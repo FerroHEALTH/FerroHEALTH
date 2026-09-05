@@ -1,0 +1,116 @@
+# SPDX-FileCopyrightText: Ruben Talstra
+# SPDX-License-Identifier: Apache-2.0
+
+# CI: the checks that keep this repository honest and do not need the site to
+# be assembled. The assembly and the link check live in pages.yml, which builds
+# on every pull request too.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  merge_group:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions: {}
+
+jobs:
+  # zizmor (docs.zizmor.sh): static security analysis for GitHub Actions, the
+  # machine check behind three properties this repository holds hard. Every
+  # `uses:` is hash-pinned (unpinned-uses), no checkout persists credentials
+  # (artipacked), and no context value is spliced into a shell
+  # (template-injection).
+  workflow-audit:
+    name: zizmor
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: taiki-e/install-action@0758d235715de2f3551eacc980d9ae8fce9342c3 # v2.87.3
+        with:
+          tool: zizmor@1.29.0
+      - name: Audit .github/workflows
+        # GH_TOKEN enables the online audits. impostor-commit verifies that a
+        # pinned commit belongs to the repository named in front of it, which
+        # it cannot do offline.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: zizmor --min-severity=low .github/workflows/
+
+  # actionlint: the correctness half of the pair. Expressions that cannot
+  # evaluate, `needs:` naming a job that does not exist, unknown runner labels,
+  # and shellcheck over every embedded `run:` block.
+  workflow-lint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Lint .github/workflows
+        # The official image, digest-pinned. actionlint's own README suggests a
+        # curl into bash off main, which is the unpinned fetch the pinning rule
+        # forbids. The image also bundles shellcheck, which half of actionlint's
+        # value depends on.
+        run: |
+          docker run --rm \
+            -v "$PWD:/repo" --workdir /repo \
+            rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 \
+            -color
+
+  # shellcheck over the tracked shell scripts: the assemble script, the checks,
+  # and the Claude hooks. `--severity=style` is the lowest floor, so everything
+  # gates. A finding is fixed, or carries a per-line `# shellcheck disable`
+  # directive with its reason. No .shellcheckrc, so nothing turns a code off
+  # tree-wide.
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The upstream release binary, pinned by version. The runner's distro
+      # package moves at every runner-image refresh. Fetched by the same
+      # SHA-pinned installer, which verifies the checksum.
+      - uses: taiki-e/install-action@0758d235715de2f3551eacc980d9ae8fce9342c3 # v2.87.3
+        with:
+          tool: shellcheck@0.11.0
+      - name: Every tracked shell program is clean at severity=style
+        run: |
+          set -euo pipefail
+          git ls-files -z '*.sh' \
+            | { grep -zc . >/dev/null && xargs -0 -r shellcheck --severity=style; } \
+            || echo "no shell files to check"
+
+  # The mechanical half of .claude/rules/writing-style.md over every tracked
+  # text file: em dashes, the buzzword list, and AI attribution. The tells that
+  # need judgement stay review-enforced.
+  prose:
+    name: writing style
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: No mechanical AI tells in tracked text
+        run: scripts/checks/writing-style.sh

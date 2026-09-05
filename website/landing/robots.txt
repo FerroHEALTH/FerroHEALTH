@@ -1,0 +1,6 @@
+# FerroHEALTH family site — crawl policy. One page, everything indexable; the
+# product documentation lives on each product's own domain and is crawled there.
+User-agent: *
+Allow: /
+
+Sitemap: https://ferrohealth.eu/sitemap.xml

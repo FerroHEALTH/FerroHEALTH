@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<!-- SPDX-FileCopyrightText: Ruben Talstra -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- GitHub Pages sets no response headers, so the policy travels in a <meta>
+       element. Weaker than the header by specification (frame-ancestors,
+       report-uri and sandbox are ignored in meta form, CSP3 3.3), but it still
+       blocks an injected external script or an exfiltrating connection, which
+       is the realistic risk on a static page.
+
+       Every source is 'self': the page loads no external script, style, font or
+       image, and connects to nothing at load time. That is also why each
+       product's mark is a committed copy under assets/products/ rather than a
+       hotlink to its own site. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>FerroHEALTH — health-data infrastructure in Rust, built on open standards</title>
+  <meta name="description" content="FerroHEALTH is the family behind three pure-Rust health-data servers: FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; and FerroBRIDGE, a bridge from openEHR to FHIR and to the OMOP Common Data Model. One language, one licence, and claims that are measured rather than asserted.">
+  <link rel="canonical" href="https://ferrohealth.eu/">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="icon" href="./assets/brand/favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="./assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="alternate icon" href="./assets/brand/favicon.ico" sizes="48x48 32x32 16x16">
+  <link rel="apple-touch-icon" href="./assets/brand/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ferrohealth.eu/">
+  <meta property="og:site_name" content="FerroHEALTH">
+  <meta property="og:title" content="FerroHEALTH — health-data infrastructure in Rust, built on open standards">
+  <meta property="og:description" content="Three pure-Rust servers: FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; and FerroBRIDGE, a bridge to FHIR and to the OMOP Common Data Model.">
+  <meta property="og:image" content="https://ferrohealth.eu/assets/brand/ferrohealth-social.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The FerroHEALTH mark, a pulse drawn in three strokes, above the wordmark FerroHEALTH and the names FerroEHR, FerroTERM and FerroBRIDGE.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://ferrohealth.eu/assets/brand/ferrohealth-social.png">
+  <meta name="twitter:image:alt" content="The FerroHEALTH mark, a pulse drawn in three strokes, above the wordmark FerroHEALTH and the names FerroEHR, FerroTERM and FerroBRIDGE.">
+
+  <!-- Structured data. An Organization that publishes three SoftwareSourceCode
+       entities, which is what lets a search engine treat the three product
+       sites as one family rather than three unrelated domains. Browsers never
+       execute an application/ld+json data block
+       (https://html.spec.whatwg.org/multipage/scripting.html#data-block), so
+       script-src does not govern it and the page stays CSP-clean. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://ferrohealth.eu/#website",
+        "url": "https://ferrohealth.eu/",
+        "name": "FerroHEALTH",
+        "description": "The family behind three pure-Rust health-data servers: FerroEHR, FerroTERM and FerroBRIDGE.",
+        "inLanguage": "en",
+        "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://ferrohealth.eu/#publisher",
+        "name": "FerroHEALTH",
+        "url": "https://ferrohealth.eu/",
+        "logo": "https://ferrohealth.eu/assets/brand/ferrohealth-icon.svg",
+        "image": "https://ferrohealth.eu/assets/brand/ferrohealth-social.png",
+        "sameAs": [
+          "https://github.com/rubentalstra/FerroEHR",
+          "https://github.com/rubentalstra/FerroTERM",
+          "https://github.com/rubentalstra/FerroBRIDGE",
+          "https://ferroehr.eu/",
+          "https://ferroterm.eu/",
+          "https://ferrobridge.eu/"
+        ]
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://ferroehr.eu/#software",
+        "name": "FerroEHR",
+        "description": "A pure-Rust openEHR Clinical Data Repository implementing ITS-REST 1.1.0 and AQL 1.1 on PostgreSQL 18, shipped as a single self-contained binary.",
+        "url": "https://ferroehr.eu/",
+        "codeRepository": "https://github.com/rubentalstra/FerroEHR",
+        "programmingLanguage": "Rust",
+        "license": "https://mariadb.com/bsl11/",
+        "applicationCategory": "HealthApplication",
+        "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://ferroterm.eu/#software",
+        "name": "FerroTERM",
+        "description": "A pure-Rust HL7 FHIR terminology server for SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM and any FHIR CodeSystem, served from one static binary over a memory-mapped index.",
+        "url": "https://ferroterm.eu/",
+        "codeRepository": "https://github.com/rubentalstra/FerroTERM",
+        "programmingLanguage": "Rust",
+        "license": "https://mariadb.com/bsl11/",
+        "applicationCategory": "HealthApplication",
+        "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://ferrobridge.eu/#software",
+        "name": "FerroBRIDGE",
+        "description": "A pure-Rust standalone bridge between openEHR and two targets: HL7 FHIR through the FHIRconnect specification, and the OMOP Common Data Model through OMOCL.",
+        "url": "https://ferrobridge.eu/",
+        "codeRepository": "https://github.com/rubentalstra/FerroBRIDGE",
+        "programmingLanguage": "Rust",
+        "license": "https://mariadb.com/bsl11/",
+        "applicationCategory": "HealthApplication",
+        "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- Nav -->
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="./" aria-label="FerroHEALTH home">
+        <img src="./assets/brand/ferrohealth-lockup-auto.svg" alt="FerroHEALTH" width="290" height="64">
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#products">Products</a>
+        <a href="#how" class="hide-sm">How they fit</a>
+        <a href="#principles" class="hide-sm">Principles</a>
+        <a href="#status">Status</a>
+        <a href="https://github.com/rubentalstra" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap">
+        <img class="hero-logo" src="./assets/brand/ferrohealth-lockup-auto.svg" alt="FerroHEALTH" width="290" height="64">
+        <h1>Health-data infrastructure in Rust, built on open standards.</h1>
+        <p class="sub">
+          FerroHEALTH is the family behind three servers that do one job each and
+          run beside each other: a record server that speaks openEHR, a
+          terminology server that speaks HL7 FHIR, and a bridge that carries a
+          record out to FHIR and to the OMOP Common Data Model. No JVM, no
+          language runtime, no search cluster.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#products">See the three products</a>
+          <a class="btn btn-ghost" href="https://sandbox.ferroehr.eu" rel="noopener">Try the live sandbox</a>
+        </div>
+        <p class="note">
+          Ferro is <em>ferrum</em>, iron. Rust is an oxide of it, which is the
+          language all three are written in.
+        </p>
+      </div>
+    </section>
+
+    <!-- The three products -->
+    <section id="products">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">The products</span>
+          <h2>Three servers, one at a time</h2>
+          <p>
+            Each one is its own repository, its own release train, and its own
+            site. Run the one you need; nothing here requires the other two.
+          </p>
+        </div>
+        <div class="products">
+
+          <article class="product product-ehr">
+            <div class="product-head">
+              <img src="./assets/products/ferroehr-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferroehr.eu/" rel="noopener">FerroEHR</a></h3>
+                <span class="role">The record</span>
+              </div>
+              <span class="status">Released</span>
+            </div>
+            <p>
+              An openEHR Clinical Data Repository. Applications store and query
+              structured health records through a vendor-neutral REST API and
+              the Archetype Query Language, so the record outlives the
+              application that wrote it.
+            </p>
+            <ul class="facts">
+              <li>ITS-REST 1.1.0 and AQL 1.1, generated from the official machine-readable models</li>
+              <li>Contribution-atomic versioning, attestations and per-version signatures</li>
+              <li>One self-contained binary on PostgreSQL 18, no JVM in the write path</li>
+              <li>Every conformance claim run against the live server each release</li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-primary" href="https://ferroehr.eu/" rel="noopener">ferroehr.eu</a>
+              <a class="btn btn-ghost" href="https://github.com/rubentalstra/FerroEHR" rel="noopener">GitHub</a>
+            </div>
+          </article>
+
+          <article class="product product-term">
+            <div class="product-head">
+              <img src="./assets/products/ferroterm-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferroterm.eu/" rel="noopener">FerroTERM</a></h3>
+                <span class="role">The meaning</span>
+              </div>
+              <span class="status">Released</span>
+            </div>
+            <p>
+              An HL7 FHIR terminology server. It answers the FHIR terminology
+              API from one static binary over a memory-mapped index built once
+              per release, which is what lets a full SNOMED CT edition run on
+              ordinary hardware.
+            </p>
+            <ul class="facts">
+              <li>SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM and any FHIR <code>CodeSystem</code></li>
+              <li>FHIR R4, R4B, R5 and the R6 ballot through one provider seam</li>
+              <li>No JVM, no Elasticsearch, no database to run</li>
+              <li>Every published figure rendered from a committed benchmark record</li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-primary" href="https://ferroterm.eu/" rel="noopener">ferroterm.eu</a>
+              <a class="btn btn-ghost" href="https://github.com/rubentalstra/FerroTERM" rel="noopener">GitHub</a>
+            </div>
+          </article>
+
+          <article class="product product-bridge">
+            <div class="product-head">
+              <img src="./assets/products/ferrobridge-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferrobridge.eu/" rel="noopener">FerroBRIDGE</a></h3>
+                <span class="role">The way out</span>
+              </div>
+              <span class="status">Design phase</span>
+            </div>
+            <p>
+              A bridge from openEHR to two targets: HL7 FHIR, and the OMOP
+              Common Data Model for research. Mappings are specification-conformant
+              YAML validated against published schemas, never
+              hand-coded per resource or per table.
+            </p>
+            <ul class="facts">
+              <li>FHIRconnect for the FHIR side, OMOCL for the OMOP side</li>
+              <li>Its own process beside any CDR it reaches over ITS-REST, never a plugin</li>
+              <li>A FHIR facade that stores nothing, and a batch ETL that writes typed rows</li>
+              <li>Designed and written down; no binary yet, and the site says so</li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-primary" href="https://ferrobridge.eu/" rel="noopener">ferrobridge.eu</a>
+              <a class="btn btn-ghost" href="https://github.com/rubentalstra/FerroBRIDGE" rel="noopener">GitHub</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- How they fit together -->
+    <section id="how" class="surface">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">How they fit</span>
+          <h2>One signal path, three seams</h2>
+          <p>
+            Every arrow is a published specification, not a private protocol, so
+            any one of the three can be swapped for another vendor's
+            implementation of the same standard.
+          </p>
+        </div>
+        <!-- The diagram is inline so it inherits the page's theme through CSS
+             classes. Its colours come from style.css, never from a fill
+             attribute, which is what keeps one copy correct in light and
+             dark. -->
+        <div class="flow-scroll">
+        <svg class="flow" viewBox="0 0 916 300" role="img" aria-labelledby="flow-title flow-desc">
+          <title id="flow-title">How FerroEHR, FerroTERM and FerroBRIDGE fit together</title>
+          <desc id="flow-desc">Clinical applications call FerroEHR over the openEHR ITS-REST API. FerroEHR calls FerroTERM over the FHIR terminology API to validate and expand codes. FerroBRIDGE reads FerroEHR over ITS-REST and exposes an HL7 FHIR facade in both directions and a one-way batch load into an OMOP Common Data Model database.</desc>
+
+          <!-- Clinical applications -->
+          <rect class="box" x="8" y="126" width="132" height="60" rx="10"/>
+          <text class="label" x="74" y="150" text-anchor="middle">Applications</text>
+          <text class="sub" x="74" y="168" text-anchor="middle">clinical, patient-facing</text>
+
+          <!-- Applications to FerroEHR. The gap is sized to hold the label,
+               which is why the boxes are not evenly spaced. -->
+          <path class="edge" d="M140 156 H202"/>
+          <path class="edge-head" d="M212 156 l-9 -5.5 v11 z"/>
+          <text class="edge-label" x="176" y="147" text-anchor="middle">ITS-REST</text>
+
+          <!-- FerroTERM -->
+          <rect class="box box-term" x="212" y="16" width="200" height="72" rx="10"/>
+          <text class="label tag-term" x="312" y="44" text-anchor="middle">FerroTERM</text>
+          <text class="sub" x="312" y="64" text-anchor="middle">SNOMED CT, LOINC, ICD, RxNorm</text>
+
+          <!-- FerroEHR to FerroTERM, both ways -->
+          <path class="edge" d="M312 126 V98"/>
+          <path class="edge-head" d="M312 88 l-5.5 9 h11 z"/>
+          <path class="edge-head" d="M312 126 l-5.5 -9 h11 z"/>
+          <text class="edge-label" x="324" y="115">$validate-code, $expand</text>
+
+          <!-- FerroEHR -->
+          <rect class="box box-ehr" x="212" y="126" width="200" height="88" rx="10"/>
+          <text class="label tag-ehr" x="312" y="156" text-anchor="middle">FerroEHR</text>
+          <text class="sub" x="312" y="176" text-anchor="middle">openEHR CDR, AQL 1.1</text>
+          <text class="sub" x="312" y="194" text-anchor="middle">PostgreSQL 18</text>
+
+          <!-- FerroEHR to FerroBRIDGE -->
+          <path class="edge" d="M412 170 H482"/>
+          <path class="edge-head" d="M492 170 l-9 -5.5 v11 z"/>
+          <text class="edge-label" x="450" y="161" text-anchor="middle">ITS-REST</text>
+
+          <!-- FerroBRIDGE -->
+          <rect class="box box-bridge" x="492" y="126" width="188" height="88" rx="10"/>
+          <text class="label tag-bridge" x="586" y="156" text-anchor="middle">FerroBRIDGE</text>
+          <text class="sub" x="586" y="176" text-anchor="middle">FHIRconnect, OMOCL</text>
+          <text class="sub" x="586" y="194" text-anchor="middle">mapping-driven</text>
+
+          <!-- FerroBRIDGE out to FHIR, both ways -->
+          <path class="edge" d="M680 152 C712 152 708 116 722 116"/>
+          <path class="edge-head" d="M732 116 l-9 -5.5 v11 z"/>
+          <path class="edge-head" d="M680 152 l9 -5.5 v11 z"/>
+          <rect class="box" x="732" y="88" width="176" height="56" rx="10"/>
+          <text class="label" x="820" y="112" text-anchor="middle">HL7 FHIR</text>
+          <text class="sub" x="820" y="130" text-anchor="middle">a facade, stores nothing</text>
+
+          <!-- FerroBRIDGE out to OMOP, one way -->
+          <path class="edge" d="M680 190 C712 190 708 224 722 224"/>
+          <path class="edge-head" d="M732 224 l-9 -5.5 v11 z"/>
+          <rect class="box" x="732" y="196" width="176" height="56" rx="10"/>
+          <text class="label" x="820" y="220" text-anchor="middle">OMOP CDM</text>
+          <text class="sub" x="820" y="238" text-anchor="middle">a batch load, for research</text>
+        </svg>
+        </div>
+        <p class="flow-note">
+          The FHIR side carries an arrowhead at both ends because it is an
+          exchange. The line into OMOP has none, because that side writes rows
+          into a research database and nothing comes back.
+        </p>
+      </div>
+    </section>
+
+    <!-- Principles -->
+    <section id="principles">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">What the family holds in common</span>
+          <h2>The same four commitments in all three repositories</h2>
+          <p>
+            The products differ. How they are built, licensed, and evidenced
+            does not.
+          </p>
+        </div>
+        <div class="grid grid-4">
+
+          <article class="card">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8h14"/><path d="M7 8l-3 7a3.5 3.5 0 0 0 6 0z"/><path d="M17 8l-3 7a3.5 3.5 0 0 0 6 0z"/></svg></div>
+            <h3>Standards, not a house format</h3>
+            <p>
+              openEHR for the record, HL7 FHIR for exchange and terminology,
+              OMOP for research. Where a specification publishes a
+              machine-readable model, the code is generated from it, so a
+              specification update is a regeneration rather than a rewrite.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13"/><path d="M4 19a2 2 0 0 0 2 2h14"/><path d="M8 8h8M8 12h5"/></svg></div>
+            <h3>One licence, no open-core tier</h3>
+            <p>
+              Every product is source-available under the Business Source
+              License 1.1, with each capability in one repository and nothing
+              held back for a paid edition. Free for non-commercial production;
+              other production use needs a commercial licence, and each version
+              becomes Apache 2.0 four years after it is published.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg></div>
+            <h3>Measured, never typed</h3>
+            <p>
+              Conformance verdicts and performance figures are rendered into
+              these sites from records committed to the repository, and a check
+              fails the build when a page and its records disagree. A number you
+              read here was produced by a run, not by a marketing decision.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h.01M7 12h.01M7 16h.01M11 8h6M11 12h6M11 16h4"/></svg></div>
+            <h3>One binary to operate</h3>
+            <p>
+              Each server is a single self-contained Rust binary in a minimal
+              distroless image: no application server, no language runtime to
+              patch, and no garbage-collection pause in the request path. What
+              you deploy is what you read.
+            </p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Standards -->
+    <section id="standards" class="surface">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Ecosystem</span>
+          <h2>What the three speak</h2>
+          <p>
+            Each product's own site carries the exact versions it implements and
+            the evidence for each claim.
+          </p>
+        </div>
+        <div class="standards">
+          <div>
+            <h3>Records</h3>
+            <div class="chips">
+              <span class="chip">openEHR ITS-REST</span>
+              <span class="chip">AQL</span>
+              <span class="chip">Reference Model</span>
+              <span class="chip">ADL / OPT</span>
+              <span class="chip">PostgreSQL</span>
+            </div>
+          </div>
+          <div>
+            <h3>Terminology</h3>
+            <div class="chips">
+              <span class="chip">HL7 FHIR R4 / R4B / R5</span>
+              <span class="chip">SNOMED CT</span>
+              <span class="chip">LOINC</span>
+              <span class="chip">ICD-10 / ICD-11</span>
+              <span class="chip">RxNorm</span>
+              <span class="chip">UCUM</span>
+            </div>
+          </div>
+          <div>
+            <h3>Exchange and research</h3>
+            <div class="chips">
+              <span class="chip">FHIRconnect</span>
+              <span class="chip">OMOCL</span>
+              <span class="chip">OMOP CDM</span>
+              <span class="chip">AMQP</span>
+              <span class="chip">S3</span>
+            </div>
+          </div>
+          <div>
+            <h3>Operations</h3>
+            <div class="chips">
+              <span class="chip">OIDC / Keycloak</span>
+              <span class="chip">IHE ATNA audit</span>
+              <span class="chip">OpenTelemetry</span>
+              <span class="chip">Prometheus</span>
+              <span class="chip">Kubernetes / Helm</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick start -->
+    <section id="quick-start">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Quick start</span>
+          <h2>Both released servers, from a container</h2>
+          <p>
+            Nothing to check out and nothing to configure. Each product's site
+            carries the full installation, the configuration, and the licensing
+            each code system needs.
+          </p>
+        </div>
+        <div class="code">
+          <div class="code-head">
+            <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span>shell</span>
+          </div>
+          <!-- The image tag is filled at assembly time from the product's
+               latest release (scripts/site/assemble.sh). The committed value is
+               a real release, so a checkout without network access still shows
+               a command that runs. -->
+          <pre><code><span class="cmt"># FerroTERM. The image serves UCUM, BCP 47, BCP 13 and ISO 3166-1</span>
+<span class="cmt"># with no configuration, so the first call needs nothing else.</span>
+<span class="prompt">$</span> docker run --rm -p 8080:8080 ghcr.io/rubentalstra/ferroterm:<span data-rel-plain="FerroTERM">0.0.11</span>
+<span class="prompt">$</span> curl 'http://localhost:8080/r4b/CodeSystem/$lookup?system=http://unitsofmeasure.org&amp;code=mg/dL'
+
+<span class="cmt"># FerroEHR. The server and PostgreSQL 18 from the compose file</span>
+<span class="cmt"># shipped with the latest release, in the current directory.</span>
+<span class="prompt">$</span> docker compose up
+<span class="prompt">$</span> curl http://localhost:8080/ferroehr/rest/status</code></pre>
+        </div>
+        <div class="section-cta">
+          <a class="btn btn-ghost" href="https://ferroehr.eu/docs/latest/getting-started.html" rel="noopener">FerroEHR getting started</a>
+          <a class="btn btn-ghost" href="https://ferroterm.eu/docs/operate/install.html" rel="noopener">FerroTERM install</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Status -->
+    <section id="status" class="surface">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Status</span>
+          <h2>Where each product is</h2>
+          <p>
+            Two are released and one is still being designed. This page says so
+            rather than describing software you cannot download.
+          </p>
+        </div>
+        <div class="matrix-scroll">
+          <!-- The release column is filled at assembly time from each
+               repository's latest release through the GitHub API. Never
+               hand-type a version here: the committed values are a fallback for
+               an assembly without network access, and they go stale by
+               design. -->
+          <table class="matrix">
+            <caption>Latest release per product, read from the GitHub API when this page was assembled.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Does</th>
+                <th scope="col">Latest release</th>
+                <th scope="col">Licence</th>
+                <th scope="col">Site</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-ehr">
+                <th scope="row"><span class="dot" aria-hidden="true"></span>FerroEHR</th>
+                <td>Stores and queries the record</td>
+                <td class="num" data-rel="FerroEHR">v4.1.1</td>
+                <td>BUSL-1.1</td>
+                <td><a href="https://ferroehr.eu/" rel="noopener">ferroehr.eu</a></td>
+              </tr>
+              <tr class="row-term">
+                <th scope="row"><span class="dot" aria-hidden="true"></span>FerroTERM</th>
+                <td>Answers what a code means</td>
+                <td class="num" data-rel="FerroTERM">v0.0.11</td>
+                <td>BUSL-1.1</td>
+                <td><a href="https://ferroterm.eu/" rel="noopener">ferroterm.eu</a></td>
+              </tr>
+              <tr class="row-bridge">
+                <th scope="row"><span class="dot" aria-hidden="true"></span>FerroBRIDGE</th>
+                <td>Carries the record onward</td>
+                <td class="num" data-rel="FerroBRIDGE">v0.0.1</td>
+                <td>BUSL-1.1</td>
+                <td><a href="https://ferrobridge.eu/" rel="noopener">ferrobridge.eu</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Closing panel -->
+    <section id="contribute">
+      <div class="wrap">
+        <div class="panel">
+          <h2>Send the improvements back</h2>
+          <p>
+            The one thing the family asks, and cannot require. A private fork
+            pays for the whole maintenance surface alone; upstreamed, the same
+            work is maintained once for everyone, and a defect found once gets
+            fixed everywhere. That is what clinical software should do.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="https://ferroehr.eu/docs/latest/why-ferroehr.html" rel="noopener">Read the full statement</a>
+            <a class="btn btn-ghost" href="https://github.com/rubentalstra" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="./" aria-label="FerroHEALTH home">
+            <img src="./assets/brand/ferrohealth-lockup-auto.svg" alt="FerroHEALTH" width="290" height="64">
+          </a>
+          <p>
+            The family behind FerroEHR, FerroTERM and FerroBRIDGE. Each product
+            is licensed under the
+            <a href="https://mariadb.com/bsl11/" rel="noopener">Business Source License 1.1</a>
+            in its own repository; this site is Apache-2.0.
+          </p>
+          <p>
+            openEHR® is a registered trademark of the openEHR Foundation. HL7®
+            and FHIR® are registered trademarks of Health Level Seven
+            International. SNOMED CT® is a registered trademark of SNOMED
+            International. Each code system's content is licensed separately by
+            its owner. None of these organisations endorse FerroHEALTH.
+          </p>
+        </div>
+        <div class="footer-links">
+          <div>
+            <h4>Products</h4>
+            <ul>
+              <li><a href="https://ferroehr.eu/" rel="noopener">FerroEHR</a></li>
+              <li><a href="https://ferroterm.eu/" rel="noopener">FerroTERM</a></li>
+              <li><a href="https://ferrobridge.eu/" rel="noopener">FerroBRIDGE</a></li>
+              <li><a href="https://sandbox.ferroehr.eu" rel="noopener">Live sandbox</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Documentation</h4>
+            <ul>
+              <li><a href="https://ferroehr.eu/docs/latest/" rel="noopener">FerroEHR docs</a></li>
+              <li><a href="https://ferroterm.eu/docs/" rel="noopener">FerroTERM docs</a></li>
+              <li><a href="https://ferrobridge.eu/docs/" rel="noopener">FerroBRIDGE docs</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Project</h4>
+            <ul>
+              <li><a href="https://github.com/rubentalstra/FerroEHR" rel="noopener">FerroEHR on GitHub</a></li>
+              <li><a href="https://github.com/rubentalstra/FerroTERM" rel="noopener">FerroTERM on GitHub</a></li>
+              <li><a href="https://github.com/rubentalstra/FerroBRIDGE" rel="noopener">FerroBRIDGE on GitHub</a></li>
+              <li><a href="/.well-known/security.txt">Security contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-note">
+        <span>© Ruben Talstra.</span>
+        <span>ferrohealth.eu</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

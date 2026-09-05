@@ -1,0 +1,42 @@
+/* SPDX-FileCopyrightText: Ruben Talstra */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* FerroHEALTH brand tokens, the "Iron & Steel" palette. Import this file, or
+   copy the values.
+
+   FerroHEALTH is the parent of three products that already own a hue each, so
+   the parent deliberately owns none of them: iron and steel are the metal the
+   family is named for, and the three product hues appear only where a product
+   is being named. */
+:root {
+  /* Core palette */
+  --ferrohealth-iron: #0F172A;        /* ink on light, ground on dark */
+  --ferrohealth-tile: #0B1020;        /* dark tile background */
+  --ferrohealth-steel: #3F6070;       /* links, primary action, secondary UI */
+  --ferrohealth-steel-deep: #2E4A57;  /* hover, pressed */
+  --ferrohealth-steel-light: #8FB6C4; /* the same voice on a dark ground */
+  --ferrohealth-graphite: #64748B;    /* muted text */
+  --ferrohealth-mist: #F1F5F9;        /* text on dark */
+  --ferrohealth-surface: #F8FAFC;     /* light surface background */
+
+  /* The products. Taken verbatim from each product's own tokens.css, so a
+     name and its colour never drift apart between the family site and the
+     product site. */
+  --ferrohealth-ehr: #B7431B;         /* FerroEHR, "Oxide & Iron" */
+  --ferrohealth-ehr-light: #D97742;   /* the same on a dark ground */
+  --ferrohealth-term: #0D9488;        /* FerroTERM */
+  --ferrohealth-term-light: #2DD4BF;
+  --ferrohealth-bridge: #4F46E5;      /* FerroBRIDGE, "Indigo & Iron" */
+  --ferrohealth-bridge-light: #A5B4FC;
+
+  /* Roles */
+  --ferrohealth-brand: var(--ferrohealth-steel);
+  --ferrohealth-fg: var(--ferrohealth-iron);
+  --ferrohealth-bg: var(--ferrohealth-surface);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ferrohealth-brand: var(--ferrohealth-steel-light);
+    --ferrohealth-fg: var(--ferrohealth-mist);
+    --ferrohealth-bg: var(--ferrohealth-tile);
+  }
+}

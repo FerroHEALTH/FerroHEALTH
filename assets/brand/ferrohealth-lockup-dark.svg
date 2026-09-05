@@ -1,0 +1,11 @@
+<!-- SPDX-FileCopyrightText: Ruben Talstra -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="290" height="64" viewBox="0 0 290 64" role="img" aria-label="FerroHEALTH">
+  <title>FerroHEALTH</title>
+  <g fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 33 H17 L23 21" stroke="#D97742"/>
+    <path d="M23 21 L29.5 45 L35 27" stroke="#2DD4BF"/>
+    <path d="M35 27 L40 33 H60" stroke="#A5B4FC"/>
+  </g>
+  <text x="76" y="44" font-family="'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" letter-spacing="-0.3"><tspan fill="#F1F5F9">Ferro</tspan><tspan fill="#8FB6C4">HEALTH</tspan></text>
+</svg>

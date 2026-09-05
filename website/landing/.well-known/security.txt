@@ -1,0 +1,21 @@
+# FerroHEALTH security contact, per RFC 9116.
+#
+# Kept in the landing site so it is served at
+# https://ferrohealth.eu/.well-known/security.txt — the location a researcher or
+# a scanner looks first, without needing to find the repository.
+#
+# This file covers the family site only. A vulnerability in a product belongs in
+# that product's own advisory queue, which is where its maintainers and its
+# release process are:
+#   https://github.com/rubentalstra/FerroEHR/security/advisories/new
+#   https://github.com/rubentalstra/FerroTERM/security/advisories/new
+#   https://github.com/rubentalstra/FerroBRIDGE/security/advisories/new
+#
+# Expires MUST be refreshed before the date below (RFC 9116 2.5.5: a stale file
+# is to be treated as invalid).
+
+Contact: https://github.com/rubentalstra/FerroHEALTH/security/advisories/new
+Expires: 2027-09-05T00:00:00.000Z
+Preferred-Languages: en, nl
+Canonical: https://ferrohealth.eu/.well-known/security.txt
+Policy: https://github.com/rubentalstra/FerroHEALTH/blob/main/SECURITY.md

@@ -30,6 +30,13 @@ fi
 
 repo_root="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../.." && pwd)}"
 
+# The rules govern this repository's files. An edit somewhere else on the disk
+# (a memory file, a sibling checkout) is out of scope.
+case "$(cd "$(dirname "$file_path")" && pwd)/" in
+"$repo_root"/*) ;;
+*) exit 0 ;;
+esac
+
 case "$file_path" in
 *.sh)
   if command -v shellcheck >/dev/null 2>&1; then

@@ -17,8 +17,13 @@ beyond that script, no runtime dependency.
   `website/landing/assets/products/`, with its source recorded in the README
   there.
 - **No inline `<style>` or `style=` attribute.** `style-src 'self'` blocks
-  them. A style lives in `style.css`, and an inline SVG is coloured through CSS
-  classes so one copy works in light and dark.
+  them in the page. A style lives in `style.css`.
+- **A diagram is a file in `assets/diagrams/`, loaded with `<img>`.** It carries
+  its palette as literal values and swaps them on `prefers-color-scheme` inside
+  the file, which is what lets the same file serve the page, a product README,
+  and a slide. That `<style>` is inside the image document, so the page's CSP
+  does not reach it. `assets/diagrams/README.md` carries the conventions and the
+  raster command.
 - **No hand-typed version.** A version on the page carries a `data-rel` or
   `data-rel-plain` marker and is filled by `assemble.sh` from that product's
   latest release. The committed value is a real release so an assembly without a

@@ -114,3 +114,51 @@ jobs:
           persist-credentials: false
       - name: No mechanical AI tells in tracked text
         run: scripts/checks/writing-style.sh
+
+  # Vector artwork stays sharp at any size and in any theme, so a page or a
+  # document that reaches for a raster while the SVG exists is a finding.
+  assets:
+    name: svg first
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Every reference with a vector available uses it
+        run: scripts/checks/svg-first.sh
+
+  # conclusion: the one status check the branch ruleset requires. It `needs`
+  # every other job and runs on `always()`, so it reports even when a job is
+  # skipped. It fails if any needed job failed or was cancelled, and passes when
+  # every result is success or skipped. The results arrive through `env:`, never
+  # spliced into `run:`, per the workflow-security rule. A new lane is added to
+  # `needs:` here and nowhere else, so the ruleset never has to change.
+  conclusion:
+    name: conclusion
+    needs:
+      - workflow-audit
+      - workflow-lint
+      - shellcheck
+      - prose
+      - assets
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Every required job passed or was skipped
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          set -euo pipefail
+          echo "needed job results: ${RESULTS}"
+          case " ${RESULTS} " in
+            *" failure "* | *" cancelled "*)
+              echo "a required job failed or was cancelled"
+              exit 1
+              ;;
+          esac
+          echo "all required jobs passed or were skipped"

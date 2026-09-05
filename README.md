@@ -21,7 +21,7 @@ License 1.1, documents itself on its own domain, and runs without the other
 two. This site says how they fit together and nothing a product's own site
 should say instead.
 
-![What calls what across FerroEHR, FerroTERM and FerroBRIDGE](assets/diagrams/ferrohealth-architecture.png)
+![What calls what across FerroEHR, FerroTERM and FerroBRIDGE](assets/diagrams/ferrohealth-architecture.svg)
 
 The diagram is one file, reusable anywhere:
 [`assets/diagrams/README.md`](assets/diagrams/README.md) says how.

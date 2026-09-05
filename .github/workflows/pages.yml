@@ -37,7 +37,7 @@ jobs:
   # Assemble the site and upload it as the Pages artifact. Runs on every event,
   # pull requests included.
   build:
-    name: build
+    name: site
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

@@ -9,7 +9,7 @@ site: a product README, the books, a slide, an issue.
 | File | What it shows |
 |---|---|
 | `ferrohealth-architecture.svg` | what calls what across FerroEHR, FerroTERM and FerroBRIDGE |
-| `ferrohealth-architecture.png` | the same at 1832x560, transparent ground, for a consumer that cannot render SVG |
+| `ferrohealth-architecture.png` | the same at 1832x560, for the rare consumer that renders no SVG at all |
 
 ## Using it
 
@@ -20,15 +20,20 @@ The landing page loads the SVG with `<img>`, and so can anything else:
      width="916" height="280" alt="...">
 ```
 
-In a GitHub README, link the raw file. GitHub strips the `<style>` element from
-an SVG rendered in Markdown, so the theme query does not survive there and the
-light palette is what shows. The PNG is the same artwork for a consumer that
-cannot render SVG at all. Both grounds are transparent, and both carry the light
-palette when the theme query cannot run, so place them on a light surface:
+In a Markdown file, reference the SVG:
 
 ```markdown
-![What calls what across the three servers](https://raw.githubusercontent.com/rubentalstra/FerroHEALTH/main/assets/diagrams/ferrohealth-architecture.png)
+![What calls what across the three servers](assets/diagrams/ferrohealth-architecture.svg)
 ```
+
+That works even where a renderer drops the `<style>` element, because every
+colour is also a presentation attribute and the file paints its own ground. Such
+a reader gets the light palette on the light surface, which is legible on a dark
+page too.
+
+Reach for `ferrohealth-architecture.png` only when the consumer renders no SVG
+at all. `scripts/checks/svg-first.sh` fails a page or a document that uses the
+raster while the vector is available.
 
 Do not screenshot the page to get the diagram. The file is the diagram.
 

@@ -23,6 +23,9 @@ in step.
 - `assets/brand/`: the FerroHEALTH mark, the icon and lockup variants, the
   favicon set, the social card, and `tokens.css`. `assets/brand/README.md` is
   the brand authority.
+- `assets/diagrams/`: the architecture diagram as one self-contained,
+  theme-adaptive SVG plus its raster. The page loads it with `<img>`, so there
+  is one copy of the artwork and it can be used outside this site.
 - `scripts/site/assemble.sh`: builds the site the way GitHub Pages serves it.
 - `scripts/checks/`: `internal-links.sh` (every local link in the assembled site
   resolves) and `writing-style.sh` (the mechanical tells).
@@ -58,6 +61,10 @@ Look at the page before calling it right: light and dark, wide and narrow.
   is indigo. FerroHEALTH is iron and steel, and spends a product hue only where
   that product is named. The product values in `assets/brand/tokens.css` are
   copied verbatim from each product's own `tokens.css`.
+- **A diagram is a file, never inline artwork.** It lives in
+  `assets/diagrams/` with its palette written in as literal values and a
+  `prefers-color-scheme` query inside the file, so one copy serves the page,
+  a README, and a slide. Edit the file and regenerate its raster.
 - **A product's mark is copied, and never edited here.** When a product changes
   its mark, refresh the copy from its source. When the copy would have to differ
   from upstream, fix it upstream instead and file the issue there.

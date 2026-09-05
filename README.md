@@ -21,10 +21,16 @@ License 1.1, documents itself on its own domain, and runs without the other
 two. This site says how they fit together and nothing a product's own site
 should say instead.
 
+![What calls what across FerroEHR, FerroTERM and FerroBRIDGE](assets/diagrams/ferrohealth-architecture.png)
+
+The diagram is one file, reusable anywhere:
+[`assets/diagrams/README.md`](assets/diagrams/README.md) says how.
+
 ## Layout
 
 ```
 assets/brand/              the FerroHEALTH mark, lockups, favicons, social card, palette
+assets/diagrams/           the architecture diagram, self-contained and theme-adaptive
 website/landing/           the site: one page, its stylesheet, and its static files
   assets/products/         a copy of each product's own mark, for the product cards
 scripts/site/assemble.sh   builds the site the way GitHub Pages serves it

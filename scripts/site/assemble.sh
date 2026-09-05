@@ -17,9 +17,9 @@
 #     just as stale as the checkout.
 #   * sitemap.xml's lastmod, from the commit being deployed.
 #
-# The brand directory lives outside the landing directory and is copied in
-# here, because the favicons, the lockups and the social card are all addressed
-# from the site root.
+# The brand and diagram directories live outside the landing directory and are
+# copied in here, because the favicons, the lockups, the social card and the
+# architecture diagram are all addressed from the site root.
 
 set -euo pipefail
 
@@ -36,6 +36,7 @@ cp -R "$LANDING"/. "$OUT/"
 
 mkdir -p "$OUT/assets"
 cp -R assets/brand "$OUT/assets/"
+cp -R assets/diagrams "$OUT/assets/"
 
 # The latest release tag of one product, or nothing when the API is not
 # reachable. A repository with no release answers 404, which is not an error

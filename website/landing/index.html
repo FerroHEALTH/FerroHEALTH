@@ -261,81 +261,34 @@
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">How they fit</span>
-          <h2>One signal path, three seams</h2>
+          <h2>What calls what</h2>
           <p>
-            Every arrow is a published specification, not a private protocol, so
-            any one of the three can be swapped for another vendor's
-            implementation of the same standard.
+            Every arrow is a published specification, so any one of the three
+            can be swapped for another implementation of the same standard.
           </p>
         </div>
-        <!-- The diagram is inline so it inherits the page's theme through CSS
-             classes. Its colours come from style.css, never from a fill
-             attribute, which is what keeps one copy correct in light and
-             dark. -->
+        <!-- One file, used here and reusable anywhere else: the diagram
+             carries its own palette and swaps it on prefers-color-scheme, so
+             the page needs no second copy of the artwork.
+             assets/diagrams/README.md says where else it is meant to go. -->
         <div class="flow-scroll">
-        <svg class="flow" viewBox="0 0 916 300" role="img" aria-labelledby="flow-title flow-desc">
-          <title id="flow-title">How FerroEHR, FerroTERM and FerroBRIDGE fit together</title>
-          <desc id="flow-desc">Clinical applications call FerroEHR over the openEHR ITS-REST API. FerroEHR calls FerroTERM over the FHIR terminology API to validate and expand codes. FerroBRIDGE reads FerroEHR over ITS-REST and exposes an HL7 FHIR facade in both directions and a one-way batch load into an OMOP Common Data Model database.</desc>
-
-          <!-- Clinical applications -->
-          <rect class="box" x="8" y="126" width="132" height="60" rx="10"/>
-          <text class="label" x="74" y="150" text-anchor="middle">Applications</text>
-          <text class="sub" x="74" y="168" text-anchor="middle">clinical, patient-facing</text>
-
-          <!-- Applications to FerroEHR. The gap is sized to hold the label,
-               which is why the boxes are not evenly spaced. -->
-          <path class="edge" d="M140 156 H202"/>
-          <path class="edge-head" d="M212 156 l-9 -5.5 v11 z"/>
-          <text class="edge-label" x="176" y="147" text-anchor="middle">ITS-REST</text>
-
-          <!-- FerroTERM -->
-          <rect class="box box-term" x="212" y="16" width="200" height="72" rx="10"/>
-          <text class="label tag-term" x="312" y="44" text-anchor="middle">FerroTERM</text>
-          <text class="sub" x="312" y="64" text-anchor="middle">SNOMED CT, LOINC, ICD, RxNorm</text>
-
-          <!-- FerroEHR to FerroTERM, both ways -->
-          <path class="edge" d="M312 126 V98"/>
-          <path class="edge-head" d="M312 88 l-5.5 9 h11 z"/>
-          <path class="edge-head" d="M312 126 l-5.5 -9 h11 z"/>
-          <text class="edge-label" x="324" y="115">$validate-code, $expand</text>
-
-          <!-- FerroEHR -->
-          <rect class="box box-ehr" x="212" y="126" width="200" height="88" rx="10"/>
-          <text class="label tag-ehr" x="312" y="156" text-anchor="middle">FerroEHR</text>
-          <text class="sub" x="312" y="176" text-anchor="middle">openEHR CDR, AQL 1.1</text>
-          <text class="sub" x="312" y="194" text-anchor="middle">PostgreSQL 18</text>
-
-          <!-- FerroEHR to FerroBRIDGE -->
-          <path class="edge" d="M412 170 H482"/>
-          <path class="edge-head" d="M492 170 l-9 -5.5 v11 z"/>
-          <text class="edge-label" x="450" y="161" text-anchor="middle">ITS-REST</text>
-
-          <!-- FerroBRIDGE -->
-          <rect class="box box-bridge" x="492" y="126" width="188" height="88" rx="10"/>
-          <text class="label tag-bridge" x="586" y="156" text-anchor="middle">FerroBRIDGE</text>
-          <text class="sub" x="586" y="176" text-anchor="middle">FHIRconnect, OMOCL</text>
-          <text class="sub" x="586" y="194" text-anchor="middle">mapping-driven</text>
-
-          <!-- FerroBRIDGE out to FHIR, both ways -->
-          <path class="edge" d="M680 152 C712 152 708 116 722 116"/>
-          <path class="edge-head" d="M732 116 l-9 -5.5 v11 z"/>
-          <path class="edge-head" d="M680 152 l9 -5.5 v11 z"/>
-          <rect class="box" x="732" y="88" width="176" height="56" rx="10"/>
-          <text class="label" x="820" y="112" text-anchor="middle">HL7 FHIR</text>
-          <text class="sub" x="820" y="130" text-anchor="middle">a facade, stores nothing</text>
-
-          <!-- FerroBRIDGE out to OMOP, one way -->
-          <path class="edge" d="M680 190 C712 190 708 224 722 224"/>
-          <path class="edge-head" d="M732 224 l-9 -5.5 v11 z"/>
-          <rect class="box" x="732" y="196" width="176" height="56" rx="10"/>
-          <text class="label" x="820" y="220" text-anchor="middle">OMOP CDM</text>
-          <text class="sub" x="820" y="238" text-anchor="middle">a batch load, for research</text>
-        </svg>
+          <img class="flow" src="./assets/diagrams/ferrohealth-architecture.svg"
+               width="916" height="280"
+               alt="Applications call FerroEHR over the openEHR ITS-REST API. FerroEHR calls FerroTERM with $validate-code. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its R4 facade in both directions, FerroTERM itself serving R4, R4B, R5 and R6, and writes typed rows into an OMOP Common Data Model v5.4 database over SQL.">
         </div>
         <p class="flow-note">
-          The FHIR side carries an arrowhead at both ends because it is an
-          exchange. The line into OMOP has none, because that side writes rows
-          into a research database and nothing comes back.
+          An arrowhead points at what is called or written to, and the FHIR side
+          carries one at both ends because the bridge reads openEHR out to FHIR
+          and writes FHIR back in. FerroEHR and FerroBRIDGE both call a FHIR
+          terminology server: FerroEHR to validate a coded value at commit time,
+          with <code>$expand</code> configured in its place against a server
+          that does not offer <code>$validate-code</code>, and FerroBRIDGE to
+          resolve a display, translate a code and validate one.
+          That seam is the FHIR terminology API, so FerroTERM fills it and so
+          does any other implementation. The facade is R4 because FHIRconnect's
+          schemas admit no other version for a mapping. OMOP is a database
+          schema, so its edge names no protocol: the OMOCL mappings compile to
+          SQL that writes typed rows into the CDM v5.4 tables.
         </p>
       </div>
     </section>

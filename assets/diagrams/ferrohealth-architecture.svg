@@ -1,0 +1,100 @@
+<!-- SPDX-FileCopyrightText: Ruben Talstra -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- What calls what across FerroEHR, FerroTERM and FerroBRIDGE.
+     Self-contained and theme-adaptive: the media query inside the file swaps
+     every colour on prefers-color-scheme, so one file serves a light and a dark
+     reader. The background is transparent, so it sits on any surface.
+     An arrowhead points at the server being called. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1832" height="560" viewBox="0 0 916 280" role="img" aria-labelledby="title desc">
+  <title id="title">What calls what across FerroEHR, FerroTERM and FerroBRIDGE</title>
+  <desc id="desc">Clinical applications call FerroEHR over the openEHR ITS-REST API. FerroEHR calls FerroTERM to validate a coded value. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to resolve and translate codes, exchanges resources with HL7 FHIR over its R4 facade in both directions, and writes typed rows into an OMOP Common Data Model database.</desc>
+  <style>
+    .box { fill: #ffffff; stroke: #dde3eb; stroke-width: 1.5 }
+    .box-ehr { stroke: #b7431b }
+    .box-term { stroke: #0d9488 }
+    .box-bridge { stroke: #4f46e5 }
+    .label { fill: #0f172a; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 700 }
+    .sub { fill: #58616e; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 11.5px; font-weight: 600 }
+    .edge { stroke: #58616e; stroke-width: 1.6; fill: none }
+    .edge-head { fill: #58616e }
+    .edge-label { fill: #58616e; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10.5px }
+    .tag-ehr { fill: #b7431b }
+    .tag-term { fill: #0d9488 }
+    .tag-bridge { fill: #4f46e5 }
+    @media (prefers-color-scheme: dark) {
+      .box { fill: #0b1020; stroke: #243044 }
+      .box-ehr { stroke: #d97742 }
+      .box-term { stroke: #2dd4bf }
+      .box-bridge { stroke: #a5b4fc }
+      .label { fill: #eef2f7 }
+      .sub, .edge-label { fill: #a4aebc }
+      .edge { stroke: #a4aebc }
+      .edge-head { fill: #a4aebc }
+      .tag-ehr { fill: #d97742 }
+      .tag-term { fill: #2dd4bf }
+      .tag-bridge { fill: #a5b4fc }
+    }
+  </style>
+
+  <!-- FerroTERM sits above the two servers that call it, because both FerroEHR
+       and FerroBRIDGE reach a terminology server over the same FHIR API. -->
+  <rect class="box box-term" x="346" y="12" width="200" height="80" rx="10"/>
+  <text class="label tag-term" x="446" y="40" text-anchor="middle">FerroTERM</text>
+  <text class="sub" x="446" y="60" text-anchor="middle">SNOMED CT, LOINC, ICD, RxNorm</text>
+  <text class="sub" x="446" y="78" text-anchor="middle">FHIR R4, R4B, R5, R6</text>
+
+  <!-- Clinical applications -->
+  <rect class="box" x="8" y="154" width="132" height="60" rx="10"/>
+  <text class="label" x="74" y="178" text-anchor="middle">Applications</text>
+  <text class="sub" x="74" y="196" text-anchor="middle">clinical, patient-facing</text>
+
+  <!-- Applications call the CDR. The gap is sized to hold the label, which is
+       why the boxes are not evenly spaced. -->
+  <path class="edge" d="M140 184 H200"/>
+  <path class="edge-head" d="M212 184 l-9 -5.5 v11 z"/>
+  <text class="edge-label" x="176" y="175" text-anchor="middle">ITS-REST</text>
+
+  <!-- FerroEHR -->
+  <rect class="box box-ehr" x="212" y="140" width="200" height="88" rx="10"/>
+  <text class="label tag-ehr" x="312" y="170" text-anchor="middle">FerroEHR</text>
+  <text class="sub" x="312" y="190" text-anchor="middle">openEHR CDR, AQL 1.1</text>
+  <text class="sub" x="312" y="208" text-anchor="middle">PostgreSQL 18</text>
+
+  <!-- FerroEHR calls the terminology server at commit time. -->
+  <path class="edge" d="M250 140 V110 H390 V102"/>
+  <path class="edge-head" d="M390 92 l-5.5 9 h11 z"/>
+  <text class="edge-label" x="320" y="104" text-anchor="middle">$validate-code</text>
+
+  <!-- FerroBRIDGE -->
+  <rect class="box box-bridge" x="492" y="140" width="188" height="88" rx="10"/>
+  <text class="label tag-bridge" x="586" y="170" text-anchor="middle">FerroBRIDGE</text>
+  <text class="sub" x="586" y="190" text-anchor="middle">FHIRconnect, OMOCL</text>
+  <text class="sub" x="586" y="208" text-anchor="middle">mapping-driven</text>
+
+  <!-- The bridge calls the terminology server for the FHIR side. -->
+  <path class="edge" d="M640 140 V110 H502 V102"/>
+  <path class="edge-head" d="M502 92 l-5.5 9 h11 z"/>
+  <text class="edge-label" x="575" y="104" text-anchor="middle">$lookup, $translate</text>
+
+  <!-- The bridge reads the CDR, so the arrow points at the CDR. -->
+  <path class="edge" d="M492 184 H424"/>
+  <path class="edge-head" d="M412 184 l9 -5.5 v11 z"/>
+  <text class="edge-label" x="452" y="175" text-anchor="middle">ITS-REST</text>
+
+  <!-- A FHIR client calls the facade. -->
+  <rect class="box" x="732" y="100" width="176" height="56" rx="10"/>
+  <text class="label" x="820" y="124" text-anchor="middle">HL7 FHIR</text>
+  <text class="sub" x="820" y="142" text-anchor="middle">a facade, stores nothing</text>
+  <path class="edge" d="M723 128 C700 128 704 160 692 160"/>
+  <path class="edge-head" d="M680 160 l9 -5.5 v11 z"/>
+  <path class="edge-head" d="M732 128 l-9 -5.5 v11 z"/>
+  <text class="edge-label" x="700" y="122" text-anchor="middle">R4 facade</text>
+
+  <!-- The ETL writes rows into the CDM database. -->
+  <rect class="box" x="732" y="208" width="176" height="56" rx="10"/>
+  <text class="label" x="820" y="232" text-anchor="middle">OMOP CDM v5.4</text>
+  <text class="sub" x="820" y="250" text-anchor="middle">a batch load, for research</text>
+  <path class="edge" d="M680 208 C704 208 706 236 720 236"/>
+  <path class="edge-head" d="M732 236 l-9 -5.5 v11 z"/>
+  <text class="edge-label" x="702" y="258" text-anchor="middle">SQL rows</text>
+</svg>

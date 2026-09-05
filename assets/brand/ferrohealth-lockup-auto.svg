@@ -1,0 +1,28 @@
+<!-- SPDX-FileCopyrightText: Ruben Talstra -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- One lockup for both themes: the media query inside the SVG switches the
+     three strokes and the wordmark on prefers-color-scheme, so a README or a
+     page serves one file to a light and a dark reader. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="290" height="64" viewBox="0 0 290 64" role="img" aria-label="FerroHEALTH">
+  <title>FerroHEALTH</title>
+  <style>
+    .ehr { stroke: #B7431B }
+    .term { stroke: #0D9488 }
+    .bridge { stroke: #4F46E5 }
+    .ferro { fill: #0F172A }
+    .health { fill: #3F6070 }
+    @media (prefers-color-scheme: dark) {
+      .ehr { stroke: #D97742 }
+      .term { stroke: #2DD4BF }
+      .bridge { stroke: #A5B4FC }
+      .ferro { fill: #F1F5F9 }
+      .health { fill: #8FB6C4 }
+    }
+  </style>
+  <g fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path class="ehr" d="M4 33 H17 L23 21"/>
+    <path class="term" d="M23 21 L29.5 45 L35 27"/>
+    <path class="bridge" d="M35 27 L40 33 H60"/>
+  </g>
+  <text x="76" y="44" font-family="'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" letter-spacing="-0.3"><tspan class="ferro">Ferro</tspan><tspan class="health">HEALTH</tspan></text>
+</svg>

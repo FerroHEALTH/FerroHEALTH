@@ -281,7 +281,9 @@
           carries one at both ends because the bridge reads openEHR out to FHIR
           and writes FHIR back in. FerroEHR and FerroBRIDGE both call a FHIR
           terminology server: FerroEHR to validate a coded value at commit time,
-          FerroBRIDGE to resolve a display, translate a code and validate one.
+          with <code>$expand</code> configured in its place against a server
+          that does not offer <code>$validate-code</code>, and FerroBRIDGE to
+          resolve a display, translate a code and validate one.
           That seam is the FHIR terminology API, so FerroTERM fills it and so
           does any other implementation. The facade is R4 because FHIRconnect's
           schemas admit no other version for a mapping. OMOP is a database

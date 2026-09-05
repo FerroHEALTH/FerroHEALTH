@@ -47,6 +47,12 @@ specification it speaks, with two exceptions worth knowing:
   The OMOCL mappings compile to SQL that writes typed rows into the CDM v5.4
   tables.
 
+`$validate-code` is the one operation FerroEHR uses, and the label says so. A
+server that does not offer it is configured to `operation = "expand"` per
+provider, which replaces `$validate-code` with `$expand` plus a membership test.
+FerroEHR never retries one as the other, so drawing both on the edge would say
+something the CDR does not do.
+
 The evidence for every edge is in the products' own documents: FerroBRIDGE's
 `website/book/src/integrate/fhir-facade.md` and
 `operate/deployment-shape.md` for the terminology operations and the CDM write,

@@ -26,3 +26,10 @@ target
 # The assembled site (scripts/site/assemble.sh), rebuilt on every run and
 # published from the Pages workflow, never from a checkout.
 _site/
+
+# Design-canvas working files. The artboards are scratch for a published
+# canvas and the seeded page is a 2.5 MB build artifact carrying a third-party
+# editor, so neither belongs in a repository whose prose is gate-checked.
+# The decision a canvas produced is recorded on its issue and in
+# assets/brand/README.md, which is the authority.
+/.design/

@@ -1,7 +1,7 @@
 <!-- SPDX-FileCopyrightText: Ruben Talstra -->
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- The 1200x630 social card. Iron ground, the mark and the wordmark, the
-     one-line description, and the three products in their own hues. -->
+     one-line description, and the four products in their own hues. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="FerroHEALTH: health-data infrastructure in Rust, built on open standards">
   <title>FerroHEALTH</title>
   <defs>
@@ -11,35 +11,42 @@
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#ground)"/>
-  <rect x="0" y="0" width="1200" height="6" fill="#B7431B"/>
-  <rect x="400" y="0" width="400" height="6" fill="#0D9488"/>
-  <rect x="800" y="0" width="400" height="6" fill="#4F46E5"/>
+  <rect x="0" y="0" width="300" height="6" fill="#C2185B"/>
+  <rect x="300" y="0" width="300" height="6" fill="#B7431B"/>
+  <rect x="600" y="0" width="300" height="6" fill="#0D9488"/>
+  <rect x="900" y="0" width="300" height="6" fill="#4F46E5"/>
 
   <g transform="translate(96,150) scale(2.1)" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 33 H17 L23 21" stroke="#D97742"/>
-    <path d="M23 21 L29.5 45 L35 27" stroke="#2DD4BF"/>
-    <path d="M35 27 L40 33 H60" stroke="#A5B4FC"/>
+    <path d="M4 33 H14 L19 20" stroke="#E04F84"/>
+    <path d="M19 20 L26 45" stroke="#D97742"/>
+    <path d="M26 45 L32 26" stroke="#2DD4BF"/>
+    <path d="M32 26 L38 33 H60" stroke="#A5B4FC"/>
   </g>
   <text x="240" y="248" font-family="'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="76" font-weight="700" letter-spacing="-1"><tspan fill="#F1F5F9">Ferro</tspan><tspan fill="#8FB6C4">HEALTH</tspan></text>
 
   <text x="96" y="342" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="500" fill="#CBD5E1">Health-data infrastructure in Rust, built on open standards.</text>
-  <text x="96" y="390" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="500" fill="#8593A8">A record server, a terminology server, and a bridge.</text>
+  <text x="96" y="390" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="500" fill="#8593A8">Enter it, keep it, describe it, send it on.</text>
 
-  <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="30" font-weight="700">
+  <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="26" font-weight="700">
     <g transform="translate(96,470)">
-      <rect x="0" y="0" width="308" height="72" rx="16" fill="#1A1F2E" stroke="#B7431B" stroke-width="2"/>
-      <circle cx="34" cy="36" r="9" fill="#D97742"/>
-      <text x="58" y="46" fill="#F1F5F9">FerroEHR</text>
+      <rect x="0" y="0" width="236" height="72" rx="16" fill="#221523" stroke="#C2185B" stroke-width="2"/>
+      <circle cx="30" cy="36" r="8" fill="#E04F84"/>
+      <text x="50" y="45" fill="#F1F5F9">FerroCHART</text>
     </g>
-    <g transform="translate(444,470)">
-      <rect x="0" y="0" width="308" height="72" rx="16" fill="#131F2A" stroke="#0D9488" stroke-width="2"/>
-      <circle cx="34" cy="36" r="9" fill="#2DD4BF"/>
-      <text x="58" y="46" fill="#F1F5F9">FerroTERM</text>
+    <g transform="translate(352,470)">
+      <rect x="0" y="0" width="236" height="72" rx="16" fill="#1A1F2E" stroke="#B7431B" stroke-width="2"/>
+      <circle cx="30" cy="36" r="8" fill="#D97742"/>
+      <text x="50" y="45" fill="#F1F5F9">FerroEHR</text>
     </g>
-    <g transform="translate(792,470)">
-      <rect x="0" y="0" width="308" height="72" rx="16" fill="#171A2E" stroke="#4F46E5" stroke-width="2"/>
-      <circle cx="34" cy="36" r="9" fill="#A5B4FC"/>
-      <text x="58" y="46" fill="#F1F5F9">FerroBRIDGE</text>
+    <g transform="translate(608,470)">
+      <rect x="0" y="0" width="236" height="72" rx="16" fill="#131F2A" stroke="#0D9488" stroke-width="2"/>
+      <circle cx="30" cy="36" r="8" fill="#2DD4BF"/>
+      <text x="50" y="45" fill="#F1F5F9">FerroTERM</text>
+    </g>
+    <g transform="translate(864,470)">
+      <rect x="0" y="0" width="236" height="72" rx="16" fill="#171A2E" stroke="#4F46E5" stroke-width="2"/>
+      <circle cx="30" cy="36" r="8" fill="#A5B4FC"/>
+      <text x="50" y="45" fill="#F1F5F9">FerroBRIDGE</text>
     </g>
   </g>
 

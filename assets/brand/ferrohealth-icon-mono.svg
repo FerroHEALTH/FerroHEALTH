@@ -4,5 +4,5 @@
      surrounding text colour. For stamps, badges and one-colour contexts. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64" role="img" aria-label="FerroHEALTH icon">
   <title>FerroHEALTH</title>
-  <path d="M4 33 H17 L23 21 L29.5 45 L35 27 L40 33 H60" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M4 33 H14 L19 20 L26 45 L32 26 L38 33 H60" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

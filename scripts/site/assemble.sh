@@ -28,7 +28,7 @@ cd "$root"
 
 readonly OUT="${1:?usage: $0 OUT}"
 readonly LANDING=website/landing
-readonly PRODUCTS=(FerroEHR FerroTERM FerroBRIDGE)
+readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE)
 
 rm -rf "${OUT:?}"
 mkdir -p "$OUT"

@@ -8,8 +8,8 @@ site: a product README, the books, a slide, an issue.
 
 | File | What it shows |
 |---|---|
-| `ferrohealth-architecture.svg` | what calls what across FerroEHR, FerroTERM and FerroBRIDGE |
-| `ferrohealth-architecture.png` | the same at 1832x560, for the rare consumer that renders no SVG at all |
+| `ferrohealth-architecture.svg` | what calls what across FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE |
+| `ferrohealth-architecture.png` | the same at 2400x680, for the rare consumer that renders no SVG at all |
 
 ## Using it
 
@@ -17,13 +17,13 @@ The landing page loads the SVG with `<img>`, and so can anything else:
 
 ```html
 <img src="https://ferrohealth.eu/assets/diagrams/ferrohealth-architecture.svg"
-     width="916" height="280" alt="...">
+     width="1200" height="340" alt="...">
 ```
 
 In a Markdown file, reference the SVG:
 
 ```markdown
-![What calls what across the three servers](assets/diagrams/ferrohealth-architecture.svg)
+![What calls what across the four servers](assets/diagrams/ferrohealth-architecture.svg)
 ```
 
 That works even where a renderer drops the `<style>` element, because every

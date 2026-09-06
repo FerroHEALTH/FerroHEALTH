@@ -1,8 +1,10 @@
 # CLAUDE.md
 
-**FerroHEALTH** is the family name for three pure-Rust health-data servers, and
+**FerroHEALTH** is the family name for four pure-Rust health-data servers, and
 this repository is the family site at <https://ferrohealth.eu> plus the shared
 brand. It ships no product code. The products are
+[FerroCHART](https://github.com/rubentalstra/FerroCHART) (an openEHR form
+builder and renderer),
 [FerroEHR](https://github.com/rubentalstra/FerroEHR) (an openEHR Clinical Data
 Repository), [FerroTERM](https://github.com/rubentalstra/FerroTERM) (an HL7 FHIR
 terminology server), and
@@ -61,10 +63,11 @@ Look at the page before calling it right: light and dark, wide and narrow.
 - **Say what is true about a product, and let its own site carry the detail.**
   FerroBRIDGE has no binary; the page says so. Never describe software a reader
   cannot download.
-- **The parent owns no hue.** FerroEHR is rust, FerroTERM is teal, FerroBRIDGE
-  is indigo. FerroHEALTH is iron and steel, and spends a product hue only where
-  that product is named. The product values in `assets/brand/tokens.css` are
-  copied verbatim from each product's own `tokens.css`.
+- **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
+  is teal, FerroBRIDGE is indigo. FerroHEALTH is iron and steel, and spends a
+  product hue only where that product is named. The product values in
+  `assets/brand/tokens.css` are copied verbatim from each product's own
+  `tokens.css`.
 - **A licence link points at the product's own `LICENSE`.** The BUSL-1.1
   boilerplate fills none of its parameters in, so a reader who follows it sees
   a blank Additional Use Grant. The page links each repository's `LICENSE` and
@@ -118,5 +121,6 @@ always.
 - @README.md: what the repository is, how to build it, and how it deploys.
 - `website/landing/assets/products/README.md`: where each product mark came
   from.
-- The three product sites carry the detail this page links to:
-  <https://ferroehr.eu>, <https://ferroterm.eu>, <https://ferrobridge.eu>.
+- The four product sites carry the detail this page links to:
+  <https://ferrochart.eu>, <https://ferroehr.eu>, <https://ferroterm.eu>,
+  <https://ferrobridge.eu>.

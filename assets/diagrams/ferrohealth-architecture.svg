@@ -1,19 +1,25 @@
 <!-- SPDX-FileCopyrightText: Ruben Talstra -->
 <!-- SPDX-License-Identifier: Apache-2.0 -->
-<!-- What calls what across FerroEHR, FerroTERM and FerroBRIDGE.
+<!-- What calls what across FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE.
      Every colour is a presentation attribute, so a renderer that drops the
      <style> element still draws the light palette. The <style> holds only the
      dark override, because a CSS rule outranks a presentation attribute.
      The ground is the page's surface colour, so the file blends into the
      section it sits in and stays readable on any other background.
-     An arrowhead points at what is called or written to. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="1832" height="560" viewBox="0 0 916 280" role="img" aria-labelledby="title desc">
-  <title id="title">What calls what across FerroEHR, FerroTERM and FerroBRIDGE</title>
-  <desc id="desc">Clinical applications call FerroEHR over the openEHR ITS-REST API. FerroEHR calls FerroTERM with $validate-code. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its R4 facade in both directions, and writes typed rows into an OMOP Common Data Model v5.4 database over SQL.</desc>
+     An arrowhead points at what is called or written to.
+     Left to right is the order data moves. Gaps between boxes are 86 px
+     because that is what an ITS-REST label needs without touching either box;
+     the edges on the right are elbows rather than curves for the same reason,
+     so each label sits on a straight run with 12 px of clear space above it
+     and clear space to either side of it. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="680" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
+  <title id="title">What calls what across FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE</title>
+  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API. Other applications call FerroEHR over ITS-REST directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its R4 facade in both directions, and writes typed rows into an OMOP Common Data Model v5.4 database over SQL.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
       .box { fill: #0b1020; stroke: #243044 }
+      .box-chart { stroke: #e04f84 }
       .box-ehr { stroke: #d97742 }
       .box-term { stroke: #2dd4bf }
       .box-bridge { stroke: #a5b4fc }
@@ -21,80 +27,102 @@
       .sub, .edge-label { fill: #a4aebc }
       .edge { stroke: #a4aebc }
       .edge-head { fill: #a4aebc }
+      .tag-chart { fill: #e04f84 }
       .tag-ehr { fill: #d97742 }
       .tag-term { fill: #2dd4bf }
       .tag-bridge { fill: #a5b4fc }
     }
   </style>
 
-  <rect class="ground" width="916" height="280" rx="12" fill="#f5f7fa"/>
+  <rect class="ground" width="1200" height="340" rx="12" fill="#f5f7fa"/>
 
   <g font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
 
-    <!-- FerroTERM sits above the two servers that call it, because both
-         FerroEHR and FerroBRIDGE reach a terminology server over the same FHIR
-         API. Its version list is here because one unqualified R4 on the
-         bridge's facade would read as a family-wide cap. -->
-    <rect class="box box-term" x="346" y="12" width="200" height="80" rx="10" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
-    <text class="label tag-term" x="446" y="40" text-anchor="middle" font-size="15" font-weight="700" fill="#0d9488">FerroTERM</text>
-    <text class="sub" x="446" y="60" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">SNOMED CT, LOINC, ICD, RxNorm</text>
-    <text class="sub" x="446" y="78" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">FHIR R4, R4B, R5, R6</text>
+    <!-- FerroTERM spans the three servers that call it, because all three reach
+         a terminology server over the same FHIR API and none of them is a more
+         important caller than the others. Drawn as a band rather than a peer
+         box, so the shared seam is the shape of the thing. Its version list is
+         here because one unqualified R4 on the bridge's facade would read as a
+         family-wide cap. -->
+    <rect class="box box-term" x="206" y="12" width="660" height="76" rx="10" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
+    <text class="label tag-term" x="536" y="40" text-anchor="middle" font-size="15" font-weight="700" fill="#0d9488">FerroTERM</text>
+    <text class="sub" x="536" y="62" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM &#183; FHIR R4, R4B, R5, R6</text>
 
-    <!-- Clinical applications -->
-    <rect class="box" x="8" y="154" width="132" height="60" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="74" y="178" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Applications</text>
-    <text class="sub" x="74" y="196" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">clinical, patient-facing</text>
+    <!-- The person the whole family exists for. -->
+    <rect class="box" x="8" y="174" width="118" height="60" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="67" y="198" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Clinicians</text>
+    <text class="sub" x="67" y="216" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">doctors and nurses</text>
+    <path class="edge" d="M126 204 H194" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M206 204 l-9 -5.5 v11 z" fill="#58616e"/>
 
-    <!-- Applications call the CDR. The gap is sized to hold the label, which is
-         why the boxes are not evenly spaced. -->
-    <path class="edge" d="M140 184 H200" fill="none" stroke="#58616e" stroke-width="1.6"/>
-    <path class="edge-head" d="M212 184 l-9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="176" y="175" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
+    <!-- FerroCHART -->
+    <rect class="box box-chart" x="206" y="160" width="160" height="88" rx="10" fill="#ffffff" stroke="#c2185b" stroke-width="1.5"/>
+    <text class="label tag-chart" x="286" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#c2185b">FerroCHART</text>
+    <text class="sub" x="286" y="210" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">templates to forms</text>
+    <text class="sub" x="286" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">forms to compositions</text>
+
+    <!-- FerroCHART expands the value set behind a coded field, so the form can
+         offer exactly the codes the template admits. -->
+    <path class="edge" d="M286 160 V92" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M286 88 l-5.5 9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="278" y="130" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$expand</text>
+
+    <path class="edge" d="M366 204 H440" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M452 204 l-9 -5.5 v11 z" fill="#58616e"/>
+    <text class="edge-label" x="409" y="195" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
 
     <!-- FerroEHR -->
-    <rect class="box box-ehr" x="212" y="140" width="200" height="88" rx="10" fill="#ffffff" stroke="#b7431b" stroke-width="1.5"/>
-    <text class="label tag-ehr" x="312" y="170" text-anchor="middle" font-size="15" font-weight="700" fill="#b7431b">FerroEHR</text>
-    <text class="sub" x="312" y="190" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">openEHR CDR, AQL 1.1</text>
-    <text class="sub" x="312" y="208" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">PostgreSQL 18</text>
+    <rect class="box box-ehr" x="452" y="160" width="160" height="88" rx="10" fill="#ffffff" stroke="#b7431b" stroke-width="1.5"/>
+    <text class="label tag-ehr" x="532" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#b7431b">FerroEHR</text>
+    <text class="sub" x="532" y="210" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">openEHR CDR, AQL 1.1</text>
+    <text class="sub" x="532" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">PostgreSQL 18</text>
 
-    <!-- FerroEHR validates a coded value at commit time. The riser leaves the
-         box off-centre so the label owns the space above the leg. -->
-    <path class="edge" d="M250 140 V110 H390 V102" fill="none" stroke="#58616e" stroke-width="1.6"/>
-    <path class="edge-head" d="M390 92 l-5.5 9 h11 z" fill="#58616e"/>
-    <text class="edge-label" x="320" y="104" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$validate-code</text>
+    <!-- FerroEHR validates a coded value at commit time. -->
+    <path class="edge" d="M532 160 V92" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M532 88 l-5.5 9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="524" y="130" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$validate-code</text>
 
-    <!-- FerroBRIDGE -->
-    <rect class="box box-bridge" x="492" y="140" width="188" height="88" rx="10" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-    <text class="label tag-bridge" x="586" y="170" text-anchor="middle" font-size="15" font-weight="700" fill="#4f46e5">FerroBRIDGE</text>
-    <text class="sub" x="586" y="190" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">FHIRconnect, OMOCL</text>
-    <text class="sub" x="586" y="208" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">mapping-driven</text>
-
-    <!-- The bridge resolves and translates codes for the FHIR side. -->
-    <path class="edge" d="M640 140 V110 H502 V102" fill="none" stroke="#58616e" stroke-width="1.6"/>
-    <path class="edge-head" d="M502 92 l-5.5 9 h11 z" fill="#58616e"/>
-    <text class="edge-label" x="575" y="104" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$lookup, $translate</text>
+    <!-- Anything else that speaks the API, on its own lane so it does not read
+         as something FerroCHART sits in front of. -->
+    <rect class="box" x="206" y="284" width="160" height="48" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="286" y="304" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Applications</text>
+    <text class="sub" x="286" y="320" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">any other ITS-REST client</text>
+    <path class="edge" d="M366 308 H532 V260" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M532 248 l-5.5 9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="449" y="300" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
 
     <!-- The bridge reads the CDR, so the arrow points at the CDR. -->
-    <path class="edge" d="M492 184 H424" fill="none" stroke="#58616e" stroke-width="1.6"/>
-    <path class="edge-head" d="M412 184 l9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="452" y="175" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
+    <path class="edge" d="M698 204 H624" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M612 204 l9 -5.5 v11 z" fill="#58616e"/>
+    <text class="edge-label" x="655" y="195" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
+
+    <!-- FerroBRIDGE -->
+    <rect class="box box-bridge" x="698" y="160" width="168" height="88" rx="10" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+    <text class="label tag-bridge" x="782" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#4f46e5">FerroBRIDGE</text>
+    <text class="sub" x="782" y="210" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">FHIRconnect, OMOCL</text>
+    <text class="sub" x="782" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">mapping-driven</text>
+
+    <!-- The bridge resolves and translates codes for the FHIR side. -->
+    <path class="edge" d="M782 160 V92" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M782 88 l-5.5 9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="774" y="130" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$lookup, $translate</text>
 
     <!-- FHIR is an exchange, so this edge carries a head at both ends. -->
-    <rect class="box" x="732" y="100" width="176" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="820" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">HL7 FHIR</text>
-    <text class="sub" x="820" y="142" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a facade, stores nothing</text>
-    <path class="edge" d="M723 128 C700 128 704 160 692 160" fill="none" stroke="#58616e" stroke-width="1.6"/>
-    <path class="edge-head" d="M680 160 l9 -5.5 v11 z" fill="#58616e"/>
-    <path class="edge-head" d="M732 128 l-9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="700" y="122" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">R4 facade</text>
+    <rect class="box" x="1010" y="116" width="176" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="1098" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">HL7 FHIR</text>
+    <text class="sub" x="1098" y="158" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a facade, stores nothing</text>
+    <path class="edge" d="M877 186 H950 V144 H1004" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M866 186 l9 -5.5 v11 z" fill="#58616e"/>
+    <path class="edge-head" d="M1010 144 l-9 -5.5 v11 z" fill="#58616e"/>
+    <text class="edge-label" x="910" y="174" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">R4 facade</text>
 
     <!-- OMOP is a database schema, so this edge names no wire specification. -->
-    <rect class="box" x="732" y="208" width="176" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="820" y="232" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OMOP CDM v5.4</text>
-    <text class="sub" x="820" y="250" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a batch load, for research</text>
-    <path class="edge" d="M680 208 C704 208 706 236 720 236" fill="none" stroke="#58616e" stroke-width="1.6"/>
-    <path class="edge-head" d="M732 236 l-9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="702" y="258" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">SQL rows</text>
+    <rect class="box" x="1010" y="224" width="176" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="1098" y="248" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OMOP CDM v5.4</text>
+    <text class="sub" x="1098" y="266" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a batch load, for research</text>
+    <path class="edge" d="M866 226 H950 V252 H1004" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M1010 252 l-9 -5.5 v11 z" fill="#58616e"/>
+    <text class="edge-label" x="908" y="214" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">SQL rows</text>
 
   </g>
 </svg>

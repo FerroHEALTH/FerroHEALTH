@@ -17,7 +17,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>FerroHEALTH: health-data infrastructure in Rust, built on open standards</title>
-  <meta name="description" content="FerroHEALTH is the family behind three pure-Rust health-data servers: FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; and FerroBRIDGE, a bridge from openEHR to FHIR and to the OMOP Common Data Model. One language, one licence, and every published figure rendered from a committed record.">
+  <meta name="description" content="FerroHEALTH is the family behind four pure-Rust health-data servers: FerroCHART, an openEHR form builder and renderer; FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; and FerroBRIDGE, a bridge from openEHR to FHIR and to the OMOP Common Data Model. One language, one licence, and every published figure rendered from a committed record.">
   <link rel="canonical" href="https://ferrohealth.eu/">
   <link rel="stylesheet" href="./style.css">
   <link rel="icon" href="./assets/brand/favicon.svg" type="image/svg+xml">
@@ -28,7 +28,7 @@
   <meta property="og:url" content="https://ferrohealth.eu/">
   <meta property="og:site_name" content="FerroHEALTH">
   <meta property="og:title" content="FerroHEALTH: health-data infrastructure in Rust, built on open standards">
-  <meta property="og:description" content="Three pure-Rust servers: FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; and FerroBRIDGE, a bridge to FHIR and to the OMOP Common Data Model.">
+  <meta property="og:description" content="Four pure-Rust servers: FerroCHART, an openEHR form builder; FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; and FerroBRIDGE, a bridge to FHIR and to the OMOP Common Data Model.">
   <meta property="og:image" content="https://ferrohealth.eu/assets/brand/ferrohealth-social.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
@@ -38,8 +38,8 @@
   <meta name="twitter:image" content="https://ferrohealth.eu/assets/brand/ferrohealth-social.png">
   <meta name="twitter:image:alt" content="The FerroHEALTH mark, a pulse drawn in four strokes, above the wordmark FerroHEALTH and the names FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE.">
 
-  <!-- Structured data. An Organization that publishes three SoftwareSourceCode
-       entities, which is what lets a search engine read the three product
+  <!-- Structured data. An Organization that publishes four SoftwareSourceCode
+       entities, which is what lets a search engine read the four product
        sites as one family. Browsers never
        execute an application/ld+json data block
        (https://html.spec.whatwg.org/multipage/scripting.html#data-block), so
@@ -53,7 +53,7 @@
         "@id": "https://ferrohealth.eu/#website",
         "url": "https://ferrohealth.eu/",
         "name": "FerroHEALTH",
-        "description": "The family behind three pure-Rust health-data servers: FerroEHR, FerroTERM and FerroBRIDGE.",
+        "description": "The family behind four pure-Rust health-data servers: FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE.",
         "inLanguage": "en",
         "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
       },
@@ -65,13 +65,27 @@
         "logo": "https://ferrohealth.eu/assets/brand/ferrohealth-icon.svg",
         "image": "https://ferrohealth.eu/assets/brand/ferrohealth-social.png",
         "sameAs": [
+          "https://github.com/rubentalstra/FerroCHART",
           "https://github.com/rubentalstra/FerroEHR",
           "https://github.com/rubentalstra/FerroTERM",
           "https://github.com/rubentalstra/FerroBRIDGE",
+          "https://ferrochart.eu/",
           "https://ferroehr.eu/",
           "https://ferroterm.eu/",
           "https://ferrobridge.eu/"
         ]
+      },
+      {
+        "@type": "SoftwareSourceCode",
+        "@id": "https://ferrochart.eu/#software",
+        "name": "FerroCHART",
+        "description": "A pure-Rust openEHR form builder and renderer. It compiles an operational template into a form definition, renders that form, and commits the entered values as a COMPOSITION to any openEHR CDR over ITS-REST.",
+        "url": "https://ferrochart.eu/",
+        "codeRepository": "https://github.com/rubentalstra/FerroCHART",
+        "programmingLanguage": "Rust",
+        "license": "https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE",
+        "applicationCategory": "HealthApplication",
+        "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
       },
       {
         "@type": "SoftwareSourceCode",
@@ -142,35 +156,63 @@
         <img class="hero-logo" src="./assets/brand/ferrohealth-lockup-auto.svg" alt="FerroHEALTH" width="290" height="64">
         <h1>Health-data infrastructure in Rust, built on open standards.</h1>
         <p class="sub">
-          FerroHEALTH is the family behind three servers that do one job each and
-          run beside each other: a record server that speaks openEHR, a
-          terminology server that speaks HL7 FHIR, and a bridge that carries a
-          record out to FHIR and to the OMOP Common Data Model. No JVM, no
-          language runtime, no search cluster.
+          FerroHEALTH is the family behind four servers that do one job each and
+          run beside each other: a form builder that a clinician types into, a
+          record server that speaks openEHR, a terminology server that speaks
+          HL7 FHIR, and a bridge that carries a record out to FHIR and to the
+          OMOP Common Data Model. No JVM, no language runtime, no search
+          cluster.
         </p>
         <div class="hero-cta">
-          <a class="btn btn-primary" href="#products">See the three products</a>
+          <a class="btn btn-primary" href="#products">See the four products</a>
           <a class="btn btn-ghost" href="https://sandbox.ferroehr.eu" rel="noopener">Try the live sandbox</a>
         </div>
         <p class="note">
           Ferro is <em>ferrum</em>, iron. Rust is an oxide of it, which is the
-          language all three are written in.
+          language all four are written in.
         </p>
       </div>
     </section>
 
-    <!-- The three products -->
+    <!-- The four products -->
     <section id="products">
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">The products</span>
-          <h2>Three servers, one at a time</h2>
+          <h2>Four servers, one at a time</h2>
           <p>
             Each one is its own repository, its own release train, and its own
-            site. Run the one you need; nothing here requires the other two.
+            site. Run the one you need; nothing here requires the other three.
           </p>
         </div>
         <div class="products">
+
+          <article class="product product-chart">
+            <div class="product-head">
+              <img src="./assets/products/ferrochart-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferrochart.eu/" rel="noopener">FerroCHART</a></h3>
+                <span class="role">The way in</span>
+              </div>
+              <span class="status">Design phase</span>
+            </div>
+            <p>
+              An openEHR form builder and renderer. It compiles an operational
+              template into a form, renders it for a clinician, and turns what
+              they type back into a COMPOSITION, so the last mile between a
+              clinical model and a person is not hand-built per form.
+            </p>
+            <ul class="facts">
+              <li>Fields derived from the Reference Model type at each template node</li>
+              <li>Hand-authored layout in a separate overlay, so a template revision does not destroy it</li>
+              <li>Any openEHR CDR over ITS-REST, never a plugin inside one</li>
+              <li>Designed and written down; no binary yet, and the site says so</li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-primary" href="https://ferrochart.eu/" rel="noopener">ferrochart.eu</a>
+              <a class="btn btn-ghost" href="https://github.com/rubentalstra/FerroCHART" rel="noopener">GitHub</a>
+            </div>
+          </article>
 
           <article class="product product-ehr">
             <div class="product-head">
@@ -264,7 +306,7 @@
           <span class="eyebrow">How they fit</span>
           <h2>What calls what</h2>
           <p>
-            Every arrow is a published specification, so any one of the three
+            Every arrow is a published specification, so any one of the four
             can be swapped for another implementation of the same standard.
           </p>
         </div>
@@ -274,17 +316,20 @@
              assets/diagrams/README.md says where else it is meant to go. -->
         <div class="flow-scroll">
           <img class="flow" src="./assets/diagrams/ferrohealth-architecture.svg"
-               width="916" height="280"
-               alt="Applications call FerroEHR over the openEHR ITS-REST API. FerroEHR calls FerroTERM with $validate-code. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its R4 facade in both directions, FerroTERM itself serving R4, R4B, R5 and R6, and writes typed rows into an OMOP Common Data Model v5.4 database over SQL.">
+               width="1200" height="340"
+               alt="A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its R4 facade in both directions, FerroTERM itself serving R4, R4B, R5 and R6, and writes typed rows into an OMOP Common Data Model v5.4 database over SQL.">
         </div>
         <p class="flow-note">
-          An arrowhead points at what is called or written to, and the FHIR side
-          carries one at both ends because the bridge reads openEHR out to FHIR
-          and writes FHIR back in. FerroEHR and FerroBRIDGE both call a FHIR
-          terminology server: FerroEHR to validate a coded value at commit time,
-          with <code>$expand</code> configured in its place against a server
-          that does not offer <code>$validate-code</code>, and FerroBRIDGE to
-          resolve a display, translate a code and validate one.
+          Left to right is the order data moves. An arrowhead points at what is
+          called or written to, and the FHIR side carries one at both ends
+          because the bridge reads openEHR out to FHIR and writes FHIR back in.
+          All three servers call a FHIR terminology server, for three different
+          reasons: FerroCHART to expand the value set behind a coded field so
+          the form can offer the codes it admits, FerroEHR to validate a coded
+          value at commit time, with <code>$expand</code> configured in its
+          place against a server that does not offer
+          <code>$validate-code</code>, and FerroBRIDGE to resolve a display,
+          translate a code and validate one.
           That seam is the FHIR terminology API, so FerroTERM fills it and so
           does any other implementation. The facade is R4 because FHIRconnect's
           schemas admit no other version for a mapping. OMOP is a database
@@ -299,9 +344,9 @@
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">What the family holds in common</span>
-          <h2>The same four commitments in all three repositories</h2>
+          <h2>The same four commitments in all four repositories</h2>
           <p>
-            The three differ in what they do. They are built, licensed and
+            The four differ in what they do. They are built, licensed and
             evidenced the same way.
           </p>
         </div>
@@ -362,7 +407,7 @@
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">Ecosystem</span>
-          <h2>What the three speak</h2>
+          <h2>What the four speak</h2>
           <p>
             Each product's own site carries the exact versions it implements and
             the evidence for each claim.
@@ -428,7 +473,7 @@
         </div>
         <div class="code">
           <div class="code-head">
-            <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             <span>shell</span>
           </div>
           <!-- The image tag is filled at assembly time from the product's
@@ -459,8 +504,8 @@
           <span class="eyebrow">Status</span>
           <h2>Where each product is</h2>
           <p>
-            Two are released and one is still being designed. This page says so
-            rather than describing software you cannot download.
+            Two are released and two are still being designed. This page says
+            so rather than describing software you cannot download.
           </p>
         </div>
         <div class="matrix-scroll">
@@ -481,6 +526,13 @@
               </tr>
             </thead>
             <tbody>
+              <tr class="row-chart">
+                <th scope="row"><span class="dot" aria-hidden="true"></span>FerroCHART</th>
+                <td>Takes the record down</td>
+                <td class="num" data-rel="FerroCHART">none yet</td>
+                <td><a href="https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE" rel="noopener">BUSL-1.1</a></td>
+                <td><a href="https://ferrochart.eu/" rel="noopener">ferrochart.eu</a></td>
+              </tr>
               <tr class="row-ehr">
                 <th scope="row"><span class="dot" aria-hidden="true"></span>FerroEHR</th>
                 <td>Stores and queries the record</td>
@@ -508,7 +560,7 @@
       </div>
     </section>
 
-    <!-- Licensing. The terms are identical across the three, so the table
+    <!-- Licensing. The terms are identical across the four, so the table
          states them once and each product entry links the LICENSE that carries
          its own parameters. The mariadb.com boilerplate has none of them
          filled in, so this page never links it. -->
@@ -518,7 +570,7 @@
           <span class="eyebrow">Licensing</span>
           <h2>Do you need a commercial licence?</h2>
           <p>
-            All three are source-available under the Business Source License
+            All four are source-available under the Business Source License
             1.1, which is not an OSI-approved open-source licence. The terms
             that apply to you are in each repository's own <code>LICENSE</code>,
             which names its Licensor, its Licensed Work, its Additional Use
@@ -586,6 +638,15 @@
         </div>
 
         <div class="licences">
+          <div class="lic product-chart">
+            <h3>FerroCHART</h3>
+            <p>
+              Licensor Ruben Talstra. The Licensed Work is FerroCHART, each
+              version as published on GitHub. There is no binary to run yet,
+              and the source carries these terms today.
+            </p>
+            <a href="https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE" rel="noopener">FerroCHART <code>LICENSE</code></a>
+          </div>
           <div class="lic product-ehr">
             <h3>FerroEHR</h3>
             <p>

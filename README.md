@@ -83,7 +83,13 @@ switch back to branch-based publishing.
 The site, the scripts and the FerroHEALTH brand assets in this repository are
 [Apache-2.0](LICENSE). Each product's mark under
 `website/landing/assets/products/` belongs to that project and keeps its
-licence. The products themselves are BUSL-1.1 in their own repositories.
+licence. The products themselves are BUSL-1.1, with the parameters that apply
+in each repository's own licence file:
+[FerroEHR](https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE),
+[FerroTERM](https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE),
+[FerroBRIDGE](https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE).
+The site states what those terms mean at
+<https://ferrohealth.eu/#licensing>.
 
 openEHR® is a registered trademark of the openEHR Foundation. HL7® and FHIR®
 are registered trademarks of Health Level Seven International. SNOMED CT® is a

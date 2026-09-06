@@ -22,3 +22,7 @@ target
 
 # macOS
 .DS_Store
+
+# The assembled site (scripts/site/assemble.sh), rebuilt on every run and
+# published from the Pages workflow, never from a checkout.
+_site/

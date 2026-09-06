@@ -81,7 +81,7 @@
         "url": "https://ferroehr.eu/",
         "codeRepository": "https://github.com/rubentalstra/FerroEHR",
         "programmingLanguage": "Rust",
-        "license": "https://mariadb.com/bsl11/",
+        "license": "https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE",
         "applicationCategory": "HealthApplication",
         "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
       },
@@ -93,7 +93,7 @@
         "url": "https://ferroterm.eu/",
         "codeRepository": "https://github.com/rubentalstra/FerroTERM",
         "programmingLanguage": "Rust",
-        "license": "https://mariadb.com/bsl11/",
+        "license": "https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE",
         "applicationCategory": "HealthApplication",
         "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
       },
@@ -105,7 +105,7 @@
         "url": "https://ferrobridge.eu/",
         "codeRepository": "https://github.com/rubentalstra/FerroBRIDGE",
         "programmingLanguage": "Rust",
-        "license": "https://mariadb.com/bsl11/",
+        "license": "https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE",
         "applicationCategory": "HealthApplication",
         "publisher": { "@id": "https://ferrohealth.eu/#publisher" }
       }
@@ -128,6 +128,7 @@
         <a href="#how" class="hide-sm">How they fit</a>
         <a href="#principles" class="hide-sm">Principles</a>
         <a href="#status">Status</a>
+        <a href="#licensing">Licence</a>
         <a href="https://github.com/rubentalstra" rel="noopener">GitHub</a>
       </nav>
     </div>
@@ -326,6 +327,7 @@
               held back for a paid edition. Free for non-commercial production;
               other production use needs a commercial licence, and each version
               becomes Apache 2.0 four years after it is published.
+              <a href="#licensing">What that means for you</a>.
             </p>
           </article>
 
@@ -483,25 +485,167 @@
                 <th scope="row"><span class="dot" aria-hidden="true"></span>FerroEHR</th>
                 <td>Stores and queries the record</td>
                 <td class="num" data-rel="FerroEHR">v4.1.1</td>
-                <td>BUSL-1.1</td>
+                <td><a href="https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE" rel="noopener">BUSL-1.1</a></td>
                 <td><a href="https://ferroehr.eu/" rel="noopener">ferroehr.eu</a></td>
               </tr>
               <tr class="row-term">
                 <th scope="row"><span class="dot" aria-hidden="true"></span>FerroTERM</th>
                 <td>Answers what a code means</td>
                 <td class="num" data-rel="FerroTERM">v0.0.11</td>
-                <td>BUSL-1.1</td>
+                <td><a href="https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE" rel="noopener">BUSL-1.1</a></td>
                 <td><a href="https://ferroterm.eu/" rel="noopener">ferroterm.eu</a></td>
               </tr>
               <tr class="row-bridge">
                 <th scope="row"><span class="dot" aria-hidden="true"></span>FerroBRIDGE</th>
                 <td>Carries the record onward</td>
                 <td class="num" data-rel="FerroBRIDGE">v0.0.1</td>
-                <td>BUSL-1.1</td>
+                <td><a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">BUSL-1.1</a></td>
                 <td><a href="https://ferrobridge.eu/" rel="noopener">ferrobridge.eu</a></td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Licensing. The terms are identical across the three, so the table
+         states them once and each product entry links the LICENSE that carries
+         its own parameters. The mariadb.com boilerplate has none of them
+         filled in, so this page never links it. -->
+    <section id="licensing">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">Licensing</span>
+          <h2>Do you need a commercial licence?</h2>
+          <p>
+            All three are source-available under the Business Source License
+            1.1, which is not an OSI-approved open-source licence. The terms
+            that apply to you are in each repository's own <code>LICENSE</code>,
+            which names its Licensor, its Licensed Work, its Additional Use
+            Grant and its Change Date. This page summarises them for
+            evaluators, and each <code>LICENSE</code> is the authority.
+          </p>
+        </div>
+
+        <div class="matrix-scroll">
+          <table class="matrix licence">
+            <caption>
+              The same answer holds for FerroEHR, FerroTERM and FerroBRIDGE.
+              Each product's <code>LICENSE</code> states it for that product.
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">What you are doing</th>
+                <th scope="col">What you need</th>
+                <th scope="col">Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Reading, building, modifying or redistributing the source</th>
+                <td><span class="verdict free">Free</span></td>
+                <td>The licence grants it without a fee and without asking anyone.</td>
+              </tr>
+              <tr>
+                <th scope="row">Development, testing, evaluation, prototyping</th>
+                <td><span class="verdict free">Free</span></td>
+                <td>All non-production use is granted.</td>
+              </tr>
+              <tr>
+                <th scope="row">Production use for Non-Commercial Purposes</th>
+                <td><span class="verdict free">Free</span></td>
+                <td>
+                  Personal use, academic or scientific research, teaching, and
+                  use by a non-profit organisation or public body that is not in
+                  the course of a business, does not deliver a service for
+                  payment, and is not for commercial advantage.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">A hospital, clinic or care provider running it for its patients</th>
+                <td><span class="verdict paid">Commercial licence</span></td>
+                <td>Delivering health care, or any other service for payment, is production use outside the grant.</td>
+              </tr>
+              <tr>
+                <th scope="row">A vendor or integrator, or any company running it in production</th>
+                <td><span class="verdict paid">Commercial licence</span></td>
+                <td>Production use in the course of a business is outside the grant.</td>
+              </tr>
+              <tr>
+                <th scope="row">Offering it, or a work derived from it, to third parties as a hosted, managed or embedded service</th>
+                <td><span class="verdict paid">Commercial licence</span></td>
+                <td>Excluded from the grant in every case, whoever you are.</td>
+              </tr>
+              <tr>
+                <th scope="row">Selling, sublicensing or otherwise distributing it for a fee, on its own or inside another product</th>
+                <td><span class="verdict paid">Commercial licence</span></td>
+                <td>Excluded from the grant in every case, whoever you are.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="licences">
+          <div class="lic product-ehr">
+            <h3>FerroEHR</h3>
+            <p>
+              Licensor Ruben Talstra. The Licensed Work is FerroEHR, each
+              version as published on GitHub.
+            </p>
+            <a href="https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE" rel="noopener">FerroEHR <code>LICENSE</code></a>
+          </div>
+          <div class="lic product-term">
+            <h3>FerroTERM</h3>
+            <p>
+              Licensor Ruben Talstra. The Licensed Work is FerroTERM, each
+              version as published on GitHub. The code systems it serves are
+              licensed by their owners, and it ships none of their content.
+            </p>
+            <a href="https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE" rel="noopener">FerroTERM <code>LICENSE</code></a>
+          </div>
+          <div class="lic product-bridge">
+            <h3>FerroBRIDGE</h3>
+            <p>
+              Licensor Ruben Talstra. The Licensed Work is FerroBRIDGE, each
+              version as published on GitHub. There is no binary to run yet,
+              and the source carries these terms today.
+            </p>
+            <a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">FerroBRIDGE <code>LICENSE</code></a>
+          </div>
+        </div>
+
+        <div class="lic-notes">
+          <p>
+            <strong>The Change Date.</strong> Each version becomes available
+            under the Apache License 2.0, its Change License, four years after
+            that version is published. The change applies per version, so a
+            version you run today gets there on its own date.
+          </p>
+          <p>
+            <strong>The published crates are separate.</strong> FerroEHR's five
+            generated openEHR model crates on crates.io (<code>openehr-base</code>,
+            <code>openehr-rm</code>, <code>openehr-am</code>,
+            <code>openehr-lang</code> and <code>openehr-term</code>) are
+            Apache-2.0, so any Rust project can use them with no licence
+            conversation; <code>openehr-term</code> also carries CC-BY-SA-3.0
+            for the openEHR terminology XML it embeds. The three hand-written
+            engines (<code>openehr-query</code>, <code>openehr-adl</code> and
+            <code>openehr-its</code>) carry the Business Source License 1.1,
+            the same as the server. FerroTERM publishes
+            <code>fhir-types</code> and <code>rf2</code> under Apache-2.0.
+            <a href="https://ferroehr.eu/docs/latest/licensing.html" rel="noopener">FerroEHR's licensing page</a>
+            carries the full table, including the third-party material each
+            repository vendors.
+          </p>
+          <p>
+            <strong>Getting a commercial licence.</strong> Companies and care
+            providers building on these products are wanted here, and the
+            commercial licence is the normal path for them. It starts with a
+            short conversation with the maintainer named in that product's
+            <code>MAINTAINERS.md</code>: Ruben Talstra,
+            <a href="https://github.com/rubentalstra" rel="noopener">@rubentalstra</a>
+            on GitHub.
+          </p>
         </div>
       </div>
     </section>
@@ -537,9 +681,14 @@
           </a>
           <p>
             The family behind FerroEHR, FerroTERM and FerroBRIDGE. Each product
-            is licensed under the
-            <a href="https://mariadb.com/bsl11/" rel="noopener">Business Source License 1.1</a>
-            in its own repository; this site is Apache-2.0.
+            is licensed under the Business Source License 1.1 in its own
+            repository, and its parameters are in that repository's
+            <code>LICENSE</code>:
+            <a href="https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE" rel="noopener">FerroEHR</a>,
+            <a href="https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE" rel="noopener">FerroTERM</a>,
+            <a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">FerroBRIDGE</a>.
+            <a href="#licensing">What the terms mean for you</a>. This site is
+            Apache-2.0.
           </p>
           <p>
             openEHR® is a registered trademark of the openEHR Foundation. HL7®

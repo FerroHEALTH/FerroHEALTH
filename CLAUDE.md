@@ -28,7 +28,9 @@ in step.
   is one copy of the artwork and it can be used outside this site.
 - `scripts/site/assemble.sh`: builds the site the way GitHub Pages serves it.
 - `scripts/checks/`: `internal-links.sh` (every local link in the assembled site
-  resolves) and `writing-style.sh` (the mechanical tells).
+  resolves), `writing-style.sh` (the mechanical tells), `svg-first.sh` (a raster
+  where the vector exists), and `licence-links.sh` (a licence link points at a
+  product's own `LICENSE`).
 - `.github/workflows/`: `ci.yml` (workflows, shell, prose) and `pages.yml`
   (assemble, check, deploy).
 
@@ -38,6 +40,8 @@ in step.
 scripts/site/assemble.sh _site
 scripts/checks/internal-links.sh _site
 scripts/checks/writing-style.sh
+scripts/checks/svg-first.sh
+scripts/checks/licence-links.sh
 shellcheck --severity=style .claude/hooks/*.sh scripts/**/*.sh
 python3 -m http.server -d _site 8000
 ```
@@ -61,6 +65,10 @@ Look at the page before calling it right: light and dark, wide and narrow.
   is indigo. FerroHEALTH is iron and steel, and spends a product hue only where
   that product is named. The product values in `assets/brand/tokens.css` are
   copied verbatim from each product's own `tokens.css`.
+- **A licence link points at the product's own `LICENSE`.** The BUSL-1.1
+  boilerplate fills none of its parameters in, so a reader who follows it sees
+  a blank Additional Use Grant. The page links each repository's `LICENSE` and
+  states the terms beside the link. `scripts/checks/licence-links.sh` holds it.
 - **A diagram is a file, never inline artwork.** It lives in
   `assets/diagrams/` with its palette written in as literal values and a
   `prefers-color-scheme` query inside the file, so one copy serves the page,

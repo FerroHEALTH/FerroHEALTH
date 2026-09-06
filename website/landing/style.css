@@ -410,6 +410,46 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
 .matrix .row-bridge { --hue: var(--fh-bridge); }
 .matrix td.num { font-family: var(--fh-mono); font-variant-numeric: tabular-nums; }
 
+/* Licensing. The verdict column is the answer a reader came for, so it reads
+   as a badge and keeps its colour in both themes; free and paid are told apart
+   by the word, and the colour only reinforces it. */
+.matrix.licence { min-width: 720px; }
+.matrix.licence tbody th { font-weight: 600; }
+.matrix.licence td:last-child { color: var(--fh-muted); font-size: 0.9rem; }
+.verdict {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+  border: 1px solid;
+}
+.verdict.free { color: var(--fh-term); border-color: color-mix(in srgb, var(--fh-term) 45%, transparent); background: color-mix(in srgb, var(--fh-term) 12%, transparent); }
+.verdict.paid { color: var(--fh-ehr); border-color: color-mix(in srgb, var(--fh-ehr) 45%, transparent); background: color-mix(in srgb, var(--fh-ehr) 12%, transparent); }
+
+.licences {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.1rem;
+  margin-top: 2.25rem;
+}
+.lic {
+  background: var(--fh-bg);
+  border: 1px solid var(--fh-border);
+  border-left: 3px solid var(--hue);
+  border-radius: var(--fh-radius);
+  padding: 1.25rem 1.35rem;
+}
+.lic h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.lic p { margin: 0 0 0.8rem; color: var(--fh-muted); font-size: 0.92rem; }
+.lic a { font-weight: 700; }
+.lic a code { background: none; padding: 0; font-size: 0.86em; }
+
+.lic-notes { max-width: 72ch; margin: 2.25rem auto 0; }
+.lic-notes p { color: var(--fh-muted); font-size: 0.94rem; margin: 0 0 1rem; }
+.lic-notes strong { color: var(--fh-text); }
+
 /* The closing panel */
 .panel {
   max-width: 760px;

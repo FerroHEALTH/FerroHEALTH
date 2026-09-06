@@ -31,6 +31,13 @@ beyond that script, no runtime dependency.
 - **Relative URLs inside the site.** The page has to work from a checkout, from
   a preview, and from the apex domain without a rewrite. Product links are
   absolute, because they point at another domain.
+- **A licence link points at the licensed product's own `LICENSE`.** The
+  Business Source License 1.1 is a template, and a generic copy of it carries an
+  empty Additional Use Grant and no Change Date. The terms live in each product
+  repository's `LICENSE`, so `#licensing` links those three and states in place
+  what is free and what needs a commercial licence.
+  `scripts/checks/licence-links.sh` fails the build on a boilerplate link and on
+  a product the page names without linking its licence.
 - **Every local link resolves.** `scripts/checks/internal-links.sh` runs in CI
   over the assembled site and covers hrefs, srcs, and same-page fragments.
 

@@ -3,7 +3,7 @@
 
 # FerroHEALTH brand
 
-FerroHEALTH is the family name for three servers that are built and released
+FerroHEALTH is the family name for four servers that are built and released
 separately: [FerroEHR](https://ferroehr.eu/), an openEHR® Clinical Data
 Repository; [FerroTERM](https://ferroterm.eu/), an HL7® FHIR® terminology
 server; and [FerroBRIDGE](https://ferrobridge.eu/), a bridge from openEHR to
@@ -11,20 +11,35 @@ FHIR and to the OMOP Common Data Model. Ferro is *ferrum*, iron, which is what
 Rust is an oxide of.
 
 The parent follows the same file set, naming, variant list, and raster pipeline
-as the three products. What it does differently is colour: each product owns a
+as the four products. What it does differently is colour: each product owns a
 hue, so the parent owns none of them.
 
 ## The mark
 
-The mark is a single pulse drawn as three strokes, one per product, in each
-product's own hue: rust for FerroEHR, teal for FerroTERM, indigo for
-FerroBRIDGE. The strokes meet, because a record reaching
-a clinician, the terminology that gives it meaning, and the bridge that carries
-it onward are one signal path, not three products in a bundle.
+The mark is a single pulse drawn as four strokes, one per product, in each
+product's own hue: rose for FerroCHART, rust for FerroEHR, teal for FerroTERM,
+indigo for FerroBRIDGE. The strokes meet, because a form a clinician fills in,
+the record it becomes, the terminology that gives it meaning, and the bridge
+that carries it onward are one signal path, not four products in a bundle.
 
-The stroke order is always FerroEHR, then FerroTERM, then FerroBRIDGE, left to
-right. That is the order data moves, and it is the order the products are named
-in every list on the site.
+The stroke order is the order data moves through the family, left to right:
+FerroCHART enters it, FerroEHR keeps it, FerroTERM describes it, FerroBRIDGE
+sends it on. That order is the meaning of the mark, so never reorder the
+strokes. Before FerroCHART the mark had three strokes in FerroEHR, FerroTERM,
+FerroBRIDGE order, which was the same sequence without the entry point.
+
+Four segments share the width three used to, so each is shorter. The mark reads
+down to 24 px and gives up below that, where `favicon.svg` takes over. At 16 px
+the favicon is a coloured pulse rather than four separable strokes; that was
+already true of the three-stroke drawing and is the accepted cost of a
+per-product mark.
+
+**Adding a fifth product breaks this.** Four is where a stroke per product
+stops scaling: a fifth segment in the same width is not legible at any size the
+mark is used at. If the family grows again, the answer is to drop the
+per-product reading and draw the pulse in steel, letting product colour live on
+the product cards where it can grow without limit. Decide that before drawing a
+fifth stroke, not after.
 
 ## Palette, "Iron & Steel"
 
@@ -45,9 +60,20 @@ between this site and the product's own:
 
 | Product | Light ground | Dark ground |
 |---|---|---|
+| FerroCHART | `#C2185B` | `#E04F84` |
 | FerroEHR | `#B7431B` | `#D97742` |
 | FerroTERM | `#0D9488` | `#2DD4BF` |
 | FerroBRIDGE | `#4F46E5` | `#A5B4FC` |
+
+The table is in stroke order, which is the order data moves, not alphabetical.
+
+FerroCHART's rose was chosen by measurement rather than by eye, because by the
+fourth product the free hues are the ones that sit close to a hue already
+taken. Every candidate was scored for its worst-case CIEDE2000 distance from
+the other three, in both grounds, under normal, deuteranope and protanope
+vision. Rose at 330 degrees wins at 14.9; green and violet both fall below 10.
+A fifth product would have to clear the same bar against four, which is the
+practical reason the mark stops at four.
 
 The values live in `tokens.css` as `--ferrohealth-*` custom properties. The
 landing page reads them through its own `--fh-*` tokens in
@@ -95,8 +121,8 @@ dependency. The rest of the FerroHEALTH surfaces use the system font stack in
   dark), always set together, never stacked.
 - Keep clear space around the mark equal to the height of the pulse's tallest
   peak.
-- The three-colour mark reads down to 24 px. Below that use `favicon.svg`,
-  which draws the strokes heavier on the iron tile and reads at 16 px.
+- The four-colour mark reads down to 24 px. Below that use `favicon.svg`,
+  which draws the strokes heavier on the iron tile.
 - Put the colour mark on light or quiet surfaces, and
   `ferrohealth-icon-dark.svg` on busy or light-photographic backgrounds.
 - Use `ferrohealth-icon-mono.svg` where one colour is required; it takes the
@@ -104,7 +130,7 @@ dependency. The rest of the FerroHEALTH surfaces use the system font stack in
 - Do not recolour a stroke outside its product's palette, reorder the strokes,
   stretch the mark, add effects, or rebuild the wordmark in another typeface.
 - Do not give FerroHEALTH a hue of its own. If the parent ever needs to be
-  loud, it borrows the three, in order.
+  loud, it borrows the four, in order.
 - FerroHEALTH names the family. Never write it as the name of software
   somebody can install.
 

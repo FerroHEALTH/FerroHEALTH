@@ -1,13 +1,17 @@
 <!-- SPDX-FileCopyrightText: Ruben Talstra -->
 <!-- SPDX-License-Identifier: Apache-2.0 -->
-<!-- The FerroHEALTH mark: one pulse drawn in three strokes, one per product.
-     Rust for FerroEHR, teal for FerroTERM, indigo for FerroBRIDGE. The strokes
-     meet, because the three servers are one signal path. -->
+<!-- The FerroHEALTH mark: one pulse drawn in four strokes, one per product, in
+     each product's own hue. The strokes run in the order data moves through
+     the family: rose for FerroCHART, which enters it, rust for FerroEHR, which
+     keeps it, teal for FerroTERM, which describes it, indigo for FerroBRIDGE,
+     which sends it on. They meet, because the four servers are one signal
+     path. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64" role="img" aria-label="FerroHEALTH icon">
   <title>FerroHEALTH</title>
   <g fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M4 33 H17 L23 21" stroke="#B7431B"/>
-    <path d="M23 21 L29.5 45 L35 27" stroke="#0D9488"/>
-    <path d="M35 27 L40 33 H60" stroke="#4F46E5"/>
+    <path d="M4 33 H14 L19 20" stroke="#C2185B"/>
+    <path d="M19 20 L26 45" stroke="#B7431B"/>
+    <path d="M26 45 L32 26" stroke="#0D9488"/>
+    <path d="M32 26 L38 33 H60" stroke="#4F46E5"/>
   </g>
 </svg>

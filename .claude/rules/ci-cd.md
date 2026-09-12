@@ -4,7 +4,7 @@ paths: [".github/**", "scripts/**"]
 
 # CI/CD and supply-chain discipline
 
-No spec governs this: our own design, and the same posture the three product
+No spec governs this: our own design, and the same posture the four product
 repositories hold, scaled to a static site. Grounded in the OWASP GitHub Actions
 Security Cheat Sheet, SLSA v1.0, and OpenSSF Scorecard.
 
@@ -17,8 +17,9 @@ Security Cheat Sheet, SLSA v1.0, and OpenSSF Scorecard.
 - **`persist-credentials: false`** on every `actions/checkout`.
 - **No `${{ }}` interpolation inside `run:`.** Pass context through `env:`, which
   is what keeps a template injection out of the shell.
-- **A pull request never deploys.** `build` runs on every event; `deploy` is
-  gated on `github.event_name != 'pull_request'`.
+- **Only main deploys.** `build` runs on every event; `deploy` is gated on
+  `github.event_name != 'pull_request' && github.ref == 'refs/heads/main'`, so
+  neither a pull request nor a dispatched build on a branch publishes.
 
 ## Lanes
 
@@ -29,18 +30,29 @@ Security Cheat Sheet, SLSA v1.0, and OpenSSF Scorecard.
 - `shell`: `shellcheck --severity=style` over every tracked shell script.
 - `prose`: `scripts/checks/writing-style.sh`, the mechanical half of
   `writing-style.md`.
+- `versions`: `scripts/checks/no-typed-version.sh`, no version a product moves
+  outside a rendered marker.
 
 `pages.yml` assembles the site, runs `scripts/checks/internal-links.sh` over the
 result, and deploys from `main`.
+
+`refresh.yml` runs every six hours. It renders the committed fallbacks in
+`index.html` in place with `scripts/site/render-releases.sh` and, when the file
+changed, commits on `chore/refresh-release-fallbacks`, opens or updates one pull
+request, dispatches `ci.yml` and `pages.yml` onto that branch (a pull request
+the workflow token opens starts no run of its own), and enables auto-merge. The
+squash merge is signed by GitHub, which satisfies the ruleset. Nothing in it
+needs a secret beyond the workflow token.
 
 ## The published site
 
 - The custom domain is configured in the repository's Pages settings.
   `website/landing/CNAME` travels with the artifact so the domain survives a
   switch back to branch-based publishing.
-- The daily schedule exists because the page carries each product's latest
-  release. A release cut in FerroEHR, FerroTERM, or FerroBRIDGE reaches the
-  status table without a commit here.
+- The six-hourly schedule exists because the page carries each product's
+  latest release and last push. A release cut in any of the four products
+  reaches the status table without a commit here, and `refresh.yml` then moves
+  the committed fallbacks to match.
 - **Never add AI or Claude attribution** to a commit, a PR, or release text.
 
 ## Never

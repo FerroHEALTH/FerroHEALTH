@@ -35,8 +35,10 @@ assets/diagrams/           the architecture diagram, self-contained and theme-ad
 website/landing/           the site: one page, its stylesheet, and its static files
   assets/products/         a copy of each product's own mark, for the product cards
 scripts/site/assemble.sh   builds the site the way GitHub Pages serves it
-scripts/checks/            what CI runs against the assembled site
-.github/workflows/pages.yml  build on every push and pull request, deploy from main
+scripts/site/render-releases.sh  fills every figure a product moves, from the GitHub API
+scripts/checks/            what CI runs against the repository and the assembled site
+.github/workflows/pages.yml    build on every push and pull request, deploy from main
+.github/workflows/refresh.yml  re-render the committed fallbacks, one auto-merged pull request
 ```
 
 ## Build it
@@ -50,18 +52,36 @@ python3 -m http.server -d _site 8000  # then open http://localhost:8000/
 `assemble.sh` copies the landing directory and the brand directory into one
 tree, and renders two things:
 
-- the release column of the status table and the container tag in the quick
-  start, from each product's latest release through the GitHub API. Without a
-  token the page keeps the version committed in `index.html`, which is a real
-  release and is exactly as stale as the checkout.
+- every figure a product moves, through `render-releases.sh` and the GitHub
+  API: the latest release tag (the status table, the card badges, the image tag
+  in the quick start), the day it was published, and the day of the last push.
+  Without a token the page keeps the values committed in `index.html`, which
+  are real and exactly as stale as the checkout.
 - `sitemap.xml`'s `lastmod`, from the commit being deployed.
 
 ## How it is deployed
 
 GitHub's Pages-with-Actions pattern, the same one the four product
 repositories use. A push to `main` assembles the site and deploys it; a pull
-request assembles it and stops. A daily schedule redeploys, so a release cut in
-any of the four products reaches the status table without a commit here.
+request assembles it and stops. A six-hourly schedule redeploys, so a release
+cut in any of the four products reaches the status table without a commit here.
+
+## How it stays fresh
+
+Every fact on the page that a product can move is rendered, and everything
+else is a design commitment or lives on the product's own site:
+
+- **Rendered:** the latest release, its date, and the last push per product,
+  by `scripts/site/render-releases.sh` at every deploy.
+- **Refreshed:** `.github/workflows/refresh.yml` runs the same script over the
+  committed `index.html` every six hours. When a value moved it opens one pull
+  request on `chore/refresh-release-fallbacks`, dispatches the required checks
+  onto it, and enables auto-merge, so the checkout follows the products with
+  nobody typing a version.
+- **Guarded:** `scripts/checks/no-typed-version.sh` fails CI on a version-like
+  token outside a rendered marker, in the page and the diagram. A specification
+  version, a database version, a FHIR release name, a code system list or a
+  crate list is not on this page at all; the product's site carries the pin.
 
 The custom domain is configured in the repository's Pages settings, and
 `website/landing/CNAME` travels with the artifact so the domain survives a
@@ -73,8 +93,10 @@ switch back to branch-based publishing.
   That is why each product's mark is a committed copy under
   `website/landing/assets/products/`, and why there is no web font, no
   analytics, and no CDN.
-- **No hand-typed version.** A number that describes a product is rendered from
-  that product's release, never typed into the page and left to rot.
+- **No hand-typed version, and no hand-typed status.** A figure that describes
+  a product is rendered from that product's repository, never typed into the
+  page and left to rot. The page shows a release and a date and lets the reader
+  judge.
 - **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
   is teal, FerroBRIDGE is indigo; FerroHEALTH is iron and steel, and borrows
   the four only where a

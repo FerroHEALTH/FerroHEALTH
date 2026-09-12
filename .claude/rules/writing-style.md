@@ -54,14 +54,19 @@ Write plainly, so the text reads like a person wrote it for another person.
 
 ## Product copy
 
-The site describes three products it does not own the release notes for. Say
-what a product does and what it is measured at, and let its own site carry the
-detail. Two rules follow from that:
+The site describes four products it does not own the release notes for. Say
+what a product does, and let its own site carry the detail. Two rules follow
+from that:
 
-- **State the status plainly.** FerroBRIDGE has no binary, so the page says so.
-  Never describe software a reader cannot download.
-- **Never type a version.** A version on the page is rendered from the product's
-  release by `scripts/site/assemble.sh`. A hand-typed one rots.
+- **Never type a status.** The page shows what each product has released and
+  when its code last moved, both rendered from its repository by
+  `scripts/site/render-releases.sh`. "Released", "design phase" and "no binary
+  yet" are judgements that rot; a date is a fact that does not.
+- **Never type a version.** A release tag is rendered the same way. A
+  specification version, a database version, a FHIR release name, a code system
+  list or a crate list is not rendered here and so is not typed here: name the
+  standard and link the product's site for the pin.
+  `scripts/checks/no-typed-version.sh` holds it.
 
 ## Comments in HTML, CSS, SVG, and shell
 

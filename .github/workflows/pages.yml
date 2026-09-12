@@ -3,16 +3,18 @@
 
 # Pages: assemble the family site and publish it to GitHub Pages.
 #
-# The shape is GitHub's Pages-with-Actions pattern, which is what the three
+# The shape is GitHub's Pages-with-Actions pattern, which is what the four
 # product repositories already use: a `build` job renders the site and uploads
 # it as a Pages artifact, and a `deploy` job publishes that artifact to the
 # github-pages environment. `build` runs on pull requests too, so a site that
 # does not assemble fails the check; only a push to main or a manual dispatch
 # deploys.
 #
-# The site carries each product's latest release, so a push is not the only
-# thing that should rebuild it: the schedule below redeploys daily and picks up
-# a release cut in any of the three repositories.
+# The site carries each product's latest release and last push, so a push here
+# is not the only thing that should rebuild it: the schedule below redeploys
+# every six hours and picks up a release cut in any of the four repositories.
+# refresh.yml moves the committed fallbacks the same way, through a pull
+# request, so the checkout stays as fresh as the deployed page.
 name: Pages
 
 on:
@@ -20,9 +22,9 @@ on:
     branches: [main]
   pull_request:
   schedule:
-    # 05:17 UTC daily. Off the hour, because the hour is when everybody else's
-    # cron runs and GitHub drops scheduled jobs under load.
-    - cron: "17 5 * * *"
+    # 17 past every sixth hour. Off the hour, because the hour is when
+    # everybody else's cron runs and GitHub drops scheduled jobs under load.
+    - cron: "17 */6 * * *"
   workflow_dispatch:
 
 permissions: {}
@@ -48,8 +50,9 @@ jobs:
           persist-credentials: false
       - name: Assemble the site
         env:
-          # The release figures are read from the three public repositories.
-          # The token reads public repository metadata and nothing else.
+          # The release and push figures are read from the four public
+          # repositories. The token reads public repository metadata and
+          # nothing else.
           GH_TOKEN: ${{ github.token }}
         run: scripts/site/assemble.sh _site
       - name: Check the assembled page for a link that would 404 on this site
@@ -58,12 +61,13 @@ jobs:
         with:
           path: _site
 
-  # Publish the artifact. Skipped on pull requests: a pull request verifies the
-  # site and never deploys it.
+  # Publish the artifact. Only main deploys: a pull request verifies the site
+  # and stops, and a dispatched build on another branch (refresh.yml runs one to
+  # report the `site` check) stops the same way.
   deploy:
     name: deploy
     needs: build
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:

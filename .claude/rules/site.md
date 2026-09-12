@@ -24,17 +24,24 @@ beyond that script, no runtime dependency.
   and a slide. That `<style>` is inside the image document, so the page's CSP
   does not reach it. `assets/diagrams/README.md` carries the conventions and the
   raster command.
-- **No hand-typed version.** A version on the page carries a `data-rel` or
-  `data-rel-plain` marker and is filled by `assemble.sh` from that product's
-  latest release. The committed value is a real release so an assembly without a
-  token still produces commands that run.
+- **No hand-typed version, and no hand-typed status.** A fact a product moves
+  carries a marker (`data-rel`, `data-rel-plain`, `data-rel-date`,
+  `data-pushed`) and is filled by `scripts/site/render-releases.sh` from that
+  product's repository: the latest release, its date, and the last push. The
+  committed value is real so an assembly without a token still produces
+  commands that run, and `.github/workflows/refresh.yml` moves it through a
+  pull request when a product releases. A specification version, a database
+  version, a FHIR release name, a code system list or a crate list is not
+  rendered and so is not typed: the page names the standard and links the
+  product's site for the pin. `scripts/checks/no-typed-version.sh` fails the
+  build on a version-like token outside a marker, in the page and the diagram.
 - **Relative URLs inside the site.** The page has to work from a checkout, from
   a preview, and from the apex domain without a rewrite. Product links are
   absolute, because they point at another domain.
 - **A licence link points at the licensed product's own `LICENSE`.** The
   Business Source License 1.1 is a template, and a generic copy of it carries an
   empty Additional Use Grant and no Change Date. The terms live in each product
-  repository's `LICENSE`, so `#licensing` links those three and states in place
+  repository's `LICENSE`, so `#licensing` links all four and states in place
   what is free and what needs a commercial licence.
   `scripts/checks/licence-links.sh` fails the build on a boilerplate link and on
   a product the page names without linking its licence.
@@ -54,7 +61,7 @@ beyond that script, no runtime dependency.
 
 ## Scope
 
-The page says what each product does and how the three fit together. Anything a
+The page says what each product does and how the four fit together. Anything a
 product's own site should say belongs there. Adding a benchmark table, a
 conformance grid, or an API reference here duplicates a page that is already
 generated from evidence in the product's repository, and the copy here would go

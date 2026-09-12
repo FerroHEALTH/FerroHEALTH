@@ -316,7 +316,7 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
-.product-head .status { margin-left: auto; }
+.product-head .status { margin-left: auto; font-family: var(--fh-mono); font-weight: 700; }
 
 /* How the four fit together. The diagram is one file in assets/diagrams/,
    which carries its own palette and swaps it on prefers-color-scheme, so this
@@ -435,7 +435,7 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
 .matrix .row-ehr { --hue: var(--fh-ehr); }
 .matrix .row-term { --hue: var(--fh-term); }
 .matrix .row-bridge { --hue: var(--fh-bridge); }
-.matrix td.num { font-family: var(--fh-mono); font-variant-numeric: tabular-nums; }
+.matrix td.num { font-family: var(--fh-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* Licensing. The verdict column is the answer a reader came for, so it reads
    as a badge and keeps its colour in both themes; free and paid are told apart

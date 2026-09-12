@@ -39,7 +39,7 @@ dominant change. Never force-push `main`.
 
 ## A change in another repository
 
-The three products are separate repositories. When work here turns up a defect
+The four products are separate repositories. When work here turns up a defect
 there, file it there with the evidence from here, and link the issue from the
 work in this repository. A local workaround carries a `TODO(#N)` pointing at the
 upstream issue and is removed when the fix lands.

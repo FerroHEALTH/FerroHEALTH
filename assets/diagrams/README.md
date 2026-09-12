@@ -44,13 +44,13 @@ at both ends, because the bridge reads openEHR out to FHIR and writes FHIR back
 in, which is the same rule the FerroBRIDGE mark keeps. Each edge names the
 specification it speaks, with two exceptions worth knowing:
 
-- **`R4 facade`** is FerroBRIDGE's FHIR version, and only its. FHIRconnect's
-  schemas admit no other value for `spec.version`, so the bridge claims R4 and
-  nothing else. FerroTERM serves R4, R4B, R5 and the R6 ballot, which is why its
-  box carries the list.
+- **`FHIR facade`** names the exchange and no FHIR release. The facade speaks
+  the release FHIRconnect's mappings name, and FerroBRIDGE's own site says
+  which. FerroTERM's band names code systems for the same reason: the FHIR
+  releases it serves are a fact its own site renders, and a list here would
+  rot.
 - **`SQL rows`** names no wire specification, because OMOP is a database schema.
-  The OMOCL mappings compile to SQL that writes typed rows into the CDM v5.4
-  tables.
+  The OMOCL mappings compile to SQL that writes typed rows into the CDM tables.
 
 `$validate-code` is the one operation FerroEHR uses, and the label says so. A
 server that does not offer it is configured to `operation = "expand"` per
@@ -72,7 +72,8 @@ media query inside the file swaps every colour on `prefers-color-scheme`, so one
 file serves a light and a dark reader, and the background stays transparent so
 it sits on any surface.
 
-A product keeps its own hue: FerroEHR rust, FerroTERM teal, FerroBRIDGE indigo.
+A product keeps its own hue: FerroCHART rose, FerroEHR rust, FerroTERM teal,
+FerroBRIDGE indigo.
 Everything else is iron, steel and graphite.
 
 ## Regenerating the raster

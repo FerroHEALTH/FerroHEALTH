@@ -130,6 +130,22 @@ jobs:
       - name: Every reference with a vector available uses it
         run: scripts/checks/svg-first.sh
 
+  # A version a product moves is rendered at assembly time or lives on the
+  # product's own site. A hand-typed one rotted once, so the page and the
+  # diagram are held to it.
+  versions:
+    name: no typed version
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: No version outside a rendered marker
+        run: scripts/checks/no-typed-version.sh
+
   # A licence link states terms. The BUSL-1.1 boilerplate fills none of its
   # parameters in, so the repository links each product's own LICENSE instead.
   licensing:
@@ -159,6 +175,7 @@ jobs:
       - shellcheck
       - prose
       - assets
+      - versions
       - licensing
     if: always()
     runs-on: ubuntu-latest

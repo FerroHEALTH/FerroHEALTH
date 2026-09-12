@@ -29,12 +29,17 @@ in step.
   theme-adaptive SVG plus its raster. The page loads it with `<img>`, so there
   is one copy of the artwork and it can be used outside this site.
 - `scripts/site/assemble.sh`: builds the site the way GitHub Pages serves it.
+  `scripts/site/render-releases.sh` fills every figure a product moves, from the
+  GitHub API, and is shared with the refresh workflow.
 - `scripts/checks/`: `internal-links.sh` (every local link in the assembled site
   resolves), `writing-style.sh` (the mechanical tells), `svg-first.sh` (a raster
-  where the vector exists), and `licence-links.sh` (a licence link points at a
-  product's own `LICENSE`).
-- `.github/workflows/`: `ci.yml` (workflows, shell, prose) and `pages.yml`
-  (assemble, check, deploy).
+  where the vector exists), `licence-links.sh` (a licence link points at a
+  product's own `LICENSE`), and `no-typed-version.sh` (no version outside a
+  rendered marker).
+- `.github/workflows/`: `ci.yml` (workflows, shell, prose, versions),
+  `pages.yml` (assemble, check, deploy from main every six hours and on push),
+  and `refresh.yml` (re-render the committed fallbacks, open one pull request,
+  auto-merge).
 
 ## Build and check
 
@@ -44,6 +49,7 @@ scripts/checks/internal-links.sh _site
 scripts/checks/writing-style.sh
 scripts/checks/svg-first.sh
 scripts/checks/licence-links.sh
+scripts/checks/no-typed-version.sh
 shellcheck --severity=style .claude/hooks/*.sh scripts/**/*.sh
 python3 -m http.server -d _site 8000
 ```
@@ -56,13 +62,18 @@ Look at the page before calling it right: light and dark, wide and narrow.
   carried in a `<meta http-equiv>` because GitHub Pages sets no response
   headers. No web font, no analytics, no CDN, no hotlinked image, no inline
   `<style>` and no `style=` attribute.
-- **Never type a version.** A version on the page carries a `data-rel` or
-  `data-rel-plain` marker and is filled by `assemble.sh` from that product's
-  latest release. The committed value is a real release, so an assembly without
-  a token still produces commands that run.
+- **Never type a version or a status.** A fact a product moves (its latest
+  release, the release date, the last push) carries a `data-rel`,
+  `data-rel-plain`, `data-rel-date` or `data-pushed` marker and is filled by
+  `scripts/site/render-releases.sh` from that product's repository. The
+  committed value is real, and `.github/workflows/refresh.yml` moves it through
+  an auto-merged pull request when a product releases.
+  `scripts/checks/no-typed-version.sh` fails the build on a version outside a
+  marker, in the page and the diagram.
 - **Say what is true about a product, and let its own site carry the detail.**
-  FerroBRIDGE has no binary; the page says so. Never describe software a reader
-  cannot download.
+  A specification version, a database version, a FHIR release name, a code
+  system list or a crate list moves with a product release and belongs on that
+  product's site. The page names the standard and links the pin.
 - **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
   is teal, FerroBRIDGE is indigo. FerroHEALTH is iron and steel, and spends a
   product hue only where that product is named. The product values in

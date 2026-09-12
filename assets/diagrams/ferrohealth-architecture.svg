@@ -14,7 +14,7 @@
      and clear space to either side of it. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="680" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
   <title id="title">What calls what across FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE</title>
-  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API. Other applications call FerroEHR over ITS-REST directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its R4 facade in both directions, and writes typed rows into an OMOP Common Data Model v5.4 database over SQL.</desc>
+  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API. Other applications call FerroEHR over ITS-REST directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
@@ -41,12 +41,12 @@
     <!-- FerroTERM spans the three servers that call it, because all three reach
          a terminology server over the same FHIR API and none of them is a more
          important caller than the others. Drawn as a band rather than a peer
-         box, so the shared seam is the shape of the thing. Its version list is
-         here because one unqualified R4 on the bridge's facade would read as a
-         family-wide cap. -->
+         box, so the shared seam is the shape of the thing. It names code
+         systems and no FHIR release: which releases it serves is a fact its
+         own site renders. -->
     <rect class="box box-term" x="206" y="12" width="660" height="76" rx="10" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
     <text class="label tag-term" x="536" y="40" text-anchor="middle" font-size="15" font-weight="700" fill="#0d9488">FerroTERM</text>
-    <text class="sub" x="536" y="62" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM &#183; FHIR R4, R4B, R5, R6</text>
+    <text class="sub" x="536" y="62" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM &#183; the FHIR terminology API</text>
 
     <!-- The person the whole family exists for. -->
     <rect class="box" x="8" y="174" width="118" height="60" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
@@ -74,8 +74,8 @@
     <!-- FerroEHR -->
     <rect class="box box-ehr" x="452" y="160" width="160" height="88" rx="10" fill="#ffffff" stroke="#b7431b" stroke-width="1.5"/>
     <text class="label tag-ehr" x="532" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#b7431b">FerroEHR</text>
-    <text class="sub" x="532" y="210" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">openEHR CDR, AQL 1.1</text>
-    <text class="sub" x="532" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">PostgreSQL 18</text>
+    <text class="sub" x="532" y="210" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">openEHR CDR, AQL</text>
+    <text class="sub" x="532" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">PostgreSQL</text>
 
     <!-- FerroEHR validates a coded value at commit time. -->
     <path class="edge" d="M532 160 V92" fill="none" stroke="#58616e" stroke-width="1.6"/>
@@ -114,11 +114,11 @@
     <path class="edge" d="M877 186 H950 V144 H1004" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M866 186 l9 -5.5 v11 z" fill="#58616e"/>
     <path class="edge-head" d="M1010 144 l-9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="910" y="174" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">R4 facade</text>
+    <text class="edge-label" x="910" y="174" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">FHIR facade</text>
 
     <!-- OMOP is a database schema, so this edge names no wire specification. -->
     <rect class="box" x="1010" y="224" width="176" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="1098" y="248" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OMOP CDM v5.4</text>
+    <text class="label" x="1098" y="248" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OMOP CDM</text>
     <text class="sub" x="1098" y="266" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a batch load, for research</text>
     <path class="edge" d="M866 226 H950 V252 H1004" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M1010 252 l-9 -5.5 v11 z" fill="#58616e"/>

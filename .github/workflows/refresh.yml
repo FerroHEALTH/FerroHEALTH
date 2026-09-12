@@ -1,0 +1,132 @@
+# SPDX-FileCopyrightText: Ruben Talstra
+# SPDX-License-Identifier: Apache-2.0
+
+# Refresh: keep the committed release fallbacks as fresh as the deployed page.
+#
+# The page renders each product's latest release, its date and the last push
+# at assembly time, so the deployed site is fresh on its own. The values
+# committed in index.html are the fallback for an assembly without a token,
+# and they rot unless something moves them. This workflow renders them in
+# place on a schedule and, when the file changed, opens one pull request on a
+# fixed branch (or updates the open one) and enables auto-merge on it.
+#
+# A pull request opened with the workflow token starts no workflow run of its
+# own: GitHub withholds those so a workflow cannot trigger itself. The two
+# required checks are dispatched onto the branch by hand instead, because
+# workflow_dispatch is the one event the token may raise. A check attaches to
+# the commit it ran on, which is where the ruleset reads it from, so auto-merge
+# fires when both pass. The squash merge is a new commit signed by GitHub,
+# which is what the ruleset's signature rule asks of main.
+name: Refresh
+
+on:
+  schedule:
+    # 41 past every sixth hour, off the hour and off the Pages schedule.
+    - cron: "41 */6 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: release fallbacks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      BRANCH: chore/refresh-release-fallbacks
+      TITLE: "chore(site): refresh the committed release fallbacks"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Render the committed fallbacks in place
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/site/render-releases.sh website/landing/index.html | tee render.log
+
+      - name: Did anything move
+        id: diff
+        run: |
+          if git diff --quiet -- website/landing/index.html; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "refresh: the committed fallbacks already match the latest releases."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git --no-pager diff -- website/landing/index.html
+          fi
+
+      - name: Commit on the refresh branch and push it
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -q -B "$BRANCH"
+          git add website/landing/index.html
+          {
+            echo "$TITLE"
+            echo
+            echo "Rendered by scripts/site/render-releases.sh from each product's repository:"
+            echo
+            grep -E '^render-releases: Ferro' render.log | sed 's/^render-releases: /- /' || true
+          } > commit.msg
+          git commit -q -F commit.msg
+          # The token travels in an Authorization header, the way actions/checkout
+          # sends it, so it is never part of a URL or written to disk. The branch
+          # is owned by this workflow and rebuilt from main every run, so a
+          # forced push replaces whatever an earlier run left there.
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" \
+            push --force --quiet "https://github.com/$REPO.git" "HEAD:refs/heads/$BRANCH"
+
+      - name: Open the pull request, or update the open one
+        if: steps.diff.outputs.changed == 'true'
+        id: pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          {
+            echo "The committed release fallbacks in \`website/landing/index.html\` moved. Rendered by \`scripts/site/render-releases.sh\` from each product's repository:"
+            echo
+            grep -E '^render-releases: Ferro' render.log | sed 's/^render-releases: /- /' || true
+            echo
+            echo "Opened by the Refresh workflow ($RUN_URL). The required checks are dispatched onto this branch and auto-merge is enabled, so it merges by itself when they pass."
+          } > pr.md
+          number="$(gh pr list --repo "$REPO" --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')"
+          if [ -z "$number" ]; then
+            gh pr create --repo "$REPO" --base main --head "$BRANCH" --title "$TITLE" --body-file pr.md
+            number="$(gh pr list --repo "$REPO" --head "$BRANCH" --base main --state open --json number --jq '.[0].number')"
+          else
+            gh pr edit "$number" --repo "$REPO" --title "$TITLE" --body-file pr.md
+          fi
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+
+      - name: Run the required checks on the branch
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          gh workflow run ci.yml --repo "$REPO" --ref "$BRANCH"
+          gh workflow run pages.yml --repo "$REPO" --ref "$BRANCH"
+
+      - name: Enable auto-merge
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          NUMBER: ${{ steps.pr.outputs.number }}
+        run: gh pr merge "$NUMBER" --repo "$REPO" --auto --squash

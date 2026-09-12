@@ -8,8 +8,11 @@
 # For an edited shell script: run shellcheck when it is available (never
 # installs it, skips silently when absent).
 #
+# For the page or the diagram: run the typed-version check
+# (scripts/checks/no-typed-version.sh).
+#
 # For any edited text file: run the mechanical half of the writing-style rule
-# (scripts/checks/writing-style.sh). Both CAN block (exit 2) so the finding
+# (scripts/checks/writing-style.sh). All three CAN block (exit 2) so the finding
 # comes back as a correction while the file is still in hand.
 #
 # The site itself is not assembled here. Assembly copies a tree and calls the
@@ -41,6 +44,18 @@ case "$file_path" in
 *.sh)
   if command -v shellcheck >/dev/null 2>&1; then
     findings="$(shellcheck --severity=style "$file_path" 2>&1)" || {
+      printf '%s\n' "$findings" >&2
+      exit 2
+    }
+  fi
+  ;;
+esac
+
+case "$file_path" in
+*/website/landing/*.html | */assets/diagrams/*.svg)
+  guard="$repo_root/scripts/checks/no-typed-version.sh"
+  if [ -x "$guard" ]; then
+    findings="$("$guard" "${file_path#"$repo_root"/}" 2>&1)" || {
       printf '%s\n' "$findings" >&2
       exit 2
     }

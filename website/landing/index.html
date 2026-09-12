@@ -17,7 +17,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>FerroHEALTH: health-data infrastructure in Rust, built on open standards</title>
-  <meta name="description" content="FerroHEALTH is the family behind four pure-Rust health-data servers: FerroCHART, an openEHR form builder and renderer; FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; and FerroBRIDGE, a bridge from openEHR to FHIR and to the OMOP Common Data Model. One language, one licence, and every published figure rendered from a committed record.">
+  <meta name="description" content="FerroHEALTH is the family behind four pure-Rust health-data servers: FerroCHART, an openEHR form builder and renderer; FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; and FerroBRIDGE, a bridge from openEHR to FHIR and to the OMOP Common Data Model. One language, one licence, and every figure on this page rendered from the products' own releases.">
   <link rel="canonical" href="https://ferrohealth.eu/">
   <link rel="stylesheet" href="./style.css">
   <link rel="icon" href="./assets/brand/favicon.svg" type="image/svg+xml">
@@ -91,7 +91,7 @@
         "@type": "SoftwareSourceCode",
         "@id": "https://ferroehr.eu/#software",
         "name": "FerroEHR",
-        "description": "A pure-Rust openEHR Clinical Data Repository implementing ITS-REST 1.1.0 and AQL 1.1 on PostgreSQL 18, shipped as a single self-contained binary.",
+        "description": "A pure-Rust openEHR Clinical Data Repository implementing the openEHR REST API and AQL on PostgreSQL, shipped as a single self-contained binary.",
         "url": "https://ferroehr.eu/",
         "codeRepository": "https://github.com/rubentalstra/FerroEHR",
         "programmingLanguage": "Rust",
@@ -103,7 +103,7 @@
         "@type": "SoftwareSourceCode",
         "@id": "https://ferroterm.eu/#software",
         "name": "FerroTERM",
-        "description": "A pure-Rust HL7 FHIR terminology server for SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM and any FHIR CodeSystem, served from one static binary over a memory-mapped index.",
+        "description": "A pure-Rust HL7 FHIR terminology server for SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM and any FHIR CodeSystem, served from one binary over an index built once per release.",
         "url": "https://ferroterm.eu/",
         "codeRepository": "https://github.com/rubentalstra/FerroTERM",
         "programmingLanguage": "Rust",
@@ -194,7 +194,7 @@
                 <h3><a href="https://ferrochart.eu/" rel="noopener">FerroCHART</a></h3>
                 <span class="role">The way in</span>
               </div>
-              <span class="status">Design phase</span>
+              <span class="status" data-rel="FerroCHART">v0.1.0</span>
             </div>
             <p>
               An openEHR form builder and renderer. It compiles an operational
@@ -206,7 +206,7 @@
               <li>Fields derived from the Reference Model type at each template node</li>
               <li>Hand-authored layout in a separate overlay, so a template revision does not destroy it</li>
               <li>Any openEHR CDR over ITS-REST, never a plugin inside one</li>
-              <li>Designed and written down; no binary yet, and the site says so</li>
+              <li>The round trip to a real CDR runs in CI on every pull request</li>
             </ul>
             <div class="product-cta">
               <a class="btn btn-primary" href="https://ferrochart.eu/" rel="noopener">ferrochart.eu</a>
@@ -221,7 +221,7 @@
                 <h3><a href="https://ferroehr.eu/" rel="noopener">FerroEHR</a></h3>
                 <span class="role">The record</span>
               </div>
-              <span class="status">Released</span>
+              <span class="status" data-rel="FerroEHR">v4.2.5</span>
             </div>
             <p>
               An openEHR Clinical Data Repository. Applications store and query
@@ -230,9 +230,9 @@
               application that wrote it.
             </p>
             <ul class="facts">
-              <li>ITS-REST 1.1.0 and AQL 1.1, generated from the official machine-readable models</li>
+              <li>The openEHR REST API and AQL, generated from the official machine-readable models</li>
               <li>Contribution-atomic versioning, attestations and per-version signatures</li>
-              <li>One self-contained binary on PostgreSQL 18, no JVM in the write path</li>
+              <li>One self-contained binary on PostgreSQL, no JVM in the write path</li>
               <li>Every conformance claim run against the live server each release</li>
             </ul>
             <div class="product-cta">
@@ -248,7 +248,7 @@
                 <h3><a href="https://ferroterm.eu/" rel="noopener">FerroTERM</a></h3>
                 <span class="role">The meaning</span>
               </div>
-              <span class="status">Released</span>
+              <span class="status" data-rel="FerroTERM">v0.1.3</span>
             </div>
             <p>
               An HL7 FHIR terminology server. It answers the FHIR terminology
@@ -257,8 +257,8 @@
               ordinary hardware.
             </p>
             <ul class="facts">
-              <li>SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM and any FHIR <code>CodeSystem</code></li>
-              <li>FHIR R4, R4B, R5 and the R6 ballot through one provider seam</li>
+              <li>SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM and any FHIR <code>CodeSystem</code>; its site carries the full list</li>
+              <li>Several FHIR releases from one binary, each under its own path, and a web viewer in the same binary</li>
               <li>No JVM, no Elasticsearch, no database to run</li>
               <li>Every published figure rendered from a committed benchmark record</li>
             </ul>
@@ -275,19 +275,20 @@
                 <h3><a href="https://ferrobridge.eu/" rel="noopener">FerroBRIDGE</a></h3>
                 <span class="role">The way out</span>
               </div>
-              <span class="status">Design phase</span>
+              <span class="status" data-rel="FerroBRIDGE">v0.0.1</span>
             </div>
             <p>
               A bridge from openEHR to two targets: HL7 FHIR, and the OMOP
               Common Data Model for research. Mappings are specification-conformant
               YAML validated against published schemas, never
-              hand-coded per resource or per table.
+              hand-coded per resource or per table. The design is written down
+              and the tracker on GitHub is the live record of the build.
             </p>
             <ul class="facts">
               <li>FHIRconnect for the FHIR side, OMOCL for the OMOP side</li>
               <li>Its own process beside any CDR it reaches over ITS-REST, never a plugin</li>
-              <li>A FHIR facade that stores nothing, and a batch ETL that writes typed rows</li>
-              <li>Designed and written down; no binary yet, and the site says so</li>
+              <li>A FHIR facade that stores nothing, and a batch load that writes typed rows</li>
+              <li>Every decision carries its citation, in the architecture document and on the tracker</li>
             </ul>
             <div class="product-cta">
               <a class="btn btn-primary" href="https://ferrobridge.eu/" rel="noopener">ferrobridge.eu</a>
@@ -317,24 +318,26 @@
         <div class="flow-scroll">
           <img class="flow" src="./assets/diagrams/ferrohealth-architecture.svg"
                width="1200" height="340"
-               alt="A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its R4 facade in both directions, FerroTERM itself serving R4, R4B, R5 and R6, and writes typed rows into an OMOP Common Data Model v5.4 database over SQL.">
+               alt="A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL.">
         </div>
         <p class="flow-note">
           Left to right is the order data moves. An arrowhead points at what is
           called or written to, and the FHIR side carries one at both ends
           because the bridge reads openEHR out to FHIR and writes FHIR back in.
-          All three servers call a FHIR terminology server, for three different
-          reasons: FerroCHART to expand the value set behind a coded field so
+          The other three servers call a FHIR terminology server, for three
+          different reasons: FerroCHART to expand the value set behind a coded field so
           the form can offer the codes it admits, FerroEHR to validate a coded
           value at commit time, with <code>$expand</code> configured in its
           place against a server that does not offer
           <code>$validate-code</code>, and FerroBRIDGE to resolve a display,
           translate a code and validate one.
           That seam is the FHIR terminology API, so FerroTERM fills it and so
-          does any other implementation. The facade is R4 because FHIRconnect's
-          schemas admit no other version for a mapping. OMOP is a database
-          schema, so its edge names no protocol: the OMOCL mappings compile to
-          SQL that writes typed rows into the CDM v5.4 tables.
+          does any other implementation. The facade speaks the FHIR release
+          FHIRconnect's mappings name, and FerroBRIDGE's site says which. OMOP
+          is a database schema, so its edge names no protocol: the OMOCL
+          mappings compile to SQL that writes typed rows into the CDM tables.
+          Which release of each standard a product implements is on that
+          product's site, rendered from its own pins.
         </p>
       </div>
     </section>
@@ -427,7 +430,7 @@
           <div>
             <h3>Terminology</h3>
             <div class="chips">
-              <span class="chip">HL7 FHIR R4 / R4B / R5</span>
+              <span class="chip">HL7 FHIR</span>
               <span class="chip">SNOMED CT</span>
               <span class="chip">LOINC</span>
               <span class="chip">ICD-10 / ICD-11</span>
@@ -464,11 +467,12 @@
       <div class="wrap">
         <div class="section-head">
           <span class="eyebrow">Quick start</span>
-          <h2>Both released servers, from a container</h2>
+          <h2>The whole stack, from one file</h2>
           <p>
-            Nothing to check out and nothing to configure. Each product's site
-            carries the full installation, the configuration, and the licensing
-            each code system needs.
+            Nothing to check out. Each command below names a product's latest
+            release, so it runs the same after the next one is cut. Each
+            product's site carries the full installation, the configuration,
+            and the licensing each code system needs.
           </p>
         </div>
         <div class="code">
@@ -476,21 +480,26 @@
             <span class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
             <span>shell</span>
           </div>
-          <!-- The image tag is filled at assembly time from the product's
-               latest release (scripts/site/assemble.sh). The committed value is
-               a real release, so a checkout without network access still shows
-               a command that runs. -->
-          <pre><code><span class="cmt"># FerroTERM. The image serves UCUM, BCP 47, BCP 13 and ISO 3166-1</span>
-<span class="cmt"># with no configuration, so the first call needs nothing else.</span>
-<span class="prompt">$</span> docker run --rm -p 8080:8080 ghcr.io/rubentalstra/ferroterm:<span data-rel-plain="FerroTERM">0.0.11</span>
-<span class="prompt">$</span> curl 'http://localhost:8080/r4b/CodeSystem/$lookup?system=http://unitsofmeasure.org&amp;code=mg/dL'
+          <!-- The FerroTERM image tag is filled at assembly time from the
+               product's latest release (scripts/site/render-releases.sh). The
+               committed value is a real release, so a checkout without network
+               access still shows a command that runs. -->
+          <pre><code><span class="cmt"># FerroCHART's release compose file starts FerroCHART, FerroEHR with its</span>
+<span class="cmt"># PostgreSQL, and FerroTERM. Three products, three licences; the file's</span>
+<span class="cmt"># header says what the demo profile is for.</span>
+<span class="prompt">$</span> curl -LO https://github.com/rubentalstra/FerroCHART/releases/latest/download/compose.yaml
+<span class="prompt">$</span> FERROCHART_CDR_URL=http://ferroehr:8080/ferroehr/rest/openehr \
+  FERROCHART_TERM_URL=http://ferroterm:8080/r4 \
+  docker compose --profile demo up
+<span class="cmt"># then open http://localhost:8080</span>
 
-<span class="cmt"># FerroEHR. The server and PostgreSQL 18 from the compose file</span>
-<span class="cmt"># shipped with the latest release, in the current directory.</span>
-<span class="prompt">$</span> docker compose up
-<span class="prompt">$</span> curl http://localhost:8080/ferroehr/rest/status</code></pre>
+<span class="cmt"># FerroTERM alone. The image serves UCUM and the registries with no</span>
+<span class="cmt"># configuration, and its viewer is at /ui.</span>
+<span class="prompt">$</span> docker run --rm -p 8080:8080 ghcr.io/rubentalstra/ferroterm:<span data-rel-plain="FerroTERM">0.1.3</span>
+<span class="cmt"># then open http://localhost:8080/ui</span></code></pre>
         </div>
         <div class="section-cta">
+          <a class="btn btn-ghost" href="https://ferrochart.eu/docs/" rel="noopener">FerroCHART docs</a>
           <a class="btn btn-ghost" href="https://ferroehr.eu/docs/latest/getting-started.html" rel="noopener">FerroEHR getting started</a>
           <a class="btn btn-ghost" href="https://ferroterm.eu/docs/operate/install.html" rel="noopener">FerroTERM install</a>
         </div>
@@ -504,55 +513,64 @@
           <span class="eyebrow">Status</span>
           <h2>Where each product is</h2>
           <p>
-            Two are released and two are still being designed. This page says
-            so rather than describing software you cannot download.
+            Three figures per product, read from its repository on GitHub when
+            this page is assembled: the latest release it has published, the
+            day that release went out, and the day its code last moved. None of
+            them is typed by hand, and the page is rebuilt several times a day,
+            so a release cut this morning is here by this afternoon. What a
+            release contains is on the product's own site.
           </p>
         </div>
         <div class="matrix-scroll">
-          <!-- The release column is filled at assembly time from each
-               repository's latest release through the GitHub API. Never
-               hand-type a version here: the committed values are a fallback for
-               an assembly without network access, and they go stale by
-               design. -->
+          <!-- Every figure in this table is filled at assembly time by
+               scripts/site/render-releases.sh through the GitHub API. Never
+               hand-type one here: the committed values are the fallback for an
+               assembly without network access, and .github/workflows/refresh.yml
+               moves them through a pull request when a product releases. -->
           <table class="matrix">
-            <caption>Latest release per product, read from the GitHub API when this page was assembled.</caption>
+            <caption>Latest release, its date, and the last push per product, read from the GitHub API when this page was assembled.</caption>
             <thead>
               <tr>
                 <th scope="col">Product</th>
                 <th scope="col">Does</th>
                 <th scope="col">Latest release</th>
+                <th scope="col">Published</th>
+                <th scope="col">Last change</th>
                 <th scope="col">Licence</th>
-                <th scope="col">Site</th>
               </tr>
             </thead>
             <tbody>
               <tr class="row-chart">
-                <th scope="row"><span class="dot" aria-hidden="true"></span>FerroCHART</th>
+                <th scope="row"><span class="dot" aria-hidden="true"></span><a href="https://ferrochart.eu/" rel="noopener">FerroCHART</a></th>
                 <td>Takes the record down</td>
-                <td class="num" data-rel="FerroCHART">none yet</td>
+                <td class="num" data-rel="FerroCHART">v0.1.0</td>
+                <td class="num"><time data-rel-date="FerroCHART" datetime="2026-09-08">2026-09-08</time></td>
+                <td class="num"><time data-pushed="FerroCHART" datetime="2026-09-09">2026-09-09</time></td>
                 <td><a href="https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE" rel="noopener">BUSL-1.1</a></td>
-                <td><a href="https://ferrochart.eu/" rel="noopener">ferrochart.eu</a></td>
               </tr>
               <tr class="row-ehr">
-                <th scope="row"><span class="dot" aria-hidden="true"></span>FerroEHR</th>
+                <th scope="row"><span class="dot" aria-hidden="true"></span><a href="https://ferroehr.eu/" rel="noopener">FerroEHR</a></th>
                 <td>Stores and queries the record</td>
-                <td class="num" data-rel="FerroEHR">v4.1.1</td>
+                <td class="num" data-rel="FerroEHR">v4.2.5</td>
+                <td class="num"><time data-rel-date="FerroEHR" datetime="2026-09-12">2026-09-12</time></td>
+                <td class="num"><time data-pushed="FerroEHR" datetime="2026-09-12">2026-09-12</time></td>
                 <td><a href="https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE" rel="noopener">BUSL-1.1</a></td>
-                <td><a href="https://ferroehr.eu/" rel="noopener">ferroehr.eu</a></td>
               </tr>
               <tr class="row-term">
-                <th scope="row"><span class="dot" aria-hidden="true"></span>FerroTERM</th>
+                <th scope="row"><span class="dot" aria-hidden="true"></span><a href="https://ferroterm.eu/" rel="noopener">FerroTERM</a></th>
                 <td>Answers what a code means</td>
-                <td class="num" data-rel="FerroTERM">v0.0.11</td>
+                <td class="num" data-rel="FerroTERM">v0.1.3</td>
+                <td class="num"><time data-rel-date="FerroTERM" datetime="2026-09-12">2026-09-12</time></td>
+                <td class="num"><time data-pushed="FerroTERM" datetime="2026-09-12">2026-09-12</time></td>
                 <td><a href="https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE" rel="noopener">BUSL-1.1</a></td>
-                <td><a href="https://ferroterm.eu/" rel="noopener">ferroterm.eu</a></td>
               </tr>
               <tr class="row-bridge">
-                <th scope="row"><span class="dot" aria-hidden="true"></span>FerroBRIDGE</th>
+                <th scope="row"><span class="dot" aria-hidden="true"></span><a href="https://ferrobridge.eu/" rel="noopener">FerroBRIDGE</a></th>
                 <td>Carries the record onward</td>
                 <td class="num" data-rel="FerroBRIDGE">v0.0.1</td>
+                <td class="num"><time data-rel-date="FerroBRIDGE" datetime="2026-09-05">2026-09-05</time></td>
+                <td class="num"><time data-pushed="FerroBRIDGE" datetime="2026-09-12">2026-09-12</time></td>
                 <td><a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">BUSL-1.1</a></td>
-                <td><a href="https://ferrobridge.eu/" rel="noopener">ferrobridge.eu</a></td>
               </tr>
             </tbody>
           </table>
@@ -582,8 +600,8 @@
         <div class="matrix-scroll">
           <table class="matrix licence">
             <caption>
-              The same answer holds for FerroEHR, FerroTERM and FerroBRIDGE.
-              Each product's <code>LICENSE</code> states it for that product.
+              The same answer holds for all four products. Each product's
+              <code>LICENSE</code> states it for that product.
             </caption>
             <thead>
               <tr>
@@ -642,8 +660,7 @@
             <h3>FerroCHART</h3>
             <p>
               Licensor Ruben Talstra. The Licensed Work is FerroCHART, each
-              version as published on GitHub. There is no binary to run yet,
-              and the source carries these terms today.
+              version as published on GitHub.
             </p>
             <a href="https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE" rel="noopener">FerroCHART <code>LICENSE</code></a>
           </div>
@@ -668,8 +685,7 @@
             <h3>FerroBRIDGE</h3>
             <p>
               Licensor Ruben Talstra. The Licensed Work is FerroBRIDGE, each
-              version as published on GitHub. There is no binary to run yet,
-              and the source carries these terms today.
+              version as published on GitHub.
             </p>
             <a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">FerroBRIDGE <code>LICENSE</code></a>
           </div>
@@ -683,31 +699,26 @@
             version you run today gets there on its own date.
           </p>
           <p>
-            <strong>The published crates are separate.</strong> FerroEHR's five
-            generated openEHR model crates on crates.io (<code>openehr-base</code>,
-            <code>openehr-rm</code>, <code>openehr-am</code>,
-            <code>openehr-lang</code> and <code>openehr-term</code>) are
-            Apache-2.0, so any Rust project can use them with no licence
-            conversation; <code>openehr-term</code> also carries CC-BY-SA-3.0
-            for the openEHR terminology XML it embeds. The three hand-written
-            engines (<code>openehr-query</code>, <code>openehr-adl</code> and
-            <code>openehr-its</code>) carry the Business Source License 1.1,
-            the same as the server. FerroTERM publishes
-            <code>fhir-types</code> and <code>rf2</code> under Apache-2.0.
+            <strong>The published crates are listed by their product.</strong>
+            Some products publish Rust crates on crates.io, some under
+            Apache-2.0 so any Rust project can use them with no licence
+            conversation, and some under the same Business Source License as
+            the server. Which crate carries which licence, and the terms every
+            vendored third-party file keeps, is on each product's own
+            licensing page:
+            <a href="https://ferrochart.eu/docs/evaluate/licensing.html" rel="noopener">FerroCHART's</a>,
+            <a href="https://ferroehr.eu/docs/latest/licensing.html" rel="noopener">FerroEHR's</a>,
+            <a href="https://ferroterm.eu/docs/evaluate/licensing.html" rel="noopener">FerroTERM's</a>
+            and
+            <a href="https://ferrobridge.eu/docs/evaluate/licensing.html" rel="noopener">FerroBRIDGE's</a>.
+            A crate list typed here would be wrong within a release.
           </p>
           <p>
-            <strong>Each product carries its own full table.</strong> Where a
-            product publishes a licensing page, it lists every crate, every
-            vendored third-party file and the terms each one keeps:
-            <a href="https://ferroehr.eu/docs/latest/licensing.html" rel="noopener">FerroEHR's</a>
-            and
-            <a href="https://ferroterm.eu/docs/evaluate/licensing.html" rel="noopener">FerroTERM's</a>.
-            FerroTERM's also answers the question its evaluators arrive with:
-            the software licence and the code system content are two separate
-            questions. SNOMED CT is licensed by SNOMED International, LOINC by
-            Regenstrief, ICD by the WHO and RxNorm by the NLM. FerroTERM ships
-            none of that content, and a deployment brings the release it is
-            licensed for.
+            <strong>The software licence and the content are two questions.</strong>
+            FerroTERM's page answers the one its evaluators arrive with. SNOMED
+            CT is licensed by SNOMED International, LOINC by Regenstrief, ICD
+            by the WHO and RxNorm by the NLM. FerroTERM ships none of that
+            content, and a deployment brings the release it is licensed for.
           </p>
           <p>
             <strong>Getting a commercial licence.</strong> Companies and care
@@ -752,10 +763,11 @@
             <img src="./assets/brand/ferrohealth-lockup-auto.svg" alt="FerroHEALTH" width="290" height="64">
           </a>
           <p>
-            The family behind FerroEHR, FerroTERM and FerroBRIDGE. Each product
-            is licensed under the Business Source License 1.1 in its own
-            repository, and its parameters are in that repository's
+            The family behind FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE.
+            Each product is licensed under the Business Source License 1.1 in
+            its own repository, and its parameters are in that repository's
             <code>LICENSE</code>:
+            <a href="https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE" rel="noopener">FerroCHART</a>,
             <a href="https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE" rel="noopener">FerroEHR</a>,
             <a href="https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE" rel="noopener">FerroTERM</a>,
             <a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">FerroBRIDGE</a>.
@@ -774,6 +786,7 @@
           <div>
             <h4>Products</h4>
             <ul>
+              <li><a href="https://ferrochart.eu/" rel="noopener">FerroCHART</a></li>
               <li><a href="https://ferroehr.eu/" rel="noopener">FerroEHR</a></li>
               <li><a href="https://ferroterm.eu/" rel="noopener">FerroTERM</a></li>
               <li><a href="https://ferrobridge.eu/" rel="noopener">FerroBRIDGE</a></li>
@@ -783,6 +796,7 @@
           <div>
             <h4>Documentation</h4>
             <ul>
+              <li><a href="https://ferrochart.eu/docs/" rel="noopener">FerroCHART docs</a></li>
               <li><a href="https://ferroehr.eu/docs/latest/" rel="noopener">FerroEHR docs</a></li>
               <li><a href="https://ferroterm.eu/docs/" rel="noopener">FerroTERM docs</a></li>
               <li><a href="https://ferrobridge.eu/docs/" rel="noopener">FerroBRIDGE docs</a></li>
@@ -791,6 +805,7 @@
           <div>
             <h4>Project</h4>
             <ul>
+              <li><a href="https://github.com/rubentalstra/FerroCHART" rel="noopener">FerroCHART on GitHub</a></li>
               <li><a href="https://github.com/rubentalstra/FerroEHR" rel="noopener">FerroEHR on GitHub</a></li>
               <li><a href="https://github.com/rubentalstra/FerroTERM" rel="noopener">FerroTERM on GitHub</a></li>
               <li><a href="https://github.com/rubentalstra/FerroBRIDGE" rel="noopener">FerroBRIDGE on GitHub</a></li>

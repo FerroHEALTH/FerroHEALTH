@@ -9,7 +9,7 @@ site: a product README, the books, a slide, an issue.
 | File | What it shows |
 |---|---|
 | `ferrohealth-architecture.svg` | what calls what across the four servers and the four planned services around them |
-| `ferrohealth-architecture.png` | the same at 2400x1424, for the rare consumer that renders no SVG at all |
+| `ferrohealth-architecture.png` | the same at 2400x1512, for the rare consumer that renders no SVG at all |
 
 ## How it is drawn
 
@@ -36,7 +36,7 @@ The landing page loads the SVG with `<img>`, and so can anything else:
 
 ```html
 <img src="https://ferrohealth.eu/assets/diagrams/ferrohealth-architecture.svg"
-     width="1200" height="712" alt="...">
+     width="1200" height="756" alt="...">
 ```
 
 In a Markdown file, reference the SVG:
@@ -143,7 +143,7 @@ graphite.
 ## Regenerating the raster
 
 ```bash
-rsvg-convert -w 2400 -h 1424 \
+rsvg-convert -w 2400 -h 1512 \
   assets/diagrams/ferrohealth-architecture.svg \
   -o assets/diagrams/ferrohealth-architecture.png
 ```

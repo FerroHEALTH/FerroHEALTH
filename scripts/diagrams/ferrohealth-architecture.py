@@ -27,14 +27,14 @@ import sys
 from dataclasses import dataclass, field
 from typing import Optional
 
-W, H = 1200, 712
+W, H = 1200, 756
 Y = 36  # everything below the frame's label line moves down this much
 
 # The frame: what is FerroHEALTH and what is the outside world. One instance
 # serves one tenant; that is the setup the family shows. FerroEHR can host
 # several isolated tenants in one deployment as its own setting, and an
 # organisation that serves several runs several instances instead.
-FRAME = (176, 8, 720, 664)  # x, y, w, h
+FRAME = (176, 8, 720, 708)  # x, y, w, h
 FRAME_LABEL = "ONE FERROHEALTH INSTANCE · ONE TENANT"
 INSIDE = {"term", "chart", "ehr", "bridge", "smart", "pix", "fed", "sys"}
 STEEL = ("#3f6070", "#8fb6c4")
@@ -64,6 +64,7 @@ MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
 
 HEAD = 12  # the line stops this far short of the tip, leaving room for the head
 HOP = 7  # radius of the arc a line draws over another where it has to cross
+LINE = 13  # line pitch of a two-line edge label
 
 
 @dataclass
@@ -120,14 +121,15 @@ class Label:
 
     def bbox(self):
         per_char = 0.62 if self.mono else 0.54
-        w = len(self.text) * self.size * per_char
+        lines = self.text.split("\n")
+        w = max(len(t) for t in lines) * self.size * per_char
         if self.anchor == "middle":
             x0 = self.x - w / 2
         elif self.anchor == "end":
             x0 = self.x - w
         else:
             x0 = self.x
-        return (x0, self.y - self.size * 0.75, x0 + w, self.y + self.size * 0.25)
+        return (x0, self.y - self.size * 0.75, x0 + w, self.y + self.size * 0.25 + LINE * (len(lines) - 1))
 
 
 # --- the declarations ---------------------------------------------------------
@@ -154,30 +156,30 @@ BOXES = [
             "its own lane, so it never reads as something FerroCHART sits in front of."),
     Box("fhir", 1000, 116, 190, 56, "HL7 FHIR", subs=["a facade, stores nothing"]),
     Box("omop", 1000, 224, 190, 56, "OMOP CDM", subs=["a batch load, for research"]),
-    Box("smart", 206, 400, 160, 88, "FerroSMART", hue="smart", planned=True,
+    Box("smart", 206, 440, 160, 88, "FerroSMART", hue="smart", planned=True,
         subs=["authorisation server", "OAuth 2.0, OIDC, SMART"],
         why="The SMART on openEHR layer FerroEHR carries today (the discovery document,\n"
             "the launch context, the scope grammar and its gate), pulled out into a\n"
             "server of its own so one place owns authorisation for the family. Two\n"
             "edges: the application obtains its token and launch context here, and the\n"
             "CDR asks here whether the token it is handed may do what it asks."),
-    Box("pix", 452, 400, 160, 88, "FerroPIX", hue="pix", planned=True,
+    Box("pix", 452, 440, 160, 88, "FerroPIX", hue="pix", planned=True,
         subs=["Master Patient Index", "IHE PIX and PDQ"],
         why="Under the CDR whose records it locates. The CDR feeds it when an EHR is\n"
             "created or its subject changes, the gateway asks it where a record is; an\n"
             "application that opens a record asks it the same way, and FerroCHART\n"
             "receives the EHR it is launched with and asks nobody."),
-    Box("fed", 698, 400, 168, 88, "FerroFED", hue="fed", planned=True,
+    Box("fed", 698, 440, 168, 88, "FerroFED", hue="fed", planned=True,
         subs=["federation gateway", "one query, every node"],
         why="Under FerroBRIDGE, on the side where data leaves, and level with the other\n"
             "organisations it talks to. The federation tier of the openEHR federation\n"
             "proposal: a transparent ITS-REST intermediary that resolves the patient\n"
             "first, then dispatches ordinary AQL to each node's own EHR id."),
-    Box("others", 1000, 416, 190, 56, "Other organisations", planned=True,
+    Box("others", 1000, 456, 190, 56, "Other organisations", planned=True,
         subs=["federation nodes"],
         why="Dashed like the gateway that reaches them, because without FerroFED there is\n"
             "no path to them at all."),
-    Box("sys", 206, 548, 660, 76, "FerroSYS", hue="sys", planned=True,
+    Box("sys", 206, 592, 660, 76, "FerroSYS", hue="sys", planned=True,
         subs=["health, telemetry, event log, notifications, configuration · every server reports to it"],
         why="The mirror of the FerroTERM band: meaning above the servers, operations\n"
             "below them. No edges, because every one of the seven boxes above would carry\n"
@@ -201,46 +203,46 @@ EDGES = [
          why="The bridge reads the CDR, so the arrow points at the CDR."),
     Edge("bridge", "term", [(782, 160), (782, 88)], "$lookup, $translate", (774, 130, "end"),
          why="The bridge resolves and translates codes for the FHIR side."),
-    Edge("bridge", "fhir", [(866, 186), (950, 186), (950, 144), (1000, 144)], "FHIR facade",
-         (910, 174, "middle"), both=True,
+    Edge("bridge", "fhir", [(866, 186), (962, 186), (962, 144), (1000, 144)], "FHIR facade",
+         (913, 174, "middle"), both=True,
          why="FHIR is an exchange, so this edge carries a head at both ends."),
-    Edge("bridge", "omop", [(866, 226), (950, 226), (950, 252), (1000, 252)], "SQL rows",
-         (908, 214, "middle"),
+    Edge("bridge", "omop", [(866, 226), (962, 226), (962, 252), (1000, 252)], "SQL rows",
+         (913, 214, "middle"),
          why="OMOP is a database schema, so this edge names no wire specification."),
-    Edge("chart", "smart", [(286, 248), (286, 400)], "OIDC, SMART launch", (278, 330, "end"),
+    Edge("chart", "smart", [(286, 248), (286, 440)], "OIDC,\nSMART launch", (278, 372, "end"),
          planned=True,
          why="FerroCHART is a SMART application: it reads the CDR's discovery document,\n"
              "sends the clinician to the authorization server, and comes back with a\n"
              "token that carries the launch context."),
-    Edge("ehr", "smart", [(470, 248), (470, 340), (330, 340), (330, 400)], "token introspection",
-         (462, 320, "end"), planned=True,
+    Edge("ehr", "smart", [(470, 248), (470, 380), (330, 380), (330, 440)], "token\nintrospection",
+         (462, 336, "end"), planned=True,
          why="The scope gate FerroEHR runs in its own request path today becomes a\n"
              "question to this server: is this token good, and does it cover this\n"
              "operation on this record. FerroTERM and FerroBRIDGE ask the same; the\n"
              "caption carries those two lines."),
-    Edge("fed", "ehr", [(698, 420), (650, 420), (650, 236), (612, 236)], "ITS-REST, AQL",
-         (658, 330, "start"), planned=True,
+    Edge("fed", "ehr", [(698, 460), (650, 460), (650, 236), (612, 236)], "ITS-REST, AQL",
+         (658, 350, "start"), planned=True,
          why="The gateway queries the local record like any client, below the bridge's\n"
              "own read of it and into the CDR's right side, so the two never meet."),
-    Edge("ehr", "pix", [(560, 248), (560, 400)], "PIXm feed", (568, 330, "start"), planned=True,
+    Edge("ehr", "pix", [(560, 248), (560, 440)], "PIXm feed", (568, 350, "start"), planned=True,
          why="The index has to learn where records are, and the CDR is the one component\n"
              "that knows the moment an EHR is created or its subject changes. IHE names\n"
              "the transaction: the PIXm Patient Identity Feed."),
-    Edge("fed", "pix", [(698, 460), (612, 460)], "PIXm", (655, 451, "middle"), planned=True,
+    Edge("fed", "pix", [(698, 504), (612, 504)], "PIXm", (655, 495, "middle"), planned=True,
          why="Where is the record: the gateway asks the index before it fans out."),
-    Edge("fed", "others", [(866, 444), (1000, 444)], "ITS-REST, AQL", (933, 435, "middle"),
+    Edge("fed", "others", [(866, 484), (1000, 484)], "ITS-REST, AQL", (933, 475, "middle"),
          planned=True,
          why="A remote CDR is a node like the local one: the gateway sends it standard\n"
              "AQL scoped to that node's own EHR id and merges what comes back, with the\n"
              "node named in the result."),
-    Edge("apps", "fed", [(72, 320), (72, 516), (782, 516), (782, 488)], "ITS-REST, AQL",
-         (600, 507, "middle"), planned=True, around=True,
+    Edge("apps", "fed", [(72, 320), (72, 562), (782, 562), (782, 528)], "ITS-REST, AQL",
+         (600, 551, "middle"), planned=True, around=True,
          why="The application tier: a client sends the gateway an ordinary AQL query and\n"
              "never learns it was federated. The line runs under the planned row, the one\n"
              "corridor where it crosses nothing."),
 ]
 
-LEGEND = (206, 656, "A dashed outline is a planned product, and a dashed line a call into one.")
+LEGEND = (206, 700, "A dashed outline is a planned product, and a dashed line a call into one.")
 
 
 for _b in BOXES:
@@ -397,14 +399,14 @@ def check(boxes, edges):
     for lab in labels:
         r = lab.bbox()
         for b in boxes:
-            if rect_overlap(r, box_rect(b), pad=2):
-                problems.append(f"label '{lab.text}' touches box {b.key}")
+            if rect_overlap(r, box_rect(b), pad=8):
+                problems.append(f"label '{lab.text}' is within 8px of box {b.key}")
         for e, p, q in segments:
-            if seg_hits_rect(p, q, (r[0] - 3, r[1] - 3, r[2] + 3, r[3] + 3)):
+            if seg_hits_rect(p, q, (r[0] - 5, r[1] - 5, r[2] + 5, r[3] + 5)):
                 problems.append(f"label '{lab.text}' touches edge {e.src}->{e.dst}")
     for i, a in enumerate(labels):
         for b in labels[i + 1:]:
-            if rect_overlap(a.bbox(), b.bbox(), pad=4):
+            if rect_overlap(a.bbox(), b.bbox(), pad=8):
                 problems.append(f"labels '{a.text}' and '{b.text}' overlap")
 
     if problems:
@@ -470,8 +472,11 @@ def draw_edge(e):
         out += f'    <path class="edge-head" d="{hd}" fill="{MUTED[0]}"/>\n'
     if e.label:
         x, y, anchor = e.label_at
+        lines = e.label.split("\n")
+        body = e.label if len(lines) == 1 else "".join(
+            f'<tspan x="{fmt(x)}" dy="{0 if i == 0 else LINE}">{t}</tspan>' for i, t in enumerate(lines))
         out += (f'    <text class="edge-label" x="{fmt(x)}" y="{fmt(y)}" text-anchor="{anchor}" '
-                f'font-family="{MONO}" font-size="10.5" fill="{MUTED[0]}">{e.label}</text>\n')
+                f'font-family="{MONO}" font-size="10.5" fill="{MUTED[0]}">{body}</text>\n')
     return out
 
 

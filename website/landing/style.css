@@ -364,7 +364,7 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
    page holds its size and nothing else. Below the min-width the labels stop
    being readable, so it scrolls inside its own box. */
 .flow-scroll { overflow-x: auto; }
-/* The drawing is 1200x712 and fills the wrap. At 900px its 10.5px edge labels
+/* The drawing is 1200x756 and fills the wrap. At 900px its 10.5px edge labels
    render at under 8px; the min-width is the point below which they stop being
    readable at all, and below that the box scrolls. */
 .flow { display: block; width: 100%; min-width: 1100px; max-width: 1400px; margin: 0 auto; height: auto; }

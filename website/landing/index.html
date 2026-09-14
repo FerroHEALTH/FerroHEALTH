@@ -69,6 +69,10 @@
           "https://github.com/rubentalstra/FerroEHR",
           "https://github.com/rubentalstra/FerroTERM",
           "https://github.com/rubentalstra/FerroBRIDGE",
+          "https://github.com/rubentalstra/FerroPIX",
+          "https://github.com/rubentalstra/FerroSMART",
+          "https://github.com/rubentalstra/FerroFED",
+          "https://github.com/rubentalstra/FerroSYS",
           "https://ferrochart.eu/",
           "https://ferroehr.eu/",
           "https://ferroterm.eu/",
@@ -299,20 +303,21 @@
 
         </div>
 
-        <!-- The planned four. A card here says what the product is for and
-             names its domain; the only status it carries is the badge, which
-             scripts/site/render-releases.sh fills from GitHub. A planned
-             product moves into the grid above, with its own mark and LICENSE
-             link, once its repository is open. -->
+        <!-- The planned four. A card here says what the product is for,
+             links its repository and names its domain; the only status it
+             carries is the badge, which scripts/site/render-releases.sh fills
+             from GitHub. A planned product moves into the grid above, and
+             into the status table, when it publishes a first release. -->
         <div class="planned-head" id="planned">
           <h3>Four more, planned</h3>
           <p>
             The four above carry the record. These four will surround it: who
             the patient is, who may act, where else the record is, and how it
-            all runs. Each has a name and a registered domain. The badge on a
-            card is read from GitHub when this page is assembled and says
-            whether a repository exists yet, or when its code last moved. A
-            planned product joins the row above once its repository is open.
+            all runs. Each has a name, a registered domain and a repository
+            that opens with its licence and its mark. The badge on a card is
+            read from GitHub when this page is assembled and says when its code
+            last moved. A planned product joins the row above when it publishes
+            a first release.
           </p>
         </div>
         <div class="products">
@@ -338,8 +343,9 @@
               <li>Fed by FerroEHR when an EHR is created or its subject changes, and asked by FerroFED and by the application that opens a record; FerroCHART receives the EHR it is launched with and asks nobody</li>
             </ul>
             <div class="product-cta">
+              <a class="btn btn-ghost" href="https://github.com/rubentalstra/FerroPIX" rel="noopener">GitHub</a>
               <span class="domain">ferropix.eu</span>
-              <span class="status" data-repo="FerroPIX">no repository yet</span>
+              <span class="status" data-repo="FerroPIX">code moved 2026-09-14</span>
             </div>
           </article>
 
@@ -366,8 +372,9 @@
               <li>Token introspection for FerroEHR, FerroTERM and FerroBRIDGE, so a scope is enforced the same way at every door</li>
             </ul>
             <div class="product-cta">
+              <a class="btn btn-ghost" href="https://github.com/rubentalstra/FerroSMART" rel="noopener">GitHub</a>
               <span class="domain">ferrosmart.eu</span>
-              <span class="status" data-repo="FerroSMART">no repository yet</span>
+              <span class="status" data-repo="FerroSMART">code moved 2026-09-14</span>
             </div>
           </article>
 
@@ -392,8 +399,9 @@
               <li>Its own process beside the CDR, over the published API and never a plugin</li>
             </ul>
             <div class="product-cta">
+              <a class="btn btn-ghost" href="https://github.com/rubentalstra/FerroFED" rel="noopener">GitHub</a>
               <span class="domain">ferrofed.eu</span>
-              <span class="status" data-repo="FerroFED">no repository yet</span>
+              <span class="status" data-repo="FerroFED">code moved 2026-09-14</span>
             </div>
           </article>
 
@@ -419,8 +427,9 @@
               <li>Installation, configuration and deployment of the family as one unit</li>
             </ul>
             <div class="product-cta">
+              <a class="btn btn-ghost" href="https://github.com/rubentalstra/FerroSYS" rel="noopener">GitHub</a>
               <span class="domain">ferrosys.eu</span>
-              <span class="status" data-repo="FerroSYS">no repository yet</span>
+              <span class="status" data-repo="FerroSYS">code moved 2026-09-14</span>
             </div>
           </article>
 
@@ -746,8 +755,9 @@
           <span class="eyebrow">Licensing</span>
           <h2>Do you need a commercial licence?</h2>
           <p>
-            All four are source-available under the Business Source License
-            1.1, which is not an OSI-approved open-source licence. The terms
+            Every product, planned or released, is source-available under the
+            Business Source License 1.1, which is not an OSI-approved
+            open-source licence. The terms
             that apply to you are in each repository's own <code>LICENSE</code>,
             which names its Licensor, its Licensed Work, its Additional Use
             Grant and its Change Date. This page summarises them for
@@ -758,7 +768,7 @@
         <div class="matrix-scroll">
           <table class="matrix licence">
             <caption>
-              The same answer holds for all four products. Each product's
+              The same answer holds for every product. Each product's
               <code>LICENSE</code> states it for that product.
             </caption>
             <thead>
@@ -847,6 +857,38 @@
             </p>
             <a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">FerroBRIDGE <code>LICENSE</code></a>
           </div>
+          <div class="lic product-pix">
+            <h3>FerroPIX</h3>
+            <p>
+              Licensor Ruben Talstra. The Licensed Work is FerroPIX, each
+              version as published on GitHub.
+            </p>
+            <a href="https://github.com/rubentalstra/FerroPIX/blob/main/LICENSE" rel="noopener">FerroPIX <code>LICENSE</code></a>
+          </div>
+          <div class="lic product-smart">
+            <h3>FerroSMART</h3>
+            <p>
+              Licensor Ruben Talstra. The Licensed Work is FerroSMART, each
+              version as published on GitHub.
+            </p>
+            <a href="https://github.com/rubentalstra/FerroSMART/blob/main/LICENSE" rel="noopener">FerroSMART <code>LICENSE</code></a>
+          </div>
+          <div class="lic product-fed">
+            <h3>FerroFED</h3>
+            <p>
+              Licensor Ruben Talstra. The Licensed Work is FerroFED, each
+              version as published on GitHub.
+            </p>
+            <a href="https://github.com/rubentalstra/FerroFED/blob/main/LICENSE" rel="noopener">FerroFED <code>LICENSE</code></a>
+          </div>
+          <div class="lic product-sys">
+            <h3>FerroSYS</h3>
+            <p>
+              Licensor Ruben Talstra. The Licensed Work is FerroSYS, each
+              version as published on GitHub.
+            </p>
+            <a href="https://github.com/rubentalstra/FerroSYS/blob/main/LICENSE" rel="noopener">FerroSYS <code>LICENSE</code></a>
+          </div>
         </div>
 
         <div class="lic-notes">
@@ -923,13 +965,17 @@
           <p>
             The family behind FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE,
             and the planned FerroPIX, FerroSMART, FerroFED and FerroSYS.
-            Each released product is licensed under the Business Source License 1.1 in
+            Each product is licensed under the Business Source License 1.1 in
             its own repository, and its parameters are in that repository's
             <code>LICENSE</code>:
             <a href="https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE" rel="noopener">FerroCHART</a>,
             <a href="https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE" rel="noopener">FerroEHR</a>,
             <a href="https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE" rel="noopener">FerroTERM</a>,
-            <a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">FerroBRIDGE</a>.
+            <a href="https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE" rel="noopener">FerroBRIDGE</a>,
+            <a href="https://github.com/rubentalstra/FerroPIX/blob/main/LICENSE" rel="noopener">FerroPIX</a>,
+            <a href="https://github.com/rubentalstra/FerroSMART/blob/main/LICENSE" rel="noopener">FerroSMART</a>,
+            <a href="https://github.com/rubentalstra/FerroFED/blob/main/LICENSE" rel="noopener">FerroFED</a>,
+            <a href="https://github.com/rubentalstra/FerroSYS/blob/main/LICENSE" rel="noopener">FerroSYS</a>.
             <a href="#licensing">What the terms mean for you</a>. This site is
             Apache-2.0.
           </p>
@@ -968,6 +1014,10 @@
               <li><a href="https://github.com/rubentalstra/FerroEHR" rel="noopener">FerroEHR on GitHub</a></li>
               <li><a href="https://github.com/rubentalstra/FerroTERM" rel="noopener">FerroTERM on GitHub</a></li>
               <li><a href="https://github.com/rubentalstra/FerroBRIDGE" rel="noopener">FerroBRIDGE on GitHub</a></li>
+              <li><a href="https://github.com/rubentalstra/FerroPIX" rel="noopener">FerroPIX on GitHub</a></li>
+              <li><a href="https://github.com/rubentalstra/FerroSMART" rel="noopener">FerroSMART on GitHub</a></li>
+              <li><a href="https://github.com/rubentalstra/FerroFED" rel="noopener">FerroFED on GitHub</a></li>
+              <li><a href="https://github.com/rubentalstra/FerroSYS" rel="noopener">FerroSYS on GitHub</a></li>
               <li><a href="/.well-known/security.txt">Security contact</a></li>
             </ul>
           </div>

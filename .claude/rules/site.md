@@ -29,17 +29,17 @@ beyond that script, no runtime dependency.
   and never the SVG. `assets/diagrams/README.md` carries the conventions and
   the raster command.
 - **A planned product says what it is for, and its one status is rendered.**
-  FerroPIX, FerroSMART, FerroFED and FerroSYS have a name and a domain and no
-  repository. Each is a dashed card in the products section with the product's
-  job, the standards it intends to speak, the domain as text (linked only once
-  it serves a page) and a `data-repo` badge that
-  `scripts/site/render-releases.sh` fills: "no repository yet" from the API's
-  404, "code moved <day>" once one exists. No "planned since", no "coming
-  soon", no row in the status table, no licence link. When a repository opens,
-  the refresh pull request moves the badge; that is when the card moves into
-  the released grid, its mark and tokens are copied from the repository, its
-  `LICENSE` is linked, and it joins the status table and
-  `scripts/checks/licence-links.sh`.
+  FerroPIX, FerroSMART, FerroFED and FerroSYS have a name, a domain and a
+  repository with their licence and brand, and no release. Each is a dashed
+  card in the products section with the product's job, the standards it
+  intends to speak, a GitHub link, the domain as text (linked only once it
+  serves a page) and a `data-repo` badge that `scripts/site/render-releases.sh`
+  fills: "code moved <day>" from the last push, "no repository yet" from a
+  404. Its `LICENSE` is linked in the licensing section and checked by
+  `scripts/checks/licence-links.sh`. No "planned since", no "coming soon", no
+  row in the status table. When it publishes a first release, the refresh
+  pull request renders the tag; that is when the card moves into the released
+  grid, its site is linked, and it joins the status table.
 - **No hand-typed version, and no hand-typed status.** A fact a product moves
   carries a marker (`data-rel`, `data-rel-plain`, `data-rel-date`,
   `data-pushed`) and is filled by `scripts/site/render-releases.sh` from that
@@ -57,7 +57,7 @@ beyond that script, no runtime dependency.
 - **A licence link points at the licensed product's own `LICENSE`.** The
   Business Source License 1.1 is a template, and a generic copy of it carries an
   empty Additional Use Grant and no Change Date. The terms live in each product
-  repository's `LICENSE`, so `#licensing` links all four and states in place
+  repository's `LICENSE`, so `#licensing` links every product's and states in place
   what is free and what needs a commercial licence.
   `scripts/checks/licence-links.sh` fails the build on a boilerplate link and on
   a product the page names without linking its licence.
@@ -72,12 +72,11 @@ beyond that script, no runtime dependency.
   spends a product hue only where that product is named: the card rule, the
   dot, the diagram box, the hero glow. The glow and the mark carry the four
   strokes only; the planned four have no stroke.
-- A released product's hue in `assets/brand/tokens.css` is copied verbatim
-  from that product's own `tokens.css`. When a product changes its palette,
-  copy the new value; never eyeball a near match. A planned product's hue is
-  provisional, chosen with `scripts/brand/hue-distance.py` and recorded with
-  its numbers in `assets/brand/README.md`; it moves to the product's
-  repository when that opens.
+- Every product's hue in `assets/brand/tokens.css` is copied verbatim from
+  that product's own `tokens.css`. When a product changes its palette, copy
+  the new value; never eyeball a near match. A new hue is chosen with
+  `scripts/brand/hue-distance.py` and recorded with its numbers in
+  `assets/brand/README.md` before it goes into the product's `tokens.css`.
 
 ## Scope
 

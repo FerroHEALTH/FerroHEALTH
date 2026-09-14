@@ -22,17 +22,17 @@ License 1.1, documents itself on its own domain, and runs without the other
 three. This site says how they fit together and nothing a product's own site
 should say instead.
 
-Four more are planned around them. Each has a name and a registered domain,
-and the page shows them as dashed cards whose one status line is read from
-GitHub, so it says "no repository yet" until a repository exists and the day
-the code last moved after that:
+Four more are planned around them. Each has a registered domain and a
+repository that opens with its licence and its brand, and the page shows them
+as dashed cards whose one status line is read from GitHub: the day the code
+last moved.
 
 | Planned | Will do | Domain |
 |---|---|---|
-| FerroPIX | A Master Patient Index: who the patient is, and where the record is | `ferropix.eu` |
-| FerroSMART | An authorisation server: who may act | `ferrosmart.eu` |
-| FerroFED | A federation gateway: where else the record is | `ferrofed.eu` |
-| FerroSYS | The control plane: how it all runs | `ferrosys.eu` |
+| [FerroPIX](https://github.com/rubentalstra/FerroPIX) | A Master Patient Index: who the patient is, and where the record is | `ferropix.eu` |
+| [FerroSMART](https://github.com/rubentalstra/FerroSMART) | The SMART on openEHR server: who may act | `ferrosmart.eu` |
+| [FerroFED](https://github.com/rubentalstra/FerroFED) | A federation gateway: where else the record is | `ferrofed.eu` |
+| [FerroSYS](https://github.com/rubentalstra/FerroSYS) | The control plane: how it all runs | `ferrosys.eu` |
 
 ![What calls what across the FerroHEALTH family](assets/diagrams/ferrohealth-architecture.svg)
 
@@ -46,7 +46,7 @@ anything else, and reusable anywhere:
 assets/brand/              the FerroHEALTH mark, lockups, favicons, social card, palette
 assets/diagrams/           the architecture diagram, self-contained and theme-adaptive
 website/landing/           the site: one page, its stylesheet, and its static files
-  assets/products/         each product's mark: a copy of its own, or provisional until it has one
+  assets/products/         a copy of each product's own mark, for the product cards
 scripts/site/assemble.sh   builds the site the way GitHub Pages serves it
 scripts/site/render-releases.sh  fills every figure a product moves, from the GitHub API
 scripts/diagrams/          draws the architecture diagram from declarations, with geometry checks
@@ -88,9 +88,9 @@ else is a design commitment or lives on the product's own site:
 
 - **Rendered:** the latest release, its date, and the last push per product,
   by `scripts/site/render-releases.sh` at every deploy. For a planned product
-  the same script renders whether a repository exists yet, from the API's 404,
-  so the first refresh pull request after one opens is the signal to move its
-  card into the released set.
+  the same script renders the day its code last moved, so the first refresh
+  pull request that renders a release tag is the signal to move its card into
+  the released set.
 - **Refreshed:** `.github/workflows/refresh.yml` runs the same script over the
   committed `index.html` every six hours. When a value moved it opens one pull
   request on `chore/refresh-release-fallbacks`, dispatches the required checks
@@ -116,14 +116,15 @@ switch back to branch-based publishing.
   page and left to rot. The page shows a release and a date and lets the reader
   judge.
 - **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo, and the planned four carry a provisional
-  plum, bronze, azure and olive chosen by measurement; FerroHEALTH is iron and
+  is teal, FerroBRIDGE is indigo, and the planned four are plum, bronze, azure
+  and olive, chosen by measurement; FerroHEALTH is iron and
   steel, and borrows a hue only where its product is named. See
   [`assets/brand/README.md`](assets/brand/README.md).
 - **A planned product says what it is for and nothing it has not done.** Its
-  card names the product, the job and the domain, shows the domain as text
-  until it serves a page, and carries one rendered badge. The mark stays at
-  four strokes: the planned four frame the data path and are not part of it.
+  card names the product and the job, links its repository, shows the domain
+  as text until it serves a page, and carries one rendered badge. The mark
+  stays at four strokes: the planned four frame the data path and are not part
+  of it.
 
 ## Licence
 
@@ -135,7 +136,11 @@ in each repository's own licence file:
 [FerroCHART](https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE),
 [FerroEHR](https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE),
 [FerroTERM](https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE),
-[FerroBRIDGE](https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE).
+[FerroBRIDGE](https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE),
+[FerroPIX](https://github.com/rubentalstra/FerroPIX/blob/main/LICENSE),
+[FerroSMART](https://github.com/rubentalstra/FerroSMART/blob/main/LICENSE),
+[FerroFED](https://github.com/rubentalstra/FerroFED/blob/main/LICENSE),
+[FerroSYS](https://github.com/rubentalstra/FerroSYS/blob/main/LICENSE).
 The site states what those terms mean at
 <https://ferrohealth.eu/#licensing>.
 

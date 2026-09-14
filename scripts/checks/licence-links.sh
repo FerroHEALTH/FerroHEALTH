@@ -18,7 +18,7 @@ set -uo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$root" || exit 1
 
-readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE)
+readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroSMART FerroFED FerroSYS)
 readonly PAGE=website/landing/index.html
 
 # A generic BUSL-1.1 copy, wherever it is hosted. This script and the rules that
@@ -47,7 +47,7 @@ while IFS= read -r file; do
   done <<< "$hits"
 done <<< "$(git ls-files '*.md' '*.html' '*.css' '*.svg' '*.txt' '*.yml' '*.json')"
 
-# The page names all four products, so it links all four licence files.
+# The page names all eight products, so it links all eight licence files.
 for product in "${PRODUCTS[@]}"; do
   url="https://github.com/rubentalstra/$product/blob/main/LICENSE"
   if ! grep -qF -- "$url" "$PAGE"; then

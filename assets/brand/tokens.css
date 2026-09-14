@@ -29,10 +29,9 @@
   --ferrohealth-bridge: #4F46E5;      /* FerroBRIDGE, "Indigo & Iron" */
   --ferrohealth-bridge-light: #A5B4FC;
 
-  /* The planned four. No product repository exists yet, so these values are
-     provisional and this file is their authority until each product's own
-     tokens.css takes over. Chosen by scripts/brand/hue-distance.py against
-     the four above; README.md records the numbers. */
+  /* The planned four, copied verbatim from each product's own tokens.css.
+     Chosen by scripts/brand/hue-distance.py against the four above before
+     the products had a repository; README.md records the numbers. */
   --ferrohealth-pix: #6B21A8;         /* FerroPIX, plum */
   --ferrohealth-pix-light: #C084FC;
   --ferrohealth-smart: #78350F;       /* FerroSMART, bronze */

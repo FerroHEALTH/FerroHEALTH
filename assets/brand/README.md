@@ -80,11 +80,11 @@ the other three, in both grounds, under normal, deuteranope and protanope
 vision. Rose at 330 degrees wins at 14.9; green and violet both fall below 10.
 That bar is why the mark stops at four strokes.
 
-### The planned four, provisional
+### The planned four
 
-No product repository exists yet for these, so the values below are the
-authority until each product's own `tokens.css` takes over, at which point they
-are copied from there like the four above and this table says so.
+Copied verbatim from each product's own `tokens.css`, like the four above. The
+values were chosen in this repository before the products had a repository,
+and moved there when each opened.
 
 | Product | Name | Light ground | Dark ground |
 |---|---|---|---|
@@ -175,8 +175,8 @@ dependency. The rest of the FerroHEALTH surfaces use the system font stack in
   stretch the mark, add effects, or rebuild the wordmark in another typeface.
 - Do not give FerroHEALTH a hue of its own. If the parent ever needs to be
   loud, it borrows the four strokes, in order.
-- A planned product's hue and mark are provisional. They move to the product's
-  own repository when it opens, and are copied back from there afterwards.
+- A planned product's hue and mark live in its own repository like any other
+  product's, and are copied from there.
 - FerroHEALTH names the family. Never write it as the name of software
   somebody can install.
 

@@ -22,8 +22,24 @@ beyond that script, no runtime dependency.
   its palette as literal values and swaps them on `prefers-color-scheme` inside
   the file, which is what lets the same file serve the page, a product README,
   and a slide. That `<style>` is inside the image document, so the page's CSP
-  does not reach it. `assets/diagrams/README.md` carries the conventions and the
-  raster command.
+  does not reach it. The architecture diagram is drawn by
+  `scripts/diagrams/ferrohealth-architecture.py` from declared boxes and
+  edges, and the script refuses to draw a box on a box, a line through a box,
+  two lines crossing or a label on anything. Edit the declarations, regenerate,
+  and never the SVG. `assets/diagrams/README.md` carries the conventions and
+  the raster command.
+- **A planned product says what it is for, and its one status is rendered.**
+  FerroPIX, FerroSMART, FerroFED and FerroSYS have a name, a domain and a
+  repository with their licence and brand, and no release. Each is a dashed
+  card in the products section with the product's job, the standards it
+  intends to speak, a GitHub link, the domain as text (linked only once it
+  serves a page) and a `data-repo` badge that `scripts/site/render-releases.sh`
+  fills: "code moved <day>" from the last push, "no repository yet" from a
+  404. Its `LICENSE` is linked in the licensing section and checked by
+  `scripts/checks/licence-links.sh`. No "planned since", no "coming soon", no
+  row in the status table. When it publishes a first release, the refresh
+  pull request renders the tag; that is when the card moves into the released
+  grid, its site is linked, and it joins the status table.
 - **No hand-typed version, and no hand-typed status.** A fact a product moves
   carries a marker (`data-rel`, `data-rel-plain`, `data-rel-date`,
   `data-pushed`) and is filled by `scripts/site/render-releases.sh` from that
@@ -41,7 +57,7 @@ beyond that script, no runtime dependency.
 - **A licence link points at the licensed product's own `LICENSE`.** The
   Business Source License 1.1 is a template, and a generic copy of it carries an
   empty Additional Use Grant and no Change Date. The terms live in each product
-  repository's `LICENSE`, so `#licensing` links all four and states in place
+  repository's `LICENSE`, so `#licensing` links every product's and states in place
   what is free and what needs a commercial licence.
   `scripts/checks/licence-links.sh` fails the build on a boilerplate link and on
   a product the page names without linking its licence.
@@ -54,10 +70,13 @@ beyond that script, no runtime dependency.
 
 - FerroHEALTH owns iron and steel. Each product owns its hue, and the page
   spends a product hue only where that product is named: the card rule, the
-  dot, the diagram box, the hero glow.
-- A product hue in `assets/brand/tokens.css` is copied verbatim from that
-  product's own `tokens.css`. When a product changes its palette, copy the new
-  value; never eyeball a near match.
+  dot, the diagram box, the hero glow. The glow and the mark carry the four
+  strokes only; the planned four have no stroke.
+- Every product's hue in `assets/brand/tokens.css` is copied verbatim from
+  that product's own `tokens.css`. When a product changes its palette, copy
+  the new value; never eyeball a near match. A new hue is chosen with
+  `scripts/brand/hue-distance.py` and recorded with its numbers in
+  `assets/brand/README.md` before it goes into the product's `tokens.css`.
 
 ## Scope
 

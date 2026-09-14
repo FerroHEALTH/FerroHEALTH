@@ -3,10 +3,9 @@
 /* FerroHEALTH brand tokens, the "Iron & Steel" palette. Import this file, or
    copy the values.
 
-   FerroHEALTH is the parent of four products that already own a hue each, so
-   the parent deliberately owns none of them: iron and steel are the metal the
-   family is named for, and the four product hues appear only where a product
-   is being named. */
+   FerroHEALTH is the parent of products that own a hue each, so the parent
+   deliberately owns none of them: iron and steel are the metal the family is
+   named for, and a product hue appears only where that product is named. */
 :root {
   /* Core palette */
   --ferrohealth-iron: #0F172A;        /* ink on light, ground on dark */
@@ -29,6 +28,18 @@
   --ferrohealth-term-light: #2DD4BF;
   --ferrohealth-bridge: #4F46E5;      /* FerroBRIDGE, "Indigo & Iron" */
   --ferrohealth-bridge-light: #A5B4FC;
+
+  /* The planned four, copied verbatim from each product's own tokens.css.
+     Chosen by scripts/brand/hue-distance.py against the four above before
+     the products had a repository; README.md records the numbers. */
+  --ferrohealth-pix: #6B21A8;         /* FerroPIX, plum */
+  --ferrohealth-pix-light: #C084FC;
+  --ferrohealth-smart: #78350F;       /* FerroSMART, bronze */
+  --ferrohealth-smart-light: #FBBF24;
+  --ferrohealth-fed: #0369A1;         /* FerroFED, azure */
+  --ferrohealth-fed-light: #7DD3FC;
+  --ferrohealth-sys: #5B6B16;         /* FerroSYS, olive */
+  --ferrohealth-sys-light: #BEF264;
 
   /* Roles */
   --ferrohealth-brand: var(--ferrohealth-steel);

@@ -9,8 +9,15 @@ builder and renderer),
 Repository), [FerroTERM](https://github.com/rubentalstra/FerroTERM) (an HL7 FHIR
 terminology server), and
 [FerroBRIDGE](https://github.com/rubentalstra/FerroBRIDGE) (a bridge from
-openEHR to FHIR and to the OMOP Common Data Model). Ferro is *ferrum*, iron,
-which Rust is an oxide of.
+openEHR to FHIR and to the OMOP Common Data Model). Four more are planned,
+each with a domain and a repository that holds its licence and its brand and
+no release yet: [FerroPIX](https://github.com/rubentalstra/FerroPIX) (patient
+identity, `ferropix.eu`), [FerroSMART](https://github.com/rubentalstra/FerroSMART)
+(the SMART on openEHR server, `ferrosmart.eu`),
+[FerroFED](https://github.com/rubentalstra/FerroFED) (federation,
+`ferrofed.eu`) and [FerroSYS](https://github.com/rubentalstra/FerroSYS) (the
+control plane, `ferrosys.eu`). Ferro is *ferrum*, iron, which Rust is an oxide
+of.
 
 Write all prose (the page, the READMEs, comments, commits, PRs, issues) to
 `.claude/rules/writing-style.md`. It is copied from FerroTERM and the two stay
@@ -27,15 +34,21 @@ in step.
   the brand authority.
 - `assets/diagrams/`: the architecture diagram as one self-contained,
   theme-adaptive SVG plus its raster. The page loads it with `<img>`, so there
-  is one copy of the artwork and it can be used outside this site.
+  is one copy of the artwork and it can be used outside this site. The SVG is
+  drawn by `scripts/diagrams/ferrohealth-architecture.py`.
 - `scripts/site/assemble.sh`: builds the site the way GitHub Pages serves it.
   `scripts/site/render-releases.sh` fills every figure a product moves, from the
   GitHub API, and is shared with the refresh workflow.
+- `scripts/diagrams/`: the diagram generator. Boxes and edges are declared;
+  the script asserts no overlap, no crossing and no label on anything before it
+  writes. `scripts/brand/hue-distance.py` scores a product hue against the
+  palette, which is how a new hue is chosen.
 - `scripts/checks/`: `internal-links.sh` (every local link in the assembled site
   resolves), `writing-style.sh` (the mechanical tells), `svg-first.sh` (a raster
   where the vector exists), `licence-links.sh` (a licence link points at a
-  product's own `LICENSE`), and `no-typed-version.sh` (no version outside a
-  rendered marker).
+  product's own `LICENSE`), `no-typed-version.sh` (no version outside a
+  rendered marker), and `diagram-generated.sh` (the committed SVG is what the
+  generator draws).
 - `.github/workflows/`: `ci.yml` (workflows, shell, prose, versions),
   `pages.yml` (assemble, check, deploy from main every six hours and on push),
   and `refresh.yml` (re-render the committed fallbacks, open one pull request,
@@ -50,6 +63,7 @@ scripts/checks/writing-style.sh
 scripts/checks/svg-first.sh
 scripts/checks/licence-links.sh
 scripts/checks/no-typed-version.sh
+scripts/checks/diagram-generated.sh
 shellcheck --severity=style .claude/hooks/*.sh scripts/**/*.sh
 python3 -m http.server -d _site 8000
 ```
@@ -63,22 +77,34 @@ Look at the page before calling it right: light and dark, wide and narrow.
   headers. No web font, no analytics, no CDN, no hotlinked image, no inline
   `<style>` and no `style=` attribute.
 - **Never type a version or a status.** A fact a product moves (its latest
-  release, the release date, the last push) carries a `data-rel`,
-  `data-rel-plain`, `data-rel-date` or `data-pushed` marker and is filled by
-  `scripts/site/render-releases.sh` from that product's repository. The
-  committed value is real, and `.github/workflows/refresh.yml` moves it through
-  an auto-merged pull request when a product releases.
-  `scripts/checks/no-typed-version.sh` fails the build on a version outside a
-  marker, in the page and the diagram.
+  release, the release date, the last push, whether it has a repository at all)
+  carries a `data-rel`, `data-rel-plain`, `data-rel-date`, `data-pushed` or
+  `data-repo` marker and is filled by `scripts/site/render-releases.sh` from
+  that product's repository. The committed value is real, and
+  `.github/workflows/refresh.yml` moves it through an auto-merged pull request
+  when a product releases. `scripts/checks/no-typed-version.sh` fails the build
+  on a version outside a marker, in the page and the diagram.
+- **A planned product is a dashed card, and says only what it is for.** It
+  names the product, the job and the intended standards, links its repository
+  and its `LICENSE`, shows the domain as text until it serves a page, and
+  carries one `data-repo` badge that renders "code moved <day>" from the
+  repository's last push ("no repository yet" from a 404). Its mark and hue are
+  copied from its repository like any other product's. It has no row in the
+  status table. When it publishes a first release, the refresh pull request
+  renders the tag; that is the signal to move the card into the released grid,
+  link its site, and add it to the status table.
 - **Say what is true about a product, and let its own site carry the detail.**
   A specification version, a database version, a FHIR release name, a code
   system list or a crate list moves with a product release and belongs on that
   product's site. The page names the standard and links the pin.
 - **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo. FerroHEALTH is iron and steel, and spends a
-  product hue only where that product is named. The product values in
-  `assets/brand/tokens.css` are copied verbatim from each product's own
-  `tokens.css`.
+  is teal, FerroBRIDGE is indigo; the planned four are plum, bronze, azure and
+  olive. FerroHEALTH is iron and steel, and spends a product
+  hue only where that product is named. Every product's values in
+  `assets/brand/tokens.css` are copied verbatim from its own `tokens.css`; a
+  new hue is chosen with `scripts/brand/hue-distance.py` before it goes there.
+  The mark stays at four strokes: they are the data path, and the planned four
+  frame it.
 - **A licence link points at the product's own `LICENSE`.** The BUSL-1.1
   boilerplate fills none of its parameters in, so a reader who follows it sees
   a blank Additional Use Grant. The page links each repository's `LICENSE` and
@@ -86,7 +112,10 @@ Look at the page before calling it right: light and dark, wide and narrow.
 - **A diagram is a file, never inline artwork.** It lives in
   `assets/diagrams/` with its palette written in as literal values and a
   `prefers-color-scheme` query inside the file, so one copy serves the page,
-  a README, and a slide. Edit the file and regenerate its raster.
+  a README, and a slide. The architecture diagram is drawn by
+  `scripts/diagrams/ferrohealth-architecture.py`: edit the declarations there,
+  regenerate the SVG and its raster, and never edit the SVG by hand.
+  `scripts/checks/diagram-generated.sh` fails the build when they differ.
 - **A product's mark is copied, and never edited here.** When a product changes
   its mark, refresh the copy from its source. When the copy would have to differ
   from upstream, fix it upstream instead and file the issue there.

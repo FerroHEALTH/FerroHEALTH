@@ -2,26 +2,31 @@
 /* SPDX-License-Identifier: Apache-2.0 */
 
 /* FerroHEALTH landing page: tokens and layout. Self-contained, in the same
-   idiom as the three product sites: a system font stack, no external asset,
-   and light and dark through prefers-color-scheme. Relative URLs only, so the
+   idiom as the product sites: a system font stack, no external asset, and
+   light and dark through prefers-color-scheme. Relative URLs only, so the
    page works from a checkout, from a preview deployment, and from the apex
    domain without a rewrite.
 
-   The accent is steel, not one of the three product hues. A product hue is
-   used only where that product is named: the card's rule, its dot, its icon.
-   Colour is how the page tells you which of the three it is talking about, so
-   spending it anywhere else would cost that. */
+   The accent is steel and belongs to no product. A product hue is used only
+   where that product is named: the card's rule, its dot, its icon. Colour is
+   how the page tells you which product it is talking about, so spending it
+   anywhere else would cost that. */
 
 :root {
   /* accent: steel, the parent's own voice (assets/brand/tokens.css) */
   --fh-accent: #3f6070;
   --fh-accent-600: #2e4a57;
   --fh-accent-050: #eef3f6;
-  /* the three products, on a light ground */
+  /* the four products, on a light ground */
   --fh-chart: #c2185b;
   --fh-ehr: #b7431b;
   --fh-term: #0d9488;
   --fh-bridge: #4f46e5;
+  /* the planned four, from each product's own tokens.css */
+  --fh-pix: #6b21a8;
+  --fh-smart: #78350f;
+  --fh-fed: #0369a1;
+  --fh-sys: #5b6b16;
   /* light theme */
   --fh-bg: #ffffff;
   --fh-surface: #f5f7fa;
@@ -48,6 +53,10 @@
     --fh-ehr: #d97742;
     --fh-term: #2dd4bf;
     --fh-bridge: #a5b4fc;
+    --fh-pix: #c084fc;
+    --fh-smart: #fbbf24;
+    --fh-fed: #7dd3fc;
+    --fh-sys: #bef264;
     --fh-bg: #0b1020;
     --fh-surface: #131a26;
     --fh-text: #eef2f7;
@@ -163,8 +172,9 @@ code {
   .btn-primary:hover { color: #0b1020; }
 }
 
-/* Hero. The glow is the three product hues in their fixed order, which is the
-   only place on the page they appear without a product being named. */
+/* Hero. The glow is the four strokes of the mark in their fixed order, which
+   is the only place on the page a product hue appears without its product
+   being named. The planned four have no stroke and so no glow. */
 .hero {
   position: relative;
   padding: clamp(3rem, 8vw, 5.5rem) 0 clamp(2.5rem, 6vw, 4rem);
@@ -270,6 +280,10 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
 .product-ehr { --hue: var(--fh-ehr); }
 .product-term { --hue: var(--fh-term); }
 .product-bridge { --hue: var(--fh-bridge); }
+.product-pix { --hue: var(--fh-pix); }
+.product-smart { --hue: var(--fh-smart); }
+.product-fed { --hue: var(--fh-fed); }
+.product-sys { --hue: var(--fh-sys); }
 .product-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.9rem; }
 .product-head > div { min-width: 0; }
 .product-head img { width: 40px; height: 40px; flex: none; }
@@ -301,6 +315,33 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
   .product .btn-primary:hover { background: color-mix(in srgb, var(--hue) 84%, #fff); color: #0b1020; }
 }
 
+/* A planned product: the same card, drawn dashed like its box in the
+   diagram, so the row reads as planned before a word is read. It has no site
+   to link, so the domain is a chip and the head carries no badge; the badge
+   sits beside the chip and the GitHub button, where it has room. */
+.planned-head { text-align: center; max-width: 66ch; margin: 3rem auto 1.75rem; }
+.planned-head h3 { font-size: clamp(1.15rem, 2.2vw, 1.45rem); margin: 0 0 0.5rem; letter-spacing: -0.01em; }
+.planned-head p { color: var(--fh-muted); margin: 0; font-size: 1rem; }
+.product.planned { border-style: dashed; }
+.product.planned::before {
+  background: repeating-linear-gradient(90deg, var(--hue) 0 10px, transparent 10px 16px);
+}
+.product.planned h3 { color: var(--fh-text); }
+.product .domain {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  border: 1.5px dashed var(--fh-border);
+  border-radius: 8px;
+  font-family: var(--fh-mono);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--fh-muted);
+}
+/* Sized so the longest domain and "no repository yet" share one line in a
+   four-column card. */
+.product .product-cta .status { align-self: center; font-size: 0.72rem; padding: 0.25rem 0.6rem; }
+
 /* The status badge on a product card, and the one in the hero. */
 .status {
   display: inline-flex;
@@ -318,17 +359,17 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
 }
 .product-head .status { margin-left: auto; font-family: var(--fh-mono); font-weight: 700; }
 
-/* How the four fit together. The diagram is one file in assets/diagrams/,
+/* How the eight fit together. The diagram is one file in assets/diagrams/,
    which carries its own palette and swaps it on prefers-color-scheme, so this
    page holds its size and nothing else. Below the min-width the labels stop
    being readable, so it scrolls inside its own box. */
 .flow-scroll { overflow-x: auto; }
-/* The drawing is 1200x340. Let it fill the wrap rather than sitting at a cap
-   sized for an older, smaller version of it: at 900px the 10.5px edge labels
-   render at under 8px. The min-width is the point below which they stop being
+/* The drawing is 1200x756 and fills the wrap. At 900px its 10.5px edge labels
+   render at under 8px; the min-width is the point below which they stop being
    readable at all, and below that the box scrolls. */
 .flow { display: block; width: 100%; min-width: 1100px; max-width: 1400px; margin: 0 auto; height: auto; }
-.flow-note { text-align: center; color: var(--fh-muted); font-size: 0.9rem; max-width: 68ch; margin: 1.5rem auto 0; }
+.flow-note { text-align: left; color: var(--fh-muted); font-size: 0.9rem; max-width: 76ch; margin: 1.5rem auto 0; }
+.flow-note + .flow-note { margin-top: 1rem; }
 
 /* Principle cards */
 .grid {

@@ -26,7 +26,7 @@ import sys
 from dataclasses import dataclass, field
 from typing import Optional
 
-W, H = 1200, 648
+W, H = 1200, 668
 
 # assets/brand/tokens.css, as literal values: a standalone SVG cannot read the
 # page's custom properties. Light is written as presentation attributes, dark
@@ -93,6 +93,7 @@ class Edge:
     planned: bool = False
     hops: list = field(default_factory=list)  # x positions where this line arcs over another
     branch_of: Optional[tuple] = None  # (src, dst) of the edge this one forks from
+    around: bool = False  # goes past its target and comes back, on purpose
     why: str = ""
 
 
@@ -143,24 +144,28 @@ BOXES = [
     Box("fhir", 1000, 116, 190, 56, "HL7 FHIR", subs=["a facade, stores nothing"]),
     Box("omop", 1000, 224, 190, 56, "OMOP CDM", subs=["a batch load, for research"]),
     Box("smart", 206, 400, 160, 88, "FerroSMART", hue="smart", planned=True,
-        subs=["authorisation server", "OAuth 2.0 and OIDC"],
-        why="Under FerroCHART, because the clinician's sign-in is the one call drawn.\n"
-            "Every server also validates the tokens it is handed against this box; those\n"
-            "edges would cross the whole picture and the caption carries them instead."),
+        subs=["authorisation server", "OAuth 2.0, OIDC, SMART"],
+        why="The SMART on openEHR layer FerroEHR carries today (the discovery document,\n"
+            "the launch context, the scope grammar and its gate), pulled out into a\n"
+            "server of its own so one place owns authorisation for the family. Two\n"
+            "edges: the application obtains its token and launch context here, and the\n"
+            "CDR asks here whether the token it is handed may do what it asks."),
     Box("pix", 452, 400, 160, 88, "FerroPIX", hue="pix", planned=True,
         subs=["Master Patient Index", "IHE PIX and PDQ"],
-        why="In the middle column, because everything that has to answer \"which\n"
-            "patient, and where is the record\" reaches it: the form, any other client,\n"
-            "and the federation gateway."),
+        why="Under the CDR whose records it locates. The gateway is the one drawn\n"
+            "caller; an application that opens a record asks it the same way, and\n"
+            "FerroCHART receives the EHR it is launched with and asks nobody."),
     Box("fed", 698, 400, 168, 88, "FerroFED", hue="fed", planned=True,
-        subs=["federation gateway", "across organisations"],
+        subs=["federation gateway", "one query, every node"],
         why="Under FerroBRIDGE, on the side where data leaves, and level with the other\n"
-            "organisations it talks to."),
+            "organisations it talks to. The federation tier of the openEHR federation\n"
+            "proposal: a transparent ITS-REST intermediary that resolves the patient\n"
+            "first, then dispatches ordinary AQL to each node's own EHR id."),
     Box("others", 1000, 416, 190, 56, "Other organisations", planned=True,
-        subs=["their openEHR CDRs"],
+        subs=["federation nodes"],
         why="Dashed like the gateway that reaches them, because without FerroFED there is\n"
             "no path to them at all."),
-    Box("sys", 206, 528, 660, 76, "FerroSYS", hue="sys", planned=True,
+    Box("sys", 206, 548, 660, 76, "FerroSYS", hue="sys", planned=True,
         subs=["health, telemetry, event log, notifications, configuration · every server reports to it"],
         why="The mirror of the FerroTERM band: meaning above the servers, operations\n"
             "below them. No edges, because every one of the seven boxes above would carry\n"
@@ -175,7 +180,7 @@ EDGES = [
     Edge("chart", "ehr", [(366, 204), (452, 204)], "ITS-REST", (409, 195, "middle")),
     Edge("ehr", "term", [(532, 160), (532, 88)], "$validate-code", (524, 130, "end"),
          why="FerroEHR validates a coded value at commit time."),
-    Edge("apps", "ehr", [(136, 290), (532, 290), (532, 248)], "ITS-REST", (470, 281, "middle"),
+    Edge("apps", "ehr", [(136, 290), (430, 290), (430, 236), (452, 236)], "ITS-REST", (380, 281, "middle"),
          hops=[286],
          why="The one line that has to cross another: FerroCHART's calls run down from\n"
              "it, and any client on the outside has to pass under it to reach the CDR.\n"
@@ -192,26 +197,34 @@ EDGES = [
          why="OMOP is a database schema, so this edge names no wire specification."),
     Edge("chart", "smart", [(286, 248), (286, 400)], "OIDC, SMART launch", (278, 330, "end"),
          planned=True,
-         why="The clinician signs in once, through the form, and the token that comes\n"
-             "back is what every other server checks. One line leaves FerroCHART\n"
-             "downward and forks, so a client on the outside has one line to hop."),
-    Edge("chart", "pix", [(286, 360), (500, 360), (500, 400)], "PDQm", (400, 351, "middle"),
-         planned=True, branch_of=("chart", "smart"),
-         why="Before a form opens a record it asks who the patient is. Any other client\n"
-             "asks the same question the same way; the caption carries that."),
+         why="FerroCHART is a SMART application: it reads the CDR's discovery document,\n"
+             "sends the clinician to the authorization server, and comes back with a\n"
+             "token that carries the launch context."),
+    Edge("ehr", "smart", [(470, 248), (470, 340), (330, 340), (330, 400)], "token introspection",
+         (478, 300, "start"), planned=True,
+         why="The scope gate FerroEHR runs in its own request path today becomes a\n"
+             "question to this server: is this token good, and does it cover this\n"
+             "operation on this record. FerroTERM and FerroBRIDGE ask the same; the\n"
+             "caption carries those two lines."),
     Edge("fed", "ehr", [(698, 420), (650, 420), (650, 236), (612, 236)], "ITS-REST, AQL",
          (658, 330, "start"), planned=True,
          why="The gateway queries the local record like any client, below the bridge's\n"
              "own read of it and into the CDR's right side, so the two never meet."),
     Edge("fed", "pix", [(698, 460), (612, 460)], "PIXm", (655, 451, "middle"), planned=True,
          why="Where is the record: the gateway asks the index before it fans out."),
-    Edge("fed", "others", [(866, 444), (1000, 444)], "XCPD, ITS-REST", (933, 435, "middle"),
-         both=True, planned=True,
-         why="Federation runs both ways: this gateway queries theirs, and theirs queries\n"
-             "this one."),
+    Edge("fed", "others", [(866, 444), (1000, 444)], "ITS-REST, AQL", (933, 435, "middle"),
+         planned=True,
+         why="A remote CDR is a node like the local one: the gateway sends it standard\n"
+             "AQL scoped to that node's own EHR id and merges what comes back, with the\n"
+             "node named in the result."),
+    Edge("apps", "fed", [(72, 320), (72, 516), (782, 516), (782, 488)], "ITS-REST, AQL",
+         (600, 507, "middle"), planned=True, around=True,
+         why="The application tier: a client sends the gateway an ordinary AQL query and\n"
+             "never learns it was federated. The line runs under the planned row, the one\n"
+             "corridor where it crosses nothing."),
 ]
 
-LEGEND = (206, 626, "A dashed outline is a planned product, and a dashed line a call into one.")
+LEGEND = (206, 646, "A dashed outline is a planned product, and a dashed line a call into one.")
 
 
 # --- geometry assertions ------------------------------------------------------
@@ -310,12 +323,13 @@ def check(boxes, edges):
             for b in boxes:
                 if seg_hits_rect(p, q, box_rect(b)):
                     problems.append(f"edge {e.src}->{e.dst} passes through {b.key}")
-        # No waypoint doubles back: each axis moves in one direction only.
+        # No waypoint doubles back: each axis moves in one direction only,
+        # unless the edge says it goes around something on purpose.
         xs = [p[0] for p in pts]
         ys = [p[1] for p in pts]
         for series, axis in ((xs, "x"), (ys, "y")):
             steps = [b - a for a, b in zip(series, series[1:]) if b != a]
-            if any(s > 0 for s in steps) and any(s < 0 for s in steps):
+            if not e.around and any(s > 0 for s in steps) and any(s < 0 for s in steps):
                 problems.append(f"edge {e.src}->{e.dst} doubles back along {axis}")
 
     hops_used = set()
@@ -328,7 +342,7 @@ def check(boxes, edges):
             # A crossing is allowed where the horizontal line declares a hop at
             # the vertical line's x, and each hop covers exactly one crossing.
             hopped = False
-            for horiz, hp, hq, vert, vp in ((ea, pa, qa, eb, pb), (eb, pb, qb, ea, pa)):
+            for horiz, hp, hq, vp in ((ea, pa, qa, pb), (eb, pb, qb, pa)):
                 if hp[1] == hq[1] and vp[0] in horiz.hops and (id(horiz), vp[0]) not in hops_used:
                     hops_used.add((id(horiz), vp[0]))
                     hopped = True
@@ -470,10 +484,11 @@ DESC = (
     "reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges "
     "resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an "
     "OMOP Common Data Model database over SQL. Four planned services, drawn dashed, frame the four "
-    "servers: FerroCHART signs the clinician in at FerroSMART, the authorisation server; FerroCHART "
-    "and other applications ask FerroPIX, the Master Patient Index, who the patient is; FerroFED, the "
-    "federation gateway, asks FerroPIX where the record is, queries FerroEHR, and exchanges "
-    "discovery and queries with other organisations' openEHR CDRs; and FerroSYS, the control plane, "
+    "servers: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR "
+    "server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; "
+    "applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX, "
+    "the Master Patient Index, where the record is, then dispatches the query to FerroEHR and to other "
+    "organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, "
     "spans everything as the band every server reports to."
 )
 

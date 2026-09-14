@@ -335,7 +335,7 @@
               <li>IHE PIX and PDQ, and their FHIR forms PIXm and PDQm, so an integrator finds the surface they expect</li>
               <li>Its own store, outside the CDR, so the clinical record carries little that identifies a person directly</li>
               <li>The EHR Index of the openEHR Platform Service Model, as a separate server</li>
-              <li>Asked by FerroCHART, by any other client and by FerroFED before a record is opened</li>
+              <li>Asked by the application that opens a record, and by FerroFED before it fans out; FerroCHART receives the EHR it is launched with and asks nobody</li>
             </ul>
             <div class="product-cta">
               <span class="domain">ferropix.eu</span>
@@ -352,15 +352,18 @@
               </div>
             </div>
             <p>
-              An authorisation server. One place issues the tokens that every
-              client presents and every server checks, so a deployment has one
-              door, and each server keeps to checking the token it is handed.
+              The SMART on openEHR server. FerroEHR carries that layer today:
+              the discovery document, the launch context, the scope grammar and
+              the gate that enforces it on every request. FerroSMART pulls it
+              out into a server of its own, so one place owns authorisation for
+              the whole family and each server asks it about the token it is
+              handed.
             </p>
             <ul class="facts">
               <li>OAuth 2.0 and OpenID Connect for every client, human or machine</li>
-              <li>SMART App Launch, so a FHIR app opens with the patient and the user already in context</li>
+              <li>SMART on openEHR and SMART App Launch: the discovery document, the launch context and the scopes, served once for every server</li>
               <li>An app registry: which clients exist, and what each may ask for</li>
-              <li>Access inside a record stays with the CDR; this server answers only at the perimeter</li>
+              <li>Token introspection for FerroEHR, FerroTERM and FerroBRIDGE, so a scope is enforced the same way at every door</li>
             </ul>
             <div class="product-cta">
               <span class="domain">ferrosmart.eu</span>
@@ -383,9 +386,9 @@
               second copy that could compete with the source.
             </p>
             <ul class="facts">
-              <li>Patient discovery across organisations, through FerroPIX and its counterparts elsewhere</li>
-              <li>Distributed AQL: the local FerroEHR and remote CDRs behind one query</li>
-              <li>A record that travels keeps its versioned-object identity, so two sites never treat one patient as two</li>
+              <li>A transparent ITS-REST intermediary: a client sends an ordinary AQL query and never learns it was federated</li>
+              <li>The patient is resolved first, through FerroPIX, so no directly identifying identifier travels in a query</li>
+              <li>Standard AQL to each node, the local FerroEHR or a remote CDR, scoped to that node's own EHR id and merged with its provenance</li>
               <li>Its own process beside the CDR, over the published API and never a plugin</li>
             </ul>
             <div class="product-cta">
@@ -444,8 +447,8 @@
              assets/diagrams/README.md says where else it is meant to go. -->
         <div class="flow-scroll">
           <img class="flow" src="./assets/diagrams/ferrohealth-architecture.svg"
-               width="1200" height="648"
-               alt="A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four planned services, drawn dashed, frame the four servers: FerroCHART signs the clinician in at FerroSMART, the authorisation server; FerroCHART and other applications ask FerroPIX, the Master Patient Index, who the patient is; FerroFED, the federation gateway, asks FerroPIX where the record is, queries FerroEHR, and exchanges discovery and queries with other organisations' openEHR CDRs; and FerroSYS, the control plane, spans everything as the band every server reports to.">
+               width="1200" height="668"
+               alt="A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four planned services, drawn dashed, frame the four servers: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX, the Master Patient Index, where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to.">
         </div>
         <p class="flow-note">
           Left to right is the order data moves. An arrowhead points at what is
@@ -465,13 +468,20 @@
           mappings compile to SQL that writes typed rows into the CDM tables.
         </p>
         <p class="flow-note">
-          The dashed boxes are the planned four. FerroCHART signs the clinician
-          in at FerroSMART, and every server checks the token it is handed
-          against that same server; those checks would be one line from each
-          box and the picture leaves them to this sentence. FerroCHART, any
-          other client and FerroFED ask FerroPIX who the patient is and where
-          the record is. FerroFED queries the local record like any client and
-          exchanges discovery and queries with other organisations' gateways.
+          The dashed boxes are the planned four. FerroEHR carries the SMART on
+          openEHR layer today: the discovery document, the launch context, the
+          scope grammar and the gate that enforces it. FerroSMART pulls that
+          layer out into a server of its own. FerroCHART, as a SMART
+          application, obtains its token and launch context there, and
+          FerroEHR asks it whether each token it is handed may do what it
+          asks; FerroTERM and FerroBRIDGE ask the same, and the picture leaves
+          those two lines to this sentence. An
+          application sends FerroFED an ordinary AQL query and never learns it
+          was federated: the gateway asks FerroPIX where the record is, then
+          sends standard AQL to each node, the local FerroEHR or another
+          organisation's CDR, and merges what comes back. An application that
+          opens a record asks FerroPIX the same question; FerroCHART receives
+          the EHR it is launched with and asks nobody.
           FerroSYS is drawn as a band under everything because every server
           reports to it and is configured from it, and a line from each would
           say nothing the band does not. Which release of each standard a

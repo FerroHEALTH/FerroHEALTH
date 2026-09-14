@@ -9,7 +9,7 @@ site: a product README, the books, a slide, an issue.
 | File | What it shows |
 |---|---|
 | `ferrohealth-architecture.svg` | what calls what across the four servers and the four planned services around them |
-| `ferrohealth-architecture.png` | the same at 2400x1296, for the rare consumer that renders no SVG at all |
+| `ferrohealth-architecture.png` | the same at 2400x1336, for the rare consumer that renders no SVG at all |
 
 ## How it is drawn
 
@@ -35,7 +35,7 @@ The landing page loads the SVG with `<img>`, and so can anything else:
 
 ```html
 <img src="https://ferrohealth.eu/assets/diagrams/ferrohealth-architecture.svg"
-     width="1200" height="648" alt="...">
+     width="1200" height="668" alt="...">
 ```
 
 In a Markdown file, reference the SVG:
@@ -64,10 +64,8 @@ and are drawn dashed, as is every call into one of them.
 
 An arrowhead points at what is called or written to. The FHIR side carries one
 at both ends, because the bridge reads openEHR out to FHIR and writes FHIR back
-in, which is the same rule the FerroBRIDGE mark keeps. Federation carries one at
-both ends for the same reason: this gateway queries the other organisations'
-gateways and they query it. Each edge names the specification it speaks, with
-a few exceptions worth knowing:
+in, which is the same rule the FerroBRIDGE mark keeps. Each edge names the
+specification it speaks, with a few exceptions worth knowing:
 
 - **`FHIR facade`** names the exchange and no FHIR release. The facade speaks
   the release FHIRconnect's mappings name, and FerroBRIDGE's own site says
@@ -76,20 +74,34 @@ a few exceptions worth knowing:
   rot.
 - **`SQL rows`** names no wire specification, because OMOP is a database schema.
   The OMOCL mappings compile to SQL that writes typed rows into the CDM tables.
-- **`OIDC, SMART launch`** is the one call drawn into FerroSMART: the
-  clinician's sign-in through the form. Every server also checks the token it is
-  handed against the same server. Those edges would run from every box and
-  cross the whole picture, so the caption carries them.
+- **`OIDC, SMART launch` and `token introspection`** are the two sides of
+  FerroSMART. FerroEHR carries the SMART on openEHR layer today: the discovery
+  document, the launch context, the scope grammar and the gate that enforces
+  it on every request. FerroSMART is that layer pulled out into a server of
+  its own. FerroCHART is the application: it obtains its token and launch
+  context there. FerroEHR asks it whether the token it is handed may do what
+  it asks, and FerroTERM and FerroBRIDGE ask the same; those two lines are
+  left to the caption.
+- **FerroFED follows the openEHR federation tier proposal.** It is a
+  transparent ITS-REST intermediary: an application sends it an ordinary AQL
+  query and never learns it was federated. It resolves the patient first,
+  through FerroPIX over PIXm, then dispatches standard AQL scoped to each
+  node's own EHR id, to the local FerroEHR and to other organisations' CDRs
+  alike, and merges what comes back with the node named. The line to the other
+  organisations is therefore `ITS-REST, AQL` and runs one way; cross-community
+  identity (XCPD) is FerroPIX's business, not the gateway's.
+- **FerroPIX has one drawn caller, the gateway.** An application that opens a
+  record asks it the same way. FerroCHART receives the EHR it is launched with
+  and asks nobody, so no line runs from the form to the index.
 - **FerroSYS has no edges at all.** Every server reports health, telemetry and
   events to it and is configured from it, so it is drawn as a band under
   everything, the mirror of the FerroTERM band above. A line from each box
   would say nothing the band does not.
 - **One line hops another.** Clinicians and Applications both sit on the
-  outside, left of FerroCHART, and FerroCHART's own calls run down from it to
-  FerroSMART and FerroPIX. A client on the outside has to pass under
-  FerroCHART to reach the CDR, so that crossing cannot be drawn away.
-  FerroCHART sends one line down that forks, the Applications line hops it
-  with a small arc, and the generator allows a crossing only where a hop is
+  outside, left of FerroCHART, and FerroCHART's own call to FerroSMART runs
+  down from it. A client on the outside has to pass under FerroCHART to reach
+  the CDR, so that crossing cannot be drawn away. The Applications line hops
+  it with a small arc, and the generator allows a crossing only where a hop is
   declared.
 
 `$validate-code` is the one operation FerroEHR uses, and the label says so. A
@@ -121,7 +133,7 @@ graphite.
 ## Regenerating the raster
 
 ```bash
-rsvg-convert -w 2400 -h 1296 \
+rsvg-convert -w 2400 -h 1336 \
   assets/diagrams/ferrohealth-architecture.svg \
   -o assets/diagrams/ferrohealth-architecture.png
 ```

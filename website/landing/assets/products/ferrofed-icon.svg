@@ -1,0 +1,13 @@
+<!-- SPDX-FileCopyrightText: Ruben Talstra -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- The FerroFED mark, provisional until the product has a repository of its
+     own: two nodes on either side of an organisation boundary, joined over
+     it. The near node is this deployment and takes the full hue; the far one
+     belongs to somebody else and takes the light value. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64" role="img" aria-label="FerroFED icon">
+  <title>FerroFED</title>
+  <path d="M32 8 V56" fill="none" stroke="#7DD3FC" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="5.5 5"/>
+  <path d="M14 42 Q32 10 50 42" fill="none" stroke="#0369A1" stroke-width="4.6" stroke-linecap="round"/>
+  <circle cx="14" cy="43" r="7" fill="#0369A1"/>
+  <circle cx="50" cy="43" r="7" fill="#7DD3FC"/>
+</svg>

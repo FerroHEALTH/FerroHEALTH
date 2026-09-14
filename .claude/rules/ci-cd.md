@@ -32,6 +32,8 @@ Security Cheat Sheet, SLSA v1.0, and OpenSSF Scorecard.
   `writing-style.md`.
 - `versions`: `scripts/checks/no-typed-version.sh`, no version a product moves
   outside a rendered marker.
+- `diagram`: `scripts/checks/diagram-generated.sh`, the committed architecture
+  SVG is what `scripts/diagrams/ferrohealth-architecture.py` draws.
 
 `pages.yml` assembles the site, runs `scripts/checks/internal-links.sh` over the
 result, and deploys from `main`.

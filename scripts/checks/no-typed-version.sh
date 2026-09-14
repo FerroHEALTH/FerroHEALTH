@@ -11,8 +11,8 @@
 # database version and a set of FHIR release names were typed into it and the
 # products moved on. A fact that moves with a release is either rendered at
 # assembly time by scripts/site/render-releases.sh, inside an element that
-# carries a data-rel, data-rel-plain, data-rel-date or data-pushed marker, or it
-# lives on the product's own site. This check fails on a version-like token
+# carries a data-rel, data-rel-plain, data-rel-date, data-pushed or data-repo
+# marker, or it lives on the product's own site. This check fails on a version-like token
 # anywhere else in the page, the 404 page and the diagram. HTML comments are
 # not checked, and neither is a licence's own version (BUSL-1.1, Apache 2.0).
 
@@ -53,7 +53,7 @@ for file in "${files[@]}"; do
   # because path data is full of `v11`-shaped commands.
   hits="$(SVG="$([[ "$file" == *.svg ]] && echo 1 || echo 0)" perl -0pe '
     s{<!--.*?-->}{ my $c = $&; $c =~ s/[^\n]//g; $c }gse;
-    s{(<[^<>]*\bdata-(rel|rel-plain|rel-date|pushed)="[^"]*"[^<>]*>)[^<]*}{$1}g;
+    s{(<[^<>]*\bdata-(rel|rel-plain|rel-date|pushed|repo)="[^"]*"[^<>]*>)[^<]*}{$1}g;
     s{<[^<>]*>}{<>}g if $ENV{SVG};
     s{Business Source License 1\.1|BUSL-1\.1|Apache(?: License|-)? 2\.0|version 1\.1}{}g;
   ' "$file" | grep -nE -- "$TAG|$FHIR_RELEASE|$STANDARD_PIN" || true)"

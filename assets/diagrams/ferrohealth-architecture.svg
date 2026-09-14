@@ -1,20 +1,16 @@
 <!-- SPDX-FileCopyrightText: Ruben Talstra -->
 <!-- SPDX-License-Identifier: Apache-2.0 -->
-<!-- What calls what across FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE.
-     Every colour is a presentation attribute, so a renderer that drops the
-     <style> element still draws the light palette. The <style> holds only the
-     dark override, because a CSS rule outranks a presentation attribute.
-     The ground is the page's surface colour, so the file blends into the
-     section it sits in and stays readable on any other background.
-     An arrowhead points at what is called or written to.
-     Left to right is the order data moves. Gaps between boxes are 86 px
-     because that is what an ITS-REST label needs without touching either box;
-     the edges on the right are elbows rather than curves for the same reason,
-     so each label sits on a straight run with 12 px of clear space above it
-     and clear space to either side of it. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="680" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
-  <title id="title">What calls what across FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE</title>
-  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API. Other applications call FerroEHR over ITS-REST directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL.</desc>
+<!-- Drawn by scripts/diagrams/ferrohealth-architecture.py; edit that file, not
+     this one, and regenerate. Every colour is a presentation attribute, so a
+     renderer that drops the <style> element still draws the light palette; the
+     <style> holds only the dark override, because a CSS rule outranks a
+     presentation attribute. The ground is the page's surface colour, so the
+     file blends into the section it sits in. Left to right is the order data
+     moves, the four servers are the data path, and the four planned services
+     frame it. An arrowhead points at what is called or written to. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1296" viewBox="0 0 1200 648" role="img" aria-labelledby="title desc">
+  <title id="title">What calls what across the FerroHEALTH family</title>
+  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four planned services, drawn dashed, frame the four servers: FerroCHART signs the clinician in at FerroSMART, the authorisation server; FerroCHART and other applications ask FerroPIX, the Master Patient Index, who the patient is; FerroFED, the federation gateway, asks FerroPIX where the record is, queries FerroEHR, and exchanges discovery and queries with other organisations' openEHR CDRs; and FerroSYS, the control plane, spans everything as the band every server reports to.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
@@ -23,47 +19,115 @@
       .box-ehr { stroke: #d97742 }
       .box-term { stroke: #2dd4bf }
       .box-bridge { stroke: #a5b4fc }
+      .box-pix { stroke: #c084fc }
+      .box-smart { stroke: #fbbf24 }
+      .box-fed { stroke: #7dd3fc }
+      .box-sys { stroke: #bef264 }
       .label { fill: #eef2f7 }
-      .sub, .edge-label { fill: #a4aebc }
-      .edge { stroke: #a4aebc }
+      .sub, .edge-label, .legend { fill: #a4aebc }
+      .edge, .legend-sample { stroke: #a4aebc }
       .edge-head { fill: #a4aebc }
       .tag-chart { fill: #e04f84 }
       .tag-ehr { fill: #d97742 }
       .tag-term { fill: #2dd4bf }
       .tag-bridge { fill: #a5b4fc }
+      .tag-pix { fill: #c084fc }
+      .tag-smart { fill: #fbbf24 }
+      .tag-fed { fill: #7dd3fc }
+      .tag-sys { fill: #bef264 }
     }
   </style>
 
-  <rect class="ground" width="1200" height="340" rx="12" fill="#f5f7fa"/>
+  <rect class="ground" width="1200" height="648" rx="12" fill="#f5f7fa"/>
 
   <g font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
 
-    <!-- FerroTERM spans the three servers that call it, because all three reach
-         a terminology server over the same FHIR API and none of them is a more
-         important caller than the others. Drawn as a band rather than a peer
-         box, so the shared seam is the shape of the thing. It names code
-         systems and no FHIR release: which releases it serves is a fact its
-         own site renders. -->
+    <!-- FerroTERM spans the three servers that call it, because all three reach a
+         terminology server over the same FHIR API and none of them is a more
+         important caller than the others. Drawn as a band rather than a peer box, so
+         the shared seam is the shape of the thing. It names code systems and no FHIR
+         release: which releases it serves is a fact its own site renders. -->
     <rect class="box box-term" x="206" y="12" width="660" height="76" rx="10" fill="#ffffff" stroke="#0d9488" stroke-width="1.5"/>
-    <text class="label tag-term" x="536" y="40" text-anchor="middle" font-size="15" font-weight="700" fill="#0d9488">FerroTERM</text>
-    <text class="sub" x="536" y="62" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM &#183; the FHIR terminology API</text>
+    <text class="label tag-term" x="536" y="47" text-anchor="middle" font-size="15" font-weight="700" fill="#0d9488">FerroTERM</text>
+    <text class="sub" x="536" y="69" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">SNOMED CT, LOINC, ICD-10, ICD-11, RxNorm, UCUM · the FHIR terminology API</text>
 
     <!-- The person the whole family exists for. -->
-    <rect class="box" x="8" y="174" width="118" height="60" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="67" y="198" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Clinicians</text>
-    <text class="sub" x="67" y="216" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">doctors and nurses</text>
-    <path class="edge" d="M126 204 H194" fill="none" stroke="#58616e" stroke-width="1.6"/>
-    <path class="edge-head" d="M206 204 l-9 -5.5 v11 z" fill="#58616e"/>
+    <rect class="box" x="8" y="174" width="128" height="60" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="72" y="201" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Clinicians</text>
+    <text class="sub" x="72" y="223" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">doctors and nurses</text>
 
-    <!-- FerroCHART -->
     <rect class="box box-chart" x="206" y="160" width="160" height="88" rx="10" fill="#ffffff" stroke="#c2185b" stroke-width="1.5"/>
     <text class="label tag-chart" x="286" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#c2185b">FerroCHART</text>
-    <text class="sub" x="286" y="210" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">templates to forms</text>
-    <text class="sub" x="286" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">forms to compositions</text>
+    <text class="sub" x="286" y="212" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">templates to forms</text>
+    <text class="sub" x="286" y="230" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">forms to compositions</text>
+
+    <rect class="box box-ehr" x="452" y="160" width="160" height="88" rx="10" fill="#ffffff" stroke="#b7431b" stroke-width="1.5"/>
+    <text class="label tag-ehr" x="532" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#b7431b">FerroEHR</text>
+    <text class="sub" x="532" y="212" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">openEHR CDR, AQL</text>
+    <text class="sub" x="532" y="230" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">PostgreSQL</text>
+
+    <rect class="box box-bridge" x="698" y="160" width="168" height="88" rx="10" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+    <text class="label tag-bridge" x="782" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#4f46e5">FerroBRIDGE</text>
+    <text class="sub" x="782" y="212" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">FHIRconnect, OMOCL</text>
+    <text class="sub" x="782" y="230" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">mapping-driven</text>
+
+    <!-- Anything else that speaks the API, under the CDR it calls so its edge is
+         the shortest one in the picture and it never reads as something FerroCHART
+         sits in front of. -->
+    <rect class="box" x="452" y="284" width="160" height="48" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="532" y="305" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Applications</text>
+    <text class="sub" x="532" y="327" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">other ITS-REST clients</text>
+
+    <rect class="box" x="1000" y="116" width="190" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="1095" y="141" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">HL7 FHIR</text>
+    <text class="sub" x="1095" y="163" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a facade, stores nothing</text>
+
+    <rect class="box" x="1000" y="224" width="190" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="1095" y="249" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OMOP CDM</text>
+    <text class="sub" x="1095" y="271" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a batch load, for research</text>
+
+    <!-- Under FerroCHART, because the clinician's sign-in is the one call drawn.
+         Every server also validates the tokens it is handed against this box; those
+         edges would cross the whole picture and the caption carries them instead. -->
+    <rect class="box box-smart" x="206" y="400" width="160" height="88" rx="10" fill="#ffffff" stroke="#78350f" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="label tag-smart" x="286" y="430" text-anchor="middle" font-size="15" font-weight="700" fill="#78350f">FerroSMART</text>
+    <text class="sub" x="286" y="452" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">authorisation server</text>
+    <text class="sub" x="286" y="470" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">OAuth 2.0 and OIDC</text>
+
+    <!-- In the middle column, because everything that has to answer "which
+         patient, and where is the record" reaches it: the form, any other client,
+         and the federation gateway. -->
+    <rect class="box box-pix" x="452" y="400" width="160" height="88" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="label tag-pix" x="532" y="430" text-anchor="middle" font-size="15" font-weight="700" fill="#6b21a8">FerroPIX</text>
+    <text class="sub" x="532" y="452" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">Master Patient Index</text>
+    <text class="sub" x="532" y="470" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">IHE PIX and PDQ</text>
+
+    <!-- Under FerroBRIDGE, on the side where data leaves, and level with the other
+         organisations it talks to. -->
+    <rect class="box box-fed" x="698" y="400" width="168" height="88" rx="10" fill="#ffffff" stroke="#0369a1" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="label tag-fed" x="782" y="430" text-anchor="middle" font-size="15" font-weight="700" fill="#0369a1">FerroFED</text>
+    <text class="sub" x="782" y="452" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">federation gateway</text>
+    <text class="sub" x="782" y="470" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">across organisations</text>
+
+    <!-- Dashed like the gateway that reaches them, because without FerroFED there is
+         no path to them at all. -->
+    <rect class="box" x="1000" y="416" width="190" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="label" x="1095" y="441" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Other organisations</text>
+    <text class="sub" x="1095" y="463" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">their openEHR CDRs</text>
+
+    <!-- The mirror of the FerroTERM band: meaning above the servers, operations
+         below them. No edges, because every one of the seven boxes above would carry
+         one and the band already says so. -->
+    <rect class="box box-sys" x="206" y="528" width="660" height="76" rx="10" fill="#ffffff" stroke="#5b6b16" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="label tag-sys" x="536" y="563" text-anchor="middle" font-size="15" font-weight="700" fill="#5b6b16">FerroSYS</text>
+    <text class="sub" x="536" y="585" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">health, telemetry, event log, notifications, configuration · every server reports to it</text>
+
+    <path class="edge" d="M136 204 H194" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M206 204 l-9 -5.5 v11 z" fill="#58616e"/>
 
     <!-- FerroCHART expands the value set behind a coded field, so the form can
          offer exactly the codes the template admits. -->
-    <path class="edge" d="M286 160 V92" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge" d="M286 160 V100" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M286 88 l-5.5 9 h11 z" fill="#58616e"/>
     <text class="edge-label" x="278" y="130" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$expand</text>
 
@@ -71,58 +135,73 @@
     <path class="edge-head" d="M452 204 l-9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="409" y="195" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
 
-    <!-- FerroEHR -->
-    <rect class="box box-ehr" x="452" y="160" width="160" height="88" rx="10" fill="#ffffff" stroke="#b7431b" stroke-width="1.5"/>
-    <text class="label tag-ehr" x="532" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#b7431b">FerroEHR</text>
-    <text class="sub" x="532" y="210" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">openEHR CDR, AQL</text>
-    <text class="sub" x="532" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">PostgreSQL</text>
-
     <!-- FerroEHR validates a coded value at commit time. -->
-    <path class="edge" d="M532 160 V92" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge" d="M532 160 V100" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M532 88 l-5.5 9 h11 z" fill="#58616e"/>
     <text class="edge-label" x="524" y="130" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$validate-code</text>
 
-    <!-- Anything else that speaks the API, on its own lane so it does not read
-         as something FerroCHART sits in front of. -->
-    <rect class="box" x="206" y="284" width="160" height="48" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="286" y="304" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Applications</text>
-    <text class="sub" x="286" y="320" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">any other ITS-REST client</text>
-    <path class="edge" d="M366 308 H532 V260" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge" d="M532 284 V260" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M532 248 l-5.5 9 h11 z" fill="#58616e"/>
-    <text class="edge-label" x="449" y="300" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
+    <text class="edge-label" x="540" y="270" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
 
     <!-- The bridge reads the CDR, so the arrow points at the CDR. -->
     <path class="edge" d="M698 204 H624" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M612 204 l9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="655" y="195" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
 
-    <!-- FerroBRIDGE -->
-    <rect class="box box-bridge" x="698" y="160" width="168" height="88" rx="10" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-    <text class="label tag-bridge" x="782" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#4f46e5">FerroBRIDGE</text>
-    <text class="sub" x="782" y="210" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">FHIRconnect, OMOCL</text>
-    <text class="sub" x="782" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">mapping-driven</text>
-
     <!-- The bridge resolves and translates codes for the FHIR side. -->
-    <path class="edge" d="M782 160 V92" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge" d="M782 160 V100" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M782 88 l-5.5 9 h11 z" fill="#58616e"/>
     <text class="edge-label" x="774" y="130" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$lookup, $translate</text>
 
     <!-- FHIR is an exchange, so this edge carries a head at both ends. -->
-    <rect class="box" x="1010" y="116" width="176" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="1098" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">HL7 FHIR</text>
-    <text class="sub" x="1098" y="158" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a facade, stores nothing</text>
-    <path class="edge" d="M877 186 H950 V144 H1004" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge" d="M878 186 H950 V144 H988" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M1000 144 l-9 -5.5 v11 z" fill="#58616e"/>
     <path class="edge-head" d="M866 186 l9 -5.5 v11 z" fill="#58616e"/>
-    <path class="edge-head" d="M1010 144 l-9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="910" y="174" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">FHIR facade</text>
 
     <!-- OMOP is a database schema, so this edge names no wire specification. -->
-    <rect class="box" x="1010" y="224" width="176" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="1098" y="248" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OMOP CDM</text>
-    <text class="sub" x="1098" y="266" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a batch load, for research</text>
-    <path class="edge" d="M866 226 H950 V252 H1004" fill="none" stroke="#58616e" stroke-width="1.6"/>
-    <path class="edge-head" d="M1010 252 l-9 -5.5 v11 z" fill="#58616e"/>
+    <path class="edge" d="M866 226 H950 V252 H988" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M1000 252 l-9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="908" y="214" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">SQL rows</text>
+
+    <!-- The clinician signs in once, through the form, and the token that comes
+         back is what every other server checks. -->
+    <path class="edge" d="M286 248 V388" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M286 400 l-5.5 -9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="278" y="330" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">OIDC, SMART launch</text>
+
+    <!-- Before a form opens a record it asks who the patient is. The elbow runs
+         down the gap between the columns so it passes nothing. -->
+    <path class="edge" d="M366 236 H409 V430 H440" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M452 430 l-9 -5.5 v11 z" fill="#58616e"/>
+    <text class="edge-label" x="402" y="340" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">PDQm</text>
+
+    <!-- Any other client asks the same question the same way. -->
+    <path class="edge" d="M532 332 V388" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M532 400 l-5.5 -9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="540" y="372" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">PIXm, PDQm</text>
+
+    <!-- The gateway queries the local record like any client, below the bridge's
+         own read of it and into the CDR's right side, so the two never meet. -->
+    <path class="edge" d="M698 420 H650 V236 H624" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M612 236 l9 -5.5 v11 z" fill="#58616e"/>
+    <text class="edge-label" x="658" y="330" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
+
+    <!-- Where is the record: the gateway asks the index before it fans out. -->
+    <path class="edge" d="M698 460 H624" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M612 460 l9 -5.5 v11 z" fill="#58616e"/>
+    <text class="edge-label" x="655" y="451" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">PIXm</text>
+
+    <!-- Federation runs both ways: this gateway queries theirs, and theirs queries
+         this one. -->
+    <path class="edge" d="M878 444 H988" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M1000 444 l-9 -5.5 v11 z" fill="#58616e"/>
+    <path class="edge-head" d="M866 444 l9 -5.5 v11 z" fill="#58616e"/>
+    <text class="edge-label" x="933" y="435" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">XCPD, ITS-REST</text>
+
+    <rect class="legend-sample" x="206" y="618" width="22" height="12" rx="3" fill="none" stroke="#58616e" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="legend" x="236" y="630" font-size="11" font-weight="600" fill="#58616e">A dashed outline is a planned product, and a dashed line a call into one.</text>
 
   </g>
 </svg>

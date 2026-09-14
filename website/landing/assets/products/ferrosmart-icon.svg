@@ -1,0 +1,12 @@
+<!-- SPDX-FileCopyrightText: Ruben Talstra -->
+<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- The FerroSMART mark, provisional until the product has a repository of
+     its own: a key, because an authorisation server issues the token a client
+     presents at every other door. The teeth are the light value so the key
+     still reads as one at favicon sizes. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64" role="img" aria-label="FerroSMART icon">
+  <title>FerroSMART</title>
+  <path d="M44 33 V42 M52 33 V40" fill="none" stroke="#FBBF24" stroke-width="4.6" stroke-linecap="round"/>
+  <circle cx="19" cy="32" r="10" fill="none" stroke="#78350F" stroke-width="4.6"/>
+  <path d="M31 32 H56" fill="none" stroke="#78350F" stroke-width="4.6" stroke-linecap="round"/>
+</svg>

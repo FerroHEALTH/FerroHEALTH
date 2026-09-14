@@ -9,14 +9,15 @@ site: a product README, the books, a slide, an issue.
 | File | What it shows |
 |---|---|
 | `ferrohealth-architecture.svg` | what calls what across the four servers and the four planned services around them |
-| `ferrohealth-architecture.png` | the same at 2400x1336, for the rare consumer that renders no SVG at all |
+| `ferrohealth-architecture.png` | the same at 2400x1424, for the rare consumer that renders no SVG at all |
 
 ## How it is drawn
 
 The SVG is drawn by `scripts/diagrams/ferrohealth-architecture.py` and is
 never edited by hand. Boxes and edges are declared in that script, and before
 it writes it asserts what a reader would otherwise have to catch: no two boxes
-overlap, every edge starts and ends on the perimeter of its own box and passes
+overlap, every product sits inside the frame and every outside party outside
+it, every edge starts and ends on the perimeter of its own box and passes
 through no other, no two edges cross except where one declares a hop over the
 other, no label touches a box, a line or another label, and every text fits its
 box. A change to the picture is a change to the declarations:
@@ -35,7 +36,7 @@ The landing page loads the SVG with `<img>`, and so can anything else:
 
 ```html
 <img src="https://ferrohealth.eu/assets/diagrams/ferrohealth-architecture.svg"
-     width="1200" height="668" alt="...">
+     width="1200" height="712" alt="...">
 ```
 
 In a Markdown file, reference the SVG:
@@ -56,6 +57,12 @@ raster while the vector is available.
 Do not screenshot the page to get the diagram. The file is the diagram.
 
 ## What it says
+
+The frame is one FerroHEALTH instance serving one tenant. The eight inside are
+the family; clinicians, applications, HL7 FHIR, the OMOP database and other
+organisations sit outside it. FerroEHR can host several isolated tenants in one
+deployment as its own setting; the family shows the single-tenant setup, and an
+organisation that serves several runs several instances.
 
 Left to right is the order data moves. The four servers are the data path:
 FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
@@ -136,7 +143,7 @@ graphite.
 ## Regenerating the raster
 
 ```bash
-rsvg-convert -w 2400 -h 1336 \
+rsvg-convert -w 2400 -h 1424 \
   assets/diagrams/ferrohealth-architecture.svg \
   -o assets/diagrams/ferrohealth-architecture.png
 ```

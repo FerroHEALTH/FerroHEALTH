@@ -9,7 +9,8 @@
 # The diagram is declared below as boxes and edges and drawn from those
 # declarations, because a picture of eight components and their calls is where
 # a hand-placed label drifts onto a line. Before the script writes, it asserts
-# what a reader would otherwise have to catch: no two boxes overlap, every edge
+# what a reader would otherwise have to catch: no two boxes overlap, every
+# product sits inside the frame and every outside party outside it, every edge
 # starts and ends on the perimeter of its own box and passes through no other,
 # no two edges cross, no label touches a box, a line or another label, and
 # every text fits its box. scripts/checks/diagram-generated.sh keeps the
@@ -26,7 +27,17 @@ import sys
 from dataclasses import dataclass, field
 from typing import Optional
 
-W, H = 1200, 668
+W, H = 1200, 712
+Y = 36  # everything below the frame's label line moves down this much
+
+# The frame: what is FerroHEALTH and what is the outside world. One instance
+# serves one tenant; that is the setup the family shows. FerroEHR can host
+# several isolated tenants in one deployment as its own setting, and an
+# organisation that serves several runs several instances instead.
+FRAME = (176, 8, 720, 664)  # x, y, w, h
+FRAME_LABEL = "ONE FERROHEALTH INSTANCE · ONE TENANT"
+INSIDE = {"term", "chart", "ehr", "bridge", "smart", "pix", "fed", "sys"}
+STEEL = ("#3f6070", "#8fb6c4")
 
 # assets/brand/tokens.css, as literal values: a standalone SVG cannot read the
 # page's custom properties. Light is written as presentation attributes, dark
@@ -229,7 +240,16 @@ EDGES = [
              "corridor where it crosses nothing."),
 ]
 
-LEGEND = (206, 646, "A dashed outline is a planned product, and a dashed line a call into one.")
+LEGEND = (206, 656, "A dashed outline is a planned product, and a dashed line a call into one.")
+
+
+for _b in BOXES:
+    _b.y += Y
+for _e in EDGES:
+    _e.points = [(x, y + Y) for x, y in _e.points]
+    if _e.label_at:
+        _e.label_at = (_e.label_at[0], _e.label_at[1] + Y, _e.label_at[2])
+LEGEND = (LEGEND[0], LEGEND[1] + Y, LEGEND[2])
 
 
 # --- geometry assertions ------------------------------------------------------
@@ -298,6 +318,17 @@ def check(boxes, edges):
         if a.right > W or a.bottom > H or a.x < 0 or a.y < 0:
             problems.append(f"box {a.key} leaves the canvas")
 
+    fx, fy, fw, fh = FRAME
+    frame = (fx, fy, fx + fw, fy + fh)
+    for b in boxes:
+        r = box_rect(b)
+        inside = r[0] >= frame[0] and r[1] >= frame[1] and r[2] <= frame[2] and r[3] <= frame[3]
+        outside = not rect_overlap(r, frame, pad=8)
+        if b.key in INSIDE and not inside:
+            problems.append(f"box {b.key} is not wholly inside the frame")
+        if b.key not in INSIDE and not outside:
+            problems.append(f"box {b.key} is not wholly outside the frame")
+
     for lab in (l for b in boxes for l in box_labels(b)):
         b = by_key[lab.owner]
         x0, y0, x1, y1 = lab.bbox()
@@ -362,6 +393,7 @@ def check(boxes, edges):
     labels = [Label(e.label_at[0], e.label_at[1], e.label, e.label_at[2], 10.5, mono=True)
               for e in edges if e.label]
     labels.append(Label(LEGEND[0] + 30, LEGEND[1] + 4, LEGEND[2], "start", 11))
+    labels.append(Label(FRAME[0] + 18, FRAME[1] + 24, FRAME_LABEL, "start", 11))
     for lab in labels:
         r = lab.bbox()
         for b in boxes:
@@ -475,6 +507,8 @@ def dark_style():
         f".sub, .edge-label, .legend {{ fill: {MUTED[1]} }}",
         f".edge, .legend-sample {{ stroke: {MUTED[1]} }}",
         f".edge-head {{ fill: {MUTED[1]} }}",
+        f".frame {{ stroke: {STEEL[1]} }}",
+        f".frame-label {{ fill: {STEEL[1]} }}",
     ]
     rules += [f".tag-{k} {{ fill: {v[1]} }}" for k, v in HUES.items()]
     body = "\n".join(f"      {r}" for r in rules)
@@ -494,7 +528,8 @@ DESC = (
     "FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send "
     "FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other "
     "organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, "
-    "spans everything as the band every server reports to."
+    "spans everything as the band every server reports to. A frame around the eight marks one "
+    "FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it."
 )
 
 HEADER = (
@@ -521,6 +556,14 @@ def render():
     out += dark_style()
     out += f'\n  <rect class="ground" width="{W}" height="{H}" rx="12" fill="{GROUND[0]}"/>\n\n'
     out += f'  <g font-family="{SANS}">\n\n'
+    fx, fy, fw, fh = FRAME
+    out += comment("The frame is one instance serving one tenant. Everything inside is\n"
+                   "FerroHEALTH; everything outside is a caller, a target, or another\n"
+                   "organisation. An organisation serving several tenants runs several.")
+    out += (f'    <rect class="frame" x="{fmt(fx)}" y="{fmt(fy)}" width="{fmt(fw)}" height="{fmt(fh)}" rx="16" '
+            f'fill="none" stroke="{STEEL[0]}" stroke-width="1.8"/>\n')
+    out += (f'    <text class="frame-label" x="{fmt(fx + 18)}" y="{fmt(fy + 24)}" font-size="11" font-weight="700" '
+            f'letter-spacing="0.06em" fill="{STEEL[0]}">{FRAME_LABEL}</text>\n\n')
     for b in BOXES:
         out += draw_box(b) + "\n"
     for e in EDGES:

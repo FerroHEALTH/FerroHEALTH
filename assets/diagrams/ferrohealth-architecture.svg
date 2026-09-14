@@ -10,7 +10,7 @@
      frame it. An arrowhead points at what is called or written to. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1336" viewBox="0 0 1200 668" role="img" aria-labelledby="title desc">
   <title id="title">What calls what across the FerroHEALTH family</title>
-  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four planned services, drawn dashed, frame the four servers: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX, the Master Patient Index, where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to.</desc>
+  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four planned services, drawn dashed, frame the four servers: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
@@ -95,9 +95,10 @@
     <text class="sub" x="286" y="452" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">authorisation server</text>
     <text class="sub" x="286" y="470" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">OAuth 2.0, OIDC, SMART</text>
 
-    <!-- Under the CDR whose records it locates. The gateway is the one drawn
-         caller; an application that opens a record asks it the same way, and
-         FerroCHART receives the EHR it is launched with and asks nobody. -->
+    <!-- Under the CDR whose records it locates. The CDR feeds it when an EHR is
+         created or its subject changes, the gateway asks it where a record is; an
+         application that opens a record asks it the same way, and FerroCHART
+         receives the EHR it is launched with and asks nobody. -->
     <rect class="box box-pix" x="452" y="400" width="160" height="88" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.5" stroke-dasharray="6 4"/>
     <text class="label tag-pix" x="532" y="430" text-anchor="middle" font-size="15" font-weight="700" fill="#6b21a8">FerroPIX</text>
     <text class="sub" x="532" y="452" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">Master Patient Index</text>
@@ -184,13 +185,20 @@
          caption carries those two lines. -->
     <path class="edge" d="M470 248 V340 H330 V388" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
     <path class="edge-head" d="M330 400 l-5.5 -9 h11 z" fill="#58616e"/>
-    <text class="edge-label" x="478" y="300" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">token introspection</text>
+    <text class="edge-label" x="462" y="320" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">token introspection</text>
 
     <!-- The gateway queries the local record like any client, below the bridge's
          own read of it and into the CDR's right side, so the two never meet. -->
     <path class="edge" d="M698 420 H650 V236 H624" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
     <path class="edge-head" d="M612 236 l9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="658" y="330" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
+
+    <!-- The index has to learn where records are, and the CDR is the one component
+         that knows the moment an EHR is created or its subject changes. IHE names
+         the transaction: the PIXm Patient Identity Feed. -->
+    <path class="edge" d="M560 248 V388" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M560 400 l-5.5 -9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="568" y="330" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">PIXm feed</text>
 
     <!-- Where is the record: the gateway asks the index before it fans out. -->
     <path class="edge" d="M698 460 H624" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>

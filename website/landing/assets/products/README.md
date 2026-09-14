@@ -28,10 +28,10 @@ the rest of this repository:
 
 | File | What it shows |
 |---|---|
-| `ferropix-icon.svg` | one person, two identifiers linked beneath them |
-| `ferrosmart-icon.svg` | a key |
-| `ferrofed-icon.svg` | two nodes joined over an organisation boundary |
-| `ferrosys-icon.svg` | a gauge |
+| `ferropix-icon.svg` | an index card with the patient on it and their identifiers beside them |
+| `ferrosmart-icon.svg` | a shield with a keyhole |
+| `ferrofed-icon.svg` | one query arriving at the gateway and fanning out to three sites |
+| `ferrosys-icon.svg` | a gauge on a stand |
 
 When a product's repository opens, its mark moves there as
 `assets/brand/<product>-icon.svg` and becomes the source; the file here becomes

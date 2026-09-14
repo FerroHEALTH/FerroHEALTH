@@ -152,9 +152,10 @@ BOXES = [
             "CDR asks here whether the token it is handed may do what it asks."),
     Box("pix", 452, 400, 160, 88, "FerroPIX", hue="pix", planned=True,
         subs=["Master Patient Index", "IHE PIX and PDQ"],
-        why="Under the CDR whose records it locates. The gateway is the one drawn\n"
-            "caller; an application that opens a record asks it the same way, and\n"
-            "FerroCHART receives the EHR it is launched with and asks nobody."),
+        why="Under the CDR whose records it locates. The CDR feeds it when an EHR is\n"
+            "created or its subject changes, the gateway asks it where a record is; an\n"
+            "application that opens a record asks it the same way, and FerroCHART\n"
+            "receives the EHR it is launched with and asks nobody."),
     Box("fed", 698, 400, 168, 88, "FerroFED", hue="fed", planned=True,
         subs=["federation gateway", "one query, every node"],
         why="Under FerroBRIDGE, on the side where data leaves, and level with the other\n"
@@ -201,7 +202,7 @@ EDGES = [
              "sends the clinician to the authorization server, and comes back with a\n"
              "token that carries the launch context."),
     Edge("ehr", "smart", [(470, 248), (470, 340), (330, 340), (330, 400)], "token introspection",
-         (478, 300, "start"), planned=True,
+         (462, 320, "end"), planned=True,
          why="The scope gate FerroEHR runs in its own request path today becomes a\n"
              "question to this server: is this token good, and does it cover this\n"
              "operation on this record. FerroTERM and FerroBRIDGE ask the same; the\n"
@@ -210,6 +211,10 @@ EDGES = [
          (658, 330, "start"), planned=True,
          why="The gateway queries the local record like any client, below the bridge's\n"
              "own read of it and into the CDR's right side, so the two never meet."),
+    Edge("ehr", "pix", [(560, 248), (560, 400)], "PIXm feed", (568, 330, "start"), planned=True,
+         why="The index has to learn where records are, and the CDR is the one component\n"
+             "that knows the moment an EHR is created or its subject changes. IHE names\n"
+             "the transaction: the PIXm Patient Identity Feed."),
     Edge("fed", "pix", [(698, 460), (612, 460)], "PIXm", (655, 451, "middle"), planned=True,
          why="Where is the record: the gateway asks the index before it fans out."),
     Edge("fed", "others", [(866, 444), (1000, 444)], "ITS-REST, AQL", (933, 435, "middle"),
@@ -486,8 +491,8 @@ DESC = (
     "OMOP Common Data Model database over SQL. Four planned services, drawn dashed, frame the four "
     "servers: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR "
     "server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; "
-    "applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX, "
-    "the Master Patient Index, where the record is, then dispatches the query to FerroEHR and to other "
+    "FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send "
+    "FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other "
     "organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, "
     "spans everything as the band every server reports to."
 )

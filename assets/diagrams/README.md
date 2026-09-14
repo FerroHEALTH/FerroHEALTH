@@ -90,7 +90,10 @@ specification it speaks, with a few exceptions worth knowing:
   alike, and merges what comes back with the node named. The line to the other
   organisations is therefore `ITS-REST, AQL` and runs one way; cross-community
   identity (XCPD) is FerroPIX's business, not the gateway's.
-- **FerroPIX has one drawn caller, the gateway.** An application that opens a
+- **`PIXm feed` is how the index learns where records are.** The CDR is the one
+  component that knows the moment an EHR is created or its subject changes, so
+  FerroEHR feeds FerroPIX; IHE names the transaction the PIXm Patient Identity
+  Feed. The gateway then asks the index over PIXm. An application that opens a
   record asks it the same way. FerroCHART receives the EHR it is launched with
   and asks nobody, so no line runs from the form to the index.
 - **FerroSYS has no edges at all.** Every server reports health, telemetry and

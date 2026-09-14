@@ -19,7 +19,8 @@
 # right is the order data moves, the four servers are the data path, and the
 # four planned services frame it. An arrowhead points at what is called or
 # written to. A dashed outline is a planned product, and a dashed edge a call
-# into one.
+# into one. Where a line has to cross another it hops over it with a small arc,
+# and a crossing is allowed only where a hop is declared.
 
 import sys
 from dataclasses import dataclass, field
@@ -51,6 +52,7 @@ SANS = "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-ser
 MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
 
 HEAD = 12  # the line stops this far short of the tip, leaving room for the head
+HOP = 7  # radius of the arc a line draws over another where it has to cross
 
 
 @dataclass
@@ -89,6 +91,8 @@ class Edge:
     label_at: Optional[tuple] = None  # (x, y, anchor)
     both: bool = False
     planned: bool = False
+    hops: list = field(default_factory=list)  # x positions where this line arcs over another
+    branch_of: Optional[tuple] = None  # (src, dst) of the edge this one forks from
     why: str = ""
 
 
@@ -132,11 +136,10 @@ BOXES = [
         subs=["openEHR CDR, AQL", "PostgreSQL"]),
     Box("bridge", 698, 160, 168, 88, "FerroBRIDGE", hue="bridge",
         subs=["FHIRconnect, OMOCL", "mapping-driven"]),
-    Box("apps", 452, 284, 160, 48, "Applications", title_size=14,
-        subs=["other ITS-REST clients"],
-        why="Anything else that speaks the API, under the CDR it calls so its edge is\n"
-            "the shortest one in the picture and it never reads as something FerroCHART\n"
-            "sits in front of."),
+    Box("apps", 8, 260, 128, 60, "Applications", title_size=14,
+        subs=["any ITS-REST client"],
+        why="Anything else that speaks the API. On the outside with the clinician, on\n"
+            "its own lane, so it never reads as something FerroCHART sits in front of."),
     Box("fhir", 1000, 116, 190, 56, "HL7 FHIR", subs=["a facade, stores nothing"]),
     Box("omop", 1000, 224, 190, 56, "OMOP CDM", subs=["a batch load, for research"]),
     Box("smart", 206, 400, 160, 88, "FerroSMART", hue="smart", planned=True,
@@ -172,7 +175,11 @@ EDGES = [
     Edge("chart", "ehr", [(366, 204), (452, 204)], "ITS-REST", (409, 195, "middle")),
     Edge("ehr", "term", [(532, 160), (532, 88)], "$validate-code", (524, 130, "end"),
          why="FerroEHR validates a coded value at commit time."),
-    Edge("apps", "ehr", [(532, 284), (532, 248)], "ITS-REST", (540, 270, "start")),
+    Edge("apps", "ehr", [(136, 290), (532, 290), (532, 248)], "ITS-REST", (470, 281, "middle"),
+         hops=[286],
+         why="The one line that has to cross another: FerroCHART's calls run down from\n"
+             "it, and any client on the outside has to pass under it to reach the CDR.\n"
+             "It hops, and the generator allows a crossing only where a hop is drawn."),
     Edge("bridge", "ehr", [(698, 204), (612, 204)], "ITS-REST", (655, 195, "middle"),
          why="The bridge reads the CDR, so the arrow points at the CDR."),
     Edge("bridge", "term", [(782, 160), (782, 88)], "$lookup, $translate", (774, 130, "end"),
@@ -186,13 +193,12 @@ EDGES = [
     Edge("chart", "smart", [(286, 248), (286, 400)], "OIDC, SMART launch", (278, 330, "end"),
          planned=True,
          why="The clinician signs in once, through the form, and the token that comes\n"
-             "back is what every other server checks."),
-    Edge("chart", "pix", [(366, 236), (409, 236), (409, 430), (452, 430)], "PDQm", (402, 340, "end"),
-         planned=True,
-         why="Before a form opens a record it asks who the patient is. The elbow runs\n"
-             "down the gap between the columns so it passes nothing."),
-    Edge("apps", "pix", [(532, 332), (532, 400)], "PIXm, PDQm", (540, 372, "start"), planned=True,
-         why="Any other client asks the same question the same way."),
+             "back is what every other server checks. One line leaves FerroCHART\n"
+             "downward and forks, so a client on the outside has one line to hop."),
+    Edge("chart", "pix", [(286, 360), (500, 360), (500, 400)], "PDQm", (400, 351, "middle"),
+         planned=True, branch_of=("chart", "smart"),
+         why="Before a form opens a record it asks who the patient is. Any other client\n"
+             "asks the same question the same way; the caption carries that."),
     Edge("fed", "ehr", [(698, 420), (650, 420), (650, 236), (612, 236)], "ITS-REST, AQL",
          (658, 330, "start"), planned=True,
          why="The gateway queries the local record like any client, below the bridge's\n"
@@ -280,10 +286,19 @@ def check(boxes, edges):
         if x0 < b.x + 4 or x1 > b.right - 4 or y0 < b.y or y1 > b.bottom:
             problems.append(f"text '{lab.text}' does not fit box {lab.owner}")
 
+    by_pair = {(e.src, e.dst): e for e in edges}
+
+    def on_segment(pt, p, q):
+        return min(p[0], q[0]) <= pt[0] <= max(p[0], q[0]) and min(p[1], q[1]) <= pt[1] <= max(p[1], q[1])
+
     segments = []
     for e in edges:
         pts = e.points
-        if not on_perimeter(pts[0], by_key[e.src]):
+        if e.branch_of:
+            trunk = by_pair[e.branch_of]
+            if not any(on_segment(pts[0], p, q) for p, q in zip(trunk.points, trunk.points[1:])):
+                problems.append(f"edge {e.src}->{e.dst} forks off nothing")
+        elif not on_perimeter(pts[0], by_key[e.src]):
             problems.append(f"edge {e.src}->{e.dst} starts off {e.src}")
         if not on_perimeter(pts[-1], by_key[e.dst]):
             problems.append(f"edge {e.src}->{e.dst} ends off {e.dst}")
@@ -303,12 +318,27 @@ def check(boxes, edges):
             if any(s > 0 for s in steps) and any(s < 0 for s in steps):
                 problems.append(f"edge {e.src}->{e.dst} doubles back along {axis}")
 
+    hops_used = set()
     for i, (ea, pa, qa) in enumerate(segments):
         for eb, pb, qb in segments[i + 1:]:
-            if ea is eb:
+            if ea is eb or (ea.src, ea.dst) == eb.branch_of or (eb.src, eb.dst) == ea.branch_of:
                 continue
-            if segs_cross((pa, qa), (pb, qb)):
+            if not segs_cross((pa, qa), (pb, qb)):
+                continue
+            # A crossing is allowed where the horizontal line declares a hop at
+            # the vertical line's x, and each hop covers exactly one crossing.
+            hopped = False
+            for horiz, hp, hq, vert, vp in ((ea, pa, qa, eb, pb), (eb, pb, qb, ea, pa)):
+                if hp[1] == hq[1] and vp[0] in horiz.hops and (id(horiz), vp[0]) not in hops_used:
+                    hops_used.add((id(horiz), vp[0]))
+                    hopped = True
+                    break
+            if not hopped:
                 problems.append(f"edges {ea.src}->{ea.dst} and {eb.src}->{eb.dst} cross")
+    for e in edges:
+        for x in e.hops:
+            if (id(e), x) not in hops_used:
+                problems.append(f"edge {e.src}->{e.dst} hops at x={x} over nothing")
 
     labels = [Label(e.label_at[0], e.label_at[1], e.label, e.label_at[2], 10.5, mono=True)
               for e in edges if e.label]
@@ -372,8 +402,14 @@ def draw_edge(e):
         heads.append(head(pts[0], pts[1]))
         pts[0] = shorten(pts[1], pts[0], HEAD)
     d = f"M{fmt(pts[0][0])} {fmt(pts[0][1])}"
-    for (_, py), (qx, qy) in zip(pts, pts[1:]):
-        d += f" H{fmt(qx)}" if py == qy else f" V{fmt(qy)}"
+    for (px, py), (qx, qy) in zip(pts, pts[1:]):
+        if py != qy:
+            d += f" V{fmt(qy)}"
+            continue
+        step = 1 if qx > px else -1
+        for x in sorted((h for h in e.hops if min(px, qx) < h < max(px, qx)), reverse=step < 0):
+            d += f" H{fmt(x - HOP * step)} A{HOP} {HOP} 0 0 1 {fmt(x + HOP * step)} {fmt(py)}"
+        d += f" H{fmt(qx)}"
     dash = ' stroke-dasharray="5 4"' if e.planned else ""
     out = ""
     if e.why:

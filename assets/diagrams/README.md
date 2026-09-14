@@ -17,9 +17,9 @@ The SVG is drawn by `scripts/diagrams/ferrohealth-architecture.py` and is
 never edited by hand. Boxes and edges are declared in that script, and before
 it writes it asserts what a reader would otherwise have to catch: no two boxes
 overlap, every edge starts and ends on the perimeter of its own box and passes
-through no other, no two edges cross, no label touches a box, a line or another
-label, and every text fits its box. A change to the picture is a change to the
-declarations:
+through no other, no two edges cross except where one declares a hop over the
+other, no label touches a box, a line or another label, and every text fits its
+box. A change to the picture is a change to the declarations:
 
 ```bash
 python3 scripts/diagrams/ferrohealth-architecture.py assets/diagrams/ferrohealth-architecture.svg
@@ -84,6 +84,13 @@ a few exceptions worth knowing:
   events to it and is configured from it, so it is drawn as a band under
   everything, the mirror of the FerroTERM band above. A line from each box
   would say nothing the band does not.
+- **One line hops another.** Clinicians and Applications both sit on the
+  outside, left of FerroCHART, and FerroCHART's own calls run down from it to
+  FerroSMART and FerroPIX. A client on the outside has to pass under
+  FerroCHART to reach the CDR, so that crossing cannot be drawn away.
+  FerroCHART sends one line down that forks, the Applications line hops it
+  with a small arc, and the generator allows a crossing only where a hop is
+  declared.
 
 `$validate-code` is the one operation FerroEHR uses, and the label says so. A
 server that does not offer it is configured to `operation = "expand"` per

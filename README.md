@@ -126,6 +126,14 @@ switch back to branch-based publishing.
   stays at four strokes: the planned four frame the data path and are not part
   of it.
 
+## Contributing
+
+Contributions carry the terms in
+[CONTRIBUTING.md](CONTRIBUTING.md#licensing-of-contributions): you keep your
+copyright, the licence stays Apache-2.0, and you grant the Licensor the
+relicensing right that keeps the work one work under one licensor. The pull
+request template records your acceptance and a check enforces it.
+
 ## Licence
 
 The site, the scripts and the FerroHEALTH brand assets in this repository are

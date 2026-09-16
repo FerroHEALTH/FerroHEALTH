@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Ruben Talstra
+# SPDX-FileCopyrightText: Vernum Projecten B.V.
 # SPDX-License-Identifier: Apache-2.0
 #
 # ferrohealth-architecture.py: draw assets/diagrams/ferrohealth-architecture.svg.
@@ -538,7 +538,7 @@ DESC = (
 )
 
 HEADER = (
-    "<!-- SPDX-FileCopyrightText: Ruben Talstra -->\n"
+    "<!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->\n"
     "<!-- SPDX-License-Identifier: Apache-2.0 -->\n"
     "<!-- Drawn by scripts/diagrams/ferrohealth-architecture.py; edit that file, not\n"
     "     this one, and regenerate. Every colour is a presentation attribute, so a\n"

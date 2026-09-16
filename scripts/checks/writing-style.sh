@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: Ruben Talstra
+# SPDX-FileCopyrightText: Vernum Projecten B.V.
 # SPDX-License-Identifier: Apache-2.0
 #
 # writing-style.sh: the mechanical half of .claude/rules/writing-style.md.

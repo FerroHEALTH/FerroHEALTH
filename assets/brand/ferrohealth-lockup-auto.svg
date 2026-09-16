@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Ruben Talstra -->
+<!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!-- One lockup for both themes: the media query inside the SVG switches the
      four strokes and the wordmark on prefers-color-scheme, so a README or a

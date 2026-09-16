@@ -21,7 +21,9 @@ graph and the project board.
    as comments. The issue thread is the durable record.
 5. **Commit on a conventional-type branch** with a descriptive subject. The PR
    body declares `Closes #<n>` so the merge closes the issue. One `Closes`
-   keyword closes one issue, so repeat it per issue.
+   keyword closes one issue, so repeat it per issue. The body keeps the
+   template's ticked licensing checkbox: `contribution-licence-guard` refuses
+   a pull request from a person without it.
 
 ## Labels
 

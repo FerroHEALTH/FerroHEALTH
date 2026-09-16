@@ -137,7 +137,8 @@ Look at the page before calling it right: light and dark, wide and narrow.
 
 The tracker is GitHub Issues and the open list is the worklist
 (`.claude/rules/issue-workflow.md`). One type label per issue, one priority
-label, and an area label (`site`, `brand`, `build`). A PR declares `Closes #N`.
+label, and an area label (`site`, `brand`, `build`). A PR declares `Closes #N` and keeps the
+template's ticked licensing checkbox (`contribution-licence-guard`).
 Work that belongs in a product repository is filed there, with the evidence from
 here. The SessionStart hook prints the open list.
 

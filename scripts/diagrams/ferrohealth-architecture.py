@@ -539,7 +539,7 @@ DESC = (
 
 HEADER = (
     "<!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->\n"
-    "<!-- SPDX-License-Identifier: Apache-2.0 -->\n"
+    "<!-- SPDX-License-Identifier: LicenseRef-FerroHEALTH-Brand -->\n"
     "<!-- Drawn by scripts/diagrams/ferrohealth-architecture.py; edit that file, not\n"
     "     this one, and regenerate. Every colour is a presentation attribute, so a\n"
     "     renderer that drops the <style> element still draws the light palette; the\n"

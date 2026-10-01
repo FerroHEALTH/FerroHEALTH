@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->
-<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- SPDX-License-Identifier: LicenseRef-FerroHEALTH-Brand -->
 <!-- One lockup for both themes: the media query inside the SVG switches the
      four strokes and the wordmark on prefers-color-scheme, so a README or a
      page serves one file to a light and a dark reader. -->

@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->
-<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- SPDX-License-Identifier: LicenseRef-FerroHEALTH-Brand -->
 <!-- Drawn by scripts/diagrams/ferrohealth-architecture.py; edit that file, not
      this one, and regenerate. Every colour is a presentation attribute, so a
      renderer that drops the <style> element still draws the light palette; the

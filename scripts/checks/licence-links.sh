@@ -49,7 +49,7 @@ done <<< "$(git ls-files '*.md' '*.html' '*.css' '*.svg' '*.txt' '*.yml' '*.json
 
 # The page names all eight products, so it links all eight licence files.
 for product in "${PRODUCTS[@]}"; do
-  url="https://github.com/rubentalstra/$product/blob/main/LICENSE"
+  url="https://github.com/FerroHEALTH/$product/blob/main/LICENSE"
   if ! grep -qF -- "$url" "$PAGE"; then
     echo "licence-links: $PAGE does not link $url." >&2
     echo "  Every product named on the page carries a link to its own LICENSE." >&2

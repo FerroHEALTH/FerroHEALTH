@@ -35,7 +35,7 @@
 set -euo pipefail
 
 readonly FILE="${1:?usage: $0 FILE}"
-readonly OWNER=rubentalstra
+readonly OWNER=FerroHEALTH
 readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroSMART FerroFED FerroSYS)
 
 [ -f "$FILE" ] || { echo "render-releases: no such file: $FILE" >&2; exit 1; }

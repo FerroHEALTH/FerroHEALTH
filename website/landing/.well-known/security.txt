@@ -7,9 +7,9 @@
 # This file covers the family site only. A vulnerability in a product belongs in
 # that product's own advisory queue, which is where its maintainers and its
 # release process are:
-#   https://github.com/rubentalstra/FerroEHR/security/advisories/new
-#   https://github.com/rubentalstra/FerroTERM/security/advisories/new
-#   https://github.com/rubentalstra/FerroBRIDGE/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroEHR/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroTERM/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroBRIDGE/security/advisories/new
 #
 # Expires MUST be refreshed before the date below (RFC 9116 2.5.5: a stale file
 # is to be treated as invalid).

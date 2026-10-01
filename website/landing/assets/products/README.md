@@ -8,14 +8,14 @@ Verbatim copies of each product's primary icon, taken from that product's own
 
 | File | Source |
 |---|---|
-| `ferrochart-icon.svg` | <https://github.com/rubentalstra/FerroCHART> `assets/brand/ferrochart-icon.svg` |
-| `ferroehr-icon.svg` | <https://github.com/rubentalstra/FerroEHR> `assets/brand/ferroehr-icon.svg` |
-| `ferroterm-icon.svg` | <https://github.com/rubentalstra/FerroTERM> `assets/brand/ferroterm-icon.svg` |
-| `ferrobridge-icon.svg` | <https://github.com/rubentalstra/FerroBRIDGE> `assets/brand/ferrobridge-icon.svg` |
-| `ferropix-icon.svg` | <https://github.com/rubentalstra/FerroPIX> `assets/brand/ferropix-icon.svg` |
-| `ferrosmart-icon.svg` | <https://github.com/rubentalstra/FerroSMART> `assets/brand/ferrosmart-icon.svg` |
-| `ferrofed-icon.svg` | <https://github.com/rubentalstra/FerroFED> `assets/brand/ferrofed-icon.svg` |
-| `ferrosys-icon.svg` | <https://github.com/rubentalstra/FerroSYS> `assets/brand/ferrosys-icon.svg` |
+| `ferrochart-icon.svg` | <https://github.com/FerroHEALTH/FerroCHART> `assets/brand/ferrochart-icon.svg` |
+| `ferroehr-icon.svg` | <https://github.com/FerroHEALTH/FerroEHR> `assets/brand/ferroehr-icon.svg` |
+| `ferroterm-icon.svg` | <https://github.com/FerroHEALTH/FerroTERM> `assets/brand/ferroterm-icon.svg` |
+| `ferrobridge-icon.svg` | <https://github.com/FerroHEALTH/FerroBRIDGE> `assets/brand/ferrobridge-icon.svg` |
+| `ferropix-icon.svg` | <https://github.com/FerroHEALTH/FerroPIX> `assets/brand/ferropix-icon.svg` |
+| `ferrosmart-icon.svg` | <https://github.com/FerroHEALTH/FerroSMART> `assets/brand/ferrosmart-icon.svg` |
+| `ferrofed-icon.svg` | <https://github.com/FerroHEALTH/FerroFED> `assets/brand/ferrofed-icon.svg` |
+| `ferrosys-icon.svg` | <https://github.com/FerroHEALTH/FerroSYS> `assets/brand/ferrosys-icon.svg` |
 
 The landing page's Content Security Policy is `default-src 'self'`, so the page
 loads no image from another origin. That is why these are copies. Refresh a file

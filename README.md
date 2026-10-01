@@ -13,10 +13,10 @@ brand; it holds no product code.
 
 | Product | Does | Site |
 |---|---|---|
-| [FerroCHART](https://github.com/rubentalstra/FerroCHART) | An openEHR form builder and renderer: takes the record down | <https://ferrochart.eu/> |
-| [FerroEHR](https://github.com/rubentalstra/FerroEHR) | An openEHR Clinical Data Repository: stores and queries the record | <https://ferroehr.eu/> |
-| [FerroTERM](https://github.com/rubentalstra/FerroTERM) | An HL7 FHIR terminology server: answers what a code means | <https://ferroterm.eu/> |
-| [FerroBRIDGE](https://github.com/rubentalstra/FerroBRIDGE) | A bridge from openEHR to FHIR and to the OMOP CDM: carries the record onward | <https://ferrobridge.eu/> |
+| [FerroCHART](https://github.com/FerroHEALTH/FerroCHART) | An openEHR form builder and renderer: takes the record down | <https://ferrochart.eu/> |
+| [FerroEHR](https://github.com/FerroHEALTH/FerroEHR) | An openEHR Clinical Data Repository: stores and queries the record | <https://ferroehr.eu/> |
+| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | An HL7 FHIR terminology server: answers what a code means | <https://ferroterm.eu/> |
+| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) | A bridge from openEHR to FHIR and to the OMOP CDM: carries the record onward | <https://ferrobridge.eu/> |
 
 Each product is released from its own repository under the Business Source
 License 1.1, documents itself on its own domain, and runs without the other
@@ -30,10 +30,10 @@ last moved.
 
 | Planned | Will do | Domain |
 |---|---|---|
-| [FerroPIX](https://github.com/rubentalstra/FerroPIX) | A Master Patient Index: who the patient is, and where the record is | `ferropix.eu` |
-| [FerroSMART](https://github.com/rubentalstra/FerroSMART) | The SMART on openEHR server: who may act | `ferrosmart.eu` |
-| [FerroFED](https://github.com/rubentalstra/FerroFED) | A federation gateway: where else the record is | `ferrofed.eu` |
-| [FerroSYS](https://github.com/rubentalstra/FerroSYS) | The control plane: how it all runs | `ferrosys.eu` |
+| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | A Master Patient Index: who the patient is, and where the record is | `ferropix.eu` |
+| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | The SMART on openEHR server: who may act | `ferrosmart.eu` |
+| [FerroFED](https://github.com/FerroHEALTH/FerroFED) | A federation gateway: where else the record is | `ferrofed.eu` |
+| [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | The control plane: how it all runs | `ferrosys.eu` |
 
 ![What calls what across the FerroHEALTH family](assets/diagrams/ferrohealth-architecture.svg)
 
@@ -146,14 +146,14 @@ them unmodified to refer to the projects, and anything else needs permission.
 mark under `website/landing/assets/products/` belongs to that project and
 keeps its licence. The products themselves are BUSL-1.1, with the parameters that apply
 in each repository's own licence file:
-[FerroCHART](https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE),
-[FerroEHR](https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE),
-[FerroTERM](https://github.com/rubentalstra/FerroTERM/blob/main/LICENSE),
-[FerroBRIDGE](https://github.com/rubentalstra/FerroBRIDGE/blob/main/LICENSE),
-[FerroPIX](https://github.com/rubentalstra/FerroPIX/blob/main/LICENSE),
-[FerroSMART](https://github.com/rubentalstra/FerroSMART/blob/main/LICENSE),
-[FerroFED](https://github.com/rubentalstra/FerroFED/blob/main/LICENSE),
-[FerroSYS](https://github.com/rubentalstra/FerroSYS/blob/main/LICENSE).
+[FerroCHART](https://github.com/FerroHEALTH/FerroCHART/blob/main/LICENSE),
+[FerroEHR](https://github.com/FerroHEALTH/FerroEHR/blob/main/LICENSE),
+[FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/LICENSE),
+[FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE),
+[FerroPIX](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE),
+[FerroSMART](https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE),
+[FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE),
+[FerroSYS](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE).
 The site states what those terms mean at
 <https://ferrohealth.eu/#licensing>.
 

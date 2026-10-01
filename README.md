@@ -7,7 +7,7 @@
 [![Code: Apache-2.0](https://img.shields.io/badge/Code-Apache--2.0-blue.svg)](LICENSE)
 [![Brand: all rights reserved](https://img.shields.io/badge/Brand-all%20rights%20reserved-lightgrey.svg)](TRADEMARKS.md)
 
-The family site for four pure-Rust health-data servers, published at
+The family site for five pure-Rust health-data servers, published at
 **<https://ferrohealth.eu/>**. This repository holds the site and the shared
 brand; it holds no product code.
 
@@ -17,13 +17,14 @@ brand; it holds no product code.
 | [FerroEHR](https://github.com/FerroHEALTH/FerroEHR) | An openEHR Clinical Data Repository: stores and queries the record | <https://ferroehr.eu/> |
 | [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | An HL7 FHIR terminology server: answers what a code means | <https://ferroterm.eu/> |
 | [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) | A bridge from openEHR to FHIR and to the OMOP CDM: carries the record onward | <https://ferrobridge.eu/> |
+| [FerroFED](https://github.com/FerroHEALTH/FerroFED) | An openEHR federation gateway: queries the record where it lives | <https://ferrofed.eu/> |
 
 Each product is released from its own repository under the Business Source
-License 1.1, documents itself on its own domain, and runs without the other
-three. This site says how they fit together and nothing a product's own site
+License 1.1, documents itself on its own domain, and runs without the
+others. This site says how they fit together and nothing a product's own site
 should say instead.
 
-Four more are planned around them. Each has a registered domain and a
+Three more are planned around them. Each has a registered domain and a
 repository that opens with its licence and its brand, and the page shows them
 as dashed cards whose one status line is read from GitHub: the day the code
 last moved.
@@ -32,7 +33,6 @@ last moved.
 |---|---|---|
 | [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | A Master Patient Index: who the patient is, and where the record is | `ferropix.eu` |
 | [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | The SMART on openEHR server: who may act | `ferrosmart.eu` |
-| [FerroFED](https://github.com/FerroHEALTH/FerroFED) | A federation gateway: where else the record is | `ferrofed.eu` |
 | [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | The control plane: how it all runs | `ferrosys.eu` |
 
 ![What calls what across the FerroHEALTH family](assets/diagrams/ferrohealth-architecture.svg)
@@ -117,15 +117,15 @@ switch back to branch-based publishing.
   page and left to rot. The page shows a release and a date and lets the reader
   judge.
 - **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo, and the planned four are plum, bronze, azure
-  and olive, chosen by measurement; FerroHEALTH is iron and
+  is teal, FerroBRIDGE is indigo, and FerroPIX, FerroSMART, FerroFED and
+  FerroSYS are plum, bronze, azure and olive, chosen by measurement; FerroHEALTH is iron and
   steel, and borrows a hue only where its product is named. See
   [`assets/brand/README.md`](assets/brand/README.md).
 - **A planned product says what it is for and nothing it has not done.** Its
   card names the product and the job, links its repository, shows the domain
   as text until it serves a page, and carries one rendered badge. The mark
-  stays at four strokes: the planned four frame the data path and are not part
-  of it.
+  stays at four strokes: FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE are
+  the data path, and FerroPIX, FerroSMART, FerroFED and FerroSYS frame it.
 
 ## Contributing
 

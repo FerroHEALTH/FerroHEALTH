@@ -17,11 +17,11 @@
 # committed SVG equal to this script's output. Standard library only.
 #
 # What the picture says is in assets/diagrams/README.md. In short: left to
-# right is the order data moves, the four servers are the data path, and the
-# four planned services frame it. An arrowhead points at what is called or
-# written to. A dashed outline is a planned product, and a dashed edge a call
-# into one. Where a line has to cross another it hops over it with a small arc,
-# and a crossing is allowed only where a hop is declared.
+# right is the order data moves, the four servers in the top row are the data
+# path, and the four services below frame it. An arrowhead points at what is
+# called or written to. A dashed outline is a planned product, and a dashed
+# edge a call into one. Where a line has to cross another it hops over it with
+# a small arc, and a crossing is allowed only where a hop is declared.
 
 import sys
 from dataclasses import dataclass, field
@@ -169,16 +169,15 @@ BOXES = [
             "created or its subject changes, the gateway asks it where a record is; an\n"
             "application that opens a record asks it the same way, and FerroCHART\n"
             "receives the EHR it is launched with and asks nobody."),
-    Box("fed", 698, 440, 168, 88, "FerroFED", hue="fed", planned=True,
+    Box("fed", 698, 440, 168, 88, "FerroFED", hue="fed",
         subs=["federation gateway", "one query, every node"],
         why="Under FerroBRIDGE, on the side where data leaves, and level with the other\n"
             "organisations it talks to. The federation tier of the openEHR federation\n"
             "proposal: a transparent ITS-REST intermediary that resolves the patient\n"
             "first, then dispatches ordinary AQL to each node's own EHR id."),
-    Box("others", 1000, 456, 190, 56, "Other organisations", planned=True,
+    Box("others", 1000, 456, 190, 56, "Other organisations",
         subs=["federation nodes"],
-        why="Dashed like the gateway that reaches them, because without FerroFED there is\n"
-            "no path to them at all."),
+        why="Level with the gateway, because FerroFED is the only path to them."),
     Box("sys", 206, 592, 660, 76, "FerroSYS", hue="sys", planned=True,
         subs=["health, telemetry, event log, notifications, configuration · every server reports to it"],
         why="The mirror of the FerroTERM band: meaning above the servers, operations\n"
@@ -221,7 +220,7 @@ EDGES = [
              "operation on this record. FerroTERM and FerroBRIDGE ask the same; the\n"
              "caption carries those two lines."),
     Edge("fed", "ehr", [(698, 460), (650, 460), (650, 236), (612, 236)], "ITS-REST, AQL",
-         (658, 350, "start"), planned=True,
+         (658, 350, "start"),
          why="The gateway queries the local record like any client, below the bridge's\n"
              "own read of it and into the CDR's right side, so the two never meet."),
     Edge("ehr", "pix", [(560, 248), (560, 440)], "PIXm feed", (568, 350, "start"), planned=True,
@@ -231,14 +230,13 @@ EDGES = [
     Edge("fed", "pix", [(698, 504), (612, 504)], "PIXm", (655, 495, "middle"), planned=True,
          why="Where is the record: the gateway asks the index before it fans out."),
     Edge("fed", "others", [(866, 484), (1000, 484)], "ITS-REST, AQL", (933, 475, "middle"),
-         planned=True,
          why="A remote CDR is a node like the local one: the gateway sends it standard\n"
              "AQL scoped to that node's own EHR id and merges what comes back, with the\n"
              "node named in the result."),
     Edge("apps", "fed", [(72, 320), (72, 562), (782, 562), (782, 528)], "ITS-REST, AQL",
-         (600, 551, "middle"), planned=True, around=True,
+         (600, 551, "middle"), around=True,
          why="The application tier: a client sends the gateway an ordinary AQL query and\n"
-             "never learns it was federated. The line runs under the planned row, the one\n"
+             "never learns it was federated. The line runs under the lower row, the one\n"
              "corridor where it crosses nothing."),
 ]
 
@@ -527,11 +525,11 @@ DESC = (
     "application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE "
     "reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges "
     "resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an "
-    "OMOP Common Data Model database over SQL. Four planned services, drawn dashed, frame the four "
-    "servers: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR "
+    "OMOP Common Data Model database over SQL. Four services frame those four servers, and the "
+    "three still planned are drawn dashed: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR "
     "server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; "
     "FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send "
-    "FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other "
+    "FerroFED, the federation gateway, an ordinary AQL query, and it asks the planned FerroPIX where the record is, then dispatches the query to FerroEHR and to other "
     "organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, "
     "spans everything as the band every server reports to. A frame around the eight marks one "
     "FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it."
@@ -546,8 +544,9 @@ HEADER = (
     "     <style> holds only the dark override, because a CSS rule outranks a\n"
     "     presentation attribute. The ground is the page's surface colour, so the\n"
     "     file blends into the section it sits in. Left to right is the order data\n"
-    "     moves, the four servers are the data path, and the four planned services\n"
-    "     frame it. An arrowhead points at what is called or written to. -->\n"
+    "     moves, the four servers in the top row are the data path, and the four\n"
+    "     services below frame it. An arrowhead points at what is called or written\n"
+    "     to. -->\n"
 )
 
 

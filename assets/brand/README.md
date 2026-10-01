@@ -137,6 +137,8 @@ landing page reads them through its own `--fh-*` tokens in
 | `favicon-32.png`, `favicon-16.png`, `favicon.ico` | raster favicons |
 | `apple-touch-icon.png` | the 180x180 home-screen icon |
 | `ferrohealth-social.svg`, `ferrohealth-social.png` | 1200x630 social card |
+| `ferrohealth-avatar.svg`, `ferrohealth-avatar.png` | 1024x1024 GitHub organisation avatar: the favicon's strokes on a full-bleed iron square |
+| `ferrohealth-github-social.svg`, `ferrohealth-github-social.png` | 1280x640 GitHub repository social preview |
 | `tokens.css` | the palette as CSS custom properties |
 
 ## Intrinsic size
@@ -183,7 +185,7 @@ dependency. The rest of the FerroHEALTH surfaces use the system font stack in
 ## Regenerating the rasters
 
 The PNG and ICO files derive from the SVGs. Run these from the repository root
-after any change to `favicon.svg` or `ferrohealth-social.svg`:
+after any change to `favicon.svg`, a social card or the avatar:
 
 ```bash
 rsvg-convert -w 32 -h 32 assets/brand/favicon.svg -o assets/brand/favicon-32.png
@@ -192,11 +194,29 @@ rsvg-convert -w 48 -h 48 assets/brand/favicon.svg -o /tmp/favicon-48.png
 magick /tmp/favicon-48.png assets/brand/favicon-32.png assets/brand/favicon-16.png assets/brand/favicon.ico
 rsvg-convert -w 180 -h 180 assets/brand/favicon.svg -o assets/brand/apple-touch-icon.png
 rsvg-convert -w 1200 -h 630 assets/brand/ferrohealth-social.svg -o assets/brand/ferrohealth-social.png
+rsvg-convert -w 1024 -h 1024 assets/brand/ferrohealth-avatar.svg -o assets/brand/ferrohealth-avatar.png
+rsvg-convert -w 1280 -h 640 assets/brand/ferrohealth-github-social.svg -o assets/brand/ferrohealth-github-social.png
 ```
 
 `scripts/site/assemble.sh` copies this directory to `assets/brand/` of the
 assembled site, so the landing page, the social card, and the favicons resolve
 on <https://ferrohealth.eu/>.
+
+## GitHub
+
+GitHub has no API for an organisation avatar or a repository social preview,
+so both are uploaded by hand: `ferrohealth-avatar.png` under the
+organisation's settings, `ferrohealth-github-social.png` under the
+FerroHEALTH repository's settings. Upload the new PNG again after you
+regenerate it.
+
+## Licence
+
+The artwork in this directory (every SVG, PNG and ICO file) is all rights
+reserved, under the terms in [`TRADEMARKS.md`](../../TRADEMARKS.md) (SPDX
+`LicenseRef-FerroHEALTH-Brand`). You may use a mark unmodified to refer to the
+projects. A modified mark, or a mark in your own product's name or logo, needs
+permission. This README and `tokens.css` are Apache-2.0.
 
 ## Trademarks
 

@@ -1,0 +1,15 @@
+<!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->
+<!-- SPDX-License-Identifier: LicenseRef-FerroHEALTH-Brand -->
+<!-- The GitHub organisation avatar: the favicon's heavier strokes on a
+     full-bleed iron square, because GitHub rounds the corners itself and shows
+     the avatar down to 20 px. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64" role="img" aria-label="FerroHEALTH">
+  <title>FerroHEALTH</title>
+  <rect x="0" y="0" width="64" height="64" fill="#0F172A"/>
+  <g transform="translate(32 32) scale(0.8) translate(-32 -34)" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 34 H16 L20.5 22" stroke="#E04F84"/>
+    <path d="M20.5 22 L27 46" stroke="#D97742"/>
+    <path d="M27 46 L33 26" stroke="#2DD4BF"/>
+    <path d="M33 26 L38.5 34 H56" stroke="#A5B4FC"/>
+  </g>
+</svg>

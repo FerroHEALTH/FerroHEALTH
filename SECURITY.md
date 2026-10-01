@@ -21,7 +21,7 @@ Please do not open a public issue for one.
 ## Report a vulnerability in the site
 
 Open a private advisory:
-<https://github.com/rubentalstra/FerroHEALTH/security/advisories/new>.
+<https://github.com/FerroHEALTH/FerroHEALTH/security/advisories/new>.
 
 In scope, and worth reporting:
 

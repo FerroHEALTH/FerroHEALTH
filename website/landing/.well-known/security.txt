@@ -14,8 +14,8 @@
 # Expires MUST be refreshed before the date below (RFC 9116 2.5.5: a stale file
 # is to be treated as invalid).
 
-Contact: https://github.com/rubentalstra/FerroHEALTH/security/advisories/new
+Contact: https://github.com/FerroHEALTH/FerroHEALTH/security/advisories/new
 Expires: 2027-09-05T00:00:00.000Z
 Preferred-Languages: en, nl
 Canonical: https://ferrohealth.eu/.well-known/security.txt
-Policy: https://github.com/rubentalstra/FerroHEALTH/blob/main/SECURITY.md
+Policy: https://github.com/FerroHEALTH/FerroHEALTH/blob/main/SECURITY.md

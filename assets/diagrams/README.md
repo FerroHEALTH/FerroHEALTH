@@ -8,7 +8,7 @@ site: a product README, the books, a slide, an issue.
 
 | File | What it shows |
 |---|---|
-| `ferrohealth-architecture.svg` | what calls what across the four servers and the four planned services around them |
+| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the four services around them |
 | `ferrohealth-architecture.png` | the same at 2400x1512, for the rare consumer that renders no SVG at all |
 
 ## How it is drawn
@@ -66,8 +66,9 @@ organisation that serves several runs several instances.
 
 Left to right is the order data moves. The four servers are the data path:
 FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
-meaning, FerroBRIDGE carries it out. The four planned services frame that path
-and are drawn dashed, as is every call into one of them.
+meaning, FerroBRIDGE carries it out. FerroPIX, FerroSMART, FerroFED and
+FerroSYS frame that path. The three still planned are drawn dashed, as is
+every call into one of them; FerroFED has released and is drawn solid.
 
 An arrowhead points at what is called or written to. The FHIR side carries one
 at both ends, because the bridge reads openEHR out to FHIR and writes FHIR back
@@ -124,9 +125,10 @@ The evidence for every solid edge is in the products' own documents:
 FerroBRIDGE's `website/book/src/integrate/fhir-facade.md` and
 `operate/deployment-shape.md` for the terminology operations and the CDM write,
 and FerroEHR's `website/book/src/installation/config-integrations.md` for
-`$validate-code` as the default membership operation. A dashed edge is a design
-intent, and the planned product's own repository will carry its evidence once
-it exists.
+`$validate-code` as the default membership operation. FerroFED's edges are
+its architecture, in its own repository, and its tracker is the record of the
+build. A dashed edge is a design intent, and the planned product's own
+repository will carry its evidence once it exists.
 
 ## Colours and theme
 

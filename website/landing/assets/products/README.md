@@ -22,7 +22,7 @@ loads no image from another origin. That is why these are copies. Refresh a file
 from its source when that product changes its mark, and never edit one here.
 Each mark belongs to its own project and keeps that project's licence.
 
-## Where the planned four's marks came from
+## Where the later four's marks came from
 
 FerroPIX, FerroSMART, FerroFED and FerroSYS had a name and a domain before they
 had a repository, so their marks were drawn in this repository first, in the

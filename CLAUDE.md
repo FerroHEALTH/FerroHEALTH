@@ -1,22 +1,23 @@
 # CLAUDE.md
 
-**FerroHEALTH** is the family name for four pure-Rust health-data servers, and
+**FerroHEALTH** is the family name for five pure-Rust health-data servers, and
 this repository is the family site at <https://ferrohealth.eu> plus the shared
 brand. It ships no product code. The products are
 [FerroCHART](https://github.com/FerroHEALTH/FerroCHART) (an openEHR form
 builder and renderer),
 [FerroEHR](https://github.com/FerroHEALTH/FerroEHR) (an openEHR Clinical Data
 Repository), [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) (an HL7 FHIR
-terminology server), and
+terminology server),
 [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) (a bridge from
-openEHR to FHIR and to the OMOP Common Data Model). Four more are planned,
-each with a domain and a repository that holds its licence and its brand and
-no release yet: [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) (patient
-identity, `ferropix.eu`), [FerroSMART](https://github.com/FerroHEALTH/FerroSMART)
-(the SMART on openEHR server, `ferrosmart.eu`),
-[FerroFED](https://github.com/FerroHEALTH/FerroFED) (federation,
-`ferrofed.eu`) and [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (the
-control plane, `ferrosys.eu`). Ferro is *ferrum*, iron, which Rust is an oxide
+openEHR to FHIR and to the OMOP Common Data Model), and
+[FerroFED](https://github.com/FerroHEALTH/FerroFED) (an openEHR federation
+gateway). Three more are planned, each with a domain and a repository that
+holds its licence and its brand and no release yet:
+[FerroPIX](https://github.com/FerroHEALTH/FerroPIX) (patient identity,
+`ferropix.eu`), [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) (the
+SMART on openEHR server, `ferrosmart.eu`) and
+[FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (the control plane,
+`ferrosys.eu`). Ferro is *ferrum*, iron, which Rust is an oxide
 of.
 
 Write all prose (the page, the READMEs, comments, commits, PRs, issues) to
@@ -99,13 +100,14 @@ Look at the page before calling it right: light and dark, wide and narrow.
   system list or a crate list moves with a product release and belongs on that
   product's site. The page names the standard and links the pin.
 - **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo; the planned four are plum, bronze, azure and
-  olive. FerroHEALTH is iron and steel, and spends a product
+  is teal, FerroBRIDGE is indigo; FerroPIX, FerroSMART, FerroFED and FerroSYS
+  are plum, bronze, azure and olive. FerroHEALTH is iron and steel, and spends a product
   hue only where that product is named. Every product's values in
   `assets/brand/tokens.css` are copied verbatim from its own `tokens.css`; a
   new hue is chosen with `scripts/brand/hue-distance.py` before it goes there.
-  The mark stays at four strokes: they are the data path, and the planned four
-  frame it.
+  The mark stays at four strokes: they are the data path (FerroCHART, FerroEHR,
+  FerroTERM, FerroBRIDGE), and FerroPIX, FerroSMART, FerroFED and FerroSYS
+  frame it, released or not.
 - **The brand artwork is all rights reserved.** The SVG, PNG and ICO files in
   `assets/brand/` and `assets/diagrams/` are under `TRADEMARKS.md`, and every
   SVG there carries `LicenseRef-FerroHEALTH-Brand`, a new one included. The
@@ -167,6 +169,6 @@ always.
 - @README.md: what the repository is, how to build it, and how it deploys.
 - `website/landing/assets/products/README.md`: where each product mark came
   from.
-- The four product sites carry the detail this page links to:
+- The five product sites carry the detail this page links to:
   <https://ferrochart.eu>, <https://ferroehr.eu>, <https://ferroterm.eu>,
-  <https://ferrobridge.eu>.
+  <https://ferrobridge.eu>, <https://ferrofed.eu>.

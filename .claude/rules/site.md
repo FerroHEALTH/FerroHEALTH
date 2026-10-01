@@ -29,8 +29,8 @@ beyond that script, no runtime dependency.
   and never the SVG. `assets/diagrams/README.md` carries the conventions and
   the raster command.
 - **A planned product says what it is for, and its one status is rendered.**
-  FerroPIX, FerroSMART, FerroFED and FerroSYS have a name, a domain and a
-  repository with their licence and brand, and no release. Each is a dashed
+  FerroPIX, FerroSMART and FerroSYS have a name, a domain and a repository
+  with their licence and brand, and no release. Each is a dashed
   card in the products section with the product's job, the standards it
   intends to speak, a GitHub link, the domain as text (linked only once it
   serves a page) and a `data-repo` badge that `scripts/site/render-releases.sh`
@@ -71,7 +71,8 @@ beyond that script, no runtime dependency.
 - FerroHEALTH owns iron and steel. Each product owns its hue, and the page
   spends a product hue only where that product is named: the card rule, the
   dot, the diagram box, the hero glow. The glow and the mark carry the four
-  strokes only; the planned four have no stroke.
+  strokes only; FerroPIX, FerroSMART, FerroFED and FerroSYS have no stroke,
+  released or not, because they frame the data path and are not on it.
 - Every product's hue in `assets/brand/tokens.css` is copied verbatim from
   that product's own `tokens.css`. When a product changes its palette, copy
   the new value; never eyeball a near match. A new hue is chosen with

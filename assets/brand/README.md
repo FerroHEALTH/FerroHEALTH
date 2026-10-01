@@ -3,14 +3,15 @@
 
 # FerroHEALTH brand
 
-FerroHEALTH is the family name for four servers that are built and released
+FerroHEALTH is the family name for five servers that are built and released
 separately: [FerroCHART](https://ferrochart.eu/), an openEHR® form builder and
 renderer; [FerroEHR](https://ferroehr.eu/), an openEHR Clinical Data
 Repository; [FerroTERM](https://ferroterm.eu/), an HL7® FHIR® terminology
-server; and [FerroBRIDGE](https://ferrobridge.eu/), a bridge from openEHR to
-FHIR and to the OMOP Common Data Model. Four more are planned around them:
-FerroPIX for patient identity, FerroSMART for authorisation, FerroFED for
-federation and FerroSYS as the control plane. Ferro is *ferrum*, iron, which is
+server; [FerroBRIDGE](https://ferrobridge.eu/), a bridge from openEHR to FHIR
+and to the OMOP Common Data Model; and [FerroFED](https://ferrofed.eu/), an
+openEHR federation gateway. Three more are planned around them: FerroPIX for
+patient identity, FerroSMART for authorisation and FerroSYS as the control
+plane. Ferro is *ferrum*, iron, which is
 what Rust is an oxide of.
 
 The parent follows the same file set, naming, variant list, and raster pipeline
@@ -41,11 +42,11 @@ per-product mark.
 scaling: a fifth segment in the same width is not legible at any size the mark
 is used at. The family has grown to eight names, and the decision is that the
 four strokes are the data path and nothing else: the form, the record, the
-meaning, the way out. The four planned services (FerroPIX, FerroSMART,
-FerroFED, FerroSYS) surround that path and are drawn as the frame around it in
-the architecture diagram; they get a hue and a mark of their own, and no stroke
-in this one. Product colour for the planned four lives on the product cards and
-in the diagram, where it can grow without limit.
+meaning, the way out. The four services around it (FerroPIX, FerroSMART,
+FerroFED, FerroSYS) are drawn as the frame around that path in the
+architecture diagram; they get a hue and a mark of their own, and no stroke in
+this one, whether they have released or not. Their colour lives on the product
+cards and in the diagram, where it can grow without limit.
 
 ## Palette, "Iron & Steel"
 
@@ -80,7 +81,7 @@ the other three, in both grounds, under normal, deuteranope and protanope
 vision. Rose at 330 degrees wins at 14.9; green and violet both fall below 10.
 That bar is why the mark stops at four strokes.
 
-### The planned four
+### The four around the data path
 
 Copied verbatim from each product's own `tokens.css`, like the four above. The
 values were chosen in this repository before the products had a repository,

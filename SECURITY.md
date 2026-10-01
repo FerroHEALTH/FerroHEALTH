@@ -12,9 +12,9 @@ no database, no user data and no dependency at runtime.
 A vulnerability in FerroEHR, FerroTERM or FerroBRIDGE belongs in that product's
 own advisory queue, which is where its maintainers and its release process are:
 
-- FerroEHR: <https://github.com/rubentalstra/FerroEHR/security/advisories/new>
-- FerroTERM: <https://github.com/rubentalstra/FerroTERM/security/advisories/new>
-- FerroBRIDGE: <https://github.com/rubentalstra/FerroBRIDGE/security/advisories/new>
+- FerroEHR: <https://github.com/FerroHEALTH/FerroEHR/security/advisories/new>
+- FerroTERM: <https://github.com/FerroHEALTH/FerroTERM/security/advisories/new>
+- FerroBRIDGE: <https://github.com/FerroHEALTH/FerroBRIDGE/security/advisories/new>
 
 Please do not open a public issue for one.
 

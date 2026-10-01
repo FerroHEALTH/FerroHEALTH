@@ -37,20 +37,23 @@ Look at the page before calling it right: light and dark, wide and narrow.
 
 ## Licensing of contributions
 
-FerroHEALTH is licensed under the Apache License 2.0 ([`LICENSE`](LICENSE)). By
-submitting a contribution you:
+The site, the scripts and the documentation are licensed under the Apache
+License 2.0 ([`LICENSE`](LICENSE)). The brand assets in `assets/brand/` and
+`assets/diagrams/` are all rights reserved, under the terms in
+[`TRADEMARKS.md`](TRADEMARKS.md). By submitting a contribution you:
 
 1. certify that you wrote it, or otherwise have the right to submit it under
    these terms;
-2. license it under the Apache License 2.0 with the rest of the repository, as
-   section 5 of that licence already provides; and
+2. license a change to an Apache-2.0 file under the Apache License 2.0 with
+   the rest of those files, as section 5 of that licence already provides;
+   and
 3. grant Vernum Projecten B.V., the copyright holder named in every file
    header, a perpetual, irrevocable, worldwide,
    royalty-free, transferable right to use, reproduce, modify, distribute,
    sublicense and relicense the contribution as part of the work under any
-   terms.
+   terms. For a change to a brand asset, this grant is the only licence.
 
-You keep your copyright, and the licence stays Apache-2.0 for everyone, the
+You keep your copyright, and each file keeps its licence for everyone, the
 maintainer included. Point 3 is what keeps the work one work under one
 licensor, the same terms every repository in the Ferro family carries, so a
 transfer of the project can cover every line, not only the maintainer's own.

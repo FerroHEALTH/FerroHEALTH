@@ -152,3 +152,10 @@ No `-b` flag: the ground is the SVG's own.
 
 `scripts/site/assemble.sh` copies this directory to `assets/diagrams/` of the
 assembled site, so both files resolve on <https://ferrohealth.eu/>.
+
+## Licence
+
+The diagram (the SVG and the PNG) is all rights reserved, under the terms in
+[`TRADEMARKS.md`](../../TRADEMARKS.md): you may show it unmodified to describe
+how the projects fit together. Its generator under `scripts/diagrams/` and
+this README are Apache-2.0.

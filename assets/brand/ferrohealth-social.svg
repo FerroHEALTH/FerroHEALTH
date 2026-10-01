@@ -1,5 +1,5 @@
 <!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->
-<!-- SPDX-License-Identifier: Apache-2.0 -->
+<!-- SPDX-License-Identifier: LicenseRef-FerroHEALTH-Brand -->
 <!-- The 1200x630 social card. Iron ground, the mark and the wordmark, the
      one-line description, and the four products in their own hues. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="FerroHEALTH: health-data infrastructure in Rust, built on open standards">

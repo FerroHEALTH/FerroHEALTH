@@ -3,8 +3,9 @@
 
 # <img src="assets/brand/ferrohealth-lockup-auto.svg" alt="FerroHEALTH" width="290" height="64">
 
-[![Pages](https://github.com/rubentalstra/FerroHEALTH/actions/workflows/pages.yml/badge.svg?branch=main)](https://github.com/rubentalstra/FerroHEALTH/actions/workflows/pages.yml)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![Pages](https://github.com/FerroHEALTH/FerroHEALTH/actions/workflows/pages.yml/badge.svg?branch=main)](https://github.com/FerroHEALTH/FerroHEALTH/actions/workflows/pages.yml)
+[![Code: Apache-2.0](https://img.shields.io/badge/Code-Apache--2.0-blue.svg)](LICENSE)
+[![Brand: all rights reserved](https://img.shields.io/badge/Brand-all%20rights%20reserved-lightgrey.svg)](TRADEMARKS.md)
 
 The family site for four pure-Rust health-data servers, published at
 **<https://ferrohealth.eu/>**. This repository holds the site and the shared
@@ -130,16 +131,20 @@ switch back to branch-based publishing.
 
 Contributions carry the terms in
 [CONTRIBUTING.md](CONTRIBUTING.md#licensing-of-contributions): you keep your
-copyright, the licence stays Apache-2.0, and you grant the Licensor the
+copyright, each file keeps its licence, and you grant the Licensor the
 relicensing right that keeps the work one work under one licensor. The pull
 request template records your acceptance and a check enforces it.
 
 ## Licence
 
-The site, the scripts and the FerroHEALTH brand assets in this repository are
-[Apache-2.0](LICENSE). Each product's mark under
-`website/landing/assets/products/` belongs to that project and keeps its
-licence. The products themselves are BUSL-1.1, with the parameters that apply
+The site, the scripts and the documentation in this repository are
+[Apache-2.0](LICENSE). The FerroHEALTH brand assets (the artwork in
+`assets/brand/` and the diagram in `assets/diagrams/`) are all rights
+reserved, under the terms in [`TRADEMARKS.md`](TRADEMARKS.md): you may use
+them unmodified to refer to the projects, and anything else needs permission.
+`TRADEMARKS.md` also covers the use of the product names. Each product's
+mark under `website/landing/assets/products/` belongs to that project and
+keeps its licence. The products themselves are BUSL-1.1, with the parameters that apply
 in each repository's own licence file:
 [FerroCHART](https://github.com/rubentalstra/FerroCHART/blob/main/LICENSE),
 [FerroEHR](https://github.com/rubentalstra/FerroEHR/blob/main/LICENSE),

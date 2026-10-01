@@ -30,8 +30,8 @@ in step.
   `assets/products/` (a copy of each product's own mark, with provenance in the
   README there).
 - `assets/brand/`: the FerroHEALTH mark, the icon and lockup variants, the
-  favicon set, the social card, and `tokens.css`. `assets/brand/README.md` is
-  the brand authority.
+  favicon set, the social cards, the GitHub avatar, and `tokens.css`.
+  `assets/brand/README.md` is the brand authority.
 - `assets/diagrams/`: the architecture diagram as one self-contained,
   theme-adaptive SVG plus its raster. The page loads it with `<img>`, so there
   is one copy of the artwork and it can be used outside this site. The SVG is
@@ -49,6 +49,7 @@ in step.
   product's own `LICENSE`), `no-typed-version.sh` (no version outside a
   rendered marker), and `diagram-generated.sh` (the committed SVG is what the
   generator draws).
+- `TRADEMARKS.md`: the brand terms (the artwork and the product names).
 - `.github/workflows/`: `ci.yml` (workflows, shell, prose, versions),
   `pages.yml` (assemble, check, deploy from main every six hours and on push),
   and `refresh.yml` (re-render the committed fallbacks, open one pull request,
@@ -105,6 +106,10 @@ Look at the page before calling it right: light and dark, wide and narrow.
   new hue is chosen with `scripts/brand/hue-distance.py` before it goes there.
   The mark stays at four strokes: they are the data path, and the planned four
   frame it.
+- **The brand artwork is all rights reserved.** The SVG, PNG and ICO files in
+  `assets/brand/` and `assets/diagrams/` are under `TRADEMARKS.md`, and every
+  SVG there carries `LicenseRef-FerroHEALTH-Brand`, a new one included. The
+  site, the scripts, the docs and `tokens.css` stay Apache-2.0.
 - **A licence link points at the product's own `LICENSE`.** The BUSL-1.1
   boilerplate fills none of its parameters in, so a reader who follows it sees
   a blank Additional Use Grant. The page links each repository's `LICENSE` and

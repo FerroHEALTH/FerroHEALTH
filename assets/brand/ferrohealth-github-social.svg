@@ -1,0 +1,56 @@
+<!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->
+<!-- SPDX-License-Identifier: LicenseRef-FerroHEALTH-Brand -->
+<!-- The 1280x640 repository social preview GitHub asks for: the social card
+     on a wider iron ground, its content shifted to the centre. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-label="FerroHEALTH: health-data infrastructure in Rust, built on open standards">
+  <title>FerroHEALTH</title>
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#0B1020"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#ground)"/>
+  <rect x="0" y="0" width="320" height="6" fill="#C2185B"/>
+  <rect x="320" y="0" width="320" height="6" fill="#B7431B"/>
+  <rect x="640" y="0" width="320" height="6" fill="#0D9488"/>
+  <rect x="960" y="0" width="320" height="6" fill="#4F46E5"/>
+
+  <g transform="translate(40,5)">
+    <g transform="translate(96,150) scale(2.1)" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 33 H14 L19 20" stroke="#E04F84"/>
+      <path d="M19 20 L26 45" stroke="#D97742"/>
+      <path d="M26 45 L32 26" stroke="#2DD4BF"/>
+      <path d="M32 26 L38 33 H60" stroke="#A5B4FC"/>
+    </g>
+    <text x="240" y="248" font-family="'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="76" font-weight="700" letter-spacing="-1"><tspan fill="#F1F5F9">Ferro</tspan><tspan fill="#8FB6C4">HEALTH</tspan></text>
+
+    <text x="96" y="342" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="500" fill="#CBD5E1">Health-data infrastructure in Rust, built on open standards.</text>
+    <text x="96" y="390" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="34" font-weight="500" fill="#8593A8">Enter it, keep it, describe it, send it on.</text>
+
+    <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="26" font-weight="700">
+      <g transform="translate(96,470)">
+        <rect x="0" y="0" width="236" height="72" rx="16" fill="#221523" stroke="#C2185B" stroke-width="2"/>
+        <circle cx="30" cy="36" r="8" fill="#E04F84"/>
+        <text x="50" y="45" fill="#F1F5F9">FerroCHART</text>
+      </g>
+      <g transform="translate(352,470)">
+        <rect x="0" y="0" width="236" height="72" rx="16" fill="#1A1F2E" stroke="#B7431B" stroke-width="2"/>
+        <circle cx="30" cy="36" r="8" fill="#D97742"/>
+        <text x="50" y="45" fill="#F1F5F9">FerroEHR</text>
+      </g>
+      <g transform="translate(608,470)">
+        <rect x="0" y="0" width="236" height="72" rx="16" fill="#131F2A" stroke="#0D9488" stroke-width="2"/>
+        <circle cx="30" cy="36" r="8" fill="#2DD4BF"/>
+        <text x="50" y="45" fill="#F1F5F9">FerroTERM</text>
+      </g>
+      <g transform="translate(864,470)">
+        <rect x="0" y="0" width="236" height="72" rx="16" fill="#171A2E" stroke="#4F46E5" stroke-width="2"/>
+        <circle cx="30" cy="36" r="8" fill="#A5B4FC"/>
+        <text x="50" y="45" fill="#F1F5F9">FerroBRIDGE</text>
+      </g>
+    </g>
+
+    <text x="1104" y="592" text-anchor="end" font-family="system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif" font-size="26" font-weight="600" fill="#64748B">ferrohealth.eu</text>
+  </g>
+</svg>

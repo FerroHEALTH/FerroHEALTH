@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->
+<!-- SPDX-FileCopyrightText: Cadasto B.V. -->
 <!-- SPDX-License-Identifier: LicenseRef-FerroHEALTH-Brand -->
 
 # FerroHEALTH brand terms
@@ -28,10 +28,10 @@ product's own file and keeps the licence of the product's repository.
 
 ## Copyright
 
-Copyright Vernum Projecten B.V. All rights reserved. The brand assets are not
+Copyright Cadasto B.V. All rights reserved. The brand assets are not
 licensed under Apache-2.0 or any other open licence. You may copy, modify or
 redistribute them only as this page allows, or with written permission from
-Vernum Projecten B.V.
+Cadasto B.V.
 
 ## What you may do
 
@@ -52,7 +52,7 @@ provided the result looks the same.
   or with its wordmark set in another typeface.
 - A name or a mark in the name or the logo of your own product, service,
   company, domain or social account.
-- A use that suggests Vernum Projecten B.V. endorses, sponsors or maintains
+- A use that suggests Cadasto B.V. endorses, sponsors or maintains
   your work when it does not.
 - Merchandise.
 

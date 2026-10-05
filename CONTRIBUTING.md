@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Vernum Projecten B.V. -->
+<!-- SPDX-FileCopyrightText: Cadasto B.V. -->
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 
 # Contributing to FerroHEALTH
@@ -47,7 +47,7 @@ License 2.0 ([`LICENSE`](LICENSE)). The brand assets in `assets/brand/` and
 2. license a change to an Apache-2.0 file under the Apache License 2.0 with
    the rest of those files, as section 5 of that licence already provides;
    and
-3. grant Vernum Projecten B.V., the copyright holder named in every file
+3. grant Cadasto B.V., the copyright holder named in every file
    header, a perpetual, irrevocable, worldwide,
    royalty-free, transferable right to use, reproduce, modify, distribute,
    sublicense and relicense the contribution as part of the work under any

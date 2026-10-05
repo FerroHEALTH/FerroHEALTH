@@ -8,7 +8,7 @@ site: a product README, the books, a slide, an issue.
 
 | File | What it shows |
 |---|---|
-| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the four services around them |
+| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the five services around them |
 | `ferrohealth-architecture.png` | the same at 2400x1512, for the rare consumer that renders no SVG at all |
 
 ## How it is drawn
@@ -58,7 +58,7 @@ Do not screenshot the page to get the diagram. The file is the diagram.
 
 ## What it says
 
-The frame is one FerroHEALTH instance serving one tenant. The eight inside are
+The frame is one FerroHEALTH instance serving one tenant. The nine inside are
 the family; clinicians, applications, HL7 FHIR, the OMOP database and other
 organisations sit outside it. FerroEHR can host several isolated tenants in one
 deployment as its own setting; the family shows the single-tenant setup, and an
@@ -66,8 +66,8 @@ organisation that serves several runs several instances.
 
 Left to right is the order data moves. The four servers are the data path:
 FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
-meaning, FerroBRIDGE carries it out. FerroPIX, FerroSMART, FerroFED and
-FerroSYS frame that path. The three still planned are drawn dashed, as is
+meaning, FerroBRIDGE carries it out. FerroPIX, FerroSMART, FerroFED, FerroSYS
+and FerroTASK frame that path. The four still planned are drawn dashed, as is
 every call into one of them; FerroFED has released and is drawn solid.
 
 An arrowhead points at what is called or written to. The FHIR side carries one
@@ -108,12 +108,18 @@ specification it speaks, with a few exceptions worth knowing:
   events to it and is configured from it, so it is drawn as a band under
   everything, the mirror of the FerroTERM band above. A line from each box
   would say nothing the band does not.
-- **One line hops another.** Clinicians and Applications both sit on the
+- **FerroTASK is a client of the CDR.** openEHR Task Planning and GDL2 both
+  read the patient's data by archetype and template path, so FerroTASK reads
+  FerroEHR over `ITS-REST, AQL` and commits the state of each plan back, and
+  keeps no clinical record of its own. It sits under FerroBRIDGE because that
+  is the one slot inside the frame its single edge reaches cleanly; the
+  position says nothing about the order data moves.
+- **Two lines hop another.** Clinicians and Applications both sit on the
   outside, left of FerroCHART, and FerroCHART's own call to FerroSMART runs
   down from it. A client on the outside has to pass under FerroCHART to reach
   the CDR, so that crossing cannot be drawn away. The Applications line hops
-  it with a small arc, and the generator allows a crossing only where a hop is
-  declared.
+  it with a small arc. FerroTASK's line to the CDR hops FerroFED's in the same
+  way. The generator allows a crossing only where a hop is declared.
 
 `$validate-code` is the one operation FerroEHR uses, and the label says so. A
 server that does not offer it is configured to `operation = "expand"` per
@@ -138,8 +144,8 @@ media query inside the file swaps every colour on `prefers-color-scheme`, so one
 file serves a light and a dark reader.
 
 A product keeps its own hue: FerroCHART rose, FerroEHR rust, FerroTERM teal,
-FerroBRIDGE indigo, and the provisional plum, bronze, azure and olive of
-FerroPIX, FerroSMART, FerroFED and FerroSYS. Everything else is iron, steel and
+FerroBRIDGE indigo, and the provisional plum, bronze, azure, olive and emerald
+of FerroPIX, FerroSMART, FerroFED, FerroSYS and FerroTASK. Everything else is iron, steel and
 graphite.
 
 ## Regenerating the raster

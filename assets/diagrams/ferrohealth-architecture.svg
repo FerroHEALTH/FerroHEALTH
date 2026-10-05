@@ -6,12 +6,12 @@
      <style> holds only the dark override, because a CSS rule outranks a
      presentation attribute. The ground is the page's surface colour, so the
      file blends into the section it sits in. Left to right is the order data
-     moves, the four servers in the top row are the data path, and the four
-     services below frame it. An arrowhead points at what is called or written
-     to. -->
+     moves, the four servers in the top row are the data path, and the
+     services below and beside them frame it. An arrowhead points at what is
+     called or written to. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1512" viewBox="0 0 1200 756" role="img" aria-labelledby="title desc">
   <title id="title">What calls what across the FerroHEALTH family</title>
-  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four services frame those four servers, and the three still planned are drawn dashed: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks the planned FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it.</desc>
+  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Five services frame those four servers, and the four still planned are drawn dashed: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks the planned FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to; FerroTASK, the task planning and decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. A frame around the nine marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
@@ -24,6 +24,7 @@
       .box-smart { stroke: #fbbf24 }
       .box-fed { stroke: #7dd3fc }
       .box-sys { stroke: #bef264 }
+      .box-task { stroke: #34d399 }
       .label { fill: #eef2f7 }
       .sub, .edge-label, .legend { fill: #a4aebc }
       .edge, .legend-sample { stroke: #a4aebc }
@@ -38,6 +39,7 @@
       .tag-smart { fill: #fbbf24 }
       .tag-fed { fill: #7dd3fc }
       .tag-sys { fill: #bef264 }
+      .tag-task { fill: #34d399 }
     }
   </style>
 
@@ -122,6 +124,15 @@
     <text class="sub" x="782" y="528" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">federation gateway</text>
     <text class="sub" x="782" y="546" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">one query, every node</text>
 
+    <!-- Task Planning and GDL2 both read the patient's data by archetype path, so
+         FerroTASK is a client of the CDR and keeps no record of its own: it reads
+         what has happened and commits the state of the plan. It sits in the one
+         slot inside the frame its single edge reaches without crossing a label. -->
+    <rect class="box box-task" x="756" y="326" width="110" height="88" rx="10" fill="#ffffff" stroke="#065f46" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="label tag-task" x="811" y="356" text-anchor="middle" font-size="15" font-weight="700" fill="#065f46">FerroTASK</text>
+    <text class="sub" x="811" y="378" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">task plans</text>
+    <text class="sub" x="811" y="396" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">GDL2 guidelines</text>
+
     <!-- Level with the gateway, because FerroFED is the only path to them. -->
     <rect class="box" x="1000" y="492" width="190" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
     <text class="label" x="1095" y="517" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Other organisations</text>
@@ -199,7 +210,7 @@
          own read of it and into the CDR's right side, so the two never meet. -->
     <path class="edge" d="M698 496 H650 V272 H624" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M612 272 l9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="658" y="386" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
+    <text class="edge-label" x="658" y="448" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
 
     <!-- The index has to learn where records are, and the CDR is the one component
          that knows the moment an EHR is created or its subject changes. IHE names
@@ -212,6 +223,13 @@
     <path class="edge" d="M698 540 H624" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
     <path class="edge-head" d="M612 540 l9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="655" y="531" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">PIXm</text>
+
+    <!-- A task plan and a guideline read the record and commit back to it, over
+         the same API any client uses. The line hops the gateway's own call into
+         the CDR, which it has to pass to reach the CDR's lower edge. -->
+    <path class="edge" d="M756 346 H657 A7 7 0 0 1 643 346 H590 V296" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M590 284 l-5.5 9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="703" y="337" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
 
     <!-- A remote CDR is a node like the local one: the gateway sends it standard
          AQL scoped to that node's own EHR id and merges what comes back, with the

@@ -16,13 +16,14 @@ Verbatim copies of each product's primary icon, taken from that product's own
 | `ferrosmart-icon.svg` | <https://github.com/FerroHEALTH/FerroSMART> `assets/brand/ferrosmart-icon.svg` |
 | `ferrofed-icon.svg` | <https://github.com/FerroHEALTH/FerroFED> `assets/brand/ferrofed-icon.svg` |
 | `ferrosys-icon.svg` | <https://github.com/FerroHEALTH/FerroSYS> `assets/brand/ferrosys-icon.svg` |
+| `ferrotask-icon.svg` | <https://github.com/FerroHEALTH/FerroTASK> `assets/brand/ferrotask-icon.svg` |
 
 The landing page's Content Security Policy is `default-src 'self'`, so the page
 loads no image from another origin. That is why these are copies. Refresh a file
 from its source when that product changes its mark, and never edit one here.
 Each mark belongs to its own project and keeps that project's licence.
 
-## Where the later four's marks came from
+## Where the later marks came from
 
 FerroPIX, FerroSMART, FerroFED and FerroSYS had a name and a domain before they
 had a repository, so their marks were drawn in this repository first, in the
@@ -31,3 +32,5 @@ strokes of 4.6, two tones from the product's own pair). When each repository
 opened, its mark moved there as `assets/brand/<product>-icon.svg` and became
 the source, under that product's licence. The files here are copies of those,
 like the other four, and are refreshed from there and never edited here.
+FerroTASK's mark was drawn in its own repository the day it opened, in the
+same grammar, and this file is a copy of it from the start.

@@ -7,7 +7,7 @@
 #   scripts/diagrams/ferrohealth-architecture.py OUT.svg
 #
 # The diagram is declared below as boxes and edges and drawn from those
-# declarations, because a picture of eight components and their calls is where
+# declarations, because a picture of nine components and their calls is where
 # a hand-placed label drifts onto a line. Before the script writes, it asserts
 # what a reader would otherwise have to catch: no two boxes overlap, every
 # product sits inside the frame and every outside party outside it, every edge
@@ -18,7 +18,7 @@
 #
 # What the picture says is in assets/diagrams/README.md. In short: left to
 # right is the order data moves, the four servers in the top row are the data
-# path, and the four services below frame it. An arrowhead points at what is
+# path, and the services below and beside them frame it. An arrowhead points at what is
 # called or written to. A dashed outline is a planned product, and a dashed
 # edge a call into one. Where a line has to cross another it hops over it with
 # a small arc, and a crossing is allowed only where a hop is declared.
@@ -36,7 +36,7 @@ Y = 36  # everything below the frame's label line moves down this much
 # organisation that serves several runs several instances instead.
 FRAME = (176, 8, 720, 708)  # x, y, w, h
 FRAME_LABEL = "ONE FERROHEALTH INSTANCE · ONE TENANT"
-INSIDE = {"term", "chart", "ehr", "bridge", "smart", "pix", "fed", "sys"}
+INSIDE = {"term", "chart", "ehr", "bridge", "smart", "pix", "fed", "sys", "task"}
 STEEL = ("#3f6070", "#8fb6c4")
 
 # assets/brand/tokens.css, as literal values: a standalone SVG cannot read the
@@ -52,6 +52,7 @@ HUES = {
     "smart": ("#78350f", "#fbbf24"),
     "fed": ("#0369a1", "#7dd3fc"),
     "sys": ("#5b6b16", "#bef264"),
+    "task": ("#065f46", "#34d399"),
 }
 GROUND = ("#f5f7fa", "#131a26")
 BOX_FILL = ("#ffffff", "#0b1020")
@@ -175,6 +176,12 @@ BOXES = [
             "organisations it talks to. The federation tier of the openEHR federation\n"
             "proposal: a transparent ITS-REST intermediary that resolves the patient\n"
             "first, then dispatches ordinary AQL to each node's own EHR id."),
+    Box("task", 756, 290, 110, 88, "FerroTASK", hue="task", planned=True,
+        subs=["task plans", "GDL2 guidelines"],
+        why="Task Planning and GDL2 both read the patient's data by archetype path, so\n"
+            "FerroTASK is a client of the CDR and keeps no record of its own: it reads\n"
+            "what has happened and commits the state of the plan. It sits in the one\n"
+            "slot inside the frame its single edge reaches without crossing a label."),
     Box("others", 1000, 456, 190, 56, "Other organisations",
         subs=["federation nodes"],
         why="Level with the gateway, because FerroFED is the only path to them."),
@@ -220,7 +227,7 @@ EDGES = [
              "operation on this record. FerroTERM and FerroBRIDGE ask the same; the\n"
              "caption carries those two lines."),
     Edge("fed", "ehr", [(698, 460), (650, 460), (650, 236), (612, 236)], "ITS-REST, AQL",
-         (658, 350, "start"),
+         (658, 412, "start"),
          why="The gateway queries the local record like any client, below the bridge's\n"
              "own read of it and into the CDR's right side, so the two never meet."),
     Edge("ehr", "pix", [(560, 248), (560, 440)], "PIXm feed", (568, 350, "start"), planned=True,
@@ -229,6 +236,11 @@ EDGES = [
              "the transaction: the PIXm Patient Identity Feed."),
     Edge("fed", "pix", [(698, 504), (612, 504)], "PIXm", (655, 495, "middle"), planned=True,
          why="Where is the record: the gateway asks the index before it fans out."),
+    Edge("task", "ehr", [(756, 310), (590, 310), (590, 248)], "ITS-REST, AQL", (703, 301, "middle"),
+         planned=True, hops=[650],
+         why="A task plan and a guideline read the record and commit back to it, over\n"
+             "the same API any client uses. The line hops the gateway's own call into\n"
+             "the CDR, which it has to pass to reach the CDR's lower edge."),
     Edge("fed", "others", [(866, 484), (1000, 484)], "ITS-REST, AQL", (933, 475, "middle"),
          why="A remote CDR is a node like the local one: the gateway sends it standard\n"
              "AQL scoped to that node's own EHR id and merges what comes back, with the\n"
@@ -525,13 +537,15 @@ DESC = (
     "application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE "
     "reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges "
     "resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an "
-    "OMOP Common Data Model database over SQL. Four services frame those four servers, and the "
-    "three still planned are drawn dashed: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR "
+    "OMOP Common Data Model database over SQL. Five services frame those four servers, and the "
+    "four still planned are drawn dashed: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR "
     "server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; "
     "FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send "
     "FerroFED, the federation gateway, an ordinary AQL query, and it asks the planned FerroPIX where the record is, then dispatches the query to FerroEHR and to other "
     "organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, "
-    "spans everything as the band every server reports to. A frame around the eight marks one "
+    "spans everything as the band every server reports to; FerroTASK, the task planning and "
+    "decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each "
+    "plan back to it. A frame around the nine marks one "
     "FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it."
 )
 
@@ -544,9 +558,9 @@ HEADER = (
     "     <style> holds only the dark override, because a CSS rule outranks a\n"
     "     presentation attribute. The ground is the page's surface colour, so the\n"
     "     file blends into the section it sits in. Left to right is the order data\n"
-    "     moves, the four servers in the top row are the data path, and the four\n"
-    "     services below frame it. An arrowhead points at what is called or written\n"
-    "     to. -->\n"
+    "     moves, the four servers in the top row are the data path, and the\n"
+    "     services below and beside them frame it. An arrowhead points at what is\n"
+    "     called or written to. -->\n"
 )
 
 

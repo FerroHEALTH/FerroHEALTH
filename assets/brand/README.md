@@ -9,9 +9,9 @@ renderer; [FerroEHR](https://ferroehr.eu/), an openEHR Clinical Data
 Repository; [FerroTERM](https://ferroterm.eu/), an HL7® FHIR® terminology
 server; [FerroBRIDGE](https://ferrobridge.eu/), a bridge from openEHR to FHIR
 and to the OMOP Common Data Model; and [FerroFED](https://ferrofed.eu/), an
-openEHR federation gateway. Three more are planned around them: FerroPIX for
-patient identity, FerroSMART for authorisation and FerroSYS as the control
-plane. Ferro is *ferrum*, iron, which is
+openEHR federation gateway. Four more are planned around them: FerroPIX for
+patient identity, FerroSMART for authorisation, FerroSYS as the control plane
+and FerroTASK for task planning and decision support. Ferro is *ferrum*, iron, which is
 what Rust is an oxide of.
 
 The parent follows the same file set, naming, variant list, and raster pipeline
@@ -40,10 +40,10 @@ per-product mark.
 
 **The mark stays at four strokes.** Four is where a stroke per product stops
 scaling: a fifth segment in the same width is not legible at any size the mark
-is used at. The family has grown to eight names, and the decision is that the
+is used at. The family has grown to nine names, and the decision is that the
 four strokes are the data path and nothing else: the form, the record, the
-meaning, the way out. The four services around it (FerroPIX, FerroSMART,
-FerroFED, FerroSYS) are drawn as the frame around that path in the
+meaning, the way out. The services around it (FerroPIX, FerroSMART,
+FerroFED, FerroSYS, FerroTASK) are drawn as the frame around that path in the
 architecture diagram; they get a hue and a mark of their own, and no stroke in
 this one, whether they have released or not. Their colour lives on the product
 cards and in the diagram, where it can grow without limit.
@@ -81,11 +81,12 @@ the other three, in both grounds, under normal, deuteranope and protanope
 vision. Rose at 330 degrees wins at 14.9; green and violet both fall below 10.
 That bar is why the mark stops at four strokes.
 
-### The four around the data path
+### The services around the data path
 
 Copied verbatim from each product's own `tokens.css`, like the four above. The
-values were chosen in this repository before the products had a repository,
-and moved there when each opened.
+first four were chosen in this repository before the products had a
+repository, and moved there when each opened. FerroTASK's was chosen here the
+day its repository opened, and went into its `tokens.css` first.
 
 | Product | Name | Light ground | Dark ground |
 |---|---|---|---|
@@ -93,6 +94,7 @@ and moved there when each opened.
 | FerroSMART | bronze | `#78350F` | `#FBBF24` |
 | FerroFED | azure | `#0369A1` | `#7DD3FC` |
 | FerroSYS | olive | `#5B6B16` | `#BEF264` |
+| FerroTASK | emerald | `#065F46` | `#34D399` |
 
 They were chosen the same way, by `scripts/brand/hue-distance.py`, which
 scores every pair in `tokens.css` for its worst-case CIEDE2000 distance over
@@ -103,10 +105,15 @@ per free arc of the wheel found no set with a colour-blind floor above 5. The
 set above is the best of them, and its numbers are the cost the family accepts
 for eight names:
 
-| | The four | All eight |
-|---|---|---|
-| floor under normal vision | 23.9 (FerroCHART, FerroEHR) | 12.5 (FerroBRIDGE, FerroPIX) |
-| floor under protanopia or deuteranopia | 14.1 (FerroCHART, FerroEHR) | 4.5 (FerroBRIDGE, FerroFED) |
+| | The four | All eight | All nine |
+|---|---|---|---|
+| floor under normal vision | 23.9 (FerroCHART, FerroEHR) | 12.5 (FerroBRIDGE, FerroPIX) | 10.1 (FerroTERM, FerroTASK) |
+| floor under protanopia or deuteranopia | 14.1 (FerroCHART, FerroEHR) | 4.5 (FerroBRIDGE, FerroFED) | 4.5 (FerroBRIDGE, FerroFED) |
+
+FerroTASK's emerald came out of a search over the whole wheel against the
+eight hues and steel. Its worst pair is 10.1, with FerroTERM's teal on the dark
+ground under normal vision, so the ninth hue leaves the colour-blind floor
+where it was.
 
 Every value holds at least 4.5:1 against its ground, so a hue can carry text
 on a card. A reader who cannot tell azure from indigo still has the name on

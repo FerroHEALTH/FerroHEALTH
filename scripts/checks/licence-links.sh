@@ -18,7 +18,7 @@ set -uo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$root" || exit 1
 
-readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroSMART FerroFED FerroSYS)
+readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroSMART FerroFED FerroSYS FerroTASK)
 readonly PAGE=website/landing/index.html
 
 # A generic BUSL-1.1 copy, wherever it is hosted. This script and the rules that

@@ -17,7 +17,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>FerroHEALTH: health-data infrastructure in Rust, built on open standards</title>
-  <meta name="description" content="FerroHEALTH is the family behind five pure-Rust health-data servers: FerroCHART, an openEHR form builder and renderer; FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; FerroBRIDGE, a bridge from openEHR to FHIR and to the OMOP Common Data Model; and FerroFED, an openEHR federation gateway. Three more are planned around them: FerroPIX for patient identity, FerroSMART for authorisation and FerroSYS as the control plane. One language, one licence, and every figure on this page rendered from the products' own repositories.">
+  <meta name="description" content="FerroHEALTH is the family behind five pure-Rust health-data servers: FerroCHART, an openEHR form builder and renderer; FerroEHR, an openEHR Clinical Data Repository; FerroTERM, an HL7 FHIR terminology server; FerroBRIDGE, a bridge from openEHR to FHIR and to the OMOP Common Data Model; and FerroFED, an openEHR federation gateway. Four more are planned around them: FerroPIX for patient identity, FerroSMART for authorisation, FerroSYS as the control plane and FerroTASK for task planning and decision support. One language, one licence, and every figure on this page rendered from the products' own repositories.">
   <link rel="canonical" href="https://ferrohealth.eu/">
   <link rel="stylesheet" href="./style.css">
   <link rel="icon" href="./assets/brand/favicon.svg" type="image/svg+xml">
@@ -73,6 +73,7 @@
           "https://github.com/FerroHEALTH/FerroSMART",
           "https://github.com/FerroHEALTH/FerroFED",
           "https://github.com/FerroHEALTH/FerroSYS",
+          "https://github.com/FerroHEALTH/FerroTASK",
           "https://ferrochart.eu/",
           "https://ferroehr.eu/",
           "https://ferroterm.eu/",
@@ -179,8 +180,8 @@
           HL7 FHIR, a bridge that carries a record out to FHIR and to the OMOP
           Common Data Model, and a gateway that queries the record where
           another organisation holds it. No JVM, no language runtime, no search
-          cluster. Three more are planned around them: who the patient is, who
-          may act, and how it all runs.
+          cluster. Four more are planned around them: who the patient is, who
+          may act, how it all runs, and what happens next.
         </p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#products">See the products</a>
@@ -351,10 +352,11 @@
              from GitHub. A planned product moves into the grid above, and
              into the status table, when it publishes a first release. -->
         <div class="planned-head" id="planned">
-          <h3>Three more, planned</h3>
+          <h3>Four more, planned</h3>
           <p>
-            The five above carry the record. These three will surround it: who
-            the patient is, who may act, and how it all runs. Each has a name,
+            The five above carry the record. These four will surround it: who
+            the patient is, who may act, how it all runs, and what happens
+            next. Each has a name,
             a registered domain and a repository that opens with its licence
             and its mark. The badge on a card is read from GitHub when this
             page is assembled and says when its code last moved. A planned
@@ -448,6 +450,32 @@
             </div>
           </article>
 
+          <article class="product product-task planned">
+            <div class="product-head">
+              <img src="./assets/products/ferrotask-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3>FerroTASK</h3>
+                <span class="role">What happens next</span>
+              </div>
+            </div>
+            <p>
+              The task planning and decision support server. A record says
+              what has happened to a patient; a care pathway says what should
+              happen next, who does it, and what to decide when a result comes
+              in. FerroTASK runs that half, against the record FerroEHR keeps.
+            </p>
+            <ul class="facts">
+              <li>openEHR Task Planning, from the PROC component: plans for clinical work, with the Decision Language for the rules inside them</li>
+              <li>GDL2, the guideline language of the openEHR CDS component, evaluated against archetype and template paths</li>
+              <li>A client of the CDR: it reads what has happened over AQL and commits the state of each plan back, so it keeps no clinical record of its own</li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-ghost" href="https://github.com/FerroHEALTH/FerroTASK" rel="noopener">GitHub</a>
+              <span class="domain">ferrotask.eu</span>
+              <span class="status" data-repo="FerroTASK">code moved 2026-10-05</span>
+            </div>
+          </article>
+
         </div>
       </div>
     </section>
@@ -472,10 +500,10 @@
         <div class="flow-scroll">
           <img class="flow" src="./assets/diagrams/ferrohealth-architecture.svg"
                width="1200" height="756"
-               alt="A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM with $lookup and $translate, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four services frame those four servers, and the three still planned are drawn dashed: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks the planned FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it.">
+               alt="A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Five services frame those four servers, and the four still planned are drawn dashed: FerroCHART obtains its token and launch context from FerroSMART, the SMART on openEHR server, and FerroEHR asks FerroSMART whether each token it is handed may do what it asks; FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks the planned FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to; FerroTASK, the task planning and decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. A frame around the nine marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it.">
         </div>
         <p class="flow-note">
-          The frame is one FerroHEALTH instance serving one tenant: the eight
+          The frame is one FerroHEALTH instance serving one tenant: the nine
           inside are the family, and everything outside is a caller, a target
           or another organisation. FerroEHR can host several isolated tenants
           in one deployment as its own setting; the family shows the
@@ -498,7 +526,7 @@
           mappings compile to SQL that writes typed rows into the CDM tables.
         </p>
         <p class="flow-note">
-          The dashed boxes are the three planned products. FerroEHR carries the SMART on
+          The dashed boxes are the four planned products. FerroEHR carries the SMART on
           openEHR layer today: the discovery document, the launch context, the
           scope grammar and the gate that enforces it. FerroSMART pulls that
           layer out into a server of its own. FerroCHART, as a SMART
@@ -515,7 +543,9 @@
           the EHR it is launched with and asks nobody.
           FerroSYS is drawn as a band under everything because every server
           reports to it and is configured from it, and a line from each would
-          say nothing the band does not. Which release of each standard a
+          say nothing the band does not. FerroTASK reads the record over AQL
+          and commits the state of each plan back to it, like any other
+          client of the CDR. Which release of each standard a
           product implements is on that product's site, rendered from its own
           pins.
         </p>
@@ -912,6 +942,14 @@
             </p>
             <a href="https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE" rel="noopener">FerroSYS <code>LICENSE</code></a>
           </div>
+          <div class="lic product-task">
+            <h3>FerroTASK</h3>
+            <p>
+              Licensor Cadasto B.V. The Licensed Work is FerroTASK, each
+              version as published on GitHub.
+            </p>
+            <a href="https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE" rel="noopener">FerroTASK <code>LICENSE</code></a>
+          </div>
         </div>
 
         <div class="lic-notes">
@@ -987,7 +1025,8 @@
           </a>
           <p>
             The family behind FerroCHART, FerroEHR, FerroTERM, FerroBRIDGE and
-            FerroFED, and the planned FerroPIX, FerroSMART and FerroSYS.
+            FerroFED, and the planned FerroPIX, FerroSMART, FerroSYS and
+            FerroTASK.
             Each product is licensed under the Business Source License 1.1 in
             its own repository, and its parameters are in that repository's
             <code>LICENSE</code>:
@@ -998,7 +1037,8 @@
             <a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE" rel="noopener">FerroPIX</a>,
             <a href="https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE" rel="noopener">FerroSMART</a>,
             <a href="https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE" rel="noopener">FerroFED</a>,
-            <a href="https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE" rel="noopener">FerroSYS</a>.
+            <a href="https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE" rel="noopener">FerroSYS</a>,
+            <a href="https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE" rel="noopener">FerroTASK</a>.
             <a href="#licensing">What the terms mean for you</a>. The site's
             code is Apache-2.0. The FerroHEALTH mark and the diagram are all
             rights reserved, and you may use them unmodified to refer to the
@@ -1045,6 +1085,7 @@
               <li><a href="https://github.com/FerroHEALTH/FerroSMART" rel="noopener">FerroSMART on GitHub</a></li>
               <li><a href="https://github.com/FerroHEALTH/FerroFED" rel="noopener">FerroFED on GitHub</a></li>
               <li><a href="https://github.com/FerroHEALTH/FerroSYS" rel="noopener">FerroSYS on GitHub</a></li>
+              <li><a href="https://github.com/FerroHEALTH/FerroTASK" rel="noopener">FerroTASK on GitHub</a></li>
               <li><a href="/.well-known/security.txt">Security contact</a></li>
             </ul>
           </div>

@@ -17,7 +17,7 @@ names or the marks either.
 - The architecture diagram: every SVG and PNG file in
   [`assets/diagrams/`](assets/diagrams/).
 - The names FerroHEALTH, FerroCHART, FerroEHR, FerroTERM, FerroBRIDGE,
-  FerroPIX, FerroSMART, FerroFED and FerroSYS.
+  FerroPIX, FerroSMART, FerroFED, FerroSYS and FerroTASK.
 
 `assets/brand/tokens.css` is Apache-2.0: a palette in CSS is code. Using it to
 make your work look like an official FerroHEALTH project is still covered by

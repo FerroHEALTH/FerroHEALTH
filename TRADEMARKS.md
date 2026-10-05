@@ -61,8 +61,10 @@ carry the product's name or mark as its own.
 
 ## Asking
 
-Open an issue at <https://github.com/FerroHEALTH/FerroHEALTH/issues>, or ask
-the maintainer named in the product's `MAINTAINERS.md`.
+Cadasto B.V. decides on a use of the names and the artwork. Write to
+<info@cadasto.com> or use <https://www.cadasto.com/contact/>. A question about
+the files themselves can go to an issue at
+<https://github.com/FerroHEALTH/FerroHEALTH/issues>.
 
 ## Other organisations' marks
 

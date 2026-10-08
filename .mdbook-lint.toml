@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# mdbook-lint over the family book (pages.yml: `mdbook-lint lint
+# website/book/src`). A warning fails the gate, so every rule left on is one
+# the book holds. The rules below are off, each for the reason given; the
+# set follows FerroEHR's book where the reason is the same.
+#
+# - MDBOOK010 (unclosed inline math): the book has no math preprocessor, and
+#   every `$` is a FHIR operation name in a code span (`$expand`).
+# - CONTENT004 (heading case): the book uses sentence case on purpose, and
+#   proper nouns (The Netherlands, the Change Date) read as mixed case.
+# - CONTENT003 (minimum words): it counts SUMMARY.md as a chapter.
+# - MD013 (line length): prose wraps at 80, and the only lines past it are a
+#   single link a line cannot break. Wrapping is review-enforced.
+# - MD049 and MD050 (emphasis style): they read the `_` and `__` inside link
+#   URLs (Fedlex `#art_7`, gesetze-im-internet `__339.html`) as emphasis.
+# - CONTENT007 (terminology): the licences are named "Business Source License"
+#   and "Apache License", "license" is the verb beside the noun "licence", and
+#   "config" appears inside FerroEHR URLs.
+# - MD028 (blank line inside a blockquote): consecutive `> [!NOTE]` callouts
+#   are the mdBook 0.5 idiom.
+# - MDBOOK005 (orphaned files): its scan walks the whole repository and
+#   reports every markdown file outside the book.
+fail-on-warnings = true
+disabled-rules = ["MDBOOK010", "CONTENT004", "CONTENT003", "CONTENT007", "MD013", "MD049", "MD050", "MD028", "MDBOOK005"]

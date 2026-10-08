@@ -34,9 +34,16 @@ Security Cheat Sheet, SLSA v1.0, and OpenSSF Scorecard.
   outside a rendered marker.
 - `diagram`: `scripts/checks/diagram-generated.sh`, the committed architecture
   SVG is what `scripts/diagrams/ferrohealth-architecture.py` draws.
+- `book revisions`: `scripts/checks/book-revisions.sh`, every page of the
+  family book is dated and `revisions.md` agrees.
 
-`pages.yml` assembles the site, runs `scripts/checks/internal-links.sh` over the
-result, and deploys from `main`.
+`pages.yml` installs the documentation toolchain pinned in
+`scripts/site/toolchain.sh` (through the SHA-pinned `taiki-e/install-action`),
+lints the book with `mdbook-lint`, assembles the site with the book, runs
+`scripts/checks/internal-links.sh`, `scripts/checks/csp.sh` and
+`lychee --offline --include-fragments` over the result, and deploys from
+`main`. External links are not fetched in CI: a remote outage says nothing
+about the change.
 
 `refresh.yml` runs every six hours. It renders the committed fallbacks in
 `index.html` in place with `scripts/site/render-releases.sh` and, when the file

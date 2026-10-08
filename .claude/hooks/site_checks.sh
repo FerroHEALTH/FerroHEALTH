@@ -8,8 +8,8 @@
 # For an edited shell script: run shellcheck when it is available (never
 # installs it, skips silently when absent).
 #
-# For the page or the diagram: run the typed-version check
-# (scripts/checks/no-typed-version.sh).
+# For the page, the diagram or a page of the family book: run the
+# typed-version check (scripts/checks/no-typed-version.sh).
 #
 # For any edited text file: run the mechanical half of the writing-style rule
 # (scripts/checks/writing-style.sh). All three CAN block (exit 2) so the finding
@@ -52,7 +52,7 @@ case "$file_path" in
 esac
 
 case "$file_path" in
-*/website/landing/*.html | */assets/diagrams/*.svg)
+*/website/landing/*.html | */assets/diagrams/*.svg | */website/book/src/*.md)
   guard="$repo_root/scripts/checks/no-typed-version.sh"
   if [ -x "$guard" ]; then
     findings="$("$guard" "${file_path#"$repo_root"/}" 2>&1)" || {

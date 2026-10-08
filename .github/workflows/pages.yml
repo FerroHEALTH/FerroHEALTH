@@ -1,7 +1,8 @@
 # SPDX-FileCopyrightText: Cadasto B.V.
 # SPDX-License-Identifier: Apache-2.0
 
-# Pages: assemble the family site and publish it to GitHub Pages.
+# Pages: assemble the family site and the family book, check them, and
+# publish them to GitHub Pages.
 #
 # The shape is GitHub's Pages-with-Actions pattern, which is what the four
 # product repositories already use: a `build` job renders the site and uploads
@@ -48,6 +49,18 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      # The book's toolchain, pinned once in scripts/site/toolchain.sh at the
+      # versions FerroEHR's book uses. The SHA-pinned installer takes mdbook
+      # from its checksummed manifest, and mdbook-lint and lychee through its
+      # cargo-binstall fallback, the route FerroEHR's docs toolchain takes too.
+      - name: Read the pinned documentation toolchain
+        id: pins
+        run: echo "tools=$(scripts/site/toolchain.sh)" >> "$GITHUB_OUTPUT"
+      - uses: taiki-e/install-action@0758d235715de2f3551eacc980d9ae8fce9342c3 # v2.87.3
+        with:
+          tool: ${{ steps.pins.outputs.tools }}
+      - name: Lint the family book
+        run: mdbook-lint lint website/book/src
       - name: Assemble the site
         env:
           # The release and push figures are read from the four public
@@ -57,6 +70,14 @@ jobs:
         run: scripts/site/assemble.sh _site
       - name: Check the assembled page for a link that would 404 on this site
         run: scripts/checks/internal-links.sh _site
+      - name: Every page carries a same-origin policy that names its inline code
+        run: scripts/checks/csp.sh _site
+      # --offline checks what this repository controls: every relative link
+      # and every fragment, across pages, resolves inside the built tree. A
+      # remote host's outage says nothing about the change, so external links
+      # are not fetched here.
+      - name: Link-check the assembled site, fragments included
+        run: lychee --offline --include-fragments --no-progress --root-dir "$PWD/_site" './_site/**/*.html'
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: _site

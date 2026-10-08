@@ -19,7 +19,9 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$root" || exit 1
 
 readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroSMART FerroFED FerroSYS FerroTASK)
-readonly PAGE=website/landing/index.html
+# The landing page and the family book's licensing page each name every
+# product, so each links every product's own LICENSE.
+readonly PAGES=(website/landing/index.html website/book/src/licensing.md)
 
 # A generic BUSL-1.1 copy, wherever it is hosted. This script and the rules that
 # state the rule quote the pattern, so they check themselves against everything
@@ -47,14 +49,15 @@ while IFS= read -r file; do
   done <<< "$hits"
 done <<< "$(git ls-files '*.md' '*.html' '*.css' '*.svg' '*.txt' '*.yml' '*.json')"
 
-# The page names all eight products, so it links all eight licence files.
-for product in "${PRODUCTS[@]}"; do
-  url="https://github.com/FerroHEALTH/$product/blob/main/LICENSE"
-  if ! grep -qF -- "$url" "$PAGE"; then
-    echo "licence-links: $PAGE does not link $url." >&2
-    echo "  Every product named on the page carries a link to its own LICENSE." >&2
-    fail=1
-  fi
+for page in "${PAGES[@]}"; do
+  for product in "${PRODUCTS[@]}"; do
+    url="https://github.com/FerroHEALTH/$product/blob/main/LICENSE"
+    if ! grep -qF -- "$url" "$page"; then
+      echo "licence-links: $page does not link $url." >&2
+      echo "  Every product named on the page carries a link to its own LICENSE." >&2
+      fail=1
+    fi
+  done
 done
 
 if [ "$fail" -ne 0 ]; then

@@ -5,6 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The landing page's policy; index.html explains it. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
   <title>404: page not found · FerroHEALTH</title>
   <meta name="robots" content="noindex">
   <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml">
@@ -16,11 +18,13 @@
       <p class="eyebrow">404</p>
       <h1>Page not found</h1>
       <p class="sub">
-        This site is one page: the four products and how they fit together.
-        Everything deeper lives on a product's own site.
+        This site is one page about the products and how they fit together,
+        and the family documentation. Everything about one product lives on
+        that product's own site.
       </p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="/">Go home</a>
+        <a class="btn btn-ghost" href="/docs/">Documentation</a>
         <a class="btn btn-ghost" href="https://ferrochart.eu/" rel="noopener">FerroCHART</a>
         <a class="btn btn-ghost" href="https://ferroehr.eu/" rel="noopener">FerroEHR</a>
         <a class="btn btn-ghost" href="https://ferroterm.eu/" rel="noopener">FerroTERM</a>

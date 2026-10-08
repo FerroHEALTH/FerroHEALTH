@@ -60,9 +60,9 @@ Do not screenshot the page to get the diagram. The file is the diagram.
 
 The frame is one FerroHEALTH instance serving one tenant. The nine inside are
 the family; clinicians, applications, HL7 FHIR, the OMOP database and other
-organisations sit outside it. FerroEHR can host several isolated tenants in one
-deployment as its own setting; the family shows the single-tenant setup, and an
-organisation that serves several runs several instances.
+organisations sit outside it. Every product is single-tenant: one instance serves
+one organisation, and an organisation that serves several runs several
+instances.
 
 Left to right is the order data moves. The four servers are the data path:
 FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes

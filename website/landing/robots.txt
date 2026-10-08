@@ -1,5 +1,6 @@
-# FerroHEALTH family site, crawl policy. One page, everything indexable. The
-# product documentation lives on each product's own domain and is crawled there.
+# FerroHEALTH family site, crawl policy. The landing page and the family book
+# at /docs/, everything indexable. Each product's own documentation lives on
+# its own domain and is crawled there.
 User-agent: *
 Allow: /
 

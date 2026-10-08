@@ -13,8 +13,9 @@
 # assembly time by scripts/site/render-releases.sh, inside an element that
 # carries a data-rel, data-rel-plain, data-rel-date, data-pushed or data-repo
 # marker, or it lives on the product's own site. This check fails on a version-like token
-# anywhere else in the page, the 404 page and the diagram. HTML comments are
-# not checked, and neither is a licence's own version (BUSL-1.1, Apache 2.0).
+# anywhere else in the page, the 404 page, the diagram and the family book's
+# pages, which carry no rendered marker at all. HTML comments are not checked,
+# and neither is a licence's own version (BUSL-1.1, Apache 2.0).
 
 set -uo pipefail
 
@@ -27,7 +28,7 @@ if [ "$#" -gt 0 ]; then
 else
   while IFS= read -r tracked; do
     files+=("$tracked")
-  done < <(git ls-files 'website/landing/*.html' 'assets/diagrams/*.svg')
+  done < <(git ls-files 'website/landing/*.html' 'assets/diagrams/*.svg' 'website/book/src/*.md')
 fi
 
 # What a typed version looks like: a release tag or a three-part version, a
@@ -42,7 +43,7 @@ checked=0
 for file in "${files[@]}"; do
   [ -f "$file" ] || continue
   case "$file" in
-    website/landing/*.html | assets/diagrams/*.svg) ;;
+    website/landing/*.html | assets/diagrams/*.svg | website/book/src/*.md) ;;
     *) continue ;;
   esac
   checked=$((checked + 1))

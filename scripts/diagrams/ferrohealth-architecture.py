@@ -31,9 +31,8 @@ W, H = 1200, 756
 Y = 36  # everything below the frame's label line moves down this much
 
 # The frame: what is FerroHEALTH and what is the outside world. One instance
-# serves one tenant; that is the setup the family shows. FerroEHR can host
-# several isolated tenants in one deployment as its own setting, and an
-# organisation that serves several runs several instances instead.
+# serves one tenant: every product is single-tenant, and an organisation that
+# serves several runs several instances.
 FRAME = (176, 8, 720, 708)  # x, y, w, h
 FRAME_LABEL = "ONE FERROHEALTH INSTANCE · ONE TENANT"
 INSIDE = {"term", "chart", "ehr", "bridge", "smart", "pix", "fed", "sys", "task"}

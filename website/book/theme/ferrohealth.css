@@ -1,0 +1,108 @@
+/* SPDX-FileCopyrightText: Cadasto B.V. */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* The FerroHEALTH recolour of mdBook's "light" and "navy" themes, the two the
+   book opens in. The values are the palette in assets/brand/tokens.css and the
+   landing page's surfaces, written in because mdBook switches theme by class,
+   not by prefers-color-scheme. The other themes stay mdBook's own. */
+
+:root {
+  /* The landing page's stacks. No web font: theme/fonts/fonts.css replaces
+     mdBook's bundled Open Sans so nothing is fetched for type. */
+  --mono-font: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.light {
+  --bg: #ffffff;
+  --fg: #0f172a;
+  --sidebar-bg: #f5f7fa;
+  --sidebar-fg: #0f172a;
+  --sidebar-non-existant: #64748b;
+  --sidebar-active: #3f6070;
+  --sidebar-spacer: #dde3eb;
+  --sidebar-header-border-color: #3f6070;
+  --scrollbar: #64748b;
+  --icons: #58616e;
+  --icons-hover: #2e4a57;
+  --links: #3f6070;
+  --inline-code-color: #2e4a57;
+  --theme-popup-bg: #ffffff;
+  --theme-popup-border: #dde3eb;
+  --theme-hover: #eef2f6;
+  --quote-bg: #f5f7fa;
+  --quote-border: #dde3eb;
+  --table-border-color: #dde3eb;
+  --table-header-bg: #e8edf2;
+  --table-alternate-bg: #f8fafc;
+  --searchbar-border-color: #dde3eb;
+  --searchbar-bg: #ffffff;
+  --searchbar-fg: #0f172a;
+  --searchresults-header-fg: #58616e;
+  --search-mark-bg: #8fb6c4;
+  --footnote-highlight: #3f6070;
+}
+
+.navy {
+  --bg: #0b1020;
+  --fg: #eef2f7;
+  --sidebar-bg: #131a26;
+  --sidebar-fg: #c9d2dd;
+  --sidebar-non-existant: #58616e;
+  --sidebar-active: #8fb6c4;
+  --sidebar-spacer: #243044;
+  --sidebar-header-border-color: #8fb6c4;
+  --scrollbar: #a4aebc;
+  --icons: #a4aebc;
+  --icons-hover: #f1f5f9;
+  --links: #8fb6c4;
+  --inline-code-color: #c9d6de;
+  --theme-popup-bg: #131a26;
+  --theme-popup-border: #243044;
+  --theme-hover: #1b2433;
+  --quote-bg: #131a26;
+  --quote-border: #243044;
+  --table-border-color: #243044;
+  --table-header-bg: #1b2433;
+  --table-alternate-bg: #10161f;
+  --searchbar-border-color: #243044;
+  --searchbar-bg: #131a26;
+  --searchbar-fg: #eef2f7;
+  --searchresults-header-fg: #a4aebc;
+  --searchresults-li-bg: #131a26;
+  --search-mark-bg: #3f6070;
+  --footnote-highlight: #8fb6c4;
+}
+
+/* The mark beside the book title. It sits on the site root, beside the
+   landing page, so the book carries no second copy of the artwork. */
+.menu-title::before {
+  content: "";
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.45em;
+  vertical-align: -0.35em;
+  background: url("../../assets/brand/ferrohealth-icon.svg") center / contain no-repeat;
+}
+
+.navy .menu-title::before {
+  background-image: url("../../assets/brand/ferrohealth-icon-dark.svg");
+}
+
+.content h1,
+.content h2 {
+  border-bottom: 2px solid var(--sidebar-active);
+  padding-bottom: 0.2em;
+}
+
+.content a,
+.content a:visited {
+  color: var(--links);
+}
+
+.content a:hover {
+  color: var(--fg);
+}

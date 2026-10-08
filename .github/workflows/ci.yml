@@ -179,6 +179,22 @@ jobs:
       - name: Every licence link points at a product's own LICENSE
         run: scripts/checks/licence-links.sh
 
+  # Every page of the family book carries the date of its revision, and the
+  # revisions page agrees, so a product release can name the revision of a
+  # family page it relies on.
+  book-revisions:
+    name: book revisions
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Every book page is dated, and revisions.md agrees
+        run: scripts/checks/book-revisions.sh
+
   # conclusion: the one status check the branch ruleset requires. It `needs`
   # every other job and runs on `always()`, so it reports even when a job is
   # skipped. It fails if any needed job failed or was cancelled, and passes when
@@ -218,6 +234,7 @@ jobs:
       - diagram
       - versions
       - licensing
+      - book-revisions
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5

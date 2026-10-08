@@ -12,8 +12,11 @@ files under [`.claude/rules/`](.claude/rules/); read those before writing.
 ## Build and check
 
 ```bash
+mdbook-lint lint website/book/src
 scripts/site/assemble.sh _site
 scripts/checks/internal-links.sh _site
+scripts/checks/csp.sh _site
+scripts/checks/book-revisions.sh
 scripts/checks/writing-style.sh
 scripts/checks/svg-first.sh
 scripts/checks/licence-links.sh

@@ -49,7 +49,9 @@ assets/brand/              the FerroHEALTH mark, lockups, favicons, social card,
 assets/diagrams/           the architecture diagram, self-contained and theme-adaptive
 website/landing/           the site: one page, its stylesheet, and its static files
   assets/products/         a copy of each product's own mark, for the product cards
-scripts/site/assemble.sh   builds the site the way GitHub Pages serves it
+website/book/              the family book (mdBook), published at /docs/
+scripts/site/assemble.sh   builds the site and the book the way GitHub Pages serves them
+scripts/site/toolchain.sh  pins mdbook, mdbook-lint and lychee for the book
 scripts/site/render-releases.sh  fills every figure a product moves, from the GitHub API
 scripts/diagrams/          draws the architecture diagram from declarations, with geometry checks
 scripts/brand/             scores a product hue against the hues the family owns
@@ -61,8 +63,9 @@ scripts/checks/            what CI runs against the repository and the assembled
 ## Build it
 
 ```bash
-scripts/site/assemble.sh _site        # assemble into _site/
+scripts/site/assemble.sh _site        # assemble into _site/, the book at _site/docs/
 scripts/checks/internal-links.sh _site  # every local link resolves
+scripts/checks/csp.sh _site           # every page names all its inline code
 python3 -m http.server -d _site 8000  # then open http://localhost:8000/
 ```
 
@@ -74,7 +77,20 @@ tree, and renders two things:
   in the quick start), the day it was published, and the day of the last push.
   Without a token the page keeps the values committed in `index.html`, which
   are real and exactly as stale as the checkout.
-- `sitemap.xml`'s `lastmod`, from the commit being deployed.
+- `sitemap.xml`'s `lastmod`, from the commit being deployed, with one entry
+  per book page.
+- the family book, with the mdbook pinned in `scripts/site/toolchain.sh`,
+  each page then given its own hashed Content-Security-Policy.
+
+## The family book
+
+<https://ferrohealth.eu/docs/> holds what is true for every product and for
+Cadasto B.V. as their manufacturer: the manufacturer, the security policy, the
+post-market procedure, the CRA's manufacturer side, the EHDS EHR system,
+licensing and trademarks, and how the products fit together. Each product's
+own book links it and keeps only what is about that product. Every page is
+dated, and `website/book/src/revisions.md` records each revision, so a product
+release can name the revision of a family page it relies on.
 
 ## How it is deployed
 

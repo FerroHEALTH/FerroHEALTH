@@ -22,6 +22,13 @@ SMART on openEHR server, `ferrosmart.eu`),
 `ferrotask.eu`). Ferro is *ferrum*, iron, which Rust is an oxide
 of.
 
+The site also publishes the **family book** at <https://ferrohealth.eu/docs/>:
+the pages that hold for every product and for Cadasto B.V. as their
+manufacturer (the manufacturer, security, post-market, the CRA's manufacturer
+side, the EHDS EHR system, licensing and trademarks, how the products fit
+together), written once. Each product's book keeps only what is about that
+product and links this one; a new product links it and never copies a page.
+
 Write all prose (the page, the READMEs, comments, commits, PRs, issues) to
 `.claude/rules/writing-style.md`. It is copied from FerroTERM and the two stay
 in step.
@@ -32,6 +39,10 @@ in step.
   `robots.txt`, `sitemap.xml`, `.well-known/security.txt`, `CNAME`, and
   `assets/products/` (a copy of each product's own mark, with provenance in the
   README there).
+- `website/book/`: the family book (mdBook), built into `/docs/`.
+  `book.toml`, `src/` (one page per family topic, `SUMMARY.md`,
+  `revisions.md`), and `theme/` (the brand recolour and the empty
+  `fonts/fonts.css` that keeps mdBook's web fonts out).
 - `assets/brand/`: the FerroHEALTH mark, the icon and lockup variants, the
   favicon set, the social cards, the GitHub avatar, and `tokens.css`.
   `assets/brand/README.md` is the brand authority.
@@ -39,7 +50,10 @@ in step.
   theme-adaptive SVG plus its raster. The page loads it with `<img>`, so there
   is one copy of the artwork and it can be used outside this site. The SVG is
   drawn by `scripts/diagrams/ferrohealth-architecture.py`.
-- `scripts/site/assemble.sh`: builds the site the way GitHub Pages serves it.
+- `scripts/site/assemble.sh`: builds the site the way GitHub Pages serves it,
+  the book included. `scripts/site/toolchain.sh` pins mdbook, mdbook-lint and
+  lychee at FerroEHR's versions, and `scripts/site/book-csp.sh` gives each
+  book page its hashed Content-Security-Policy.
   `scripts/site/render-releases.sh` fills every figure a product moves, from the
   GitHub API, and is shared with the refresh workflow.
 - `scripts/diagrams/`: the diagram generator. Boxes and edges are declared;
@@ -50,8 +64,10 @@ in step.
   resolves), `writing-style.sh` (the mechanical tells), `svg-first.sh` (a raster
   where the vector exists), `licence-links.sh` (a licence link points at a
   product's own `LICENSE`), `no-typed-version.sh` (no version outside a
-  rendered marker), and `diagram-generated.sh` (the committed SVG is what the
-  generator draws).
+  rendered marker, in the page, the diagram and the book), `diagram-generated.sh`
+  (the committed SVG is what the generator draws), `csp.sh` (every assembled
+  page carries a same-origin policy naming all its inline code) and
+  `book-revisions.sh` (every book page is dated, and `revisions.md` agrees).
 - `TRADEMARKS.md`: the brand terms (the artwork and the product names).
 - `.github/workflows/`: `ci.yml` (workflows, shell, prose, versions),
   `pages.yml` (assemble, check, deploy from main every six hours and on push),
@@ -61,8 +77,12 @@ in step.
 ## Build and check
 
 ```bash
+mdbook-lint lint website/book/src         # the pinned tools: scripts/site/toolchain.sh
 scripts/site/assemble.sh _site
 scripts/checks/internal-links.sh _site
+scripts/checks/csp.sh _site
+lychee --offline --include-fragments --root-dir "$PWD/_site" './_site/**/*.html'
+scripts/checks/book-revisions.sh
 scripts/checks/writing-style.sh
 scripts/checks/svg-first.sh
 scripts/checks/licence-links.sh
@@ -72,14 +92,25 @@ shellcheck --severity=style .claude/hooks/*.sh scripts/**/*.sh
 python3 -m http.server -d _site 8000
 ```
 
-Look at the page before calling it right: light and dark, wide and narrow.
+Look at the page and the book before calling them right: light and dark, wide
+and narrow.
 
 ## IMPORTANT hard rules
 
 - **Nothing loads from another origin.** The page's CSP is `default-src 'self'`,
   carried in a `<meta http-equiv>` because GitHub Pages sets no response
   headers. No web font, no analytics, no CDN, no hotlinked image, no inline
-  `<style>` and no `style=` attribute.
+  `<style>` and no `style=` attribute. The book holds the same origin rule;
+  mdBook's own inline scripts and style attributes run only because each page's
+  policy names them by SHA-256, written by `scripts/site/book-csp.sh`, never
+  through `'unsafe-inline'` (`.claude/rules/site.md` § The family book).
+- **The family book holds family- and manufacturer-level material only.** A
+  page belongs there when its text holds for every product it names; where
+  products differ, it says which product does what. A product's own pages
+  stay in its book and link the family book. Its page addresses are fixed,
+  every page carries `Revised YYYY-MM-DD.` with a row in `revisions.md`, and
+  a law citation quotes the Official Journal and links EUR-Lex (the vendored
+  corpus is FerroEHR's `docs/law/`).
 - **Never type a version or a status.** A fact a product moves (its latest
   release, the release date, the last push, whether it has a repository at all)
   carries a `data-rel`, `data-rel-plain`, `data-rel-date`, `data-pushed` or
@@ -157,8 +188,9 @@ Path-scoped rules load when files in their scope are read; the rest apply
 always.
 
 - `.claude/rules/writing-style.md`: no AI tells in any prose. The top priority.
-- `.claude/rules/site.md`: the page's hard rules, the brand rules that reach it,
-  and what belongs on a product's own site instead.
+- `.claude/rules/site.md`: the page's hard rules, the family book's place,
+  rules and contents, the brand rules that reach both, and what belongs on a
+  product's own site instead.
 - `.claude/rules/comments.md`: comment budgets for HTML, CSS, SVG, and shell.
 - `.claude/rules/ci-cd.md`: workflow security, the CI lanes, and how the site
   publishes.

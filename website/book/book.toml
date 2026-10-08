@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The FerroHEALTH family book, published at https://ferrohealth.eu/docs/.
+# scripts/site/assemble.sh builds it from a staged copy that adds the favicon
+# from assets/brand/, then writes a per-page Content-Security-Policy with
+# scripts/site/book-csp.sh. Build it through assemble.sh, not on its own.
+
+[book]
+title = "FerroHEALTH Documentation"
+authors = ["Cadasto B.V."]
+description = "The manufacturer, security, post-market, CRA, EHDS and licensing pages that hold for every FerroHEALTH product."
+language = "en"
+src = "src"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+site-url = "/docs/"
+additional-css = ["theme/ferrohealth.css"]
+git-repository-url = "https://github.com/FerroHEALTH/FerroHEALTH"
+edit-url-template = "https://github.com/FerroHEALTH/FerroHEALTH/edit/main/website/book/{path}"
+smart-punctuation = true
+
+# The book carries no runnable code. The playground would fetch from
+# play.rust-lang.org, which the same-origin policy forbids.
+[output.html.playground]
+runnable = false
+copyable = true
+
+[output.html.search]
+enable = true

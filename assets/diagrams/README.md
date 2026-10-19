@@ -58,7 +58,7 @@ Do not screenshot the page to get the diagram. The file is the diagram.
 
 ## What it says
 
-The frame is one FerroHEALTH instance serving one tenant. The nine inside are
+The frame is one FerroHEALTH instance serving one tenant. The eight inside are
 the family; clinicians, applications, HL7 FHIR, the OMOP database and other
 organisations sit outside it. Every product is single-tenant: one instance serves
 one organisation, and an organisation that serves several runs several
@@ -66,8 +66,8 @@ instances.
 
 Left to right is the order data moves. The four servers are the data path:
 FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
-meaning, FerroBRIDGE carries it out. FerroPIX, FerroSMART, FerroFED, FerroSYS
-and FerroTASK frame that path. The four still planned are drawn dashed, as is
+meaning, FerroBRIDGE carries it out. FerroPIX, FerroFED, FerroSYS
+and FerroTASK frame that path. The three still planned are drawn dashed, as is
 every call into one of them; FerroFED has released and is drawn solid.
 
 An arrowhead points at what is called or written to. The FHIR side carries one
@@ -82,14 +82,11 @@ specification it speaks, with a few exceptions worth knowing:
   rot.
 - **`SQL rows`** names no wire specification, because OMOP is a database schema.
   The OMOCL mappings compile to SQL that writes typed rows into the CDM tables.
-- **`OIDC, SMART launch` and `token introspection`** are the two sides of
-  FerroSMART. FerroEHR carries the SMART on openEHR layer today: the discovery
-  document, the launch context, the scope grammar and the gate that enforces
-  it on every request. FerroSMART is that layer pulled out into a server of
-  its own. FerroCHART is the application: it obtains its token and launch
-  context there. FerroEHR asks it whether the token it is handed may do what
-  it asks, and FerroTERM and FerroBRIDGE ask the same; those two lines are
-  left to the caption.
+- **No authorisation server is drawn.** Each product is its own SMART App
+  Launch 2.x resource server: it checks the tokens it is handed against the
+  deployment's own authorization server, which sits outside the family. A
+  central FerroHEALTH authorisation service would hold the signing key every
+  product's access depends on, so there is none (owner, 2026-10-19).
 - **FerroFED follows the openEHR federation tier proposal.** It is a
   transparent ITS-REST intermediary: an application sends it an ordinary AQL
   query and never learns it was federated. It resolves the patient first,
@@ -114,12 +111,9 @@ specification it speaks, with a few exceptions worth knowing:
   keeps no clinical record of its own. It sits under FerroBRIDGE because that
   is the one slot inside the frame its single edge reaches cleanly; the
   position says nothing about the order data moves.
-- **Two lines hop another.** Clinicians and Applications both sit on the
-  outside, left of FerroCHART, and FerroCHART's own call to FerroSMART runs
-  down from it. A client on the outside has to pass under FerroCHART to reach
-  the CDR, so that crossing cannot be drawn away. The Applications line hops
-  it with a small arc. FerroTASK's line to the CDR hops FerroFED's in the same
-  way. The generator allows a crossing only where a hop is declared.
+- **One line hops another.** FerroTASK's line to the CDR hops FerroFED's
+  with a small arc. The generator allows a crossing only where a hop is
+  declared.
 
 `$validate-code` is the one operation FerroEHR uses, and the label says so. A
 server that does not offer it is configured to `operation = "expand"` per
@@ -144,8 +138,8 @@ media query inside the file swaps every colour on `prefers-color-scheme`, so one
 file serves a light and a dark reader.
 
 A product keeps its own hue: FerroCHART rose, FerroEHR rust, FerroTERM teal,
-FerroBRIDGE indigo, and the provisional plum, bronze, azure, olive and emerald
-of FerroPIX, FerroSMART, FerroFED, FerroSYS and FerroTASK. Everything else is iron, steel and
+FerroBRIDGE indigo, and the provisional plum, azure, olive and emerald
+of FerroPIX, FerroFED, FerroSYS and FerroTASK. Everything else is iron, steel and
 graphite.
 
 ## Regenerating the raster

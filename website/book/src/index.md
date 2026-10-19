@@ -1,6 +1,6 @@
 # FerroHEALTH documentation
 
-Revised 2026-10-08.
+Revised 2026-10-19.
 
 This book holds what is true for every FerroHEALTH product: who makes them,
 how a vulnerability or a complaint reaches the manufacturer, what the
@@ -24,13 +24,12 @@ once.
 | FerroBRIDGE | A bridge from openEHR to FHIR and to the OMOP Common Data Model | <https://ferrobridge.eu/docs/> | [FerroHEALTH/FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) |
 | FerroFED | An openEHR federation gateway | <https://ferrofed.eu/docs/> | [FerroHEALTH/FerroFED](https://github.com/FerroHEALTH/FerroFED) |
 
-Four more are planned. Each has a repository that holds its licence and its
+Three more are planned. Each has a repository that holds its licence and its
 brand, and none has a release or a book yet:
 
 | Planned | What it is for | Repository |
 |---|---|---|
 | FerroPIX | Patient identity: a Master Patient Index | [FerroHEALTH/FerroPIX](https://github.com/FerroHEALTH/FerroPIX) |
-| FerroSMART | The SMART on openEHR authorisation server | [FerroHEALTH/FerroSMART](https://github.com/FerroHEALTH/FerroSMART) |
 | FerroSYS | The control plane | [FerroHEALTH/FerroSYS](https://github.com/FerroHEALTH/FerroSYS) |
 | FerroTASK | Task planning and decision support over openEHR | [FerroHEALTH/FerroTASK](https://github.com/FerroHEALTH/FerroTASK) |
 

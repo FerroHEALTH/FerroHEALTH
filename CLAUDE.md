@@ -11,11 +11,10 @@ terminology server),
 [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) (a bridge from
 openEHR to FHIR and to the OMOP Common Data Model), and
 [FerroFED](https://github.com/FerroHEALTH/FerroFED) (an openEHR federation
-gateway). Four more are planned, each with a domain and a repository that
+gateway). Three more are planned, each with a domain and a repository that
 holds its licence and its brand and no release yet:
 [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) (patient identity,
-`ferropix.eu`), [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) (the
-SMART on openEHR server, `ferrosmart.eu`),
+`ferropix.eu`),
 [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (the control plane,
 `ferrosys.eu`) and [FerroTASK](https://github.com/FerroHEALTH/FerroTASK)
 (task planning and decision support over openEHR PROC and GDL2,
@@ -133,14 +132,19 @@ and narrow.
   system list or a crate list moves with a product release and belongs on that
   product's site. The page names the standard and links the pin.
 - **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo; FerroPIX, FerroSMART, FerroFED, FerroSYS
-  and FerroTASK are plum, bronze, azure, olive and emerald. FerroHEALTH is
+  is teal, FerroBRIDGE is indigo; FerroPIX, FerroFED, FerroSYS
+  and FerroTASK are plum, azure, olive and emerald. FerroHEALTH is
   iron and steel, and spends a product hue only where that product is named. Every product's values in
   `assets/brand/tokens.css` are copied verbatim from its own `tokens.css`; a
   new hue is chosen with `scripts/brand/hue-distance.py` before it goes there.
   The mark stays at four strokes: they are the data path (FerroCHART, FerroEHR,
-  FerroTERM, FerroBRIDGE), and FerroPIX, FerroSMART, FerroFED, FerroSYS and
+  FerroTERM, FerroBRIDGE), and FerroPIX, FerroFED, FerroSYS and
   FerroTASK frame it, released or not.
+- **No product is an authorisation server.** Each product is its own SMART
+  App Launch 2.x resource server against the deployment's authorization
+  server, because one central service would hold the signing key every
+  product's access depends on (owner, 2026-10-19). Never add a central
+  FerroHEALTH authorisation service to the page, the book or the diagram.
 - **The brand artwork is all rights reserved.** The SVG, PNG and ICO files in
   `assets/brand/` and `assets/diagrams/` are under `TRADEMARKS.md`, and every
   SVG there carries `LicenseRef-FerroHEALTH-Brand`, a new one included. The

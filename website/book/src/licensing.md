@@ -1,6 +1,6 @@
 # Licensing and trademarks
 
-Revised 2026-10-08.
+Revised 2026-10-19.
 
 Every FerroHEALTH product is source-available under the Business Source
 License 1.1 (SPDX `BUSL-1.1`), with Cadasto B.V. as the Licensor. This page
@@ -23,7 +23,6 @@ each product. Each product's own `LICENSE` is the text that applies to it:
 | FerroBRIDGE | [`LICENSE`](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE) |
 | FerroFED | [`LICENSE`](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE) |
 | FerroPIX | [`LICENSE`](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE) |
-| FerroSMART | [`LICENSE`](https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE) |
 | FerroSYS | [`LICENSE`](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE) |
 | FerroTASK | [`LICENSE`](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE) |
 
@@ -88,7 +87,7 @@ book; FerroEHR's is in its
 ## Trademarks and brand terms
 
 The names FerroHEALTH, FerroCHART, FerroEHR, FerroTERM, FerroBRIDGE,
-FerroPIX, FerroSMART, FerroFED, FerroSYS and FerroTASK, the FerroHEALTH mark
+FerroPIX, FerroFED, FerroSYS and FerroTASK, the FerroHEALTH mark
 with its icon and lockup variants, and the architecture diagram are covered by
 the FerroHEALTH brand terms,
 [`TRADEMARKS.md`](https://github.com/FerroHEALTH/FerroHEALTH/blob/main/TRADEMARKS.md).

@@ -24,7 +24,7 @@ License 1.1, documents itself on its own domain, and runs without the
 others. This site says how they fit together and nothing a product's own site
 should say instead.
 
-Four more are planned around them. Each has a registered domain and a
+Three more are planned around them. Each has a registered domain and a
 repository that opens with its licence and its brand, and the page shows them
 as dashed cards whose one status line is read from GitHub: the day the code
 last moved.
@@ -32,7 +32,6 @@ last moved.
 | Planned | Will do | Domain |
 |---|---|---|
 | [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | A Master Patient Index: who the patient is, and where the record is | `ferropix.eu` |
-| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | The SMART on openEHR server: who may act | `ferrosmart.eu` |
 | [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | The control plane: how it all runs | `ferrosys.eu` |
 | [FerroTASK](https://github.com/FerroHEALTH/FerroTASK) | Task planning and decision support: what happens next | `ferrotask.eu` |
 
@@ -134,16 +133,20 @@ switch back to branch-based publishing.
   page and left to rot. The page shows a release and a date and lets the reader
   judge.
 - **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo, and FerroPIX, FerroSMART, FerroFED,
-  FerroSYS and FerroTASK are plum, bronze, azure, olive and emerald, chosen by measurement; FerroHEALTH is iron and
+  is teal, FerroBRIDGE is indigo, and FerroPIX, FerroFED,
+  FerroSYS and FerroTASK are plum, azure, olive and emerald, chosen by measurement; FerroHEALTH is iron and
   steel, and borrows a hue only where its product is named. See
   [`assets/brand/README.md`](assets/brand/README.md).
 - **A planned product says what it is for and nothing it has not done.** Its
   card names the product and the job, links its repository, shows the domain
   as text until it serves a page, and carries one rendered badge. The mark
   stays at four strokes: FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE are
-  the data path, and FerroPIX, FerroSMART, FerroFED, FerroSYS and FerroTASK
+  the data path, and FerroPIX, FerroFED, FerroSYS and FerroTASK
   frame it.
+- **Authorisation stays with each product.** Every product is its own SMART
+  App Launch 2.x resource server against the deployment's authorization
+  server. The family runs no central authorisation service, because one would
+  hold the signing key every product's access depends on.
 
 ## Contributing
 
@@ -169,7 +172,6 @@ in each repository's own licence file:
 [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/LICENSE),
 [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE),
 [FerroPIX](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE),
-[FerroSMART](https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE),
 [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE),
 [FerroSYS](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE),
 [FerroTASK](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE).

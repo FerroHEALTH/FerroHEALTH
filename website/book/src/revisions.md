@@ -14,6 +14,9 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-19 | [FerroHEALTH documentation](index.md) | The planned authorisation service is withdrawn. |
+| 2026-10-19 | [Licensing and trademarks](licensing.md) | The withdrawn authorisation service left the licence table and the brand names. |
+| 2026-10-19 | [How the products fit together](architecture.md) | The withdrawn authorisation service left the diagram; each product authorises its own callers against the deployment's authorization server. |
 | 2026-10-08 | [FerroHEALTH documentation](index.md) | First revision. |
 | 2026-10-08 | [The manufacturer](manufacturer.md) | First revision, from FerroEHR's manufacturer record and compliance pages. |
 | 2026-10-08 | [Security](security.md) | First revision: the shared parts of FerroEHR's `SECURITY.md`, with the points where the products' own policies differ. |

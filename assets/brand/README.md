@@ -9,8 +9,8 @@ renderer; [FerroEHR](https://ferroehr.eu/), an openEHR Clinical Data
 Repository; [FerroTERM](https://ferroterm.eu/), an HL7® FHIR® terminology
 server; [FerroBRIDGE](https://ferrobridge.eu/), a bridge from openEHR to FHIR
 and to the OMOP Common Data Model; and [FerroFED](https://ferrofed.eu/), an
-openEHR federation gateway. Four more are planned around them: FerroPIX for
-patient identity, FerroSMART for authorisation, FerroSYS as the control plane
+openEHR federation gateway. Three more are planned around them: FerroPIX for
+patient identity, FerroSYS as the control plane
 and FerroTASK for task planning and decision support. Ferro is *ferrum*, iron, which is
 what Rust is an oxide of.
 
@@ -40,9 +40,9 @@ per-product mark.
 
 **The mark stays at four strokes.** Four is where a stroke per product stops
 scaling: a fifth segment in the same width is not legible at any size the mark
-is used at. The family has grown to nine names, and the decision is that the
+is used at. The family has grown to eight names, and the decision is that the
 four strokes are the data path and nothing else: the form, the record, the
-meaning, the way out. The services around it (FerroPIX, FerroSMART,
+meaning, the way out. The services around it (FerroPIX,
 FerroFED, FerroSYS, FerroTASK) are drawn as the frame around that path in the
 architecture diagram; they get a hue and a mark of their own, and no stroke in
 this one, whether they have released or not. Their colour lives on the product
@@ -91,7 +91,6 @@ day its repository opened, and went into its `tokens.css` first.
 | Product | Name | Light ground | Dark ground |
 |---|---|---|---|
 | FerroPIX | plum | `#6B21A8` | `#C084FC` |
-| FerroSMART | bronze | `#78350F` | `#FBBF24` |
 | FerroFED | azure | `#0369A1` | `#7DD3FC` |
 | FerroSYS | olive | `#5B6B16` | `#BEF264` |
 | FerroTASK | emerald | `#065F46` | `#34D399` |
@@ -114,6 +113,11 @@ FerroTASK's emerald came out of a search over the whole wheel against the
 eight hues and steel. Its worst pair is 10.1, with FerroTERM's teal on the dark
 ground under normal vision, so the ninth hue leaves the colour-blind floor
 where it was.
+
+The table records the palette as it was chosen, with a bronze hue for a
+planned authorisation service in it. The family dropped that service on
+2026-10-19, and its hue left `tokens.css` with it. The floor of the eight hues that remain is still 4.5, between
+FerroBRIDGE and FerroFED, as the script reports.
 
 Every value holds at least 4.5:1 against its ground, so a hue can carry text
 on a card. A reader who cannot tell azure from indigo still has the name on

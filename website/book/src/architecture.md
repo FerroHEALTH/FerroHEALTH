@@ -1,6 +1,6 @@
 # How the products fit together
 
-Revised 2026-10-08.
+Revised 2026-10-19.
 
 Each FerroHEALTH product runs on its own, and each speaks a published
 specification to the others. This page shows which product calls which, and
@@ -14,14 +14,14 @@ in the FerroHEALTH repository. Select it to open it at full size.
 
 ## Reading the diagram
 
-The frame is one FerroHEALTH instance serving one organisation. The nine
+The frame is one FerroHEALTH instance serving one organisation. The eight
 inside are the family; clinicians, applications, HL7 FHIR, the OMOP database
 and other organisations sit outside it. A dashed outline is a planned product,
 and a dashed line is a call into one.
 
 Left to right is the order data moves. Four servers are the data path:
 FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
-meaning, and FerroBRIDGE carries it out. FerroPIX, FerroSMART, FerroFED,
+meaning, and FerroBRIDGE carries it out. FerroPIX, FerroFED,
 FerroSYS and FerroTASK frame that path. An arrowhead points at what is called
 or written to, and each edge names the specification it speaks.
 
@@ -42,10 +42,6 @@ or written to, and each edge names the specification it speaks.
 
 The planned products add these calls once they exist:
 
-- **FerroSMART** is the SMART on openEHR authorisation server. FerroCHART
-  obtains its token and launch context there (OIDC, SMART launch), and
-  FerroEHR asks it whether a token may do what it asks (token
-  introspection). FerroEHR carries the SMART on openEHR layer itself today.
 - **FerroPIX** is the Master Patient Index. FerroEHR feeds it each EHR it
   creates (the IHE PIXm Patient Identity Feed), and FerroFED asks it where a
   patient's records are (PIXm) before it dispatches a query.
@@ -73,7 +69,7 @@ its configuration:
 | FerroBRIDGE | [What FerroBRIDGE runs beside](https://ferrobridge.eu/docs/operate/deployment-shape.html) |
 | FerroFED | [The container](https://ferrofed.eu/docs/operate/container.html) |
 
-Three rules hold across the family:
+Four rules hold across the family:
 
 - **One instance per organisation.** FerroEHR is single-tenant: several
   organisations are served by several instances, each with its own database.
@@ -87,3 +83,8 @@ Three rules hold across the family:
   API, which is what lets them form one EHR system under the EHDS while
   staying independent of each other
   ([intended purpose](ehds/intended-purpose.md)).
+- **Each product authorises its own callers.** Every product is its own
+  SMART App Launch 2.x resource server: it checks the access tokens it is
+  handed against the deployment's own authorization server. The family runs
+  no central authorisation service, because one would hold the signing key
+  every product's access depends on.

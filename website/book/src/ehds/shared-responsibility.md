@@ -1,6 +1,6 @@
 # The EHDS EHR system: shared responsibility
 
-Revised 2026-10-08.
+Revised 2026-10-19.
 
 Almost every obligation in EU and national health-data law rests on the
 controller, and where the EHR system is operated on that controller's behalf,
@@ -106,9 +106,9 @@ for each release of each FerroHEALTH product is Cadasto B.V. The
 
 | Obligation | What FerroEHR provides | What the deploying organisation does |
 |---|---|---|
-| [Art. 13 and Annex I](https://eur-lex.europa.eu/eli/reg/2024/2847/oj), the essential cybersecurity requirements and the manufacturer's obligations, from 11 December 2027 | The [CRA risk assessment](https://ferroehr.eu/docs/latest/compliance/cra-risk-assessment.html), point by point against Annex I, with the evidence and the open work | Run a supported release, apply security updates, and keep the security environment the [intended purpose](https://ferroehr.eu/docs/latest/compliance/intended-purpose.html#the-security-environment-ferroehr-assumes) assumes |
+| [Art. 13 and Annex I](https://eur-lex.europa.eu/eli/reg/2024/2847/oj), the essential cybersecurity requirements and the manufacturer's obligations, from 11 December 2027 | The [CRA risk assessment](https://ferroehr.eu/docs/latest/compliance/cra-risk-assessment.html), point by point against Annex I, with the evidence and the open work | Run the newest release, apply security updates, and keep the security environment the [intended purpose](https://ferroehr.eu/docs/latest/compliance/intended-purpose.html#the-security-environment-ferroehr-assumes) assumes |
 | [Art. 14](https://eur-lex.europa.eu/eli/reg/2024/2847/oj), reporting actively exploited vulnerabilities and severe incidents, since 11 September 2026 | Cadasto B.V. notifies the CSIRT and ENISA ([complaints, incidents and vulnerabilities](../post-market.md)) | Report what you see to Cadasto B.V.; your own NIS2 and GDPR notifications stay yours |
-| [Art. 13(8)](https://eur-lex.europa.eu/eli/reg/2024/2847/oj), the support period | Five years per release, the end date in the release notes | Upgrade before the end date, and to the newest release when it carries a security fix |
+| [Art. 13(8)](https://eur-lex.europa.eu/eli/reg/2024/2847/oj), the support period | Only the newest release is supported; security fixes ship in new releases for at least five years after each release, with the end month in the release notes | Upgrade to the newest release when one is published; upgrading is free |
 
 ## National law
 

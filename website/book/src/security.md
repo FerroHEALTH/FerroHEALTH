@@ -1,6 +1,6 @@
 # Security
 
-Revised 2026-10-08.
+Revised 2026-10-19.
 
 This page is the vulnerability-handling policy of Cadasto B.V., the
 manufacturer of every FerroHEALTH product: how to report a vulnerability,
@@ -156,14 +156,25 @@ that Cadasto B.V. still has to confirm.
 
 ## The support period
 
+Only the newest release of a product is supported. When a new release is
+published, every earlier release stops receiving fixes: there are no
+maintenance branches, no long-term-support line and no backports in any
+product. If you are not on the newest release, upgrade; upgrading is free.
+
 CRA Art. 13(8) has the manufacturer handle a product's vulnerabilities for a
 support period that "shall be at least five years", unless the product is
 expected to be in use for less time, and Art. 13(19) has its end date,
-"including at least the month and the year", stated to the user. These
-articles bind the releases placed on the market from 11 December 2027
-(CRA Art. 71(2) and 69(2)). Each product states its support period in its own
-`SECURITY.md`, because the line of releases and their end dates are its own.
-Where products differ today, the table below says how.
+"including at least the month and the year", stated to the user. Cadasto B.V.
+meets this as a commitment for the whole product: it keeps publishing
+security fixes, in new releases, for at least five years after each release
+is placed on the market, and ships them only in the newest release, as
+Art. 13(10) allows ([how a fix reaches you](#how-a-fix-reaches-you)). Where a
+product states an end month for a release, it is the month until which
+Cadasto B.V. commits to keep publishing fixed releases; the release itself is
+supported only while it is the newest. These articles bind the releases
+placed on the market from 11 December 2027 (CRA Art. 71(2) and 69(2)). Each
+product states this in its own `SECURITY.md`. Where products differ today,
+the table below says how.
 
 A release withdrawn because it did not conform is unsupported, and the
 product's `SECURITY.md` lists it with the release to move to
@@ -230,12 +241,12 @@ The products adopted this policy at different times, and their `SECURITY.md`
 files still differ on these points. Each product's own file is the statement
 for that product until it links this page in place of its own text.
 
-| Product | Reporting routes its `SECURITY.md` names | Acknowledgement, then assessment | Support period it states | Security-only patch releases | Safe harbour |
+| Product | Reporting routes its `SECURITY.md` names | Acknowledgement, then assessment | Support it states | Security-only patch releases | Safe harbour |
 |---|---|---|---|---|---|
-| [FerroEHR](https://github.com/FerroHEALTH/FerroEHR/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 5 working days, then 10 working days | five years from the month a release is published, with the end date in each release's notes | yes | yes |
-| [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/SECURITY.md) | private reporting | 7 days | five years from the release date, with a table of end dates | not stated | not stated |
-| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/SECURITY.md) | private reporting, or the maintainer's email to agree a channel | about 5 business days, then about 10, best effort | the latest release only, no end date | not stated | not stated |
-| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the latest release only, no end date | not stated | not stated |
+| [FerroEHR](https://github.com/FerroHEALTH/FerroEHR/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 5 working days, then 10 working days | the newest release only; fixed releases for at least five years after each release, with the end month in each release's notes | yes | yes |
+| [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/SECURITY.md) | private reporting | 7 days | the newest release only; fixed releases for at least five years after each release, with a table of end dates | not stated | not stated |
+| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/SECURITY.md) | private reporting, or the maintainer's email to agree a channel | about 5 business days, then about 10, best effort | the newest release only; fixed releases for at least five years after each release, no end month | not stated | not stated |
+| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the newest release only; fixed releases for at least five years after each release, no end month | not stated | not stated |
 | [FerroCHART](https://github.com/FerroHEALTH/FerroCHART/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the latest release only, no end date | not stated | not stated |
 
 The email address info@cadasto.com reaches the manufacturer of every product,

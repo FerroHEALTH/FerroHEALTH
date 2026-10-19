@@ -1,6 +1,6 @@
 # The Cyber Resilience Act
 
-Revised 2026-10-08.
+Revised 2026-10-19.
 
 The Cyber Resilience Act (CRA, Regulation (EU) 2024/2847) sets cybersecurity
 requirements for "a software or hardware product and its remote data
@@ -85,9 +85,12 @@ the market when it is published, so the releases published from 11 December
 - **The support period (Art. 13(8)).** "the support period shall be at least
   five years", and "Where the product with digital elements is expected to be
   in use for less than five years, the support period shall correspond to the
-  expected use time". The end date, month and year, is stated to the user
-  (Art. 13(19)). Each product states its own period and the end date of each
-  release ([security](security.md#the-support-period)).
+  expected use time". Cadasto B.V. keeps publishing security fixes for at
+  least five years after each release and ships them only in the newest
+  release (Art. 13(10)), so only the newest release is supported. Where a
+  product states an end date, month and year (Art. 13(19)), it is the month
+  until which fixed releases keep coming
+  ([security](security.md#the-support-period)).
 - **Vulnerability handling (Annex I Part II).** Fixes ship forward in the
   newest release, as Art. 13(10) allows, security fixes ship separately from
   functionality where technically feasible, and every fixed vulnerability gets

@@ -24,7 +24,7 @@ License 1.1, documents itself on its own domain, and runs without the
 others. This site says how they fit together and nothing a product's own site
 should say instead.
 
-Four more are planned around them. Each has a registered domain and a
+Three more are planned around them. Each has a registered domain and a
 repository that opens with its licence and its brand, and the page shows them
 as dashed cards whose one status line is read from GitHub: the day the code
 last moved.

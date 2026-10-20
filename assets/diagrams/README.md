@@ -121,12 +121,11 @@ specification it speaks, with a few exceptions worth knowing:
 - **FerroTASK is a client of the CDR.** openEHR Task Planning and GDL2 both
   read the patient's data by archetype and template path, so FerroTASK reads
   FerroEHR over `ITS-REST, AQL` and commits the state of each plan back, and
-  keeps no clinical record of its own. It sits under FerroBRIDGE because that
-  is the one slot inside the frame its single edge reaches cleanly; the
-  position says nothing about the order data moves.
-- **One line hops another.** FerroTASK's line to the CDR hops FerroFED's
-  with a small arc. The generator allows a crossing only where a hop is
-  declared.
+  keeps no clinical record of its own. It sits in one row with FerroPIX and
+  FerroFED, the services around the data path, at the same size as both, and
+  its line climbs into the CDR's lower edge left of the index's feed.
+- **No line crosses another.** The generator allows a crossing only where a
+  hop is declared, and the drawing declares none.
 
 `$validate-code` is the one operation FerroEHR uses, and the label says so. A
 server that does not offer it is configured to `operation = "expand"` per

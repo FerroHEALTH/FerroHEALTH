@@ -106,10 +106,10 @@
          gateway asks it where a record is; an application that opens a record asks
          it the same way, and FerroCHART receives the EHR it is launched with and
          asks nobody. -->
-    <rect class="box box-pix" x="452" y="476" width="160" height="88" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.5" stroke-dasharray="6 4"/>
-    <text class="label tag-pix" x="532" y="506" text-anchor="middle" font-size="15" font-weight="700" fill="#6b21a8">FerroPIX</text>
-    <text class="sub" x="532" y="528" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">Master Patient Index</text>
-    <text class="sub" x="532" y="546" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">IHE PIX, PDQ, PMIR</text>
+    <rect class="box box-pix" x="452" y="476" width="168" height="88" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="label tag-pix" x="536" y="506" text-anchor="middle" font-size="15" font-weight="700" fill="#6b21a8">FerroPIX</text>
+    <text class="sub" x="536" y="528" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">Master Patient Index</text>
+    <text class="sub" x="536" y="546" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">IHE PIX, PDQ, PMIR</text>
 
     <!-- Under FerroBRIDGE, on the side where data leaves, and level with the other
          organisations it talks to. The federation tier of the openEHR federation
@@ -122,12 +122,13 @@
 
     <!-- Task Planning and GDL2 both read the patient's data by archetype path, so
          FerroTASK is a client of the CDR and keeps no record of its own: it reads
-         what has happened and commits the state of the plan. It sits in the one
-         slot inside the frame its single edge reaches without crossing a label. -->
-    <rect class="box box-task" x="756" y="326" width="110" height="88" rx="10" fill="#ffffff" stroke="#065f46" stroke-width="1.5" stroke-dasharray="6 4"/>
-    <text class="label tag-task" x="811" y="356" text-anchor="middle" font-size="15" font-weight="700" fill="#065f46">FerroTASK</text>
-    <text class="sub" x="811" y="378" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">task plans</text>
-    <text class="sub" x="811" y="396" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">GDL2 guidelines</text>
+         what has happened and commits the state of the plan. It sits in the row of
+         the other services around the data path, at the same size as FerroPIX and
+         FerroFED. -->
+    <rect class="box box-task" x="206" y="476" width="168" height="88" rx="10" fill="#ffffff" stroke="#065f46" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="label tag-task" x="290" y="506" text-anchor="middle" font-size="15" font-weight="700" fill="#065f46">FerroTASK</text>
+    <text class="sub" x="290" y="528" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">task plans</text>
+    <text class="sub" x="290" y="546" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">GDL2 guidelines</text>
 
     <!-- Level with the gateway, because FerroFED is the only path to them. -->
     <rect class="box" x="1000" y="492" width="190" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
@@ -221,16 +222,16 @@
     <text class="edge-label" x="568" y="380" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e"><tspan x="568" dy="0">PIXm, PDQm</tspan><tspan x="568" dy="13">PIXm feed</tspan></text>
 
     <!-- Where is the record: the gateway asks the index before it fans out. -->
-    <path class="edge" d="M698 540 H624" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
-    <path class="edge-head" d="M612 540 l9 -5.5 v11 z" fill="#58616e"/>
+    <path class="edge" d="M698 540 H632" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M620 540 l9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="655" y="531" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">PIXm</text>
 
     <!-- A task plan and a guideline read the record and commit back to it, over
-         the same API any client uses. The line hops the gateway's own call into
-         the CDR, which it has to pass to reach the CDR's lower edge. -->
-    <path class="edge" d="M756 346 H657 A7 7 0 0 1 643 346 H590 V296" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
-    <path class="edge-head" d="M590 284 l-5.5 9 h11 z" fill="#58616e"/>
-    <text class="edge-label" x="703" y="337" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
+         the same API any client uses. The line climbs from the services' row into
+         the CDR's lower edge, left of the index's feed and clear of every other line. -->
+    <path class="edge" d="M320 476 V416 H500 V296" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
+    <path class="edge-head" d="M500 284 l-5.5 9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="410" y="405" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
 
     <!-- A remote CDR is a node like the local one: the gateway sends it standard
          AQL scoped to that node's own EHR id and merges what comes back, with the

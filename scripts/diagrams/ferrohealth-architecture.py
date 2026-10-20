@@ -166,7 +166,7 @@ BOXES = [
             "its own lane, so it never reads as something FerroCHART sits in front of."),
     Box("fhir", 1000, 116, 190, 56, "HL7 FHIR", subs=["a facade, stores nothing"]),
     Box("omop", 1000, 224, 190, 56, "OMOP CDM", subs=["a batch load, for research"]),
-    Box("pix", 452, 440, 160, 88, "FerroPIX", hue="pix", planned=True,
+    Box("pix", 452, 440, 168, 88, "FerroPIX", hue="pix", planned=True,
         subs=["Master Patient Index", "IHE PIX, PDQ, PMIR"],
         why="Under the CDR whose records it locates. Dashed while its server is being\n"
             "built. The CDR resolves each EHR's subject through it and feeds it, the\n"
@@ -179,12 +179,13 @@ BOXES = [
             "organisations it talks to. The federation tier of the openEHR federation\n"
             "proposal: a transparent ITS-REST intermediary that resolves the patient\n"
             "first, then dispatches ordinary AQL to each node's own EHR id."),
-    Box("task", 756, 290, 110, 88, "FerroTASK", hue="task", planned=True,
+    Box("task", 206, 440, 168, 88, "FerroTASK", hue="task", planned=True,
         subs=["task plans", "GDL2 guidelines"],
         why="Task Planning and GDL2 both read the patient's data by archetype path, so\n"
             "FerroTASK is a client of the CDR and keeps no record of its own: it reads\n"
-            "what has happened and commits the state of the plan. It sits in the one\n"
-            "slot inside the frame its single edge reaches without crossing a label."),
+            "what has happened and commits the state of the plan. It sits in the row of\n"
+            "the other services around the data path, at the same size as FerroPIX and\n"
+            "FerroFED."),
     Box("others", 1000, 456, 190, 56, "Other organisations",
         subs=["federation nodes"],
         why="Level with the gateway, because FerroFED is the only path to them."),
@@ -233,13 +234,13 @@ EDGES = [
              "PDQm ITI-78), and it is the one component that knows the moment an EHR is\n"
              "created or its subject changes, so it also feeds the index (ITI-104). The\n"
              "subject its EHR_STATUS carries is the pseudonym the index mints."),
-    Edge("fed", "pix", [(698, 504), (612, 504)], "PIXm", (655, 495, "middle"), planned=True,
+    Edge("fed", "pix", [(698, 504), (620, 504)], "PIXm", (655, 495, "middle"), planned=True,
          why="Where is the record: the gateway asks the index before it fans out."),
-    Edge("task", "ehr", [(756, 310), (590, 310), (590, 248)], "ITS-REST, AQL", (703, 301, "middle"),
-         planned=True, hops=[650],
+    Edge("task", "ehr", [(320, 440), (320, 380), (500, 380), (500, 248)], "ITS-REST, AQL",
+         (410, 369, "middle"), planned=True,
          why="A task plan and a guideline read the record and commit back to it, over\n"
-             "the same API any client uses. The line hops the gateway's own call into\n"
-             "the CDR, which it has to pass to reach the CDR's lower edge."),
+             "the same API any client uses. The line climbs from the services' row into\n"
+             "the CDR's lower edge, left of the index's feed and clear of every other line."),
     Edge("fed", "others", [(866, 484), (1000, 484)], "ITS-REST, AQL", (933, 475, "middle"),
          why="A remote CDR is a node like the local one: the gateway sends it standard\n"
              "AQL scoped to that node's own EHR id and merges what comes back, with the\n"

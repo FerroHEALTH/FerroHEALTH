@@ -14,6 +14,10 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-20 | [FerroHEALTH documentation](index.md) | FerroPIX has released and joins the products; the shared libraries FerroSMART, FerroAUDIT and FerroUI are named, and none of them is a product. |
+| 2026-10-20 | [How the products fit together](architecture.md) | The shared libraries and who uses each; FerroEHR resolves and feeds FerroPIX, whose pseudonym its EHR_STATUS carries; FerroPIX owns the IHE identity crates; the diagram draws the libraries as a band outside the instance. |
+| 2026-10-20 | [Licensing and trademarks](licensing.md) | The shared libraries' licences, their hosted-service definitions and their names; FerroPIX's hosted-service definition. |
+| 2026-10-20 | [Security](security.md) | FerroPIX and the shared libraries' reporting routes, and FerroPIX's support statement. |
 | 2026-10-19 | [Security](security.md) | Only the newest release of a product is supported; the five years of Art. 13(8) are a commitment to keep publishing fixes in new releases. |
 | 2026-10-19 | [The Cyber Resilience Act](cra.md) | The support period is a commitment to keep publishing fixes in new releases, and only the newest release is supported. |
 | 2026-10-19 | [The EHDS EHR system: shared responsibility](ehds/shared-responsibility.md) | The deploying organisation runs the newest release, the only one supported. |

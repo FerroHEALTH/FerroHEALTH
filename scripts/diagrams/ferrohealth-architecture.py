@@ -21,13 +21,16 @@
 # path, and the services below and beside them frame it. An arrowhead points at what is
 # called or written to. A dashed outline is a planned product, and a dashed
 # edge a call into one. Where a line has to cross another it hops over it with
-# a small arc, and a crossing is allowed only where a hop is declared.
+# a small arc, and a crossing is allowed only where a hop is declared. The
+# shared libraries sit in their own band under the frame, with no edges: they
+# are compiled into the products and never run, so they are never drawn as a
+# server inside the instance.
 
 import sys
 from dataclasses import dataclass, field
 from typing import Optional
 
-W, H = 1200, 756
+W, H = 1200, 900
 Y = 36  # everything below the frame's label line moves down this much
 
 # The frame: what is FerroHEALTH and what is the outside world. One instance
@@ -37,6 +40,14 @@ FRAME = (176, 8, 720, 708)  # x, y, w, h
 FRAME_LABEL = "ONE FERROHEALTH INSTANCE · ONE TENANT"
 INSIDE = {"term", "chart", "ehr", "bridge", "pix", "fed", "sys", "task"}
 STEEL = ("#3f6070", "#8fb6c4")
+
+# The library band: the crates every product is built from. Under the frame
+# and outside it, because a library is part of each product that uses it and
+# runs nowhere on its own; no edge reaches it, because every product would
+# carry one and a line would read as a call over the network.
+LIB_FRAME = (176, 732, 720, 128)  # x, y, w, h
+LIB_LABEL = "SHARED LIBRARIES · BUILT INTO THE PRODUCTS, NEVER RUN ON THEIR OWN"
+LIBRARIES = {"smart", "audit", "ui"}
 
 # assets/brand/tokens.css, as literal values: a standalone SVG cannot read the
 # page's custom properties. Light is written as presentation attributes, dark
@@ -156,11 +167,12 @@ BOXES = [
     Box("fhir", 1000, 116, 190, 56, "HL7 FHIR", subs=["a facade, stores nothing"]),
     Box("omop", 1000, 224, 190, 56, "OMOP CDM", subs=["a batch load, for research"]),
     Box("pix", 452, 440, 160, 88, "FerroPIX", hue="pix", planned=True,
-        subs=["Master Patient Index", "IHE PIX and PDQ"],
-        why="Under the CDR whose records it locates. The CDR feeds it when an EHR is\n"
-            "created or its subject changes, the gateway asks it where a record is; an\n"
-            "application that opens a record asks it the same way, and FerroCHART\n"
-            "receives the EHR it is launched with and asks nobody."),
+        subs=["Master Patient Index", "IHE PIX, PDQ, PMIR"],
+        why="Under the CDR whose records it locates. Dashed while its server is being\n"
+            "built. The CDR resolves each EHR's subject through it and feeds it, the\n"
+            "gateway asks it where a record is; an application that opens a record asks\n"
+            "it the same way, and FerroCHART receives the EHR it is launched with and\n"
+            "asks nobody."),
     Box("fed", 698, 440, 168, 88, "FerroFED", hue="fed",
         subs=["federation gateway", "one query, every node"],
         why="Under FerroBRIDGE, on the side where data leaves, and level with the other\n"
@@ -181,6 +193,14 @@ BOXES = [
         why="The mirror of the FerroTERM band: meaning above the servers, operations\n"
             "below them. No edges, because every one of the six boxes above would carry\n"
             "one and the band already says so."),
+    Box("smart", 206, 736, 208, 76, "FerroSMART", subs=["ferrohealth-smart", "checks tokens, issues none"],
+        why="The SMART App Launch and OAuth 2.0 resource server each product runs in\n"
+            "its own process, against the deployment's own authorization server."),
+    Box("audit", 432, 736, 208, 76, "FerroAUDIT", subs=["ihe-atna, ehds-logging", "audit trail, EHDS access log"],
+        why="The IHE ATNA and BALP audit trail and the EHDS access record, sent to an\n"
+            "Audit Record Repository the deployment runs."),
+    Box("ui", 658, 736, 208, 76, "FerroUI", subs=["ferrohealth-ui", "the consoles' components"],
+        why="The component library each product's operator console is built with."),
 ]
 
 EDGES = [
@@ -208,10 +228,11 @@ EDGES = [
          (658, 412, "start"),
          why="The gateway queries the local record like any client, below the bridge's\n"
              "own read of it and into the CDR's right side, so the two never meet."),
-    Edge("ehr", "pix", [(560, 248), (560, 440)], "PIXm feed", (568, 350, "start"), planned=True,
-         why="The index has to learn where records are, and the CDR is the one component\n"
-             "that knows the moment an EHR is created or its subject changes. IHE names\n"
-             "the transaction: the PIXm Patient Identity Feed."),
+    Edge("ehr", "pix", [(560, 248), (560, 440)], "PIXm, PDQm\nPIXm feed", (568, 344, "start"), planned=True,
+         why="The CDR resolves the subject of each EHR through the index (PIXm ITI-83,\n"
+             "PDQm ITI-78), and it is the one component that knows the moment an EHR is\n"
+             "created or its subject changes, so it also feeds the index (ITI-104). The\n"
+             "subject its EHR_STATUS carries is the pseudonym the index mints."),
     Edge("fed", "pix", [(698, 504), (612, 504)], "PIXm", (655, 495, "middle"), planned=True,
          why="Where is the record: the gateway asks the index before it fans out."),
     Edge("task", "ehr", [(756, 310), (590, 310), (590, 248)], "ITS-REST, AQL", (703, 301, "middle"),
@@ -230,7 +251,7 @@ EDGES = [
              "corridor where it crosses nothing."),
 ]
 
-LEGEND = (206, 700, "A dashed outline is a planned product, and a dashed line a call into one.")
+LEGEND = (206, 848, "A dashed outline is a server not running yet, and a dashed line a call into one.")
 
 
 for _b in BOXES:
@@ -318,6 +339,16 @@ def check(boxes, edges):
             problems.append(f"box {b.key} is not wholly inside the frame")
         if b.key not in INSIDE and not outside:
             problems.append(f"box {b.key} is not wholly outside the frame")
+        lx, ly, lw, lh = LIB_FRAME
+        in_band = r[0] >= lx and r[1] >= ly and r[2] <= lx + lw and r[3] <= ly + lh
+        if (b.key in LIBRARIES) != in_band:
+            problems.append(f"box {b.key} is {'outside' if b.key in LIBRARIES else 'inside'} the library band")
+        if b.key in LIBRARIES and (b.hue or b.planned):
+            problems.append(f"library {b.key} carries a product hue or a planned outline")
+    if any(e.src in LIBRARIES or e.dst in LIBRARIES for e in edges):
+        problems.append("an edge reaches a library, which nothing calls over the network")
+    if rect_overlap(frame, (LIB_FRAME[0], LIB_FRAME[1], LIB_FRAME[0] + LIB_FRAME[2], LIB_FRAME[1] + LIB_FRAME[3]), pad=8):
+        problems.append("the library band touches the instance frame")
 
     for lab in (l for b in boxes for l in box_labels(b)):
         b = by_key[lab.owner]
@@ -384,6 +415,7 @@ def check(boxes, edges):
               for e in edges if e.label]
     labels.append(Label(LEGEND[0] + 30, LEGEND[1] + 4, LEGEND[2], "start", 11))
     labels.append(Label(FRAME[0] + 18, FRAME[1] + 24, FRAME_LABEL, "start", 11))
+    labels.append(Label(LIB_FRAME[0] + 18, LIB_FRAME[1] + 24, LIB_LABEL, "start", 11))
     for lab in labels:
         r = lab.bbox()
         for b in boxes:
@@ -502,6 +534,8 @@ def dark_style():
         f".edge-head {{ fill: {MUTED[1]} }}",
         f".frame {{ stroke: {STEEL[1]} }}",
         f".frame-label {{ fill: {STEEL[1]} }}",
+        f".lib-frame {{ stroke: {MUTED[1]} }}",
+        f".lib-label {{ fill: {MUTED[1]} }}",
     ]
     rules += [f".tag-{k} {{ fill: {v[1]} }}" for k, v in HUES.items()]
     body = "\n".join(f"      {r}" for r in rules)
@@ -516,16 +550,20 @@ DESC = (
     "reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges "
     "resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an "
     "OMOP Common Data Model database over SQL. Four services frame those four servers, and the "
-    "three still planned are drawn dashed: "
-    "FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send "
-    "FerroFED, the federation gateway, an ordinary AQL query, and it asks the planned FerroPIX where the record is, then dispatches the query to FerroEHR and to other "
+    "three not running yet are drawn dashed: "
+    "FerroEHR resolves the subject of each EHR through FerroPIX, the Master Patient Index whose "
+    "server is being built, over PIXm and PDQm, and feeds it each EHR it creates; applications send "
+    "FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other "
     "organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, "
     "spans everything as the band every server reports to; FerroTASK, the task planning and "
     "decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each "
     "plan back to it. Each server checks the access tokens it is handed against the deployment's own "
     "authorization server, so no FerroHEALTH service holds the key every server depends on. "
     "A frame around the eight marks one "
-    "FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it."
+    "FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it. "
+    "Under the frame, a band holds the three shared libraries the products are built from, which never "
+    "run on their own: FerroSMART checks access tokens and issues none, FerroAUDIT writes the audit "
+    "trail and the EHDS access record, and FerroUI holds the components of the operator consoles."
 )
 
 HEADER = (
@@ -539,7 +577,7 @@ HEADER = (
     "     file blends into the section it sits in. Left to right is the order data\n"
     "     moves, the four servers in the top row are the data path, and the\n"
     "     services below and beside them frame it. An arrowhead points at what is\n"
-    "     called or written to. -->\n"
+    "     called or written to. The band under the frame is the shared libraries. -->\n"
 )
 
 
@@ -561,6 +599,13 @@ def render():
             f'fill="none" stroke="{STEEL[0]}" stroke-width="1.8"/>\n')
     out += (f'    <text class="frame-label" x="{fmt(fx + 18)}" y="{fmt(fy + 24)}" font-size="11" font-weight="700" '
             f'letter-spacing="0.06em" fill="{STEEL[0]}">{FRAME_LABEL}</text>\n\n')
+    lx, ly, lw, lh = LIB_FRAME
+    out += comment("The shared libraries: compiled into the products that use them, outside\n"
+                   "the instance because none of them runs as a process of its own.")
+    out += (f'    <rect class="lib-frame" x="{fmt(lx)}" y="{fmt(ly)}" width="{fmt(lw)}" height="{fmt(lh)}" rx="16" '
+            f'fill="none" stroke="{MUTED[0]}" stroke-width="1.2"/>\n')
+    out += (f'    <text class="lib-label" x="{fmt(lx + 18)}" y="{fmt(ly + 24)}" font-size="11" font-weight="700" '
+            f'letter-spacing="0.06em" fill="{MUTED[0]}">{LIB_LABEL}</text>\n\n')
     for b in BOXES:
         out += draw_box(b) + "\n"
     for e in EDGES:

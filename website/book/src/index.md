@@ -1,6 +1,6 @@
 # FerroHEALTH documentation
 
-Revised 2026-10-19.
+Revised 2026-10-20.
 
 This book holds what is true for every FerroHEALTH product: who makes them,
 how a vulnerability or a complaint reaches the manufacturer, what the
@@ -23,18 +23,34 @@ once.
 | FerroTERM | An HL7 FHIR terminology server | <https://ferroterm.eu/docs/> | [FerroHEALTH/FerroTERM](https://github.com/FerroHEALTH/FerroTERM) |
 | FerroBRIDGE | A bridge from openEHR to FHIR and to the OMOP Common Data Model | <https://ferrobridge.eu/docs/> | [FerroHEALTH/FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) |
 | FerroFED | An openEHR federation gateway | <https://ferrofed.eu/docs/> | [FerroHEALTH/FerroFED](https://github.com/FerroHEALTH/FerroFED) |
+| FerroPIX | A Master Patient Index; its first release set up the repository, and the server is being built | none yet | [FerroHEALTH/FerroPIX](https://github.com/FerroHEALTH/FerroPIX) |
 
-Three more are planned. Each has a repository that holds its licence and its
-brand, and none has a release or a book yet:
+Two more are planned. Each has a repository that holds its licence and its
+brand, and neither has a release or a book yet:
 
 | Planned | What it is for | Repository |
 |---|---|---|
-| FerroPIX | Patient identity: a Master Patient Index | [FerroHEALTH/FerroPIX](https://github.com/FerroHEALTH/FerroPIX) |
 | FerroSYS | The control plane | [FerroHEALTH/FerroSYS](https://github.com/FerroHEALTH/FerroSYS) |
 | FerroTASK | Task planning and decision support over openEHR | [FerroHEALTH/FerroTASK](https://github.com/FerroHEALTH/FerroTASK) |
 
 The family site, <https://ferrohealth.eu/>, shows what each product has
 released and when its code last moved.
+
+## The shared libraries
+
+The products are built from three shared libraries. Each is a set of Rust
+crates on crates.io, released from its own repository under the Business
+Source License 1.1. None of them is a product: none runs on its own, and each
+is compiled into the products that use it.
+
+| Library | Crates | What it does | Repository |
+|---|---|---|---|
+| FerroSMART | `ferrohealth-smart` | The SMART App Launch, SMART on openEHR and OAuth 2.0 resource server: it checks the access tokens a product is handed against the deployment's authorization server, and issues none | [FerroHEALTH/FerroSMART](https://github.com/FerroHEALTH/FerroSMART) |
+| FerroAUDIT | `ihe-atna`, `ehds-logging` | The IHE ATNA and BALP audit trail, and the record of each access to electronic health data that the EHDS Regulation asks of an EHR system | [FerroHEALTH/FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) |
+| FerroUI | `ferrohealth-ui` | The component library of the products' operator consoles | [FerroHEALTH/FerroUI](https://github.com/FerroHEALTH/FerroUI) |
+
+[How the products fit together](architecture.md#the-shared-libraries) says
+which product uses which.
 
 ## What is in this book
 

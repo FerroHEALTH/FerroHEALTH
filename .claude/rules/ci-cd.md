@@ -59,8 +59,8 @@ needs a secret beyond the workflow token.
   `website/landing/CNAME` travels with the artifact so the domain survives a
   switch back to branch-based publishing.
 - The six-hourly schedule exists because the page carries each product's
-  latest release and last push. A release cut in any of the four products
-  reaches the status table without a commit here, and `refresh.yml` then moves
+  latest release and last push. A release cut in any product or shared
+  library reaches the page without a commit here, and `refresh.yml` then moves
   the committed fallbacks to match.
 - **Never add AI or Claude attribution** to a commit, a PR, or release text.
 

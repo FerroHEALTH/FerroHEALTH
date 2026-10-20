@@ -8,10 +8,10 @@
      file blends into the section it sits in. Left to right is the order data
      moves, the four servers in the top row are the data path, and the
      services below and beside them frame it. An arrowhead points at what is
-     called or written to. -->
-<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1512" viewBox="0 0 1200 756" role="img" aria-labelledby="title desc">
+     called or written to. The band under the frame is the shared libraries. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1800" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
   <title id="title">What calls what across the FerroHEALTH family</title>
-  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four services frame those four servers, and the three still planned are drawn dashed: FerroEHR feeds FerroPIX, the Master Patient Index, each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks the planned FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to; FerroTASK, the task planning and decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. Each server checks the access tokens it is handed against the deployment's own authorization server, so no FerroHEALTH service holds the key every server depends on. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it.</desc>
+  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four services frame those four servers, and the three not running yet are drawn dashed: FerroEHR resolves the subject of each EHR through FerroPIX, the Master Patient Index whose server is being built, over PIXm and PDQm, and feeds it each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to; FerroTASK, the task planning and decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. Each server checks the access tokens it is handed against the deployment's own authorization server, so no FerroHEALTH service holds the key every server depends on. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it. Under the frame, a band holds the three shared libraries the products are built from, which never run on their own: FerroSMART checks access tokens and issues none, FerroAUDIT writes the audit trail and the EHDS access record, and FerroUI holds the components of the operator consoles.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
@@ -30,6 +30,8 @@
       .edge-head { fill: #a4aebc }
       .frame { stroke: #8fb6c4 }
       .frame-label { fill: #8fb6c4 }
+      .lib-frame { stroke: #a4aebc }
+      .lib-label { fill: #a4aebc }
       .tag-chart { fill: #e04f84 }
       .tag-ehr { fill: #d97742 }
       .tag-term { fill: #2dd4bf }
@@ -41,7 +43,7 @@
     }
   </style>
 
-  <rect class="ground" width="1200" height="756" rx="12" fill="#f5f7fa"/>
+  <rect class="ground" width="1200" height="900" rx="12" fill="#f5f7fa"/>
 
   <g font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
 
@@ -50,6 +52,11 @@
          organisation. An organisation serving several tenants runs several. -->
     <rect class="frame" x="176" y="8" width="720" height="708" rx="16" fill="none" stroke="#3f6070" stroke-width="1.8"/>
     <text class="frame-label" x="194" y="32" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#3f6070">ONE FERROHEALTH INSTANCE · ONE TENANT</text>
+
+    <!-- The shared libraries: compiled into the products that use them, outside
+         the instance because none of them runs as a process of its own. -->
+    <rect class="lib-frame" x="176" y="732" width="720" height="128" rx="16" fill="none" stroke="#58616e" stroke-width="1.2"/>
+    <text class="lib-label" x="194" y="756" font-size="11" font-weight="700" letter-spacing="0.06em" fill="#58616e">SHARED LIBRARIES · BUILT INTO THE PRODUCTS, NEVER RUN ON THEIR OWN</text>
 
     <!-- FerroTERM spans the three servers that call it, because all three reach a
          terminology server over the same FHIR API and none of them is a more
@@ -94,14 +101,15 @@
     <text class="label" x="1095" y="285" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OMOP CDM</text>
     <text class="sub" x="1095" y="307" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a batch load, for research</text>
 
-    <!-- Under the CDR whose records it locates. The CDR feeds it when an EHR is
-         created or its subject changes, the gateway asks it where a record is; an
-         application that opens a record asks it the same way, and FerroCHART
-         receives the EHR it is launched with and asks nobody. -->
+    <!-- Under the CDR whose records it locates. Dashed while its server is being
+         built. The CDR resolves each EHR's subject through it and feeds it, the
+         gateway asks it where a record is; an application that opens a record asks
+         it the same way, and FerroCHART receives the EHR it is launched with and
+         asks nobody. -->
     <rect class="box box-pix" x="452" y="476" width="160" height="88" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.5" stroke-dasharray="6 4"/>
     <text class="label tag-pix" x="532" y="506" text-anchor="middle" font-size="15" font-weight="700" fill="#6b21a8">FerroPIX</text>
     <text class="sub" x="532" y="528" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">Master Patient Index</text>
-    <text class="sub" x="532" y="546" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">IHE PIX and PDQ</text>
+    <text class="sub" x="532" y="546" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">IHE PIX, PDQ, PMIR</text>
 
     <!-- Under FerroBRIDGE, on the side where data leaves, and level with the other
          organisations it talks to. The federation tier of the openEHR federation
@@ -132,6 +140,26 @@
     <rect class="box box-sys" x="206" y="628" width="660" height="76" rx="10" fill="#ffffff" stroke="#5b6b16" stroke-width="1.5" stroke-dasharray="6 4"/>
     <text class="label tag-sys" x="536" y="663" text-anchor="middle" font-size="15" font-weight="700" fill="#5b6b16">FerroSYS</text>
     <text class="sub" x="536" y="685" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">health, telemetry, event log, notifications, configuration · every server reports to it</text>
+
+    <!-- The SMART App Launch and OAuth 2.0 resource server each product runs in
+         its own process, against the deployment's own authorization server. -->
+    <rect class="box" x="206" y="772" width="208" height="76" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="310" y="802" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroSMART</text>
+    <text class="sub" x="310" y="824" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ferrohealth-smart</text>
+    <text class="sub" x="310" y="842" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">checks tokens, issues none</text>
+
+    <!-- The IHE ATNA and BALP audit trail and the EHDS access record, sent to an
+         Audit Record Repository the deployment runs. -->
+    <rect class="box" x="432" y="772" width="208" height="76" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="536" y="802" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroAUDIT</text>
+    <text class="sub" x="536" y="824" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ihe-atna, ehds-logging</text>
+    <text class="sub" x="536" y="842" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">audit trail, EHDS access log</text>
+
+    <!-- The component library each product's operator console is built with. -->
+    <rect class="box" x="658" y="772" width="208" height="76" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="762" y="802" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroUI</text>
+    <text class="sub" x="762" y="824" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ferrohealth-ui</text>
+    <text class="sub" x="762" y="842" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">the consoles' components</text>
 
     <path class="edge" d="M136 240 H194" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M206 240 l-9 -5.5 v11 z" fill="#58616e"/>
@@ -184,12 +212,13 @@
     <path class="edge-head" d="M612 272 l9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="658" y="448" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
 
-    <!-- The index has to learn where records are, and the CDR is the one component
-         that knows the moment an EHR is created or its subject changes. IHE names
-         the transaction: the PIXm Patient Identity Feed. -->
+    <!-- The CDR resolves the subject of each EHR through the index (PIXm ITI-83,
+         PDQm ITI-78), and it is the one component that knows the moment an EHR is
+         created or its subject changes, so it also feeds the index (ITI-104). The
+         subject its EHR_STATUS carries is the pseudonym the index mints. -->
     <path class="edge" d="M560 284 V464" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
     <path class="edge-head" d="M560 476 l-5.5 -9 h11 z" fill="#58616e"/>
-    <text class="edge-label" x="568" y="386" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">PIXm feed</text>
+    <text class="edge-label" x="568" y="380" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e"><tspan x="568" dy="0">PIXm, PDQm</tspan><tspan x="568" dy="13">PIXm feed</tspan></text>
 
     <!-- Where is the record: the gateway asks the index before it fans out. -->
     <path class="edge" d="M698 540 H624" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
@@ -217,8 +246,8 @@
     <path class="edge-head" d="M782 564 l-5.5 9 h11 z" fill="#58616e"/>
     <text class="edge-label" x="600" y="587" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
 
-    <rect class="legend-sample" x="206" y="728" width="22" height="12" rx="3" fill="none" stroke="#58616e" stroke-width="1.5" stroke-dasharray="6 4"/>
-    <text class="legend" x="236" y="740" font-size="11" font-weight="600" fill="#58616e">A dashed outline is a planned product, and a dashed line a call into one.</text>
+    <rect class="legend-sample" x="206" y="876" width="22" height="12" rx="3" fill="none" stroke="#58616e" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <text class="legend" x="236" y="888" font-size="11" font-weight="600" fill="#58616e">A dashed outline is a server not running yet, and a dashed line a call into one.</text>
 
   </g>
 </svg>

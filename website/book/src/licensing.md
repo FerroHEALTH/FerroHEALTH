@@ -1,9 +1,10 @@
 # Licensing and trademarks
 
-Revised 2026-10-19.
+Revised 2026-10-20.
 
-Every FerroHEALTH product is source-available under the Business Source
-License 1.1 (SPDX `BUSL-1.1`), with Cadasto B.V. as the Licensor. This page
+Every FerroHEALTH product, and every shared library the products are built
+from, is source-available under the Business Source License 1.1 (SPDX
+`BUSL-1.1`), with Cadasto B.V. as the Licensor. This page
 states the terms every product shares, how to arrange a commercial licence,
 the terms of the FerroHEALTH names and artwork, and the terms under which
 contributions are accepted. It is a summary for evaluators and deployers, not
@@ -25,6 +26,17 @@ each product. Each product's own `LICENSE` is the text that applies to it:
 | FerroPIX | [`LICENSE`](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE) |
 | FerroSYS | [`LICENSE`](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE) |
 | FerroTASK | [`LICENSE`](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE) |
+
+The shared libraries carry their own `LICENSE` on the same terms:
+
+| Shared library | Licence |
+|---|---|
+| FerroSMART | [`LICENSE`](https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE) |
+| FerroAUDIT | [`LICENSE`](https://github.com/FerroHEALTH/FerroAUDIT/blob/main/LICENSE) |
+| FerroUI | [`LICENSE`](https://github.com/FerroHEALTH/FerroUI/blob/main/LICENSE) |
+
+A library compiled into a product has the same Licensor as the product and
+the same boundary between free and commercial use, set out below.
 
 The Business Source License 1.1 is not an OSI-approved open-source licence,
 and no product claims that it is. A product may publish some of its parts
@@ -62,6 +74,10 @@ than you and your affiliates:
 | FerroTERM | stores, manages, or queries terminology, code system content, or health data held by it |
 | FerroBRIDGE | maps, converts, or exchanges health data |
 | FerroFED | discovers, queries, or exchanges health records across organisations |
+| FerroPIX | resolves, cross-references, or locates patient identities or health records |
+| FerroSMART | authenticates or authorises access to health data, or issues or checks tokens for it |
+| FerroAUDIT | records, sends, or stores audit records of access to health data |
+| FerroUI | operates a user interface built with it |
 
 The planned products' licences are in their repositories, linked above.
 
@@ -87,7 +103,8 @@ book; FerroEHR's is in its
 ## Trademarks and brand terms
 
 The names FerroHEALTH, FerroCHART, FerroEHR, FerroTERM, FerroBRIDGE,
-FerroPIX, FerroFED, FerroSYS and FerroTASK, the FerroHEALTH mark
+FerroPIX, FerroFED, FerroSYS and FerroTASK, the names of the shared
+libraries FerroSMART, FerroAUDIT and FerroUI, the FerroHEALTH mark
 with its icon and lockup variants, and the architecture diagram are covered by
 the FerroHEALTH brand terms,
 [`TRADEMARKS.md`](https://github.com/FerroHEALTH/FerroHEALTH/blob/main/TRADEMARKS.md).
@@ -125,8 +142,8 @@ International. None of these organisations endorse FerroHEALTH.
 
 ## Contributions
 
-The five released products accept contributions on the same terms. By
-submitting a contribution to one of them you:
+The released products and the shared libraries accept contributions on the
+same terms. By submitting a contribution to one of them you:
 
 1. certify that you wrote it, or otherwise have the right to submit it under
    these terms;

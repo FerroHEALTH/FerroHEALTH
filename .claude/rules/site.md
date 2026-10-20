@@ -32,7 +32,7 @@ beyond that script and the pinned mdbook, no runtime dependency.
   and never the SVG. `assets/diagrams/README.md` carries the conventions and
   the raster command.
 - **A planned product says what it is for, and its one status is rendered.**
-  FerroPIX, FerroSYS and FerroTASK have a name, a domain and a repository
+  FerroSYS and FerroTASK have a name, a domain and a repository
   with their licence and brand, and no release. Each is a dashed
   card in the products section with the product's job, the standards it
   intends to speak, a GitHub link, the domain as text (linked only once it
@@ -42,7 +42,19 @@ beyond that script and the pinned mdbook, no runtime dependency.
   `scripts/checks/licence-links.sh`. No "planned since", no "coming soon", no
   row in the status table. When it publishes a first release, the refresh
   pull request renders the tag; that is when the card moves into the released
-  grid, its site is linked, and it joins the status table.
+  grid, its site is linked once it serves a page, and it joins the status
+  table. FerroPIX made that move with its first release, the repository
+  setup: its card says the server is being built, and its domain stays text
+  until it serves a page.
+- **A shared library is never a product.** FerroSMART, FerroAUDIT and FerroUI
+  are crates the products compile in, and none of them runs on its own. They
+  have their own section (`#libraries`), cards in the parent's steel
+  (`.product-lib`, no product hue and no mark), a `data-rel` badge from their
+  repository and no row in the status table, and they never count toward a
+  number of products. Their `LICENSE` is linked in the licensing section and
+  checked by `scripts/checks/licence-links.sh`. The diagram draws them in a
+  band outside the instance frame with no edges, and its generator refuses
+  an edge into one.
 - **No hand-typed version, and no hand-typed status.** A fact a product moves
   carries a marker (`data-rel`, `data-rel-plain`, `data-rel-date`,
   `data-pushed`) and is filled by `scripts/site/render-releases.sh` from that

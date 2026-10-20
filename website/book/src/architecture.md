@@ -45,8 +45,8 @@ or written to, and each edge names the specification it speaks.
 
 These calls come once the servers behind them run:
 
-- **FerroPIX** is the Master Patient Index. FerroEHR will resolve the subject
-  of each EHR through it (PIXm, ITI-83, and PDQm, ITI-78) and feed it each EHR
+- **FerroPIX** is the Master Patient Index. FerroEHR resolves the subject of
+  each EHR through it (PIXm, ITI-83, and PDQm, ITI-78) and feeds it each EHR
   it creates or whose subject changes (the Patient Identity Feed FHIR,
   ITI-104). The subject an EHR's EHR_STATUS carries is then the pseudonym
   FerroPIX mints, so the record holds no directly identifying identifier.
@@ -77,7 +77,7 @@ outside the instance with no edges.
 | Library | Crates | What it does | Who uses it |
 |---|---|---|---|
 | [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | `ferrohealth-smart` | The SMART App Launch, SMART on openEHR and OAuth 2.0 resource server: token validation against the authorization server's keys, the SMART scopes and the patient compartment, machine authentication, and one audit line per request. It checks tokens and never issues one. | FerroEHR, FerroTERM and FerroBRIDGE; FerroFED is moving onto it |
-| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with the store-and-forward spool ITI-20 asks of a sender, and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroPIX; FerroEHR and FerroFED are moving onto it, and FerroSYS will build the receiving Audit Record Repository on it |
+| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with the store-and-forward spool ITI-20 asks of a sender, and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroPIX; FerroEHR and FerroFED are moving onto it, and FerroSYS plans to build the receiving Audit Record Repository on it |
 | [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The components of the operator consoles, with a theme per product | the consoles of FerroEHR, FerroTERM, FerroBRIDGE and FerroFED |
 
 The release of each library is on its card on the

@@ -219,11 +219,11 @@ EDGES = [
          why="The bridge reads the CDR, so the arrow points at the CDR."),
     Edge("bridge", "term", [(782, 160), (782, 88)], "$lookup, $translate", (774, 130, "end"),
          why="The bridge resolves and translates codes for the FHIR side."),
-    Edge("bridge", "fhir", [(866, 186), (962, 186), (962, 144), (1000, 144)], "FHIR facade",
-         (913, 174, "middle"), both=True,
+    Edge("bridge", "fhir", [(866, 186), (980, 186), (980, 144), (1000, 144)], "FHIR facade",
+         (938, 174, "middle"), both=True,
          why="FHIR is an exchange, so this edge carries a head at both ends."),
-    Edge("bridge", "omop", [(866, 226), (962, 226), (962, 252), (1000, 252)], "SQL rows",
-         (913, 214, "middle"),
+    Edge("bridge", "omop", [(866, 226), (980, 226), (980, 252), (1000, 252)], "SQL rows",
+         (938, 214, "middle"),
          why="OMOP is a database schema, so this edge names no wire specification."),
     Edge("fed", "ehr", [(698, 460), (650, 460), (650, 236), (612, 236)], "ITS-REST, AQL",
          (658, 412, "start"),
@@ -241,7 +241,7 @@ EDGES = [
          why="A task plan and a guideline read the record and commit back to it, over\n"
              "the same API any client uses. The line climbs from the services' row into\n"
              "the CDR's lower edge, left of the index's feed and clear of every other line."),
-    Edge("fed", "others", [(866, 484), (1000, 484)], "ITS-REST, AQL", (933, 475, "middle"),
+    Edge("fed", "others", [(866, 484), (1000, 484)], "ITS-REST, AQL", (946, 473, "middle"),
          why="A remote CDR is a node like the local one: the gateway sends it standard\n"
              "AQL scoped to that node's own EHR id and merges what comes back, with the\n"
              "node named in the result."),
@@ -425,6 +425,13 @@ def check(boxes, edges):
         for e, p, q in segments:
             if seg_hits_rect(p, q, (r[0] - 5, r[1] - 5, r[2] + 5, r[3] + 5)):
                 problems.append(f"label '{lab.text}' touches edge {e.src}->{e.dst}")
+        # The frame and the library band are lines too, and an edge label that
+        # sits where an edge leaves the frame is the one most likely to land on it.
+        for name, (rx, ry, rw, rh) in (("the frame", FRAME), ("the library band", LIB_FRAME)):
+            corners = [(rx, ry), (rx + rw, ry), (rx + rw, ry + rh), (rx, ry + rh), (rx, ry)]
+            for p, q in zip(corners, corners[1:]):
+                if seg_hits_rect(p, q, (r[0] - 5, r[1] - 5, r[2] + 5, r[3] + 5)):
+                    problems.append(f"label '{lab.text}' touches the outline of {name}")
     for i, a in enumerate(labels):
         for b in labels[i + 1:]:
             if rect_overlap(a.bbox(), b.bbox(), pad=8):

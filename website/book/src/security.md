@@ -1,6 +1,6 @@
 # Security
 
-Revised 2026-10-19.
+Revised 2026-10-20.
 
 This page is the vulnerability-handling policy of Cadasto B.V., the
 manufacturer of every FerroHEALTH product: how to report a vulnerability,
@@ -28,6 +28,15 @@ through GitHub private vulnerability reporting on the product's repository:
 - FerroTERM: <https://github.com/FerroHEALTH/FerroTERM/security/advisories/new>
 - FerroBRIDGE: <https://github.com/FerroHEALTH/FerroBRIDGE/security/advisories/new>
 - FerroFED: <https://github.com/FerroHEALTH/FerroFED/security/advisories/new>
+- FerroPIX: <https://github.com/FerroHEALTH/FerroPIX/security/advisories/new>
+
+A vulnerability in a shared library the products are built from goes to that
+library's repository the same way, and a product that uses the library takes
+the fix in a release of its own:
+
+- FerroSMART: <https://github.com/FerroHEALTH/FerroSMART/security/advisories/new>
+- FerroAUDIT: <https://github.com/FerroHEALTH/FerroAUDIT/security/advisories/new>
+- FerroUI: <https://github.com/FerroHEALTH/FerroUI/security/advisories/new>
 
 The form is "Report a vulnerability" on the repository's Security tab, and it
 needs a GitHub account. Without one, email
@@ -247,6 +256,7 @@ for that product until it links this page in place of its own text.
 | [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/SECURITY.md) | private reporting | 7 days | the newest release only; fixed releases for at least five years after each release, with a table of end dates | not stated | not stated |
 | [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/SECURITY.md) | private reporting, or the maintainer's email to agree a channel | about 5 business days, then about 10, best effort | the newest release only; fixed releases for at least five years after each release, no end month | not stated | not stated |
 | [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the newest release only; fixed releases for at least five years after each release, no end month | not stated | not stated |
+| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX/blob/main/SECURITY.md) | private reporting | 7 days | the newest release only; fixed releases for at least five years after each release, no end month | not stated | not stated |
 | [FerroCHART](https://github.com/FerroHEALTH/FerroCHART/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the latest release only, no end date | not stated | not stated |
 
 The email address info@cadasto.com reaches the manufacturer of every product,

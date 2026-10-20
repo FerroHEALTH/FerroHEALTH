@@ -19,8 +19,9 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$root" || exit 1
 
 readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroFED FerroSYS FerroTASK)
+readonly LIBRARIES=(FerroSMART FerroAUDIT FerroUI)
 # The landing page and the family book's licensing page each name every
-# product, so each links every product's own LICENSE.
+# product and shared library, so each links every one's own LICENSE.
 readonly PAGES=(website/landing/index.html website/book/src/licensing.md)
 
 # A generic BUSL-1.1 copy, wherever it is hosted. This script and the rules that
@@ -50,7 +51,7 @@ while IFS= read -r file; do
 done <<< "$(git ls-files '*.md' '*.html' '*.css' '*.svg' '*.txt' '*.yml' '*.json')"
 
 for page in "${PAGES[@]}"; do
-  for product in "${PRODUCTS[@]}"; do
+  for product in "${PRODUCTS[@]}" "${LIBRARIES[@]}"; do
     url="https://github.com/FerroHEALTH/$product/blob/main/LICENSE"
     if ! grep -qF -- "$url" "$page"; then
       echo "licence-links: $page does not link $url." >&2

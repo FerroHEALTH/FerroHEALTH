@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # render-releases.sh: fill the facts a product moves into a page, in place,
-# from that product's repository through the GitHub API.
+# from that product's or shared library's repository through the GitHub API.
 #
 #   scripts/site/render-releases.sh FILE
 #
@@ -37,6 +37,9 @@ set -euo pipefail
 readonly FILE="${1:?usage: $0 FILE}"
 readonly OWNER=FerroHEALTH
 readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroFED FerroSYS FerroTASK)
+# The shared libraries are no products, and their cards carry a release the
+# same way, so the same markers fill them.
+readonly LIBRARIES=(FerroSMART FerroAUDIT FerroUI)
 
 [ -f "$FILE" ] || { echo "render-releases: no such file: $FILE" >&2; exit 1; }
 
@@ -75,7 +78,7 @@ fill() {
 answered=0
 asked=0
 
-for product in "${PRODUCTS[@]}"; do
+for product in "${PRODUCTS[@]}" "${LIBRARIES[@]}"; do
   repo="repos/$OWNER/$product"
 
   asked=$((asked + 1))

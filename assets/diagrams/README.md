@@ -8,8 +8,8 @@ site: a product README, the books, a slide, an issue.
 
 | File | What it shows |
 |---|---|
-| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the five services around them |
-| `ferrohealth-architecture.png` | the same at 2400x1512, for the rare consumer that renders no SVG at all |
+| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the four services around them, with the shared libraries in a band under them |
+| `ferrohealth-architecture.png` | the same at 2400x1800, for the rare consumer that renders no SVG at all |
 
 ## How it is drawn
 
@@ -36,7 +36,7 @@ The landing page loads the SVG with `<img>`, and so can anything else:
 
 ```html
 <img src="https://ferrohealth.eu/assets/diagrams/ferrohealth-architecture.svg"
-     width="1200" height="756" alt="...">
+     width="1200" height="900" alt="...">
 ```
 
 In a Markdown file, reference the SVG:
@@ -67,8 +67,18 @@ instances.
 Left to right is the order data moves. The four servers are the data path:
 FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
 meaning, FerroBRIDGE carries it out. FerroPIX, FerroFED, FerroSYS
-and FerroTASK frame that path. The three still planned are drawn dashed, as is
-every call into one of them; FerroFED has released and is drawn solid.
+and FerroTASK frame that path. A server not running yet is drawn dashed, as is
+every call into one: FerroSYS and FerroTASK are planned, and FerroPIX has
+released its repository setup while its server is being built. FerroFED runs
+and is drawn solid.
+
+Under the frame, a second band holds the shared libraries: FerroSMART
+(`ferrohealth-smart`), FerroAUDIT (`ihe-atna`, `ehds-logging`) and FerroUI
+(`ferrohealth-ui`). They sit outside the instance because they run inside the
+products that compile them in, never on their own, and no edge reaches them
+because nothing calls a library over the network. They carry no product hue.
+The generator refuses a library box inside the instance frame, a hue or a
+dashed outline on one, and an edge into one.
 
 An arrowhead points at what is called or written to. The FHIR side carries one
 at both ends, because the bridge reads openEHR out to FHIR and writes FHIR back
@@ -83,8 +93,9 @@ specification it speaks, with a few exceptions worth knowing:
 - **`SQL rows`** names no wire specification, because OMOP is a database schema.
   The OMOCL mappings compile to SQL that writes typed rows into the CDM tables.
 - **No authorisation server is drawn.** Each product is its own SMART App
-  Launch 2.x resource server: it checks the tokens it is handed against the
-  deployment's own authorization server, which sits outside the family. A
+  Launch 2.x resource server, through the FerroSMART library: it checks the
+  tokens it is handed against the deployment's own authorization server,
+  which sits outside the family. A
   central FerroHEALTH authorisation service would hold the signing key every
   product's access depends on, so there is none (owner, 2026-10-19).
 - **FerroFED follows the openEHR federation tier proposal.** It is a
@@ -95,10 +106,12 @@ specification it speaks, with a few exceptions worth knowing:
   alike, and merges what comes back with the node named. The line to the other
   organisations is therefore `ITS-REST, AQL` and runs one way; cross-community
   identity (XCPD) is FerroPIX's business, not the gateway's.
-- **`PIXm feed` is how the index learns where records are.** The CDR is the one
-  component that knows the moment an EHR is created or its subject changes, so
-  FerroEHR feeds FerroPIX; IHE names the transaction the PIXm Patient Identity
-  Feed. The gateway then asks the index over PIXm. An application that opens a
+- **`PIXm, PDQm` and `PIXm feed` are the CDR's two uses of the index.**
+  FerroEHR will resolve the subject of each EHR through FerroPIX (PIXm ITI-83,
+  PDQm ITI-78), and the subject its EHR_STATUS carries is the pseudonym
+  FerroPIX mints. The CDR is also the one component that knows the moment an
+  EHR is created or its subject changes, so it feeds the index (the Patient
+  Identity Feed FHIR, ITI-104). The gateway then asks the index over PIXm. An application that opens a
   record asks it the same way. FerroCHART receives the EHR it is launched with
   and asks nobody, so no line runs from the form to the index.
 - **FerroSYS has no edges at all.** Every server reports health, telemetry and
@@ -108,12 +121,11 @@ specification it speaks, with a few exceptions worth knowing:
 - **FerroTASK is a client of the CDR.** openEHR Task Planning and GDL2 both
   read the patient's data by archetype and template path, so FerroTASK reads
   FerroEHR over `ITS-REST, AQL` and commits the state of each plan back, and
-  keeps no clinical record of its own. It sits under FerroBRIDGE because that
-  is the one slot inside the frame its single edge reaches cleanly; the
-  position says nothing about the order data moves.
-- **One line hops another.** FerroTASK's line to the CDR hops FerroFED's
-  with a small arc. The generator allows a crossing only where a hop is
-  declared.
+  keeps no clinical record of its own. It sits in one row with FerroPIX and
+  FerroFED, the services around the data path, at the same size as both, and
+  its line climbs into the CDR's lower edge left of the index's feed.
+- **No line crosses another.** The generator allows a crossing only where a
+  hop is declared, and the drawing declares none.
 
 `$validate-code` is the one operation FerroEHR uses, and the label says so. A
 server that does not offer it is configured to `operation = "expand"` per
@@ -127,8 +139,9 @@ FerroBRIDGE's `website/book/src/integrate/fhir-facade.md` and
 and FerroEHR's `website/book/src/installation/config-integrations.md` for
 `$validate-code` as the default membership operation. FerroFED's edges are
 its architecture, in its own repository, and its tracker is the record of the
-build. A dashed edge is a design intent, and the planned product's own
-repository will carry its evidence once it exists.
+build. A dashed edge is a design intent: FerroEHR's resolution through
+FerroPIX is FerroHEALTH/FerroEHR#3380, and FerroPIX's README states the
+profiles it serves.
 
 ## Colours and theme
 
@@ -145,7 +158,7 @@ graphite.
 ## Regenerating the raster
 
 ```bash
-rsvg-convert -w 2400 -h 1512 \
+rsvg-convert -w 2400 -h 1800 \
   assets/diagrams/ferrohealth-architecture.svg \
   -o assets/diagrams/ferrohealth-architecture.png
 ```

@@ -3,15 +3,18 @@
 
 # FerroHEALTH brand
 
-FerroHEALTH is the family name for five servers that are built and released
+FerroHEALTH is the family name for servers that are built and released
 separately: [FerroCHART](https://ferrochart.eu/), an openEHR® form builder and
 renderer; [FerroEHR](https://ferroehr.eu/), an openEHR Clinical Data
 Repository; [FerroTERM](https://ferroterm.eu/), an HL7® FHIR® terminology
 server; [FerroBRIDGE](https://ferrobridge.eu/), a bridge from openEHR to FHIR
-and to the OMOP Common Data Model; and [FerroFED](https://ferrofed.eu/), an
-openEHR federation gateway. Three more are planned around them: FerroPIX for
-patient identity, FerroSYS as the control plane
-and FerroTASK for task planning and decision support. Ferro is *ferrum*, iron, which is
+and to the OMOP Common Data Model; [FerroFED](https://ferrofed.eu/), an
+openEHR federation gateway; and FerroPIX, a Master Patient Index whose server
+is being built. Two more are planned around them: FerroSYS as the control
+plane and FerroTASK for task planning and decision support. The shared
+libraries the products are built from (FerroSMART, FerroAUDIT, FerroUI) are
+no products: they own no hue and no stroke, and the page shows them in the
+parent's steel. Ferro is *ferrum*, iron, which is
 what Rust is an oxide of.
 
 The parent follows the same file set, naming, variant list, and raster pipeline

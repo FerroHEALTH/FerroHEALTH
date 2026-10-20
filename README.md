@@ -7,7 +7,7 @@
 [![Code: Apache-2.0](https://img.shields.io/badge/Code-Apache--2.0-blue.svg)](LICENSE)
 [![Brand: all rights reserved](https://img.shields.io/badge/Brand-all%20rights%20reserved-lightgrey.svg)](TRADEMARKS.md)
 
-The family site for five pure-Rust health-data servers, published at
+The family site for the pure-Rust health-data servers below, published at
 **<https://ferrohealth.eu/>**. This repository holds the site and the shared
 brand; it holds no product code.
 
@@ -18,22 +18,34 @@ brand; it holds no product code.
 | [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | An HL7 FHIR terminology server: answers what a code means | <https://ferroterm.eu/> |
 | [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) | A bridge from openEHR to FHIR and to the OMOP CDM: carries the record onward | <https://ferrobridge.eu/> |
 | [FerroFED](https://github.com/FerroHEALTH/FerroFED) | An openEHR federation gateway: queries the record where it lives | <https://ferrofed.eu/> |
+| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | A Master Patient Index: who the patient is, and where the record is. Its first release set up the repository; the server is being built | `ferropix.eu`, not serving yet |
 
 Each product is released from its own repository under the Business Source
 License 1.1, documents itself on its own domain, and runs without the
 others. This site says how they fit together and nothing a product's own site
 should say instead.
 
-Three more are planned around them. Each has a registered domain and a
+Two more are planned around them. Each has a registered domain and a
 repository that opens with its licence and its brand, and the page shows them
 as dashed cards whose one status line is read from GitHub: the day the code
 last moved.
 
 | Planned | Will do | Domain |
 |---|---|---|
-| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | A Master Patient Index: who the patient is, and where the record is | `ferropix.eu` |
 | [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | The control plane: how it all runs | `ferrosys.eu` |
 | [FerroTASK](https://github.com/FerroHEALTH/FerroTASK) | Task planning and decision support: what happens next | `ferrotask.eu` |
+
+The products are built from three shared libraries. Each is a set of Rust
+crates released from its own repository under the same licence, and none of
+them is a product: none runs on its own, and each is compiled into the
+products that use it. The page gives them their own section, outside the
+product grids and the status table.
+
+| Shared library | Crates | Does |
+|---|---|---|
+| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | `ferrohealth-smart` | The SMART App Launch and OAuth 2.0 resource server every product checks tokens with; it issues none |
+| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The IHE ATNA and BALP audit trail and the EHDS access record |
+| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The component library of the products' operator consoles |
 
 ![What calls what across the FerroHEALTH family](assets/diagrams/ferrohealth-architecture.svg)
 
@@ -71,9 +83,10 @@ python3 -m http.server -d _site 8000  # then open http://localhost:8000/
 `assemble.sh` copies the landing directory and the brand directory into one
 tree, and renders two things:
 
-- every figure a product moves, through `render-releases.sh` and the GitHub
-  API: the latest release tag (the status table, the card badges, the image tag
-  in the quick start), the day it was published, and the day of the last push.
+- every figure a product or a shared library moves, through
+  `render-releases.sh` and the GitHub API: the latest release tag (the status
+  table, the card badges, the image tag in the quick start), the day it was
+  published, and the day of the last push.
   Without a token the page keeps the values committed in `index.html`, which
   are real and exactly as stale as the checkout.
 - `sitemap.xml`'s `lastmod`, from the commit being deployed, with one entry
@@ -93,10 +106,10 @@ release can name the revision of a family page it relies on.
 
 ## How it is deployed
 
-GitHub's Pages-with-Actions pattern, the same one the four product
-repositories use. A push to `main` assembles the site and deploys it; a pull
-request assembles it and stops. A six-hourly schedule redeploys, so a release
-cut in any of the four products reaches the status table without a commit here.
+GitHub's Pages-with-Actions pattern, the same one the product repositories
+use. A push to `main` assembles the site and deploys it; a pull request
+assembles it and stops. A six-hourly schedule redeploys, so a release cut in
+any product or shared library reaches the page without a commit here.
 
 ## How it stays fresh
 
@@ -145,8 +158,13 @@ switch back to branch-based publishing.
   frame it.
 - **Authorisation stays with each product.** Every product is its own SMART
   App Launch 2.x resource server against the deployment's authorization
-  server. The family runs no central authorisation service, because one would
-  hold the signing key every product's access depends on.
+  server, through the FerroSMART library in its own process. The family runs
+  no central authorisation service, because one would hold the signing key
+  every product's access depends on.
+- **A library is never a product.** FerroSMART, FerroAUDIT and FerroUI have
+  their own section, cards in the parent's steel, a rendered release and no
+  row in the status table, and the diagram draws them in a band outside the
+  instance frame with no edges.
 
 ## Contributing
 
@@ -175,6 +193,10 @@ in each repository's own licence file:
 [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE),
 [FerroSYS](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE),
 [FerroTASK](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE).
+The shared libraries are BUSL-1.1 too:
+[FerroSMART](https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE),
+[FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT/blob/main/LICENSE),
+[FerroUI](https://github.com/FerroHEALTH/FerroUI/blob/main/LICENSE).
 The site states what those terms mean at
 <https://ferrohealth.eu/#licensing>.
 

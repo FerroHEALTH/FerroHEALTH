@@ -197,15 +197,15 @@
     <text class="edge-label" x="774" y="166" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$lookup, $translate</text>
 
     <!-- FHIR is an exchange, so this edge carries a head at both ends. -->
-    <path class="edge" d="M878 222 H962 V180 H988" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge" d="M878 222 H980 V180 H988" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M1000 180 l-9 -5.5 v11 z" fill="#58616e"/>
     <path class="edge-head" d="M866 222 l9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="913" y="210" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">FHIR facade</text>
+    <text class="edge-label" x="938" y="210" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">FHIR facade</text>
 
     <!-- OMOP is a database schema, so this edge names no wire specification. -->
-    <path class="edge" d="M866 262 H962 V288 H988" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge" d="M866 262 H980 V288 H988" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M1000 288 l-9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="913" y="250" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">SQL rows</text>
+    <text class="edge-label" x="938" y="250" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">SQL rows</text>
 
     <!-- The gateway queries the local record like any client, below the bridge's
          own read of it and into the CDR's right side, so the two never meet. -->
@@ -238,7 +238,7 @@
          node named in the result. -->
     <path class="edge" d="M866 520 H988" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M1000 520 l-9 -5.5 v11 z" fill="#58616e"/>
-    <text class="edge-label" x="933" y="511" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
+    <text class="edge-label" x="946" y="509" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
 
     <!-- The application tier: a client sends the gateway an ordinary AQL query and
          never learns it was federated. The line runs under the lower row, the one

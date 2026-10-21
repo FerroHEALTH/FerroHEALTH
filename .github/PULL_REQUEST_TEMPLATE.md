@@ -19,8 +19,3 @@ Closes #NNN
 - [ ] Prose follows `.claude/rules/writing-style.md`.
 - [ ] Every commit is signed.
 - [ ] No AI or assistant attribution anywhere in the commits or this PR.
-
-Contributions carry the licensing terms in
-[CONTRIBUTING.md](../CONTRIBUTING.md#licensing-of-contributions); the
-`contribution-licence-guard` check reads the box above, and there is no separate
-agreement to sign.

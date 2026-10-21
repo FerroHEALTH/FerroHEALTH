@@ -33,3 +33,7 @@ _site/
 # The decision a canvas produced is recorded on its issue and in
 # assets/brand/README.md, which is the authority.
 /.design/
+
+# Per-machine agent settings and git worktrees
+.claude/settings.local.json
+.claude/worktrees/

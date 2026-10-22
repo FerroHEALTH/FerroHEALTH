@@ -12,8 +12,8 @@ terminology server),
 openEHR to FHIR and to the OMOP Common Data Model),
 [FerroFED](https://github.com/FerroHEALTH/FerroFED) (an openEHR federation
 gateway) and [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) (a Master
-Patient Index; its first release set up the repository and the server is
-being built, and `ferropix.eu` serves no page yet). Two more are planned,
+Patient Index; it publishes its identity crates, the server is being built,
+and `ferropix.eu` serves its site). Two more are planned,
 each with a domain and a repository that holds its licence and its brand and
 no release yet:
 [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (the control plane,
@@ -222,4 +222,4 @@ always.
   from.
 - The product sites carry the detail this page links to:
   <https://ferrochart.eu>, <https://ferroehr.eu>, <https://ferroterm.eu>,
-  <https://ferrobridge.eu>, <https://ferrofed.eu>.
+  <https://ferrobridge.eu>, <https://ferrofed.eu>, <https://ferropix.eu>.

@@ -9,11 +9,22 @@ graph and the project board.
 
 ## The loop
 
-1. **Orient.** `gh issue list --state open`. Pick the pinned issue or the one
-   the user names, and read it with `gh issue view <n> --comments`.
+1. **Orient.** `gh issue list --state open` (the SessionStart hook prints it
+   with `<Type/Priority>` after each title). Pick the pinned issue or the one
+   the user names; otherwise take the open issue with the highest `Priority`
+   field, the oldest first within a priority. Read it with:
+
+   ```sh
+   gh issue view <n> --json title,body,comments \
+     --jq '.title, .body, (.comments[] | "--- comment ---", .body)'
+   ```
+
+   Never read an issue with `gh issue view <n> --comments`: it prints nothing
+   and exits 0 for an issue with no comments, so the contract comes back
+   empty.
 2. **Read the contract.** The body opens with a plain summary of what and why,
    followed by an `## Acceptance criteria` checklist. Work found en route gets
-   its own issue.
+   its own issue, filed with `scripts/gh/fields.sh new` (below).
 3. **Do the work.** Assemble the site and look at the page before claiming it is
    right: `scripts/site/assemble.sh _site`, then serve `_site` and check light
    and dark, wide and narrow.
@@ -25,19 +36,50 @@ graph and the project board.
    template's ticked licensing checkbox: `contribution-licence-guard` refuses
    a pull request from a person without it.
 
-## Labels
+## Type, priority and labels
 
-- **Type:** exactly one per issue, mapped to the conventional-commit types:
-  `bug`, `enhancement`, `documentation`, `chore`, `refactor`, `ci`.
-- **Priority:** `P0` to `P3`.
+**The type, the priority and the effort of an issue are GitHub's own fields,
+never labels.** The `FerroHEALTH` organisation defines all three, and
+`scripts/gh/fields.sh` sets each by issue number, resolving every node id and
+failing loud on a typo:
+
+| Fact | Where it lives | Values | Command |
+|---|---|---|---|
+| Type | the native issue type of the organisation | `Bug`, `Feature`, `Task` | `scripts/gh/fields.sh type <n> bug\|feature\|task` |
+| Priority | the organisation's `Priority` issue field | `Urgent`, `High`, `Medium`, `Low` | `scripts/gh/fields.sh priority <n> urgent\|high\|medium\|low` |
+| Effort | the organisation's `Effort` issue field | `High`, `Medium`, `Low` | `scripts/gh/fields.sh effort <n> high\|medium\|low` |
+
+`scripts/gh/fields.sh show <n>` prints all three with the labels and the
+milestone. `scripts/gh/fields.sh new <type> <priority> <effort> <gh issue
+create args…>` creates an issue that carries all three from the start, so
+every issue is filed through it, never through a bare `gh issue create`.
+
+The priorities read: `Urgent` is drop everything, `High` is the current
+focus, `Medium` is normal, `Low` is the backlog. Effort is the size of the
+work as filed: `Low` is one sitting, `Medium` is one pull request, `High` is
+more than one pull request or a design that has to be held in context. Every
+open issue carries one; it never changes the order of the worklist, which the
+priority and the age of the issue decide.
+
+The type maps to the conventional-commit type of the branch and the commit: a
+`Bug` is a `fix`, a `Feature` is a `feat`, and a `Task` names its kind with
+exactly one work-kind label. The labels `bug`, `enhancement` and `P0` to `P3`
+that carried type and priority before are deleted, and `scripts/gh/labels.sh`
+retires them again wherever they reappear. Labels carry what the platform has
+no field for:
+
+- **Work kind, on a `Task` only, exactly one:** `documentation`, `chore`,
+  `refactor`, `perf`, `test`, `ci`. A `Bug` and a `Feature` carry none.
 - **Area:** `site` (the page and its assets), `brand` (the mark and the
   palette), `build` (the assemble script and the checks).
+- **Workflow:** `security`, `dependencies` (Dependabot).
 
 ## Branches use conventional types
 
 `<type>/<kebab-case-slug>` with `type` in `feat`, `fix`, `chore`, `docs`,
 `refactor`, `perf`, `test`, `ci`, `build`, `release`. Pick the type by the
-dominant change. Never force-push `main`.
+dominant change: a `Bug` is `fix/`, a `Feature` is `feat/`, and a `Task`
+takes its work-kind label. Never force-push `main`.
 
 ## A change in another repository
 

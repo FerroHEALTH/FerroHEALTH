@@ -78,6 +78,9 @@ in step.
   (the committed SVG is what the generator draws), `csp.sh` (every assembled
   page carries a same-origin policy naming all its inline code) and
   `book-revisions.sh` (every book page is dated, and `revisions.md` agrees).
+- `scripts/gh/`: the tracker helpers. `fields.sh` sets the issue type and the
+  `Priority` and `Effort` fields, `labels.sh` bootstraps the label set, and
+  `rel.sh` sets sub-issue and dependency edges.
 - `TRADEMARKS.md`: the brand terms (the artwork and the product names).
 - `.github/workflows/`: `ci.yml` (workflows, shell, prose, versions),
   `pages.yml` (assemble, check, deploy from main every six hours and on push),
@@ -193,11 +196,19 @@ and narrow.
 ## Issue workflow (the loop)
 
 The tracker is GitHub Issues and the open list is the worklist
-(`.claude/rules/issue-workflow.md`). One type label per issue, one priority
-label, and an area label (`site`, `brand`, `build`). A PR declares `Closes #N` and keeps the
-template's ticked licensing checkbox (`contribution-licence-guard`).
-Work that belongs in a product repository is filed there, with the evidence from
-here. The SessionStart hook prints the open list.
+(`.claude/rules/issue-workflow.md`). The type (Bug, Feature, Task), the
+priority (Urgent, High, Medium, Low) and the effort (High, Medium, Low) are
+GitHub's native issue type and the organisation's `Priority` and `Effort`
+issue fields, never labels, set with `scripts/gh/fields.sh`; an issue is filed
+with `scripts/gh/fields.sh new` so it carries all three from the start. A Task
+carries exactly one work-kind label (documentation/chore/refactor/perf/test/
+ci), and an area label is added as needed (`site`, `brand`, `build`). Read an
+issue with `gh issue view <n> --json title,body,comments`, never `--comments`,
+which prints nothing for an issue without comments. A PR declares `Closes #N`
+and keeps the template's ticked licensing checkbox
+(`contribution-licence-guard`). Work that belongs in a product repository is
+filed there, with the evidence from here. The SessionStart hook prints the
+open list with `<Type/Priority>` after each title.
 
 ## Working discipline (`.claude/`)
 
@@ -211,7 +222,8 @@ always.
 - `.claude/rules/comments.md`: comment budgets for HTML, CSS, SVG, and shell.
 - `.claude/rules/ci-cd.md`: workflow security, the CI lanes, and how the site
   publishes.
-- `.claude/rules/issue-workflow.md`: the tracker loop, labels, and branches.
+- `.claude/rules/issue-workflow.md`: the tracker loop, the type, priority and
+  effort fields, the labels, and branches.
 
 ## References
 

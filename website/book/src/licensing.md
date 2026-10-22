@@ -1,6 +1,6 @@
 # Licensing and trademarks
 
-Revised 2026-10-20.
+Revised 2026-10-22.
 
 Every FerroHEALTH product, and every shared library the products are built
 from, is source-available under the Business Source License 1.1 (SPDX
@@ -14,18 +14,20 @@ legal advice.
 
 The Business Source License 1.1 is a template: its parameters (the Licensor,
 the Licensed Work, the Additional Use Grant, the Change Date) are filled in by
-each product. Each product's own `LICENSE` is the text that applies to it:
+each product. Each product's own `LICENSE` is the text that applies to it,
+and each released product's licensing page says which of its parts carry
+which licence:
 
-| Product | Licence |
-|---|---|
-| FerroCHART | [`LICENSE`](https://github.com/FerroHEALTH/FerroCHART/blob/main/LICENSE) |
-| FerroEHR | [`LICENSE`](https://github.com/FerroHEALTH/FerroEHR/blob/main/LICENSE) |
-| FerroTERM | [`LICENSE`](https://github.com/FerroHEALTH/FerroTERM/blob/main/LICENSE) |
-| FerroBRIDGE | [`LICENSE`](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE) |
-| FerroFED | [`LICENSE`](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE) |
-| FerroPIX | [`LICENSE`](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE) |
-| FerroSYS | [`LICENSE`](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE) |
-| FerroTASK | [`LICENSE`](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE) |
+| Product | Licence | Its licensing page |
+|---|---|---|
+| FerroCHART | [`LICENSE`](https://github.com/FerroHEALTH/FerroCHART/blob/main/LICENSE) | [ferrochart.eu](https://ferrochart.eu/docs/evaluate/licensing.html) |
+| FerroEHR | [`LICENSE`](https://github.com/FerroHEALTH/FerroEHR/blob/main/LICENSE) | [ferroehr.eu](https://ferroehr.eu/docs/latest/licensing.html) |
+| FerroTERM | [`LICENSE`](https://github.com/FerroHEALTH/FerroTERM/blob/main/LICENSE) | [ferroterm.eu](https://ferroterm.eu/docs/evaluate/licensing.html) |
+| FerroBRIDGE | [`LICENSE`](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE) | [ferrobridge.eu](https://ferrobridge.eu/docs/evaluate/licensing.html) |
+| FerroFED | [`LICENSE`](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE) | [ferrofed.eu](https://ferrofed.eu/docs/evaluate/licensing.html) |
+| FerroPIX | [`LICENSE`](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE) | [ferropix.eu](https://ferropix.eu/docs/evaluate/licensing.html) |
+| FerroSYS | [`LICENSE`](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE) | none yet |
+| FerroTASK | [`LICENSE`](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE) | none yet |
 
 The shared libraries carry their own `LICENSE` on the same terms:
 

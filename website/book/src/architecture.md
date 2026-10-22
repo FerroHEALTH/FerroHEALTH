@@ -1,6 +1,6 @@
 # How the products fit together
 
-Revised 2026-10-20.
+Revised 2026-10-22.
 
 Each FerroHEALTH product runs on its own, and each speaks a published
 specification to the others. This page shows which product calls which, and
@@ -53,8 +53,8 @@ These calls come once the servers behind them run:
   FerroFED asks it where a patient's records are (PIXm) before it dispatches
   a query. FerroPIX also owns the crates of the IHE identity profiles,
   `ihe-iti` (PIXm, PDQm, PMIR, mCSD, XCPD and IUA, a feature each), and
-  `nl-generic-functions`, the Dutch Generic Functions, which move to it from
-  FerroFED.
+  `nl-generic-functions`, the Dutch Generic Functions, which moved to it from
+  FerroFED and which it publishes from its own repository.
 - **FerroTASK** reads FerroEHR over the openEHR REST API and AQL for task
   plans and GDL2 guidelines, and commits the state of each plan back.
 - **FerroSYS** is the control plane. Every server reports health, telemetry
@@ -76,9 +76,9 @@ outside the instance with no edges.
 
 | Library | Crates | What it does | Who uses it |
 |---|---|---|---|
-| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | `ferrohealth-smart` | The SMART App Launch, SMART on openEHR and OAuth 2.0 resource server: token validation against the authorization server's keys, the SMART scopes and the patient compartment, machine authentication, and one audit line per request. It checks tokens and never issues one. | FerroEHR, FerroTERM and FerroBRIDGE; FerroFED is moving onto it |
-| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with the store-and-forward spool ITI-20 asks of a sender, and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroPIX; FerroEHR and FerroFED are moving onto it, and FerroSYS plans to build the receiving Audit Record Repository on it |
-| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The components of the operator consoles, with a theme per product | the consoles of FerroEHR, FerroTERM, FerroBRIDGE and FerroFED |
+| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | `ferrohealth-smart` | The SMART App Launch, SMART on openEHR and OAuth 2.0 resource server: token validation against the authorization server's keys, the SMART scopes and the patient compartment, machine authentication, and one audit line per request. It checks tokens and never issues one. | FerroEHR, FerroTERM, FerroBRIDGE, FerroFED and FerroPIX |
+| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with the store-and-forward spool ITI-20 asks of a sender, and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroEHR, FerroFED and FerroPIX, and FerroSYS plans to build the receiving Audit Record Repository on it |
+| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The one source for the user interface of every operator console: the components, the stylesheet with a theme per product, and the design; each console moves onto a new release in one rollout with the others, as [its console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md) describes | the consoles of FerroEHR, FerroTERM, FerroBRIDGE and FerroFED |
 
 The release of each library is on its card on the
 [family site](https://ferrohealth.eu/#libraries), read from its repository.
@@ -119,5 +119,5 @@ Five rules hold across the family:
   product's access depends on.
 - **Audit is written once.** FerroAUDIT is the family's audit
   implementation, sending to an Audit Record Repository the deployment runs.
-  FerroPIX writes its audit trail through it, and FerroEHR and FerroFED are
-  moving their audit trails and EHDS access records onto it.
+  FerroEHR, FerroFED and FerroPIX write their audit trails through it, and
+  FerroEHR and FerroFED their EHDS access records.

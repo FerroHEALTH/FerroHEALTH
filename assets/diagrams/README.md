@@ -68,8 +68,8 @@ Left to right is the order data moves. The four servers are the data path:
 FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
 meaning, FerroBRIDGE carries it out. FerroPIX, FerroFED, FerroSYS
 and FerroTASK frame that path. A server not running yet is drawn dashed, as is
-every call into one: FerroSYS and FerroTASK are planned, and FerroPIX has
-released its repository setup while its server is being built. FerroFED runs
+every call into one: FerroSYS and FerroTASK are planned, and FerroPIX
+publishes its identity crates while its server is being built. FerroFED runs
 and is drawn solid.
 
 Under the frame, a second band holds the shared libraries: FerroSMART

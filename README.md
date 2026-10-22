@@ -18,7 +18,7 @@ brand; it holds no product code.
 | [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | An HL7 FHIR terminology server: answers what a code means | <https://ferroterm.eu/> |
 | [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) | A bridge from openEHR to FHIR and to the OMOP CDM: carries the record onward | <https://ferrobridge.eu/> |
 | [FerroFED](https://github.com/FerroHEALTH/FerroFED) | An openEHR federation gateway: queries the record where it lives | <https://ferrofed.eu/> |
-| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | A Master Patient Index: who the patient is, and where the record is. Its first release set up the repository; the server is being built | `ferropix.eu`, not serving yet |
+| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | A Master Patient Index: who the patient is, and where the record is. It publishes its identity crates; the server is being built | <https://ferropix.eu/> |
 
 Each product is released from its own repository under the Business Source
 License 1.1, documents itself on its own domain, and runs without the
@@ -45,7 +45,7 @@ product grids and the status table.
 |---|---|---|
 | [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | `ferrohealth-smart` | The SMART App Launch and OAuth 2.0 resource server every product checks tokens with; it issues none |
 | [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The IHE ATNA and BALP audit trail and the EHDS access record |
-| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The component library of the products' operator consoles |
+| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The one source for the user interface of every operator console ([console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md)) |
 
 ![What calls what across the FerroHEALTH family](assets/diagrams/ferrohealth-architecture.svg)
 

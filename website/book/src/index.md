@@ -1,6 +1,6 @@
 # FerroHEALTH documentation
 
-Revised 2026-10-20.
+Revised 2026-10-22.
 
 This book holds what is true for every FerroHEALTH product: who makes them,
 how a vulnerability or a complaint reaches the manufacturer, what the
@@ -23,7 +23,7 @@ once.
 | FerroTERM | An HL7 FHIR terminology server | <https://ferroterm.eu/docs/> | [FerroHEALTH/FerroTERM](https://github.com/FerroHEALTH/FerroTERM) |
 | FerroBRIDGE | A bridge from openEHR to FHIR and to the OMOP Common Data Model | <https://ferrobridge.eu/docs/> | [FerroHEALTH/FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) |
 | FerroFED | An openEHR federation gateway | <https://ferrofed.eu/docs/> | [FerroHEALTH/FerroFED](https://github.com/FerroHEALTH/FerroFED) |
-| FerroPIX | A Master Patient Index; its first release set up the repository, and the server is being built | none yet | [FerroHEALTH/FerroPIX](https://github.com/FerroHEALTH/FerroPIX) |
+| FerroPIX | A Master Patient Index; it publishes its identity crates, and the server is being built | <https://ferropix.eu/docs/> | [FerroHEALTH/FerroPIX](https://github.com/FerroHEALTH/FerroPIX) |
 
 Two more are planned. Each has a repository that holds its licence and its
 brand, and neither has a release or a book yet:
@@ -47,7 +47,7 @@ is compiled into the products that use it.
 |---|---|---|---|
 | FerroSMART | `ferrohealth-smart` | The SMART App Launch, SMART on openEHR and OAuth 2.0 resource server: it checks the access tokens a product is handed against the deployment's authorization server, and issues none | [FerroHEALTH/FerroSMART](https://github.com/FerroHEALTH/FerroSMART) |
 | FerroAUDIT | `ihe-atna`, `ehds-logging` | The IHE ATNA and BALP audit trail, and the record of each access to electronic health data that the EHDS Regulation asks of an EHR system | [FerroHEALTH/FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) |
-| FerroUI | `ferrohealth-ui` | The component library of the products' operator consoles | [FerroHEALTH/FerroUI](https://github.com/FerroHEALTH/FerroUI) |
+| FerroUI | `ferrohealth-ui` | The one source for the user interface of every operator console ([the console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md)) | [FerroHEALTH/FerroUI](https://github.com/FerroHEALTH/FerroUI) |
 
 [How the products fit together](architecture.md#the-shared-libraries) says
 which product uses which.

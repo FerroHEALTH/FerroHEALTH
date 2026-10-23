@@ -9,12 +9,21 @@ no database, no user data and no dependency at runtime.
 
 ## Report a vulnerability in a product
 
-A vulnerability in FerroEHR, FerroTERM or FerroBRIDGE belongs in that product's
-own advisory queue, which is where its maintainers and its release process are:
+A vulnerability in a product belongs in that product's own advisory queue,
+which is where its maintainers and its release process are:
 
 - FerroEHR: <https://github.com/FerroHEALTH/FerroEHR/security/advisories/new>
 - FerroTERM: <https://github.com/FerroHEALTH/FerroTERM/security/advisories/new>
 - FerroBRIDGE: <https://github.com/FerroHEALTH/FerroBRIDGE/security/advisories/new>
+- FerroFED: <https://github.com/FerroHEALTH/FerroFED/security/advisories/new>
+- FerroPIX: <https://github.com/FerroHEALTH/FerroPIX/security/advisories/new>
+
+A vulnerability in a shared library the products are built from goes to that
+library's queue the same way:
+
+- FerroSMART: <https://github.com/FerroHEALTH/FerroSMART/security/advisories/new>
+- FerroAUDIT: <https://github.com/FerroHEALTH/FerroAUDIT/security/advisories/new>
+- FerroUI: <https://github.com/FerroHEALTH/FerroUI/security/advisories/new>
 
 Please do not open a public issue for one.
 

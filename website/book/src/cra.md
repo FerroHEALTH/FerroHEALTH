@@ -1,6 +1,6 @@
 # The Cyber Resilience Act
 
-Revised 2026-10-19.
+Revised 2026-10-23.
 
 The Cyber Resilience Act (CRA, Regulation (EU) 2024/2847) sets cybersecurity
 requirements for "a software or hardware product and its remote data
@@ -112,9 +112,12 @@ same for every product, and this book is their source:
 | 7. "the type of technical security support offered by the manufacturer", the first half of the point | [security](security.md#how-a-fix-reaches-you); the second half, "the end-date of the support period", is each product's own |
 
 The other points are product-specific, and each product answers them in its
-own book. FerroEHR's are on its
-[CRA information and instructions to the user](https://ferroehr.eu/docs/latest/compliance/cra-user-information.html)
-page.
+own book, on its CRA information and instructions to the user page:
+
+- [FerroEHR](https://ferroehr.eu/docs/latest/compliance/cra-user-information.html)
+- [FerroBRIDGE](https://ferrobridge.eu/docs/evaluate/cra-user-information.html)
+- [FerroFED](https://ferrofed.eu/docs/evaluate/cra-user-information.html)
+- [FerroTERM](https://ferroterm.eu/docs/evaluate/cra-user-information.html)
 
 ## How conformity is assessed, product by product
 
@@ -140,7 +143,7 @@ FerroBRIDGE, and FerroFED. EHDS Article 104 amends the CRA for that case:
 
 | Product | Conformity route | The product's own record |
 |---|---|---|
-| FerroEHR and FerroBRIDGE | one EHR system: the EHDS Chapter III procedure (CRA Art. 32(5a)), one technical documentation set and one declaration naming both. FerroEHR's reading is a default product, against a competing reading of Annex III class I point 1 | [FerroEHR's CRA page](https://ferroehr.eu/docs/latest/compliance/cra.html), its [risk assessment](https://ferroehr.eu/docs/latest/compliance/cra-risk-assessment.html) and its [technical documentation](https://ferroehr.eu/docs/latest/compliance/technical-documentation.html). FerroBRIDGE's book carries no CRA page yet |
+| FerroEHR and FerroBRIDGE | one EHR system: the EHDS Chapter III procedure (CRA Art. 32(5a)), one technical documentation set and one declaration naming both. FerroEHR's reading is a default product, against a competing reading of Annex III class I point 1 | [FerroEHR's CRA page](https://ferroehr.eu/docs/latest/compliance/cra.html), its [risk assessment](https://ferroehr.eu/docs/latest/compliance/cra-risk-assessment.html) and its [technical documentation](https://ferroehr.eu/docs/latest/compliance/technical-documentation.html). FerroBRIDGE's [CRA information and instructions to the user](https://ferrobridge.eu/docs/evaluate/cra-user-information.html) |
 | FerroFED | an EHR system of its own: the EHDS Chapter III procedure (CRA Art. 32(5a)), with one documentation set, declaration and CE marking for both acts | [FerroFED's regulatory status](https://ferrofed.eu/docs/evaluate/regulatory-status.html#the-cyber-resilience-act) |
 | FerroTERM, FerroCHART | not recorded: whether each is a default product or an important product under Annex III is open | none yet |
 

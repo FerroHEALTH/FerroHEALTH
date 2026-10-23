@@ -4,12 +4,17 @@
 # https://ferrohealth.eu/.well-known/security.txt, the location a researcher or
 # a scanner looks first, without needing to find the repository.
 #
-# This file covers the family site only. A vulnerability in a product belongs in
-# that product's own advisory queue, which is where its maintainers and its
-# release process are:
+# This file covers the family site only. A vulnerability in a product or in a
+# shared library belongs in its own advisory queue, which is where its
+# maintainers and its release process are:
 #   https://github.com/FerroHEALTH/FerroEHR/security/advisories/new
 #   https://github.com/FerroHEALTH/FerroTERM/security/advisories/new
 #   https://github.com/FerroHEALTH/FerroBRIDGE/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroFED/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroPIX/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroSMART/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroAUDIT/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroUI/security/advisories/new
 #
 # Expires MUST be refreshed before the date below (RFC 9116 2.5.5: a stale file
 # is to be treated as invalid).

@@ -14,6 +14,7 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-23 | [Security](security.md) | FerroAUDIT, FerroSMART and FerroUI join the per-product table, and the FerroFED, FerroTERM, FerroBRIDGE and FerroPIX rows are current; the release checks every product shares, and each product's VEX documents and image scans; VEX is no longer described as FerroEHR's alone. |
 | 2026-10-22 | [Licensing and trademarks](licensing.md) | Each released product's licensing page is linked beside its `LICENSE`, FerroPIX's on `ferropix.eu` included. |
 | 2026-10-22 | [FerroHEALTH documentation](index.md) | FerroPIX's book is linked, and FerroUI is the one source for every console's user interface, with its console guide linked. |
 | 2026-10-22 | [How the products fit together](architecture.md) | FerroFED and FerroPIX use FerroSMART, FerroEHR and FerroFED use FerroAUDIT, and FerroUI leads every console's user interface. |

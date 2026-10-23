@@ -1,6 +1,6 @@
 # Security
 
-Revised 2026-10-20.
+Revised 2026-10-23.
 
 This page is the vulnerability-handling policy of Cadasto B.V., the
 manufacturer of every FerroHEALTH product: how to report a vulnerability,
@@ -124,9 +124,10 @@ Every fixed vulnerability gets a GitHub security advisory on the product's
 repository, published with the release that fixes it (CRA Annex I Part II(4)).
 That covers a vulnerability in the product's own code, and a fix to a
 dependency or a base image that changes what a shipped artefact contains or
-how it behaves. Where a product publishes VEX statements (FerroEHR does, under
-[`security/vex/`](https://github.com/FerroHEALTH/FerroEHR/tree/main/security/vex)),
-a dependency finding that a statement shows does not affect the artefact gets
+how it behaves. Where a product publishes VEX statements (each product's
+`security/vex/` directory; the table under
+[How each product applies it today](#how-each-product-applies-it-today)
+names which products do), a dependency finding that a statement shows does not affect the artefact gets
 no advisory, and the statement is its record. Each advisory carries:
 
 - a description of the vulnerability and its impact;
@@ -253,11 +254,33 @@ for that product until it links this page in place of its own text.
 | Product | Reporting routes its `SECURITY.md` names | Acknowledgement, then assessment | Support it states | Security-only patch releases | Safe harbour |
 |---|---|---|---|---|---|
 | [FerroEHR](https://github.com/FerroHEALTH/FerroEHR/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 5 working days, then 10 working days | the newest release only; fixed releases for at least five years after each release, with the end month in each release's notes | yes | yes |
-| [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/SECURITY.md) | private reporting | 7 days | the newest release only; fixed releases for at least five years after each release, with a table of end dates | not stated | not stated |
-| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/SECURITY.md) | private reporting, or the maintainer's email to agree a channel | about 5 business days, then about 10, best effort | the newest release only; fixed releases for at least five years after each release, no end month | not stated | not stated |
-| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the newest release only; fixed releases for at least five years after each release, no end month | not stated | not stated |
-| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX/blob/main/SECURITY.md) | private reporting | 7 days | the newest release only; fixed releases for at least five years after each release, no end month | not stated | not stated |
+| [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with a table of end dates and the end date in each release's notes | yes, where technically feasible | not stated |
+| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroUI](https://github.com/FerroHEALTH/FerroUI/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
 | [FerroCHART](https://github.com/FerroHEALTH/FerroCHART/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the latest release only, no end date | not stated | not stated |
+
+FerroEHR, FerroFED, FerroTERM, FerroBRIDGE, FerroPIX, FerroAUDIT, FerroSMART
+and FerroUI also share these release checks. CI holds every `### Security`
+changelog entry to its advisory and to the reason a fix ships beside other
+changes, and the release checks the section it cuts the same way. A release
+preflight runs the release's checks on your machine before the tag. Each
+`SECURITY.md` names info@cadasto.com as a reporting route. The rest differs
+per product:
+
+| Product | VEX documents | Container images |
+|---|---|---|
+| FerroEHR | Rust advisories, and the operating-system packages of its own image and of the PostgreSQL image | scanned before the tag, with a vulnerability record attached to the release |
+| FerroFED | Rust advisories | scanned before the tag, with a vulnerability record attached to the release |
+| FerroTERM | Rust advisories | scanned before the tag, with a vulnerability record attached to the release |
+| FerroBRIDGE | Rust advisories | scanned before the tag, with a vulnerability record attached to the release |
+| FerroPIX | Rust advisories | none published yet |
+| FerroUI | Rust advisories | none; it ships a crate |
+| FerroAUDIT | none yet; the first accepted advisory brings one | none |
+| FerroSMART | none yet; the first accepted advisory brings one | none |
 
 The email address info@cadasto.com reaches the manufacturer of every product,
 whichever routes a product's file names. The duties of CRA Art. 13 and Annex

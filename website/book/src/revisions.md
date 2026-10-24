@@ -14,6 +14,13 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-24 | [FerroHEALTH documentation](index.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
+| 2026-10-24 | [How the products fit together](architecture.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
+| 2026-10-24 | [The Cyber Resilience Act](cra.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
+| 2026-10-24 | [Licensing and trademarks](licensing.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
+| 2026-10-24 | [The manufacturer](manufacturer.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
+| 2026-10-24 | [Post-market](post-market.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
+| 2026-10-24 | [Security](security.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
 | 2026-10-24 | [The Cyber Resilience Act](cra.md) | FerroTERM is a default product whose conformity is assessed by internal control (module A), the owner's decision of 2026-10-24, and its row links its CRA user information and risk assessment. |
 | 2026-10-23 | [The Cyber Resilience Act](cra.md) | FerroBRIDGE, FerroFED and FerroTERM's CRA information and instructions to the user are linked beside FerroEHR's, and FerroBRIDGE's row names its page. |
 | 2026-10-23 | [Security](security.md) | FerroAUDIT, FerroSMART and FerroUI join the per-product table, and the FerroFED, FerroTERM, FerroBRIDGE and FerroPIX rows are current; the release checks every product shares, and each product's VEX documents and image scans; VEX is no longer described as FerroEHR's alone. |

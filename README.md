@@ -13,7 +13,7 @@ brand; it holds no product code.
 
 | Product | Does | Site |
 |---|---|---|
-| [FerroCHART](https://github.com/FerroHEALTH/FerroCHART) | An openEHR form builder and renderer: takes the record down | <https://ferrochart.eu/> |
+| [FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS) | An openEHR form builder and renderer: takes the record down | <https://ferroforms.eu/> |
 | [FerroEHR](https://github.com/FerroHEALTH/FerroEHR) | An openEHR Clinical Data Repository: stores and queries the record | <https://ferroehr.eu/> |
 | [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | An HL7 FHIR terminology server: answers what a code means | <https://ferroterm.eu/> |
 | [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) | A bridge from openEHR to FHIR and to the OMOP CDM: carries the record onward | <https://ferrobridge.eu/> |
@@ -145,7 +145,7 @@ switch back to branch-based publishing.
   a product is rendered from that product's repository, never typed into the
   page and left to rot. The page shows a release and a date and lets the reader
   judge.
-- **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
+- **The parent owns no hue.** FerroFORMS is rose, FerroEHR is rust, FerroTERM
   is teal, FerroBRIDGE is indigo, and FerroPIX, FerroFED,
   FerroSYS and FerroTASK are plum, azure, olive and emerald, chosen by measurement; FerroHEALTH is iron and
   steel, and borrows a hue only where its product is named. See
@@ -153,7 +153,7 @@ switch back to branch-based publishing.
 - **A planned product says what it is for and nothing it has not done.** Its
   card names the product and the job, links its repository, shows the domain
   as text until it serves a page, and carries one rendered badge. The mark
-  stays at four strokes: FerroCHART, FerroEHR, FerroTERM and FerroBRIDGE are
+  stays at four strokes: FerroFORMS, FerroEHR, FerroTERM and FerroBRIDGE are
   the data path, and FerroPIX, FerroFED, FerroSYS and FerroTASK
   frame it.
 - **Authorisation stays with each product.** Every product is its own SMART
@@ -185,7 +185,7 @@ them unmodified to refer to the projects, and anything else needs permission.
 mark under `website/landing/assets/products/` belongs to that project and
 keeps its licence. The products themselves are BUSL-1.1, with the parameters that apply
 in each repository's own licence file:
-[FerroCHART](https://github.com/FerroHEALTH/FerroCHART/blob/main/LICENSE),
+[FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS/blob/main/LICENSE),
 [FerroEHR](https://github.com/FerroHEALTH/FerroEHR/blob/main/LICENSE),
 [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/LICENSE),
 [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE),

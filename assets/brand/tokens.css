@@ -20,8 +20,8 @@
   /* The products. Taken verbatim from each product's own tokens.css, so a
      name and its colour never drift apart between the family site and the
      product site. */
-  --ferrohealth-chart: #C2185B;       /* FerroCHART, "Rose & Iron" */
-  --ferrohealth-chart-light: #E04F84; /* the same on a dark ground */
+  --ferrohealth-forms: #C2185B;       /* FerroFORMS, "Rose & Iron" */
+  --ferrohealth-forms-light: #E04F84; /* the same on a dark ground */
   --ferrohealth-ehr: #B7431B;         /* FerroEHR, "Oxide & Iron" */
   --ferrohealth-ehr-light: #D97742;   /* the same on a dark ground */
   --ferrohealth-term: #0D9488;        /* FerroTERM */

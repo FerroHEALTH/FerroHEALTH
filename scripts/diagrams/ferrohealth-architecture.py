@@ -38,7 +38,7 @@ Y = 36  # everything below the frame's label line moves down this much
 # serves several runs several instances.
 FRAME = (176, 8, 720, 708)  # x, y, w, h
 FRAME_LABEL = "ONE FERROHEALTH INSTANCE · ONE TENANT"
-INSIDE = {"term", "chart", "ehr", "bridge", "pix", "fed", "sys", "task"}
+INSIDE = {"term", "forms", "ehr", "bridge", "pix", "fed", "sys", "task"}
 STEEL = ("#3f6070", "#8fb6c4")
 
 # The library band: the crates every product is built from. Under the frame
@@ -54,7 +54,7 @@ LIBRARIES = {"smart", "audit", "ui"}
 # as the one <style> block, so a renderer that drops <style> still gets a
 # legible light drawing.
 HUES = {
-    "chart": ("#c2185b", "#e04f84"),
+    "forms": ("#c2185b", "#e04f84"),
     "ehr": ("#b7431b", "#d97742"),
     "term": ("#0d9488", "#2dd4bf"),
     "bridge": ("#4f46e5", "#a5b4fc"),
@@ -154,7 +154,7 @@ BOXES = [
             "release: which releases it serves is a fact its own site renders."),
     Box("clinicians", 8, 174, 128, 60, "Clinicians", subs=["doctors and nurses"],
         why="The person the whole family exists for."),
-    Box("chart", 206, 160, 160, 88, "FerroCHART", hue="chart",
+    Box("forms", 206, 160, 160, 88, "FerroFORMS", hue="forms",
         subs=["templates to forms", "forms to compositions"]),
     Box("ehr", 452, 160, 160, 88, "FerroEHR", hue="ehr",
         subs=["openEHR CDR, AQL", "PostgreSQL"]),
@@ -163,7 +163,7 @@ BOXES = [
     Box("apps", 8, 260, 128, 60, "Applications", title_size=14,
         subs=["any ITS-REST client"],
         why="Anything else that speaks the API. On the outside with the clinician, on\n"
-            "its own lane, so it never reads as something FerroCHART sits in front of."),
+            "its own lane, so it never reads as something FerroFORMS sits in front of."),
     Box("fhir", 1000, 116, 190, 56, "HL7 FHIR", subs=["a facade, stores nothing"]),
     Box("omop", 1000, 224, 190, 56, "OMOP CDM", subs=["a batch load, for research"]),
     Box("pix", 452, 440, 168, 88, "FerroPIX", hue="pix", planned=True,
@@ -171,7 +171,7 @@ BOXES = [
         why="Under the CDR whose records it locates. Dashed while its server is being\n"
             "built. The CDR resolves each EHR's subject through it and feeds it, the\n"
             "gateway asks it where a record is; an application that opens a record asks\n"
-            "it the same way, and FerroCHART receives the EHR it is launched with and\n"
+            "it the same way, and FerroFORMS receives the EHR it is launched with and\n"
             "asks nobody."),
     Box("fed", 698, 440, 168, 88, "FerroFED", hue="fed",
         subs=["federation gateway", "one query, every node"],
@@ -205,16 +205,16 @@ BOXES = [
 ]
 
 EDGES = [
-    Edge("clinicians", "chart", [(136, 204), (206, 204)]),
-    Edge("chart", "term", [(286, 160), (286, 88)], "$expand", (278, 130, "end"),
-         why="FerroCHART expands the value set behind a coded field, so the form can\n"
+    Edge("clinicians", "forms", [(136, 204), (206, 204)]),
+    Edge("forms", "term", [(286, 160), (286, 88)], "$expand", (278, 130, "end"),
+         why="FerroFORMS expands the value set behind a coded field, so the form can\n"
              "offer exactly the codes the template admits."),
-    Edge("chart", "ehr", [(366, 204), (452, 204)], "ITS-REST", (409, 195, "middle")),
+    Edge("forms", "ehr", [(366, 204), (452, 204)], "ITS-REST", (409, 195, "middle")),
     Edge("ehr", "term", [(532, 160), (532, 88)], "$validate-code", (524, 130, "end"),
          why="FerroEHR validates a coded value at commit time."),
     Edge("apps", "ehr", [(136, 290), (430, 290), (430, 236), (452, 236)], "ITS-REST", (380, 281, "middle"),
-         why="Any client on the outside reaches the CDR on its own lane, under FerroCHART,\n"
-             "so it never reads as something FerroCHART sits in front of."),
+         why="Any client on the outside reaches the CDR on its own lane, under FerroFORMS,\n"
+             "so it never reads as something FerroFORMS sits in front of."),
     Edge("bridge", "ehr", [(698, 204), (612, 204)], "ITS-REST", (655, 195, "middle"),
          why="The bridge reads the CDR, so the arrow points at the CDR."),
     Edge("bridge", "term", [(782, 160), (782, 88)], "$lookup, $translate", (774, 130, "end"),
@@ -552,7 +552,7 @@ def dark_style():
 
 TITLE = "What calls what across the FerroHEALTH family"
 DESC = (
-    "A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM "
+    "A clinician uses FerroFORMS in a browser. FerroFORMS expands value sets against FerroTERM "
     "and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other "
     "application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE "
     "reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges "

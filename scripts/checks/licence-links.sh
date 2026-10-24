@@ -18,7 +18,7 @@ set -uo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$root" || exit 1
 
-readonly PRODUCTS=(FerroCHART FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroFED FerroSYS FerroTASK)
+readonly PRODUCTS=(FerroFORMS FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroFED FerroSYS FerroTASK)
 readonly LIBRARIES=(FerroSMART FerroAUDIT FerroUI)
 # The landing page and the family book's licensing page each name every
 # product and shared library, so each links every one's own LICENSE.

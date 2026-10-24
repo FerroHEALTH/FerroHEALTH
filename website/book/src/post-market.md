@@ -1,6 +1,6 @@
 # Post-market
 
-Revised 2026-10-08.
+Revised 2026-10-24.
 
 This page is the post-market procedure Cadasto B.V. runs as manufacturer of
 every FerroHEALTH product: how to complain or report an incident, how a report
@@ -40,7 +40,7 @@ bind the manufacturer of an EHR system. Cadasto B.V. declares two:
 - **FerroFED**, which Cadasto B.V. classifies as an EHR system of its own
   ([FerroFED's regulatory status](https://ferrofed.eu/docs/evaluate/regulatory-status.html)).
 
-This book records no EHDS classification for FerroTERM or FerroCHART.
+This book records no EHDS classification for FerroTERM or FerroFORMS.
 
 ## When the duties apply
 
@@ -107,7 +107,7 @@ appended and never rewritten:
 |---|---|
 | FerroEHR | [complaints](https://github.com/FerroHEALTH/FerroEHR/blob/main/docs/registers/complaints.tsv), [non-conforming versions](https://github.com/FerroHEALTH/FerroEHR/blob/main/docs/registers/non-conforming-versions.tsv), [upstream reports](https://github.com/FerroHEALTH/FerroEHR/blob/main/docs/registers/upstream-reports.tsv) |
 | FerroFED | [complaints](https://github.com/FerroHEALTH/FerroFED/blob/main/docs/registers/complaints.tsv), [non-conforming versions](https://github.com/FerroHEALTH/FerroFED/blob/main/docs/registers/non-conforming-versions.tsv) |
-| FerroCHART, FerroTERM, FerroBRIDGE | none yet |
+| FerroFORMS, FerroTERM, FerroBRIDGE | none yet |
 
 A complaint gets its row within one working day of receipt, whatever the
 channel. No row names the person who complained or carries patient data, and

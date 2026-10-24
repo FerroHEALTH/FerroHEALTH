@@ -3,7 +3,7 @@
 **FerroHEALTH** is the family name for a set of pure-Rust health-data servers, and
 this repository is the family site at <https://ferrohealth.eu> plus the shared
 brand. It ships no product code. The products are
-[FerroCHART](https://github.com/FerroHEALTH/FerroCHART) (an openEHR form
+[FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS) (an openEHR form
 builder and renderer),
 [FerroEHR](https://github.com/FerroHEALTH/FerroEHR) (an openEHR Clinical Data
 Repository), [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) (an HL7 FHIR
@@ -145,13 +145,13 @@ and narrow.
   A specification version, a database version, a FHIR release name, a code
   system list or a crate list moves with a product release and belongs on that
   product's site. The page names the standard and links the pin.
-- **The parent owns no hue.** FerroCHART is rose, FerroEHR is rust, FerroTERM
+- **The parent owns no hue.** FerroFORMS is rose, FerroEHR is rust, FerroTERM
   is teal, FerroBRIDGE is indigo; FerroPIX, FerroFED, FerroSYS
   and FerroTASK are plum, azure, olive and emerald. FerroHEALTH is
   iron and steel, and spends a product hue only where that product is named. Every product's values in
   `assets/brand/tokens.css` are copied verbatim from its own `tokens.css`; a
   new hue is chosen with `scripts/brand/hue-distance.py` before it goes there.
-  The mark stays at four strokes: they are the data path (FerroCHART, FerroEHR,
+  The mark stays at four strokes: they are the data path (FerroFORMS, FerroEHR,
   FerroTERM, FerroBRIDGE), and FerroPIX, FerroFED, FerroSYS and
   FerroTASK frame it, released or not.
 - **No product is an authorisation server.** Each product is its own SMART
@@ -233,5 +233,5 @@ always.
 - `website/landing/assets/products/README.md`: where each product mark came
   from.
 - The product sites carry the detail this page links to:
-  <https://ferrochart.eu>, <https://ferroehr.eu>, <https://ferroterm.eu>,
+  <https://ferroforms.eu>, <https://ferroehr.eu>, <https://ferroterm.eu>,
   <https://ferrobridge.eu>, <https://ferrofed.eu>, <https://ferropix.eu>.

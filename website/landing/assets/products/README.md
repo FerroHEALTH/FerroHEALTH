@@ -8,7 +8,7 @@ Verbatim copies of each product's primary icon, taken from that product's own
 
 | File | Source |
 |---|---|
-| `ferrochart-icon.svg` | <https://github.com/FerroHEALTH/FerroCHART> `assets/brand/ferrochart-icon.svg` |
+| `ferroforms-icon.svg` | <https://github.com/FerroHEALTH/FerroFORMS> `assets/brand/ferroforms-icon.svg` |
 | `ferroehr-icon.svg` | <https://github.com/FerroHEALTH/FerroEHR> `assets/brand/ferroehr-icon.svg` |
 | `ferroterm-icon.svg` | <https://github.com/FerroHEALTH/FerroTERM> `assets/brand/ferroterm-icon.svg` |
 | `ferrobridge-icon.svg` | <https://github.com/FerroHEALTH/FerroBRIDGE> `assets/brand/ferrobridge-icon.svg` |

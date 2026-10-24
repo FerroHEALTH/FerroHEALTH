@@ -65,7 +65,7 @@ one organisation, and an organisation that serves several runs several
 instances.
 
 Left to right is the order data moves. The four servers are the data path:
-FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
+FerroFORMS takes the record down, FerroEHR keeps it, FerroTERM gives its codes
 meaning, FerroBRIDGE carries it out. FerroPIX, FerroFED, FerroSYS
 and FerroTASK frame that path. A server not running yet is drawn dashed, as is
 every call into one: FerroSYS and FerroTASK are planned, and FerroPIX
@@ -112,7 +112,7 @@ specification it speaks, with a few exceptions worth knowing:
   FerroPIX mints. The CDR is also the one component that knows the moment an
   EHR is created or its subject changes, so it feeds the index (the Patient
   Identity Feed FHIR, ITI-104). The gateway then asks the index over PIXm. An application that opens a
-  record asks it the same way. FerroCHART receives the EHR it is launched with
+  record asks it the same way. FerroFORMS receives the EHR it is launched with
   and asks nobody, so no line runs from the form to the index.
 - **FerroSYS has no edges at all.** Every server reports health, telemetry and
   events to it and is configured from it, so it is drawn as a band under
@@ -150,7 +150,7 @@ values, because a standalone SVG cannot read the page's custom properties. The
 media query inside the file swaps every colour on `prefers-color-scheme`, so one
 file serves a light and a dark reader.
 
-A product keeps its own hue: FerroCHART rose, FerroEHR rust, FerroTERM teal,
+A product keeps its own hue: FerroFORMS rose, FerroEHR rust, FerroTERM teal,
 FerroBRIDGE indigo, and the provisional plum, azure, olive and emerald
 of FerroPIX, FerroFED, FerroSYS and FerroTASK. Everything else is iron, steel and
 graphite.

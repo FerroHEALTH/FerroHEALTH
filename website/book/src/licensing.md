@@ -1,6 +1,6 @@
 # Licensing and trademarks
 
-Revised 2026-10-22.
+Revised 2026-10-24.
 
 Every FerroHEALTH product, and every shared library the products are built
 from, is source-available under the Business Source License 1.1 (SPDX
@@ -20,7 +20,7 @@ which licence:
 
 | Product | Licence | Its licensing page |
 |---|---|---|
-| FerroCHART | [`LICENSE`](https://github.com/FerroHEALTH/FerroCHART/blob/main/LICENSE) | [ferrochart.eu](https://ferrochart.eu/docs/evaluate/licensing.html) |
+| FerroFORMS | [`LICENSE`](https://github.com/FerroHEALTH/FerroFORMS/blob/main/LICENSE) | [ferroforms.eu](https://ferroforms.eu/docs/evaluate/licensing.html) |
 | FerroEHR | [`LICENSE`](https://github.com/FerroHEALTH/FerroEHR/blob/main/LICENSE) | [ferroehr.eu](https://ferroehr.eu/docs/latest/licensing.html) |
 | FerroTERM | [`LICENSE`](https://github.com/FerroHEALTH/FerroTERM/blob/main/LICENSE) | [ferroterm.eu](https://ferroterm.eu/docs/evaluate/licensing.html) |
 | FerroBRIDGE | [`LICENSE`](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE) | [ferrobridge.eu](https://ferrobridge.eu/docs/evaluate/licensing.html) |
@@ -71,7 +71,7 @@ than you and your affiliates:
 
 | Product | does this through it |
 |---|---|
-| FerroCHART | builds, renders, or captures health data |
+| FerroFORMS | builds, renders, or captures health data |
 | FerroEHR | stores, manages, or queries health data held by it |
 | FerroTERM | stores, manages, or queries terminology, code system content, or health data held by it |
 | FerroBRIDGE | maps, converts, or exchanges health data |
@@ -104,7 +104,7 @@ book; FerroEHR's is in its
 
 ## Trademarks and brand terms
 
-The names FerroHEALTH, FerroCHART, FerroEHR, FerroTERM, FerroBRIDGE,
+The names FerroHEALTH, FerroFORMS, FerroEHR, FerroTERM, FerroBRIDGE,
 FerroPIX, FerroFED, FerroSYS and FerroTASK, the names of the shared
 libraries FerroSMART, FerroAUDIT and FerroUI, the FerroHEALTH mark
 with its icon and lockup variants, and the architecture diagram are covered by

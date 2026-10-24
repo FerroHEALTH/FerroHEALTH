@@ -16,7 +16,7 @@ names or the marks either.
   [`assets/brand/`](assets/brand/), and their copies on <https://ferrohealth.eu>.
 - The architecture diagram: every SVG and PNG file in
   [`assets/diagrams/`](assets/diagrams/).
-- The names FerroHEALTH, FerroCHART, FerroEHR, FerroTERM, FerroBRIDGE,
+- The names FerroHEALTH, FerroFORMS, FerroEHR, FerroTERM, FerroBRIDGE,
   FerroPIX, FerroFED, FerroSYS and FerroTASK, and the names of the shared
   libraries FerroSMART, FerroAUDIT and FerroUI.
 

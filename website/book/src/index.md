@@ -1,6 +1,6 @@
 # FerroHEALTH documentation
 
-Revised 2026-10-22.
+Revised 2026-10-24.
 
 This book holds what is true for every FerroHEALTH product: who makes them,
 how a vulnerability or a complaint reaches the manufacturer, what the
@@ -18,7 +18,7 @@ once.
 
 | Product | What it does | Its documentation | Repository |
 |---|---|---|---|
-| FerroCHART | An openEHR form builder and renderer | <https://ferrochart.eu/docs/> | [FerroHEALTH/FerroCHART](https://github.com/FerroHEALTH/FerroCHART) |
+| FerroFORMS | An openEHR form builder and renderer | <https://ferroforms.eu/docs/> | [FerroHEALTH/FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS) |
 | FerroEHR | An openEHR Clinical Data Repository | <https://ferroehr.eu/docs/latest/> | [FerroHEALTH/FerroEHR](https://github.com/FerroHEALTH/FerroEHR) |
 | FerroTERM | An HL7 FHIR terminology server | <https://ferroterm.eu/docs/> | [FerroHEALTH/FerroTERM](https://github.com/FerroHEALTH/FerroTERM) |
 | FerroBRIDGE | A bridge from openEHR to FHIR and to the OMOP Common Data Model | <https://ferrobridge.eu/docs/> | [FerroHEALTH/FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) |

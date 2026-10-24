@@ -1,6 +1,6 @@
 # How the products fit together
 
-Revised 2026-10-22.
+Revised 2026-10-24.
 
 Each FerroHEALTH product runs on its own, and each speaks a published
 specification to the others. This page shows which product calls which, and
@@ -23,7 +23,7 @@ built), and a dashed line is a call into one. The band under the frame holds
 the shared libraries, which run inside the products and take no call.
 
 Left to right is the order data moves. Four servers are the data path:
-FerroCHART takes the record down, FerroEHR keeps it, FerroTERM gives its codes
+FerroFORMS takes the record down, FerroEHR keeps it, FerroTERM gives its codes
 meaning, and FerroBRIDGE carries it out. FerroPIX, FerroFED,
 FerroSYS and FerroTASK frame that path. An arrowhead points at what is called
 or written to, and each edge names the specification it speaks.
@@ -32,8 +32,8 @@ or written to, and each edge names the specification it speaks.
 
 | Caller | Calls | Over | What for |
 |---|---|---|---|
-| FerroCHART | FerroTERM | the FHIR terminology API, `$expand` | the codes a coded field admits |
-| FerroCHART | FerroEHR | the openEHR REST API | committing the compositions a form produces |
+| FerroFORMS | FerroTERM | the FHIR terminology API, `$expand` | the codes a coded field admits |
+| FerroFORMS | FerroEHR | the openEHR REST API | committing the compositions a form produces |
 | Any application | FerroEHR | the openEHR REST API | reading and writing the record directly |
 | FerroEHR | FerroTERM | the FHIR terminology API, `$validate-code` | validating a coded value at commit time |
 | FerroBRIDGE | FerroEHR | the openEHR REST API | reading the record it carries out |
@@ -91,7 +91,7 @@ its configuration:
 
 | Product | Where its book describes deploying it |
 |---|---|
-| FerroCHART | [The renderer](https://ferrochart.eu/docs/operate/renderer.html) |
+| FerroFORMS | [The renderer](https://ferroforms.eu/docs/operate/renderer.html) |
 | FerroEHR | [Installation](https://ferroehr.eu/docs/latest/installation/index.html) |
 | FerroTERM | [Installing](https://ferroterm.eu/docs/operate/install.html) |
 | FerroBRIDGE | [What FerroBRIDGE runs beside](https://ferrobridge.eu/docs/operate/deployment-shape.html) |

@@ -32,7 +32,7 @@
       <g transform="translate(96,470)">
         <rect x="0" y="0" width="236" height="72" rx="16" fill="#221523" stroke="#C2185B" stroke-width="2"/>
         <circle cx="30" cy="36" r="8" fill="#E04F84"/>
-        <text x="50" y="45" fill="#F1F5F9">FerroCHART</text>
+        <text x="50" y="45" fill="#F1F5F9">FerroFORMS</text>
       </g>
       <g transform="translate(352,470)">
         <rect x="0" y="0" width="236" height="72" rx="16" fill="#1A1F2E" stroke="#B7431B" stroke-width="2"/>

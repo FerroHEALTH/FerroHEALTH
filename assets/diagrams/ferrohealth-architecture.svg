@@ -11,12 +11,12 @@
      called or written to. The band under the frame is the shared libraries. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1800" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
   <title id="title">What calls what across the FerroHEALTH family</title>
-  <desc id="desc">A clinician uses FerroCHART in a browser. FerroCHART expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four services frame those four servers, and the three not running yet are drawn dashed: FerroEHR resolves the subject of each EHR through FerroPIX, the Master Patient Index whose server is being built, over PIXm and PDQm, and feeds it each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to; FerroTASK, the task planning and decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. Each server checks the access tokens it is handed against the deployment's own authorization server, so no FerroHEALTH service holds the key every server depends on. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it. Under the frame, a band holds the three shared libraries the products are built from, which never run on their own: FerroSMART checks access tokens and issues none, FerroAUDIT writes the audit trail and the EHDS access record, and FerroUI holds the components of the operator consoles.</desc>
+  <desc id="desc">A clinician uses FerroFORMS in a browser. FerroFORMS expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four services frame those four servers, and the three not running yet are drawn dashed: FerroEHR resolves the subject of each EHR through FerroPIX, the Master Patient Index whose server is being built, over PIXm and PDQm, and feeds it each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to; FerroTASK, the task planning and decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. Each server checks the access tokens it is handed against the deployment's own authorization server, so no FerroHEALTH service holds the key every server depends on. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it. Under the frame, a band holds the three shared libraries the products are built from, which never run on their own: FerroSMART checks access tokens and issues none, FerroAUDIT writes the audit trail and the EHDS access record, and FerroUI holds the components of the operator consoles.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
       .box { fill: #0b1020; stroke: #243044 }
-      .box-chart { stroke: #e04f84 }
+      .box-forms { stroke: #e04f84 }
       .box-ehr { stroke: #d97742 }
       .box-term { stroke: #2dd4bf }
       .box-bridge { stroke: #a5b4fc }
@@ -32,7 +32,7 @@
       .frame-label { fill: #8fb6c4 }
       .lib-frame { stroke: #a4aebc }
       .lib-label { fill: #a4aebc }
-      .tag-chart { fill: #e04f84 }
+      .tag-forms { fill: #e04f84 }
       .tag-ehr { fill: #d97742 }
       .tag-term { fill: #2dd4bf }
       .tag-bridge { fill: #a5b4fc }
@@ -72,8 +72,8 @@
     <text class="label" x="72" y="237" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Clinicians</text>
     <text class="sub" x="72" y="259" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">doctors and nurses</text>
 
-    <rect class="box box-chart" x="206" y="196" width="160" height="88" rx="10" fill="#ffffff" stroke="#c2185b" stroke-width="1.5"/>
-    <text class="label tag-chart" x="286" y="226" text-anchor="middle" font-size="15" font-weight="700" fill="#c2185b">FerroCHART</text>
+    <rect class="box box-forms" x="206" y="196" width="160" height="88" rx="10" fill="#ffffff" stroke="#c2185b" stroke-width="1.5"/>
+    <text class="label tag-forms" x="286" y="226" text-anchor="middle" font-size="15" font-weight="700" fill="#c2185b">FerroFORMS</text>
     <text class="sub" x="286" y="248" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">templates to forms</text>
     <text class="sub" x="286" y="266" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">forms to compositions</text>
 
@@ -88,7 +88,7 @@
     <text class="sub" x="782" y="266" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">mapping-driven</text>
 
     <!-- Anything else that speaks the API. On the outside with the clinician, on
-         its own lane, so it never reads as something FerroCHART sits in front of. -->
+         its own lane, so it never reads as something FerroFORMS sits in front of. -->
     <rect class="box" x="8" y="296" width="128" height="60" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
     <text class="label" x="72" y="323" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Applications</text>
     <text class="sub" x="72" y="345" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">any ITS-REST client</text>
@@ -104,7 +104,7 @@
     <!-- Under the CDR whose records it locates. Dashed while its server is being
          built. The CDR resolves each EHR's subject through it and feeds it, the
          gateway asks it where a record is; an application that opens a record asks
-         it the same way, and FerroCHART receives the EHR it is launched with and
+         it the same way, and FerroFORMS receives the EHR it is launched with and
          asks nobody. -->
     <rect class="box box-pix" x="452" y="476" width="168" height="88" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.5" stroke-dasharray="6 4"/>
     <text class="label tag-pix" x="536" y="506" text-anchor="middle" font-size="15" font-weight="700" fill="#6b21a8">FerroPIX</text>
@@ -165,7 +165,7 @@
     <path class="edge" d="M136 240 H194" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M206 240 l-9 -5.5 v11 z" fill="#58616e"/>
 
-    <!-- FerroCHART expands the value set behind a coded field, so the form can
+    <!-- FerroFORMS expands the value set behind a coded field, so the form can
          offer exactly the codes the template admits. -->
     <path class="edge" d="M286 196 V136" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M286 124 l-5.5 9 h11 z" fill="#58616e"/>
@@ -180,8 +180,8 @@
     <path class="edge-head" d="M532 124 l-5.5 9 h11 z" fill="#58616e"/>
     <text class="edge-label" x="524" y="166" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">$validate-code</text>
 
-    <!-- Any client on the outside reaches the CDR on its own lane, under FerroCHART,
-         so it never reads as something FerroCHART sits in front of. -->
+    <!-- Any client on the outside reaches the CDR on its own lane, under FerroFORMS,
+         so it never reads as something FerroFORMS sits in front of. -->
     <path class="edge" d="M136 326 H430 V272 H440" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M452 272 l-9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="380" y="317" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>

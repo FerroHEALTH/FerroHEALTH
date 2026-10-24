@@ -1,0 +1,61 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# FerroFED in the family lane, mounted read-only at
+# /etc/ferrofed/ferrofed.toml. It federates the two nodes of registry.toml
+# and resolves the synthetic patient through the static development
+# cross-reference below, which run.sh creates the EHRs for. compose.pix.yaml
+# swaps this file for ferrofed.pix.toml, which resolves the patient through
+# FerroPIX instead. Every key is on
+# <https://ferrofed.eu/docs/operate/configuration.html>.
+
+# The development profile admits the static cross-reference and the nodes'
+# Basic credential over plain http inside the compose network.
+profile = "development"
+
+[server]
+drain_delay_ms = 0
+shutdown_timeout_ms = 30000
+bindings_drain_timeout_ms = 5000
+
+[registry]
+document = "/etc/ferrofed/registry.toml"
+
+[federation]
+id = "family-e2e"
+per_node_timeout_ms = 10000
+overall_timeout_ms = 25000
+node_selection = "ask-all"
+
+# The lane's issuer, read over loopback in the issuer's network namespace.
+[auth]
+issuer = "http://localhost:8180/family"
+audience = ["family-e2e-ferrofed"]
+
+# The gateway's development signing key, run.sh's file secret.
+[signing]
+key_file = "/run/secrets/ferrofed/signing-key.pem"
+jwks_uri = "http://localhost:8080/.well-known/jwks.json"
+
+# FerroEHR's quickstart user, as the FerroFED quickstart sends it.
+[credentials."node-a-query"]
+user = "ferroehr"
+password = "ferroehr"
+
+[credentials."node-b-query"]
+user = "ferroehr"
+password = "ferroehr"
+
+# The synthetic patient, inside the example arc urn:oid:2.999 that ITU-T
+# X.660 reserves, with an EHR at both nodes. run.sh reads these rows.
+[[dev.crossref]]
+namespace = "urn:oid:2.999.1.1"
+value = "family-e2e-0001"
+member = "node-a"
+ehr_id = "aaaaaaaa-aaaa-4aaa-8aaa-0000000e2e01"
+
+[[dev.crossref]]
+namespace = "urn:oid:2.999.1.1"
+value = "family-e2e-0001"
+member = "node-b"
+ehr_id = "bbbbbbbb-bbbb-4bbb-8bbb-0000000e2e01"

@@ -1,0 +1,27 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "family-e2e-finding",
+  "url": "http://example.org/fhir/CodeSystem/family-e2e-finding",
+  "version": "1.0.0",
+  "name": "FamilyE2eFinding",
+  "title": "FerroHEALTH family lane findings",
+  "status": "active",
+  "experimental": true,
+  "publisher": "FerroHEALTH family end-to-end lane",
+  "description": "Synthetic findings invented for the FerroHEALTH family end-to-end lane. They name no real condition.",
+  "caseSensitive": true,
+  "content": "complete",
+  "count": 2,
+  "concept": [
+    {
+      "code": "alpha",
+      "display": "Family lane finding alpha",
+      "definition": "A synthetic finding the family lane records through FerroBRIDGE."
+    },
+    {
+      "code": "beta",
+      "display": "Family lane finding beta",
+      "definition": "A second synthetic finding of the family lane."
+    }
+  ]
+}

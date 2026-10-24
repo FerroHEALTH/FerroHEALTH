@@ -1,0 +1,15 @@
+{
+  "resourceType": "ValueSet",
+  "id": "family-e2e-findings",
+  "url": "http://example.org/fhir/ValueSet/family-e2e-findings",
+  "version": "1.0.0",
+  "name": "FamilyE2eFindings",
+  "title": "FerroHEALTH family lane findings",
+  "status": "active",
+  "experimental": true,
+  "publisher": "FerroHEALTH family end-to-end lane",
+  "description": "Every synthetic finding of the family lane.",
+  "compose": {
+    "include": [{ "system": "http://example.org/fhir/CodeSystem/family-e2e-finding" }]
+  }
+}

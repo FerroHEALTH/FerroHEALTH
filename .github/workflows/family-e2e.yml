@@ -1,0 +1,54 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+
+# Family end-to-end: the published images of every product, pinned by digest
+# in e2e/family/compose.yaml, started side by side and driven through one
+# synthetic patient by e2e/family/run.sh. A broken step fails the run with one
+# line naming the product and the call, followed by the stack's logs.
+#
+# It runs on demand, weekly, and on a pull request that touches the lane. The
+# Refresh workflow dispatches it onto its branch when a product release moves
+# a pin, because a pull request the workflow token opens starts no run of its
+# own. Nothing here builds an image or needs a secret.
+name: Family end-to-end
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Mondays at 05:17 UTC, off the hour.
+    - cron: "17 5 * * 1"
+  pull_request:
+    branches: [main]
+    paths:
+      - "e2e/family/**"
+      - "scripts/e2e/**"
+      - ".github/workflows/family-e2e.yml"
+
+permissions: {}
+
+concurrency:
+  group: family-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lane:
+    name: family lane
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Every pin is a product's latest published release
+        # Informational: a release published since the last refresh is
+        # reported here and moved by the Refresh workflow.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/e2e/pin-images.sh --check
+
+      - name: Run the lane
+        run: e2e/family/run.sh

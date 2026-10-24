@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# FerroBRIDGE in the family lane, mounted read-only at
+# /etc/ferrobridge/config.toml: the FHIR R4 facade over FerroEHR node A, with
+# FerroTERM as its terminology server and the lane's issuer checking every
+# caller. compose.yaml sets the listener, the log format and the usage report.
+# Every key is on <https://ferrobridge.eu/docs/operate/configuration.html>.
+
+[cdr]
+base_url = "http://ferroehr-a:8080/ferroehr/rest/openehr/v1"
+
+# FerroEHR's quickstart user; the password is the cdr_password file secret.
+[cdr.credentials]
+user = "ferroehr"
+password_file = "/run/secrets/cdr_password"
+
+# FerroTERM's R4 base. Its read surface takes no credential.
+[terminology]
+base_url = "http://ferroterm:8080/r4"
+wire_version = "r4"
+
+[mappings]
+directory = "/etc/ferrobridge/mappings"
+
+[facade]
+enabled = true
+base_url = "http://localhost:8090/fhir"
+# run.sh creates the patient's EHR at node A before the facade writes to it.
+ehr_policy = "existing"
+identity_store = "/home/nonroot/identity.redb"
+composition_language = "en"
+composition_territory = "NL"
+system_id = "ferrobridge.family-e2e.local"
+
+[auth]
+issuer = "http://localhost:8180/family"
+audience = ["http://localhost:8090/fhir"]

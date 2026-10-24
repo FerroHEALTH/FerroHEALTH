@@ -45,8 +45,14 @@ reports produced by a scanner without a reproduction.
 
 ## What to expect
 
-An acknowledgement within three working days, and a fix or an explanation
-before the advisory is published. The machine-readable contact is
+An acknowledgement within about 5 business days and an initial assessment
+(is it valid, how severe) within about 10 business days, best effort, then a
+fix or an explanation before the advisory is published. A confirmed
+vulnerability is fixed in a release published within 7 days for Critical, 30
+days for High, 90 days for Medium and with the next release for Low, counted
+from the confirmed assessment; the
+[family security page](https://ferrohealth.eu/docs/security.html) holds the
+policy every product follows. The machine-readable contact is
 [`website/landing/.well-known/security.txt`](website/landing/.well-known/security.txt),
 served at <https://ferrohealth.eu/.well-known/security.txt>; its `Expires` date
 must be refreshed before it passes, because RFC 9116 says a stale file is

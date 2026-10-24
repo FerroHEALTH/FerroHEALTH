@@ -14,6 +14,7 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-24 | [Security](security.md) | The family's fix-time targets by severity, counted from the confirmed assessment, and the acknowledgement and assessment times in the family wording; the per-product table gains a fix-time column, and the FerroEHR, FerroFED, FerroPIX, FerroAUDIT and FerroSMART rows state the family times. |
 | 2026-10-24 | [FerroHEALTH documentation](index.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
 | 2026-10-24 | [How the products fit together](architecture.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
 | 2026-10-24 | [The Cyber Resilience Act](cra.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |

@@ -60,12 +60,16 @@ vulnerability, and that starts the 24-hour clock
 ## What happens next
 
 - **Acknowledgement and assessment.** The maintainer acknowledges the report
-  and assesses its severity, then states an intended fix window. The times
-  each product commits to are in the
-  [table below](#how-each-product-applies-it-today). If you hear nothing within
-  that time, the report has not reached us: try the other route, or open a
-  public issue saying only that a private report awaits acknowledgement, with
-  no details.
+  within about 5 business days and makes an initial assessment (is it valid,
+  how severe) within about 10 business days, best effort. If you hear nothing
+  within that time, the report has not reached us: try the other route, or
+  open a public issue saying only that a private report awaits
+  acknowledgement, with no details.
+- **Fix.** A confirmed vulnerability is fixed in a release published within
+  the target for its severity, counted from the confirmed assessment: 7 days
+  for Critical, 30 days for High, 90 days for Medium, and the next release for
+  Low. Each product's commitment is in the
+  [table below](#how-each-product-applies-it-today).
 - **Coordinated disclosure.** A disclosure date is agreed with you, and you
   are told when the fix ships. If the manufacturer misses its commitments,
   publishing is your call.
@@ -251,17 +255,17 @@ The products adopted this policy at different times, and their `SECURITY.md`
 files still differ on these points. Each product's own file is the statement
 for that product until it links this page in place of its own text.
 
-| Product | Reporting routes its `SECURITY.md` names | Acknowledgement, then assessment | Support it states | Security-only patch releases | Safe harbour |
-|---|---|---|---|---|---|
-| [FerroEHR](https://github.com/FerroHEALTH/FerroEHR/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 5 working days, then 10 working days | the newest release only; fixed releases for at least five years after each release, with the end month in each release's notes | yes | yes |
-| [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with a table of end dates and the end date in each release's notes | yes, where technically feasible | not stated |
-| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
-| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
-| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
-| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
-| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
-| [FerroUI](https://github.com/FerroHEALTH/FerroUI/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
-| [FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the latest release only, no end date | not stated | not stated |
+| Product | Reporting routes its `SECURITY.md` names | Acknowledgement, then assessment | Fix-time targets | Support it states | Security-only patch releases | Safe harbour |
+|---|---|---|---|---|---|---|
+| [FerroEHR](https://github.com/FerroHEALTH/FerroEHR/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the family targets | the newest release only; fixed releases for at least five years after each release, with the end month in each release's notes | yes | yes |
+| [FerroFED](https://github.com/FerroHEALTH/FerroFED/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the family targets | the newest release only; fixes published for at least five years after each release, with a table of end dates and the end date in each release's notes | yes, where technically feasible | not stated |
+| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the family targets | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the family targets | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the family targets | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the family targets | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the family targets | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroUI](https://github.com/FerroHEALTH/FerroUI/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the family targets | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
+| [FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | not stated | the latest release only, no end date | not stated | not stated |
 
 FerroEHR, FerroFED, FerroTERM, FerroBRIDGE, FerroPIX, FerroAUDIT, FerroSMART
 and FerroUI also share these release checks. CI holds every `### Security`

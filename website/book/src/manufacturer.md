@@ -1,6 +1,6 @@
 # The manufacturer
 
-Revised 2026-10-08.
+Revised 2026-10-24.
 
 Cadasto B.V. is the manufacturer of every FerroHEALTH product and the
 Licensor named in each product's `LICENSE`. This page gives its details and
@@ -51,7 +51,7 @@ it:
 |---|---|
 | FerroEHR | the `ferroehr` binaries, the `ferroehr`, `ferroehr-viewer` and `ferroehr-postgres` container images, the Helm chart and the source archive ([FerroEHR's CRA page](https://ferroehr.eu/docs/latest/compliance/cra.html)) |
 | FerroFED | the source tag, the binary tarballs, and the gateway and console images ([FerroFED's regulatory status](https://ferrofed.eu/docs/evaluate/regulatory-status.html)) |
-| FerroCHART, FerroTERM, FerroBRIDGE | the release assets each repository's `SECURITY.md` lists under how a release is verified |
+| FerroFORMS, FerroTERM, FerroBRIDGE | the release assets each repository's `SECURITY.md` lists under how a release is verified |
 
 An organisation that runs a release for itself puts that product into service.
 It does not become the manufacturer by doing so. Whether an organisation that

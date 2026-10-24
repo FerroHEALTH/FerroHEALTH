@@ -1,6 +1,6 @@
 # Security
 
-Revised 2026-10-23.
+Revised 2026-10-24.
 
 This page is the vulnerability-handling policy of Cadasto B.V., the
 manufacturer of every FerroHEALTH product: how to report a vulnerability,
@@ -23,7 +23,7 @@ product applies the policy differently today, the
 Do not open a public issue for a suspected vulnerability. Report it privately
 through GitHub private vulnerability reporting on the product's repository:
 
-- FerroCHART: <https://github.com/FerroHEALTH/FerroCHART/security/advisories/new>
+- FerroFORMS: <https://github.com/FerroHEALTH/FerroFORMS/security/advisories/new>
 - FerroEHR: <https://github.com/FerroHEALTH/FerroEHR/security/advisories/new>
 - FerroTERM: <https://github.com/FerroHEALTH/FerroTERM/security/advisories/new>
 - FerroBRIDGE: <https://github.com/FerroHEALTH/FerroBRIDGE/security/advisories/new>
@@ -261,7 +261,7 @@ for that product until it links this page in place of its own text.
 | [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
 | [FerroSMART](https://github.com/FerroHEALTH/FerroSMART/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | 7 days | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
 | [FerroUI](https://github.com/FerroHEALTH/FerroUI/blob/main/SECURITY.md) | private reporting, or email to info@cadasto.com | about 5 business days, then about 10, best effort | the newest release only; fixes published for at least five years after each release, with the end month in each release's notes | yes, where technically feasible | not stated |
-| [FerroCHART](https://github.com/FerroHEALTH/FerroCHART/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the latest release only, no end date | not stated | not stated |
+| [FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS/blob/main/SECURITY.md) | private reporting, or the maintainer's GitHub profile to agree a channel | about 5 business days, then about 10, best effort | the latest release only, no end date | not stated | not stated |
 
 FerroEHR, FerroFED, FerroTERM, FerroBRIDGE, FerroPIX, FerroAUDIT, FerroSMART
 and FerroUI also share these release checks. CI holds every `### Security`

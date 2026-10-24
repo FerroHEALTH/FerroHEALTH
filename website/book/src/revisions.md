@@ -14,6 +14,7 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-24 | [How the products fit together](architecture.md) | The family end-to-end lane: what it runs and asserts, how to run it on your own machine, and how its image pins follow each release. |
 | 2026-10-24 | [FerroHEALTH documentation](index.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
 | 2026-10-24 | [How the products fit together](architecture.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
 | 2026-10-24 | [The Cyber Resilience Act](cra.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |

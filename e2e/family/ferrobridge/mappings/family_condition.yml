@@ -1,11 +1,12 @@
 # SPDX-FileCopyrightText: Cadasto B.V.
 # SPDX-License-Identifier: Apache-2.0
-# The model mapping of the family lane: a Condition's code and onset onto the
-# problem name and the date of onset of EVALUATION.problem_diagnosis.v1, as
-# the synthetic ferrobridge.diagnose.v1 template of the FerroBRIDGE testkit
-# constrains it. A coding that carries no display takes the one FerroTERM's
-# $lookup gives, because DV_CODED_TEXT.value is mandatory in openEHR
-# (FHIRconnect v1.0.0, data-type/DV_CODED_TEXT).
+# The model mapping of the family lane: a Condition's code, verification
+# status and onset onto the problem name, the diagnostic certainty and the date
+# of onset of EVALUATION.problem_diagnosis.v1, as the synthetic
+# ferrobridge.diagnose.v1 template of the FerroBRIDGE testkit constrains it.
+# The certainty is a DV_CODED_TEXT, so a coding that carries no display takes
+# the one FerroTERM's $lookup gives, because DV_CODED_TEXT.value is mandatory
+# in openEHR (FHIRconnect v1.0.0, data-type/DV_CODED_TEXT).
 grammar: FHIRConnect/v1.0.0
 type: model
 metadata:
@@ -24,6 +25,12 @@ mappings:
     with:
       fhir: "$resource.code"
       openehr: "$archetype/data[at0001]/items[at0002]"
+      type: "CODEABLECONCEPT"
+
+  - name: "certainty"
+    with:
+      fhir: "$resource.verificationStatus"
+      openehr: "$archetype/data[at0001]/items[at0073]"
       type: "CODEABLECONCEPT"
 
   - name: "onset"

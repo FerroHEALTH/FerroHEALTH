@@ -277,7 +277,8 @@ jq -n --arg profile "$PROFILE" --arg ns "$PATIENT_SYSTEM" --arg id "$PATIENT_VAL
   --arg system "$FINDINGS" '{
     resourceType: "Condition", meta: {profile: [$profile]},
     subject: {identifier: {system: $ns, value: $id}},
-    code: {coding: [{system: $system, code: "alpha"}]},
+    code: {text: "Family lane problem"},
+    verificationStatus: {coding: [{system: $system, code: "alpha"}]},
     onsetDateTime: "2026-10-01T09:00:00+02:00"}' >"$WORK/condition.json"
 status="$(call POST "$BRIDGE/Condition" -H "Authorization: Bearer $bridge_token" \
   -H 'Content-Type: application/fhir+json' -H 'Accept: application/fhir+json' \
@@ -291,8 +292,8 @@ status="$(call GET "$BRIDGE/Condition/$condition_id" -H "Authorization: Bearer $
   -H 'Accept: application/fhir+json')"
 expect FerroBRIDGE "GET /fhir/Condition/{id}" 200 "$status"
 SYSTEM="$FINDINGS" WANT="$ALPHA_DISPLAY" holds FerroBRIDGE "GET /fhir/Condition/{id}" \
-  '.code.coding[] | select(.system == env.SYSTEM and .code == "alpha") | .display == env.WANT' \
-  "the code does not carry the display FerroTERM's \$lookup gave"
+  '.verificationStatus.coding[] | select(.system == env.SYSTEM and .code == "alpha") | .display == env.WANT' \
+  "the verification status does not carry the display FerroTERM's \$lookup gave"
 
 # The composition counts per node, and the problem name FerroBRIDGE wrote.
 step FerroEHR "node A: POST /query/aql (compositions of the patient's EHR)"
@@ -301,8 +302,8 @@ expect FerroEHR "node A POST /query/aql" 200 "$status"
 holds FerroEHR "node A POST /query/aql" '.rows | length == 2' \
   "node A does not hold two compositions for the patient (one committed directly, one through FerroBRIDGE)"
 
-step FerroEHR "node A: POST /query/aql (the problem name FerroBRIDGE committed)"
-status="$(aql "$NODE_A" "SELECT d/data[at0001]/items[at0002]/value/value AS name, d/data[at0001]/items[at0002]/value/defining_code/code_string AS code FROM EHR e[ehr_id/value='$EHR_A'] CONTAINS COMPOSITION c CONTAINS EVALUATION d[openEHR-EHR-EVALUATION.problem_diagnosis.v1]")"
+step FerroEHR "node A: POST /query/aql (the certainty FerroBRIDGE committed)"
+status="$(aql "$NODE_A" "SELECT d/data[at0001]/items[at0073]/value/value AS certainty, d/data[at0001]/items[at0073]/value/defining_code/code_string AS code FROM EHR e[ehr_id/value='$EHR_A'] CONTAINS COMPOSITION c CONTAINS EVALUATION d[openEHR-EHR-EVALUATION.problem_diagnosis.v1]")"
 expect FerroEHR "node A POST /query/aql" 200 "$status"
 WANT="$ALPHA_DISPLAY" holds FerroEHR "node A POST /query/aql" '.rows == [[env.WANT, "alpha"]]' \
   "the stored DV_CODED_TEXT is not alpha with FerroTERM's display"

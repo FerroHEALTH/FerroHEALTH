@@ -1,6 +1,6 @@
 # The Cyber Resilience Act
 
-Revised 2026-10-23.
+Revised 2026-10-24.
 
 The Cyber Resilience Act (CRA, Regulation (EU) 2024/2847) sets cybersecurity
 requirements for "a software or hardware product and its remote data
@@ -145,7 +145,8 @@ FerroBRIDGE, and FerroFED. EHDS Article 104 amends the CRA for that case:
 |---|---|---|
 | FerroEHR and FerroBRIDGE | one EHR system: the EHDS Chapter III procedure (CRA Art. 32(5a)), one technical documentation set and one declaration naming both. FerroEHR's reading is a default product, against a competing reading of Annex III class I point 1 | [FerroEHR's CRA page](https://ferroehr.eu/docs/latest/compliance/cra.html), its [risk assessment](https://ferroehr.eu/docs/latest/compliance/cra-risk-assessment.html) and its [technical documentation](https://ferroehr.eu/docs/latest/compliance/technical-documentation.html). FerroBRIDGE's [CRA information and instructions to the user](https://ferrobridge.eu/docs/evaluate/cra-user-information.html) |
 | FerroFED | an EHR system of its own: the EHDS Chapter III procedure (CRA Art. 32(5a)), with one documentation set, declaration and CE marking for both acts | [FerroFED's regulatory status](https://ferrofed.eu/docs/evaluate/regulatory-status.html#the-cyber-resilience-act) |
-| FerroTERM, FerroCHART | not recorded: whether each is a default product or an important product under Annex III is open | none yet |
+| FerroTERM | a default product, the owner's decision of 2026-10-24: a terminology server answering the FHIR `CodeSystem`, `ValueSet` and `ConceptMap` operations has the core functionality of no Annex III category (CRA Art. 7(1)). Conformity is assessed by internal control, module A (CRA Art. 32(1)(a), Annex VIII Part I) | FerroTERM's [CRA information and instructions to the user](https://ferroterm.eu/docs/evaluate/cra-user-information.html) and its [risk assessment](https://ferroterm.eu/docs/evaluate/cra-risk-assessment.html) |
+| FerroCHART | not recorded: whether it is a default product or an important product under Annex III is open | none yet |
 
 ### The EU declaration of conformity
 
@@ -173,7 +174,9 @@ manufacturer has not applied harmonised standards, common specifications or a
 certification scheme in full, CRA Art. 32(2) requires a third-party procedure
 (module B with C, or module H). Each product's book states its reading of its
 own core functionality; FerroEHR's is on its
-[CRA page](https://ferroehr.eu/docs/latest/compliance/cra.html).
+[CRA page](https://ferroehr.eu/docs/latest/compliance/cra.html), and FerroTERM's
+is in its
+[risk assessment](https://ferroterm.eu/docs/evaluate/cra-risk-assessment.html#scope-and-dates).
 
 ## A deployment Cadasto B.V. hosts as a service
 

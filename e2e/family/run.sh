@@ -292,10 +292,12 @@ status="$(call GET "$BRIDGE/Condition/$condition_id" -H "Authorization: Bearer $
   -H 'Accept: application/fhir+json')"
 expect FerroBRIDGE "GET /fhir/Condition/{id}" 200 "$status"
 SYSTEM="$FINDINGS" WANT="$ALPHA_DISPLAY" holds FerroBRIDGE "GET /fhir/Condition/{id}" \
-  '.verificationStatus.coding[] | select(.system == env.SYSTEM and .code == "alpha") | .display == env.WANT' \
-  "the verification status does not carry the display FerroTERM's \$lookup gave"
+  '.verificationStatus | .text == env.WANT and any(.coding[]; .system == env.SYSTEM and .code == "alpha")' \
+  "the verification status is not alpha with the display FerroTERM's \$lookup gave as its text"
 
-# The composition counts per node, and the problem name FerroBRIDGE wrote.
+# The composition counts per node, and the certainty FerroBRIDGE wrote. The
+# DV_CODED_TEXT value is the CodeableConcept's text (FHIRconnect v1.0.0,
+# data-type/DV_CODED_TEXT).
 step FerroEHR "node A: POST /query/aql (compositions of the patient's EHR)"
 status="$(aql "$NODE_A" "SELECT c/uid/value AS uid FROM EHR e[ehr_id/value='$EHR_A'] CONTAINS COMPOSITION c")"
 expect FerroEHR "node A POST /query/aql" 200 "$status"

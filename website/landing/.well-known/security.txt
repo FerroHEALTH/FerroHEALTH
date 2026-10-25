@@ -12,7 +12,7 @@
 #   https://github.com/FerroHEALTH/FerroBRIDGE/security/advisories/new
 #   https://github.com/FerroHEALTH/FerroFED/security/advisories/new
 #   https://github.com/FerroHEALTH/FerroPIX/security/advisories/new
-#   https://github.com/FerroHEALTH/FerroSMART/security/advisories/new
+#   https://github.com/FerroHEALTH/FerroAUTH/security/advisories/new
 #   https://github.com/FerroHEALTH/FerroAUDIT/security/advisories/new
 #   https://github.com/FerroHEALTH/FerroUI/security/advisories/new
 #

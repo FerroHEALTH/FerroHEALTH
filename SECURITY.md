@@ -21,7 +21,7 @@ which is where its maintainers and its release process are:
 A vulnerability in a shared library the products are built from goes to that
 library's queue the same way:
 
-- FerroSMART: <https://github.com/FerroHEALTH/FerroSMART/security/advisories/new>
+- FerroAUTH: <https://github.com/FerroHEALTH/FerroAUTH/security/advisories/new>
 - FerroAUDIT: <https://github.com/FerroHEALTH/FerroAUDIT/security/advisories/new>
 - FerroUI: <https://github.com/FerroHEALTH/FerroUI/security/advisories/new>
 

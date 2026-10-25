@@ -11,7 +11,7 @@
      called or written to. The band under the frame is the shared libraries. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1800" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
   <title id="title">What calls what across the FerroHEALTH family</title>
-  <desc id="desc">A clinician uses FerroFORMS in a browser. FerroFORMS expands value sets against FerroTERM and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an OMOP Common Data Model database over SQL. Four services frame those four servers, and the three not running yet are drawn dashed: FerroEHR resolves the subject of each EHR through FerroPIX, the Master Patient Index whose server is being built, over PIXm and PDQm, and feeds it each EHR it creates; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, spans everything as the band every server reports to; FerroTASK, the task planning and decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. Each server checks the access tokens it is handed against the deployment's own authorization server, so no FerroHEALTH service holds the key every server depends on. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it. Under the frame, a band holds the three shared libraries the products are built from, which never run on their own: FerroSMART checks access tokens and issues none, FerroAUDIT writes the audit trail and the EHDS access record, and FerroUI holds the components of the operator consoles.</desc>
+  <desc id="desc">Five products reach each other only over published protocols. FerroEHR, the openEHR CDR, is reached over the openEHR ITS-REST API and AQL, which any application can call directly, and it validates coded values against FerroTERM, the FHIR terminology server, as a client. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR face in both directions, receives clinical HL7 Version 2 messages over MLLP, and writes typed rows into an OMOP Common Data Model database over SQL. FerroFORMS, the form builder, is paused: a clinician uses it in a browser, and it expands value sets against FerroTERM and commits compositions to FerroEHR over ITS-REST. Four services frame the data path, and the three not running yet are drawn dashed: FerroPIX, the Master Patient Index whose server is being built, owns identity and the IHE profiles, and FerroEHR is to look the subject of each EHR up there as a client over PIXm and PDQm; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; FerroSYS, the control plane, spans everything as the band every server reports to; and FerroTASK, the task planning and decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. Each server checks the access tokens it is handed against the deployment's own authorization server, so no FerroHEALTH service holds the key every server depends on. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, HL7 Version 2 senders, OMOP and other organisations sit outside it. Under the frame, a band holds the three shared libraries the products are built from, which never run on their own: FerroAUTH authenticates callers and makes the policy decision, issuing no token, FerroAUDIT writes the audit trail and the EHDS access record, and FerroUI holds the components of the operator consoles, every one of them reactive.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
@@ -72,10 +72,12 @@
     <text class="label" x="72" y="237" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Clinicians</text>
     <text class="sub" x="72" y="259" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">doctors and nurses</text>
 
+    <!-- Paused, and still drawn: it is a client of the CDR and of the terminology
+         server like any other, and the owner keeps it listed. -->
     <rect class="box box-forms" x="206" y="196" width="160" height="88" rx="10" fill="#ffffff" stroke="#c2185b" stroke-width="1.5"/>
     <text class="label tag-forms" x="286" y="226" text-anchor="middle" font-size="15" font-weight="700" fill="#c2185b">FerroFORMS</text>
     <text class="sub" x="286" y="248" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">templates to forms</text>
-    <text class="sub" x="286" y="266" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">forms to compositions</text>
+    <text class="sub" x="286" y="266" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">paused</text>
 
     <rect class="box box-ehr" x="452" y="196" width="160" height="88" rx="10" fill="#ffffff" stroke="#b7431b" stroke-width="1.5"/>
     <text class="label tag-ehr" x="532" y="226" text-anchor="middle" font-size="15" font-weight="700" fill="#b7431b">FerroEHR</text>
@@ -101,11 +103,17 @@
     <text class="label" x="1095" y="285" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">OMOP CDM</text>
     <text class="sub" x="1095" y="307" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">a batch load, for research</text>
 
+    <!-- Clinical HL7 Version 2 messages come into the bridge over MLLP and are mapped
+         through HL7's Version 2 to FHIR guide into the CDR. Identity feeds go to FerroPIX. -->
+    <rect class="box" x="1000" y="368" width="190" height="56" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
+    <text class="label" x="1095" y="393" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">HL7 Version 2</text>
+    <text class="sub" x="1095" y="415" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">clinical message senders</text>
+
     <!-- Under the CDR whose records it locates. Dashed while its server is being
-         built. The CDR resolves each EHR's subject through it and feeds it, the
-         gateway asks it where a record is; an application that opens a record asks
-         it the same way, and FerroFORMS receives the EHR it is launched with and
-         asks nobody. -->
+         built. Identity and the IHE profiles are its job alone: the gateway asks it
+         where a record is, the CDR is to look an EHR's subject up there as a client,
+         an application that opens a record asks it the same way, and FerroFORMS
+         receives the EHR it is launched with and asks nobody. -->
     <rect class="box box-pix" x="452" y="476" width="168" height="88" rx="10" fill="#ffffff" stroke="#6b21a8" stroke-width="1.5" stroke-dasharray="6 4"/>
     <text class="label tag-pix" x="536" y="506" text-anchor="middle" font-size="15" font-weight="700" fill="#6b21a8">FerroPIX</text>
     <text class="sub" x="536" y="528" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">Master Patient Index</text>
@@ -113,8 +121,8 @@
 
     <!-- Under FerroBRIDGE, on the side where data leaves, and level with the other
          organisations it talks to. The federation tier of the openEHR federation
-         proposal: a transparent ITS-REST intermediary that resolves the patient
-         first, then dispatches ordinary AQL to each node's own EHR id. -->
+         proposal: a transparent ITS-REST intermediary that asks FerroPIX who the
+         patient is, then dispatches ordinary AQL to each node's own EHR id. -->
     <rect class="box box-fed" x="698" y="476" width="168" height="88" rx="10" fill="#ffffff" stroke="#0369a1" stroke-width="1.5"/>
     <text class="label tag-fed" x="782" y="506" text-anchor="middle" font-size="15" font-weight="700" fill="#0369a1">FerroFED</text>
     <text class="sub" x="782" y="528" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">federation gateway</text>
@@ -142,21 +150,24 @@
     <text class="label tag-sys" x="536" y="663" text-anchor="middle" font-size="15" font-weight="700" fill="#5b6b16">FerroSYS</text>
     <text class="sub" x="536" y="685" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">health, telemetry, event log, notifications, configuration · every server reports to it</text>
 
-    <!-- The SMART App Launch and OAuth 2.0 resource server each product runs in
-         its own process, against the deployment's own authorization server. -->
+    <!-- Renamed from FerroSMART. ferrohealth-smart is the SMART App Launch and
+         OAuth 2.0 resource server each product runs in its own process, against
+         the deployment's own authorization server; ferrohealth-authz makes the
+         policy decision. -->
     <rect class="box" x="206" y="772" width="208" height="76" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
-    <text class="label" x="310" y="802" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroSMART</text>
-    <text class="sub" x="310" y="824" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ferrohealth-smart</text>
-    <text class="sub" x="310" y="842" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">checks tokens, issues none</text>
+    <text class="label" x="310" y="802" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroAUTH</text>
+    <text class="sub" x="310" y="824" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ferrohealth-smart, -authz</text>
+    <text class="sub" x="310" y="842" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">authentication, policy</text>
 
-    <!-- The IHE ATNA and BALP audit trail and the EHDS access record, sent to an
-         Audit Record Repository the deployment runs. -->
+    <!-- The whole IHE ATNA and BALP audit trail (sending, forwarding, retrieving)
+         and the EHDS access record. -->
     <rect class="box" x="432" y="772" width="208" height="76" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
     <text class="label" x="536" y="802" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroAUDIT</text>
     <text class="sub" x="536" y="824" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ihe-atna, ehds-logging</text>
     <text class="sub" x="536" y="842" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">audit trail, EHDS access log</text>
 
-    <!-- The component library each product's operator console is built with. -->
+    <!-- The component library each product's operator console is built with;
+         every console is reactive. -->
     <rect class="box" x="658" y="772" width="208" height="76" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
     <text class="label" x="762" y="802" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroUI</text>
     <text class="sub" x="762" y="824" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ferrohealth-ui</text>
@@ -186,7 +197,8 @@
     <path class="edge-head" d="M452 272 l-9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="380" y="317" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
 
-    <!-- The bridge reads the CDR, so the arrow points at the CDR. -->
+    <!-- The bridge reads the CDR and commits what it maps in, so the arrow points
+         at the CDR. -->
     <path class="edge" d="M698 240 H624" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M612 240 l9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="655" y="231" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST</text>
@@ -202,6 +214,12 @@
     <path class="edge-head" d="M866 222 l9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="938" y="210" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">FHIR facade</text>
 
+    <!-- Clinical HL7 Version 2 messages, received on the bridge's MLLP listener and mapped
+         through HL7's Version 2 to FHIR guide. -->
+    <path class="edge" d="M1000 396 H840 V296" fill="none" stroke="#58616e" stroke-width="1.6"/>
+    <path class="edge-head" d="M840 284 l-5.5 9 h11 z" fill="#58616e"/>
+    <text class="edge-label" x="906" y="387" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">MLLP</text>
+
     <!-- OMOP is a database schema, so this edge names no wire specification. -->
     <path class="edge" d="M866 262 H980 V288 H988" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M1000 288 l-9 -5.5 v11 z" fill="#58616e"/>
@@ -213,13 +231,12 @@
     <path class="edge-head" d="M612 272 l9 -5.5 v11 z" fill="#58616e"/>
     <text class="edge-label" x="658" y="448" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">ITS-REST, AQL</text>
 
-    <!-- The CDR resolves the subject of each EHR through the index (PIXm ITI-83,
-         PDQm ITI-78), and it is the one component that knows the moment an EHR is
-         created or its subject changes, so it also feeds the index (ITI-104). The
-         subject its EHR_STATUS carries is the pseudonym the index mints. -->
+    <!-- The CDR is to look the subject of an EHR up at the index as a client
+         (PIXm ITI-83, PDQm ITI-78), so its EHR_STATUS can carry the pseudonym the
+         index mints. It implements no IHE profile and runs no identity of its own. -->
     <path class="edge" d="M560 284 V464" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>
     <path class="edge-head" d="M560 476 l-5.5 -9 h11 z" fill="#58616e"/>
-    <text class="edge-label" x="568" y="380" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e"><tspan x="568" dy="0">PIXm, PDQm</tspan><tspan x="568" dy="13">PIXm feed</tspan></text>
+    <text class="edge-label" x="568" y="380" text-anchor="start" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" fill="#58616e">PIXm, PDQm</text>
 
     <!-- Where is the record: the gateway asks the index before it fans out. -->
     <path class="edge" d="M698 540 H632" fill="none" stroke="#58616e" stroke-width="1.6" stroke-dasharray="5 4"/>

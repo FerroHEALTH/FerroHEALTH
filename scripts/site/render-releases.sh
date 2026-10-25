@@ -39,7 +39,7 @@ readonly OWNER=FerroHEALTH
 readonly PRODUCTS=(FerroFORMS FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroFED FerroSYS FerroTASK)
 # The shared libraries are no products, and their cards carry a release the
 # same way, so the same markers fill them.
-readonly LIBRARIES=(FerroSMART FerroAUDIT FerroUI)
+readonly LIBRARIES=(FerroAUTH FerroAUDIT FerroUI)
 
 [ -f "$FILE" ] || { echo "render-releases: no such file: $FILE" >&2; exit 1; }
 

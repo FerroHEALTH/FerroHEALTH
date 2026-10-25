@@ -11,19 +11,30 @@ The family site for the pure-Rust health-data servers below, published at
 **<https://ferrohealth.eu/>**. This repository holds the site and the shared
 brand; it holds no product code.
 
-| Product | Does | Site |
-|---|---|---|
-| [FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS) | An openEHR form builder and renderer: takes the record down | <https://ferroforms.eu/> |
-| [FerroEHR](https://github.com/FerroHEALTH/FerroEHR) | An openEHR Clinical Data Repository: stores and queries the record | <https://ferroehr.eu/> |
-| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | An HL7 FHIR terminology server: answers what a code means | <https://ferroterm.eu/> |
-| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) | A bridge from openEHR to FHIR and to the OMOP CDM: carries the record onward | <https://ferrobridge.eu/> |
-| [FerroFED](https://github.com/FerroHEALTH/FerroFED) | An openEHR federation gateway: queries the record where it lives | <https://ferrofed.eu/> |
-| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | A Master Patient Index: who the patient is, and where the record is. It publishes its identity crates; the server is being built | <https://ferropix.eu/> |
+The family is five products. Each is its own server, image and repository,
+and each reaches the others only over a published protocol, so none is a
+compile-time dependency of another:
+
+| Product | Does | How the others reach it | Site |
+|---|---|---|---|
+| [FerroEHR](https://github.com/FerroHEALTH/FerroEHR) | The openEHR Clinical Data Repository: stores and queries the record | openEHR ITS-REST and AQL | <https://ferroehr.eu/> |
+| [FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) | openEHR to HL7 FHIR (FHIRconnect) and to the OMOP CDM (OMOCL), and clinical HL7 Version 2 messages mapped in through HL7's Version 2 to FHIR guide | it calls the CDR over ITS-REST; clients call its FHIR face and its MLLP listener | <https://ferrobridge.eu/> |
+| [FerroFED](https://github.com/FerroHEALTH/FerroFED) | The federation gateway: the openEHR Federation Tier with AQL, EHDS cross-border exchange and MyHealth@EU | it calls each CDR over ITS-REST; clients call its ITS-REST and FHIR faces | <https://ferrofed.eu/> |
+| [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | The Master Patient Index: who the patient is, and where the record is. It publishes its identity crates; the server is being built | IHE PIXm, PDQm and PMIR, and the HL7 Version 2 identity feed and queries (ITI-8, ITI-9, ITI-21) over MLLP | <https://ferropix.eu/> |
+| [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | The HL7 FHIR terminology server: answers what a code means | FHIR terminology operations | <https://ferroterm.eu/> |
 
 Each product is released from its own repository under the Business Source
 License 1.1, documents itself on its own domain, and runs without the
-others. This site says how they fit together and nothing a product's own site
-should say instead.
+others. A product stays in its own lane: FerroEHR implements no FHIR, OMOP,
+federation or IHE profile, because FHIR and OMOP are FerroBRIDGE's,
+federation is FerroFED's, and identity and the IHE profiles are FerroPIX's.
+When a product needs another's function, it calls that server over its
+protocol, as a client. This site says how they fit together and nothing a
+product's own site should say instead.
+
+[FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS), an openEHR form
+builder and renderer at <https://ferroforms.eu/>, is paused. The page keeps
+its card and its row and marks it paused.
 
 Two more are planned around them. Each has a registered domain and a
 repository that opens with its licence and its brand, and the page shows them
@@ -38,14 +49,21 @@ last moved.
 The products are built from three shared libraries. Each is a set of Rust
 crates released from its own repository under the same licence, and none of
 them is a product: none runs on its own, and each is compiled into the
-products that use it. The page gives them their own section, outside the
-product grids and the status table.
+products that use it. They carry the work every product shares and never a
+product's domain. The page gives them their own section, outside the product
+grids and the status table.
 
 | Shared library | Crates | Does |
 |---|---|---|
-| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | `ferrohealth-smart` | The SMART App Launch and OAuth 2.0 resource server every product checks tokens with; it issues none |
-| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The IHE ATNA and BALP audit trail and the EHDS access record |
-| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The one source for the user interface of every operator console ([console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md)) |
+| [FerroAUTH](https://github.com/FerroHEALTH/FerroAUTH) | `ferrohealth-smart`, `ferrohealth-authz` | Authentication and the policy decision. `ferrohealth-smart` is the SMART App Launch and OAuth 2.0 resource server every product checks tokens with, and it issues none; `ferrohealth-authz` makes the policy decision (ABAC, Cedar, a remote PDP), with 0.1.0 in preparation. Renamed from FerroSMART on 2026-10-25; the crate names stay |
+| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The whole IHE ATNA and BALP audit trail (sending, forwarding and retrieving) and the EHDS access record |
+| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The one source for the user interface of every operator console, and every console is reactive: a link, a form or an action never reloads the whole page ([console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md)) |
+
+The protocol clients and models stay with the product that publishes them,
+for every other product to use: `fhir-types` and `ferrobridge-term` from
+FerroBRIDGE, `ihe-iti` and `nl-generic-functions` from FerroPIX, and the
+`openehr-*` crates from FerroEHR. Nothing is written twice: when a shared
+crate lacks something, it is added in the repository that owns it.
 
 ![What calls what across the FerroHEALTH family](assets/diagrams/ferrohealth-architecture.svg)
 
@@ -158,10 +176,10 @@ switch back to branch-based publishing.
   frame it.
 - **Authorisation stays with each product.** Every product is its own SMART
   App Launch 2.x resource server against the deployment's authorization
-  server, through the FerroSMART library in its own process. The family runs
+  server, through FerroAUTH's `ferrohealth-smart` in its own process. The family runs
   no central authorisation service, because one would hold the signing key
   every product's access depends on.
-- **A library is never a product.** FerroSMART, FerroAUDIT and FerroUI have
+- **A library is never a product.** FerroAUTH, FerroAUDIT and FerroUI have
   their own section, cards in the parent's steel, a rendered release and no
   row in the status table, and the diagram draws them in a band outside the
   instance frame with no edges.
@@ -194,7 +212,7 @@ in each repository's own licence file:
 [FerroSYS](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE),
 [FerroTASK](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE).
 The shared libraries are BUSL-1.1 too:
-[FerroSMART](https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE),
+[FerroAUTH](https://github.com/FerroHEALTH/FerroAUTH/blob/main/LICENSE),
 [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT/blob/main/LICENSE),
 [FerroUI](https://github.com/FerroHEALTH/FerroUI/blob/main/LICENSE).
 The site states what those terms mean at

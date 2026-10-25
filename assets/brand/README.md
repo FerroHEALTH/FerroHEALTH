@@ -3,19 +3,20 @@
 
 # FerroHEALTH brand
 
-FerroHEALTH is the family name for servers that are built and released
-separately: [FerroFORMS](https://ferroforms.eu/), an openEHR® form builder and
-renderer; [FerroEHR](https://ferroehr.eu/), an openEHR Clinical Data
-Repository; [FerroTERM](https://ferroterm.eu/), an HL7® FHIR® terminology
-server; [FerroBRIDGE](https://ferrobridge.eu/), a bridge from openEHR to FHIR
-and to the OMOP Common Data Model; [FerroFED](https://ferrofed.eu/), an
-openEHR federation gateway; and FerroPIX, a Master Patient Index whose server
-is being built. Two more are planned around them: FerroSYS as the control
-plane and FerroTASK for task planning and decision support. The shared
-libraries the products are built from (FerroSMART, FerroAUDIT, FerroUI) are
-no products: they own no hue and no stroke, and the page shows them in the
-parent's steel. Ferro is *ferrum*, iron, which is
-what Rust is an oxide of.
+FerroHEALTH is the family name for five servers that are built and released
+separately and reach each other only over published protocols:
+[FerroEHR](https://ferroehr.eu/), the openEHR® Clinical Data Repository;
+[FerroBRIDGE](https://ferrobridge.eu/), openEHR to HL7® FHIR® and to the OMOP
+Common Data Model; [FerroFED](https://ferrofed.eu/), the federation gateway;
+[FerroPIX](https://ferropix.eu/), the Master Patient Index whose server is
+being built; and [FerroTERM](https://ferroterm.eu/), the HL7 FHIR terminology
+server. [FerroFORMS](https://ferroforms.eu/), an openEHR form builder and
+renderer, is paused and keeps its hue and its stroke. Two more are planned
+around them: FerroSYS as the control plane and FerroTASK for task planning
+and decision support. The shared libraries the products are built from
+(FerroAUTH, FerroAUDIT, FerroUI) are no products: they own no hue and no
+stroke, and the page shows them in the parent's steel. Ferro is *ferrum*,
+iron, which is what Rust is an oxide of.
 
 The parent follows the same file set, naming, variant list, and raster pipeline
 as the products. What it does differently is colour: each product owns a hue,

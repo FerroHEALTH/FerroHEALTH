@@ -46,7 +46,7 @@ beyond that script and the pinned mdbook, no runtime dependency.
   table. FerroPIX made that move with its first release, and its site is
   linked now that `ferropix.eu` serves one; its card says the server is
   being built.
-- **A shared library is never a product.** FerroSMART, FerroAUDIT and FerroUI
+- **A shared library is never a product.** FerroAUTH, FerroAUDIT and FerroUI
   are crates the products compile in, and none of them runs on its own. They
   have their own section (`#libraries`), cards in the parent's steel
   (`.product-lib`, no product hue and no mark), a `data-rel` badge from their
@@ -55,6 +55,18 @@ beyond that script and the pinned mdbook, no runtime dependency.
   checked by `scripts/checks/licence-links.sh`. The diagram draws them in a
   band outside the instance frame with no edges, and its generator refuses
   an edge into one.
+- **Each product is described in its own lane.** The page, the book and the
+  diagram follow `.claude/memory/family-architecture.md`: FerroEHR is the
+  openEHR CDR and serves no FHIR, OMOP, federation or IHE profile; FHIR, OMOP
+  and clinical HL7 Version 2 are FerroBRIDGE's; federation is FerroFED's, which asks
+  FerroPIX who a patient is and keeps no identity of its own; identity and the
+  IHE profiles are FerroPIX's; terminology is FerroTERM's. A product that
+  needs another's function calls it as a client, and the copy says so. Every
+  console is reactive, so no text says an action reloads the page.
+- **FerroFORMS is paused, and listed.** The owner holds `ferroforms.eu` and the
+  page keeps its card, its row and its licence link. Where the page or the
+  book describes its status, it says the product is paused; it is never
+  counted among the five products and never removed.
 - **No hand-typed version, and no hand-typed status.** A fact a product moves
   carries a marker (`data-rel`, `data-rel-plain`, `data-rel-date`,
   `data-pushed`) and is filled by `scripts/site/render-releases.sh` from that

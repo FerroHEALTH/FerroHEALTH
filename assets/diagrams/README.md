@@ -59,21 +59,27 @@ Do not screenshot the page to get the diagram. The file is the diagram.
 ## What it says
 
 The frame is one FerroHEALTH instance serving one tenant. The eight inside are
-the family; clinicians, applications, HL7 FHIR, the OMOP database and other
-organisations sit outside it. Every product is single-tenant: one instance serves
+the family; clinicians, applications, HL7 FHIR, HL7 Version 2 senders, the OMOP
+database and other organisations sit outside it. The family is five products
+that reach each other only over published protocols, each in its own lane:
+FerroEHR implements no FHIR, OMOP, federation or IHE profile, FHIR, OMOP and
+clinical HL7 Version 2 are FerroBRIDGE's, federation is FerroFED's, and identity and
+the IHE profiles are FerroPIX's. Every product is single-tenant: one instance serves
 one organisation, and an organisation that serves several runs several
 instances.
 
 Left to right is the order data moves. The four servers are the data path:
 FerroFORMS takes the record down, FerroEHR keeps it, FerroTERM gives its codes
-meaning, FerroBRIDGE carries it out. FerroPIX, FerroFED, FerroSYS
+meaning, FerroBRIDGE carries it out. FerroFORMS is paused and still drawn,
+solid, with "paused" in its box, because it is not a server waiting to run. FerroPIX, FerroFED, FerroSYS
 and FerroTASK frame that path. A server not running yet is drawn dashed, as is
 every call into one: FerroSYS and FerroTASK are planned, and FerroPIX
 publishes its identity crates while its server is being built. FerroFED runs
 and is drawn solid.
 
-Under the frame, a second band holds the shared libraries: FerroSMART
-(`ferrohealth-smart`), FerroAUDIT (`ihe-atna`, `ehds-logging`) and FerroUI
+Under the frame, a second band holds the shared libraries: FerroAUTH
+(`ferrohealth-smart` and `ferrohealth-authz`, authentication and the policy
+decision; renamed from FerroSMART on 2026-10-25), FerroAUDIT (`ihe-atna`, `ehds-logging`) and FerroUI
 (`ferrohealth-ui`). They sit outside the instance because they run inside the
 products that compile them in, never on their own, and no edge reaches them
 because nothing calls a library over the network. They carry no product hue.
@@ -93,27 +99,30 @@ specification it speaks, with a few exceptions worth knowing:
 - **`SQL rows`** names no wire specification, because OMOP is a database schema.
   The OMOCL mappings compile to SQL that writes typed rows into the CDM tables.
 - **No authorisation server is drawn.** Each product is its own SMART App
-  Launch 2.x resource server, through the FerroSMART library: it checks the
+  Launch 2.x resource server, through FerroAUTH's `ferrohealth-smart`: it checks the
   tokens it is handed against the deployment's own authorization server,
   which sits outside the family. A
   central FerroHEALTH authorisation service would hold the signing key every
   product's access depends on, so there is none (owner, 2026-10-19).
 - **FerroFED follows the openEHR federation tier proposal.** It is a
   transparent ITS-REST intermediary: an application sends it an ordinary AQL
-  query and never learns it was federated. It resolves the patient first,
-  through FerroPIX over PIXm, then dispatches standard AQL scoped to each
+  query and never learns it was federated. It asks FerroPIX who the patient
+  is, over PIXm, and keeps no identity of its own, then dispatches standard AQL scoped to each
   node's own EHR id, to the local FerroEHR and to other organisations' CDRs
   alike, and merges what comes back with the node named. The line to the other
   organisations is therefore `ITS-REST, AQL` and runs one way; cross-community
   identity (XCPD) is FerroPIX's business, not the gateway's.
-- **`PIXm, PDQm` and `PIXm feed` are the CDR's two uses of the index.**
-  FerroEHR will resolve the subject of each EHR through FerroPIX (PIXm ITI-83,
-  PDQm ITI-78), and the subject its EHR_STATUS carries is the pseudonym
-  FerroPIX mints. The CDR is also the one component that knows the moment an
-  EHR is created or its subject changes, so it feeds the index (the Patient
-  Identity Feed FHIR, ITI-104). The gateway then asks the index over PIXm. An application that opens a
-  record asks it the same way. FerroFORMS receives the EHR it is launched with
-  and asks nobody, so no line runs from the form to the index.
+- **`PIXm, PDQm` is the CDR's lookup at the index, as a client.** FerroEHR
+  implements no IHE profile and runs no identity of its own. It is to look
+  the subject of an EHR up at FerroPIX (PIXm ITI-83, PDQm ITI-78), so the
+  subject its EHR_STATUS carries can be the pseudonym FerroPIX mints. The
+  gateway asks the index over PIXm. An application that opens a record asks
+  it the same way. FerroFORMS receives the EHR it is launched with and asks
+  nobody, so no line runs from the form to the index.
+- **`MLLP` is the bridge's listener.** Clinical HL7 Version 2 messages come
+  in on FerroBRIDGE's MLLP listener and are mapped through HL7's Version 2 to
+  FHIR guide into the CDR. The HL7 Version 2 identity feed and queries go to
+  FerroPIX, which draws no outside sender because its server is being built.
 - **FerroSYS has no edges at all.** Every server reports health, telemetry and
   events to it and is configured from it, so it is drawn as a band under
   everything, the mirror of the FerroTERM band above. A line from each box
@@ -123,7 +132,7 @@ specification it speaks, with a few exceptions worth knowing:
   FerroEHR over `ITS-REST, AQL` and commits the state of each plan back, and
   keeps no clinical record of its own. It sits in one row with FerroPIX and
   FerroFED, the services around the data path, at the same size as both, and
-  its line climbs into the CDR's lower edge left of the index's feed.
+  its line climbs into the CDR's lower edge left of the index's lookup.
 - **No line crosses another.** The generator allows a crossing only where a
   hop is declared, and the drawing declares none.
 

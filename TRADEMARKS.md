@@ -18,7 +18,7 @@ names or the marks either.
   [`assets/diagrams/`](assets/diagrams/).
 - The names FerroHEALTH, FerroFORMS, FerroEHR, FerroTERM, FerroBRIDGE,
   FerroPIX, FerroFED, FerroSYS and FerroTASK, and the names of the shared
-  libraries FerroSMART, FerroAUDIT and FerroUI.
+  libraries FerroAUTH, FerroAUDIT and FerroUI.
 
 `assets/brand/tokens.css` is Apache-2.0: a palette in CSS is code. Using it to
 make your work look like an official FerroHEALTH project is still covered by

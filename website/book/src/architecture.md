@@ -1,6 +1,6 @@
 # How the products fit together
 
-Revised 2026-10-25.
+Revised 2026-10-26.
 
 The FerroHEALTH family is five products, each its own server, image and
 repository, and each reaches the others only over a published protocol. No
@@ -47,17 +47,17 @@ in the FerroHEALTH repository. Select it to open it at full size.
 
 ## Reading the diagram
 
-The frame is one FerroHEALTH instance serving one organisation. The eight
-inside are the products; clinicians, applications, HL7 FHIR, the OMOP database
-and other organisations sit outside it. A dashed outline is a server not
-running yet (FerroSYS and FerroTASK are planned, and FerroPIX's server is being
-built), and a dashed line is a call into one. The band under the frame holds
+The frame is one FerroHEALTH instance serving one organisation. The six
+inside are the products; clinicians, applications, HL7 FHIR, HL7 Version 2
+senders, the OMOP database and other organisations sit outside it. A dashed
+outline is a server not running yet (FerroPIX's server is being built), and a
+dashed line is a call into one. The band under the frame holds
 the shared libraries, which run inside the products and take no call.
 
 Left to right is the order data moves. The top row is the data path:
 FerroFORMS takes the record down, FerroEHR keeps it, FerroTERM gives its codes
 meaning, and FerroBRIDGE carries it out and brings HL7 Version 2 messages in.
-FerroPIX, FerroFED, FerroSYS and FerroTASK frame that path. An arrowhead
+FerroPIX and FerroFED frame that path. An arrowhead
 points at what is called or written to, and each edge names the
 specification it speaks.
 
@@ -78,7 +78,7 @@ specification it speaks.
 | FerroFED | FerroPIX | IHE PIXm | who the patient is and where the records are, before it dispatches a query |
 | FerroFED | FerroEHR and other organisations' openEHR CDRs | the openEHR REST API and AQL | each node's part of the answer, merged with the node named |
 
-These calls come once the servers behind them run:
+These calls come once the server behind them runs:
 
 - **FerroPIX** is the Master Patient Index, and identity and the IHE identity
   profiles are its job alone. It answers IHE PIXm, PDQm and PMIR, and the
@@ -89,11 +89,6 @@ These calls come once the servers behind them run:
   carries can be the pseudonym FerroPIX mints. FerroPIX publishes the crates
   of the identity specifications, `ihe-iti` and `nl-generic-functions`, the
   Dutch Generic Functions, for every product to use.
-- **FerroTASK** reads FerroEHR over the openEHR REST API and AQL for task
-  plans and GDL2 guidelines, and commits the state of each plan back.
-- **FerroSYS** is the control plane. Every server reports health, telemetry
-  and events to it and is configured from it, so it is drawn as a band under
-  everything.
 
 Every call in the table speaks a published specification, so any product can
 be swapped for another implementation of the same standard: FerroTERM for any
@@ -101,7 +96,7 @@ FHIR terminology server, FerroEHR for any openEHR CDR, and so on.
 
 ## The shared libraries
 
-What every product would otherwise write for itself lives in three shared
+What every product would otherwise write for itself lives in four shared
 libraries. Each is a set of Rust crates on crates.io, released from its own
 repository under the Business Source License 1.1, and compiled into the
 products that use it. A shared library carries cross-cutting work and never a
@@ -112,8 +107,9 @@ outside the instance with no edges.
 | Library | Crates | What it does | Who uses it |
 |---|---|---|---|
 | [FerroAUTH](https://github.com/FerroHEALTH/FerroAUTH) | `ferrohealth-smart`, `ferrohealth-authz` | Authentication and the policy decision. `ferrohealth-smart` is the SMART App Launch, SMART on openEHR and OAuth 2.0 resource server: token validation against the authorization server's keys, the authenticated subject with its scopes and roles, the patient compartment, machine authentication, and one audit line per request. It checks tokens and never issues one. `ferrohealth-authz` makes the policy decision (ABAC, Cedar, a remote PDP), with its first usable release in preparation. The repository was renamed from FerroSMART on 2026-10-25, and the crate names stay. | FerroEHR, FerroTERM, FerroBRIDGE, FerroFED and FerroPIX |
-| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The whole audit trail: the IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with sending, the store-and-forward spool ITI-20 asks of a sender, forwarding and retrieving; and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroEHR, FerroFED and FerroPIX, and FerroSYS plans to build the receiving Audit Record Repository on it |
+| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The whole audit trail: the IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with sending, the store-and-forward spool ITI-20 asks of a sender, forwarding and retrieving; and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroEHR, FerroFED and FerroPIX |
 | [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The one source for the user interface of every operator console: the components, the stylesheet with a theme per product, and the design. Every console built on it is reactive, so an action never reloads the whole page. Each console moves onto a new release in one rollout with the others, as [its console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md) describes | the consoles of FerroEHR, FerroTERM, FerroBRIDGE and FerroFED |
+| [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | `ferrohealth-secret`, `ferrohealth-config`, `ferrohealth-telemetry`, `ferrohealth-health`, `ferrohealth-server`, `ferrohealth-usage-report` | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report. It is a set of crates like FerroAUTH and FerroAUDIT, never a control plane or a central service, and it is being built, with no release yet. | the products, as each crate is released |
 
 The protocol clients and models stay with the product that owns the
 protocol, and every other product uses them from there:

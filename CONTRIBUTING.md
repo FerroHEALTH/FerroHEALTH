@@ -80,10 +80,10 @@ Every fact on the page that a product can move is rendered, and everything
 else is a design commitment or lives on the product's own site:
 
 - **Rendered:** the latest release, its date, and the last push per product,
-  by `scripts/site/render-releases.sh` at every deploy. For a planned product
-  the same script renders the day its code last moved, so the first refresh
-  pull request that renders a release tag is the signal to move its card into
-  the released set.
+  by `scripts/site/render-releases.sh` at every deploy. For a planned product,
+  or a shared library with no release yet, the same script renders the day its
+  code last moved, so the first refresh pull request that renders a release
+  tag is the signal to move a planned card into the released set.
 - **Refreshed:** `.github/workflows/refresh.yml` runs the same script over the
   committed `index.html` every six hours. When a value moved it opens one pull
   request on `chore/refresh-release-fallbacks`, dispatches the required checks
@@ -109,16 +109,16 @@ switch back to branch-based publishing.
   page and left to rot. The page shows a release and a date and lets the reader
   judge.
 - **The parent owns no hue.** FerroFORMS is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo, and FerroPIX, FerroFED,
-  FerroSYS and FerroTASK are plum, azure, olive and emerald, chosen by measurement; FerroHEALTH is iron and
+  is teal, FerroBRIDGE is indigo, and FerroPIX and FerroFED are plum and
+  azure, chosen by measurement. The shared libraries own no hue; FerroHEALTH is iron and
   steel, and borrows a hue only where its product is named. See
   [`assets/brand/README.md`](assets/brand/README.md).
-- **A planned product says what it is for and nothing it has not done.** Its
+- **A planned product says what it is for and nothing it has not done.** None
+  is listed today. Its
   card names the product and the job, links its repository, shows the domain
   as text until it serves a page, and carries one rendered badge. The mark
   stays at four strokes: FerroFORMS, FerroEHR, FerroTERM and FerroBRIDGE are
-  the data path, and FerroPIX, FerroFED, FerroSYS and FerroTASK
-  frame it.
+  the data path, and FerroPIX and FerroFED frame it.
 - **Authorisation stays with each product.** Every product is its own SMART
   App Launch 2.x resource server against the deployment's authorization
   server, through FerroAUTH's `ferrohealth-smart` in its own process. The family runs

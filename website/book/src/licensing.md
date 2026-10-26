@@ -1,6 +1,6 @@
 # Licensing and trademarks
 
-Revised 2026-10-25.
+Revised 2026-10-26.
 
 Every FerroHEALTH product, and every shared library the products are built
 from, is source-available under the Business Source License 1.1 (SPDX
@@ -26,8 +26,6 @@ which licence:
 | FerroBRIDGE | [`LICENSE`](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE) | [ferrobridge.eu](https://ferrobridge.eu/docs/evaluate/licensing.html) |
 | FerroFED | [`LICENSE`](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE) | [ferrofed.eu](https://ferrofed.eu/docs/evaluate/licensing.html) |
 | FerroPIX | [`LICENSE`](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE) | [ferropix.eu](https://ferropix.eu/docs/evaluate/licensing.html) |
-| FerroSYS | [`LICENSE`](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE) | none yet |
-| FerroTASK | [`LICENSE`](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE) | none yet |
 
 The shared libraries carry their own `LICENSE` on the same terms:
 
@@ -36,6 +34,7 @@ The shared libraries carry their own `LICENSE` on the same terms:
 | FerroAUTH | [`LICENSE`](https://github.com/FerroHEALTH/FerroAUTH/blob/main/LICENSE) |
 | FerroAUDIT | [`LICENSE`](https://github.com/FerroHEALTH/FerroAUDIT/blob/main/LICENSE) |
 | FerroUI | [`LICENSE`](https://github.com/FerroHEALTH/FerroUI/blob/main/LICENSE) |
+| FerroSYS | [`LICENSE`](https://github.com/FerroHEALTH/FerroSYS/blob/main/LICENSE) |
 
 A library compiled into a product has the same Licensor as the product and
 the same boundary between free and commercial use, set out below.
@@ -80,8 +79,7 @@ than you and your affiliates:
 | FerroAUTH | authenticates or authorises access to health data, or issues or checks tokens for it |
 | FerroAUDIT | records, sends, or stores audit records of access to health data |
 | FerroUI | operates a user interface built with it |
-
-The planned products' licences are in their repositories, linked above.
+| FerroSYS | operates a health-data server built with it |
 
 ## The Change Date
 
@@ -105,8 +103,8 @@ book; FerroEHR's is in its
 ## Trademarks and brand terms
 
 The names FerroHEALTH, FerroFORMS, FerroEHR, FerroTERM, FerroBRIDGE,
-FerroPIX, FerroFED, FerroSYS and FerroTASK, the names of the shared
-libraries FerroAUTH, FerroAUDIT and FerroUI, the FerroHEALTH mark
+FerroPIX, FerroFED and FerroTASK, the names of the shared libraries
+FerroAUTH, FerroAUDIT, FerroUI and FerroSYS, the FerroHEALTH mark
 with its icon and lockup variants, and the architecture diagram are covered by
 the FerroHEALTH brand terms,
 [`TRADEMARKS.md`](https://github.com/FerroHEALTH/FerroHEALTH/blob/main/TRADEMARKS.md).

@@ -1,6 +1,6 @@
 # Revisions
 
-Revised 2026-10-08.
+Revised 2026-10-26.
 
 Every change to a page of this book is a revision, dated on the page itself
 and listed here, newest first. A product release that relies on a page names
@@ -14,6 +14,18 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-26 | [Revisions](revisions.md) | The EHDS system documents joined the book. |
+| 2026-10-26 | [FerroHEALTH documentation](index.md) | The EHDS system's information sheet, instructions for use, readiness record and technical documentation are listed. |
+| 2026-10-26 | [The EHDS EHR system: information sheet](ehds/information-sheet.md) | First revision: the system's information sheet (EHDS Art. 38), moved from FerroEHR's book and written for both products. The version of the system is the release of the product a copy accompanies, with the oldest release of the other product it is tested against, and each release appends its own versions. |
+| 2026-10-26 | [The EHDS EHR system: instructions for use](ehds/instructions-for-use.md) | First revision: the system's instructions for use (EHDS Art. 30(1)(d)), moved from FerroEHR's book, with FerroBRIDGE's part beside FerroEHR's. |
+| 2026-10-26 | [The EHDS EHR system: readiness](ehds/readiness.md) | First revision: the readiness record, moved from FerroEHR's book and rendered from `website/book/ehds.yaml`, with every issue named by its repository. |
+| 2026-10-26 | [The EHDS EHR system: technical documentation](ehds/technical-documentation.md) | First revision: the Annex III index, moved from FerroEHR's book and rendered from `website/book/ehds.yaml`. |
+| 2026-10-26 | [Annex III 1: a detailed description of the EHR system](ehds/annex-iii-1-description.md) | First revision, from FerroEHR's `docs/technical-documentation/annex-iii-1-description.md`. |
+| 2026-10-26 | [Annex III 2: the system in place to evaluate performance](ehds/annex-iii-2-performance-evaluation.md) | First revision, from FerroEHR's `docs/technical-documentation/annex-iii-2-performance-evaluation.md`. |
+| 2026-10-26 | [Annex III 3: the common specifications used](ehds/annex-iii-3-common-specifications.md) | First revision, from FerroEHR's `docs/technical-documentation/annex-iii-3-common-specifications.md`. |
+| 2026-10-26 | [Annex III 4: verification and validation results](ehds/annex-iii-4-verification-and-validation.md) | First revision, from FerroEHR's `docs/technical-documentation/annex-iii-4-verification-and-validation.md`. |
+| 2026-10-26 | [Annex III 5: a copy of the information sheet](ehds/annex-iii-5-information-sheet.md) | First revision, from FerroEHR's `docs/technical-documentation/annex-iii-5-information-sheet.md`. |
+| 2026-10-26 | [Annex III 6: a copy of the EU declaration of conformity](ehds/annex-iii-6-declaration-of-conformity.md) | First revision, from FerroEHR's `docs/technical-documentation/annex-iii-6-declaration-of-conformity.md`. |
 | 2026-10-26 | [How the products fit together](architecture.md) | The family end-to-end lane: what it runs and asserts, how to run it on your own machine, and how its image pins follow each release. |
 | 2026-10-26 | [How the products fit together](architecture.md) | FerroTASK is restored as the planned product, in the diagram and in the text; FerroPIX is drawn solid as a released, running server; FerroFORMS is greyed out because it is paused. |
 | 2026-10-26 | [FerroHEALTH documentation](index.md) | FerroTASK is restored as the planned product; FerroPIX's row no longer says its server is being built. |

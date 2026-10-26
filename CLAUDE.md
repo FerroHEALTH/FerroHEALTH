@@ -93,7 +93,12 @@ in step.
   rendered marker, in the page, the diagram and the book), `diagram-generated.sh`
   (the committed SVG is what the generator draws), `csp.sh` (every assembled
   page carries a same-origin policy naming all its inline code) and
-  `book-revisions.sh` (every book page is dated, and `revisions.md` agrees).
+  `book-revisions.sh` (every book page is dated, and `revisions.md` agrees),
+  and `ehds-tracker.sh` (the EHDS readiness source says planned about no
+  closed work, reading each issue from its own repository).
+- `scripts/render/ehds-pages.sh`: renders the EHDS readiness record and the
+  technical documentation index of the family book from
+  `website/book/ehds.yaml`; `--check` is the CI diff.
 - `scripts/gh/`: the tracker helpers. `fields.sh` sets the issue type and the
   `Priority` and `Effort` fields, `labels.sh` bootstraps the label set, and
   `rel.sh` sets sub-issue and dependency edges.
@@ -112,6 +117,8 @@ scripts/checks/internal-links.sh _site
 scripts/checks/csp.sh _site
 lychee --offline --include-fragments --root-dir "$PWD/_site" './_site/**/*.html'
 scripts/checks/book-revisions.sh
+scripts/render/ehds-pages.sh --check
+scripts/checks/ehds-tracker.sh --self-test && scripts/checks/ehds-tracker.sh
 scripts/checks/writing-style.sh
 scripts/checks/svg-first.sh
 scripts/checks/licence-links.sh

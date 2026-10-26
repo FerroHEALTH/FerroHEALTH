@@ -75,7 +75,12 @@ which product uses which.
 - **The EHDS EHR system:** the
   [intended purpose](ehds/intended-purpose.md) and the
   [shared responsibility](ehds/shared-responsibility.md) of the EHR system
-  that FerroEHR and FerroBRIDGE form together.
+  that FerroEHR and FerroBRIDGE form together, its
+  [information sheet](ehds/information-sheet.md) and
+  [instructions for use](ehds/instructions-for-use.md), which each release of
+  either product attaches with its own versions, its
+  [readiness](ehds/readiness.md) record and its
+  [technical documentation](ehds/technical-documentation.md).
 - **[Licensing and trademarks](licensing.md):** the Business Source License
   1.1 terms every product carries, commercial licences, the brand terms and the
   terms for contributions.

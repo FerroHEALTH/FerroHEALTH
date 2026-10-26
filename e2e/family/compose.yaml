@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # The family end-to-end lane: the published images of FerroEHR (two nodes),
-# FerroTERM, FerroBRIDGE and FerroFED side by side, with FerroPIX added by
-# compose.pix.yaml, driven by run.sh through one synthetic patient. No
-# specification governs a cross-product test: our own design.
+# FerroTERM, FerroBRIDGE, FerroFED and FerroPIX side by side, driven by run.sh
+# through one synthetic patient. FerroPIX is the lane's Master Patient Index:
+# both sites feed it (ITI-104), and FerroFED resolves the patient through it as
+# its PIXm Manager (ITI-83). No specification governs a cross-product test: our
+# own design.
 #
 #   e2e/family/run.sh            secrets, start, seed, every assertion, stop
 #   e2e/family/run.sh --keep     the same, and leave the stack running
@@ -46,7 +48,7 @@ x-hardened: &hardened
 # One FerroEHR node; each service below adds its database and system_id.
 x-ferroehr-node: &ferroehr-node
   <<: *hardened
-  image: ghcr.io/ferrohealth/ferroehr:5.4.0@sha256:7fb3185d2e8eeed414c1c1d2690b748a3351ebf800daaf144aa1eed2a6539290
+  image: ghcr.io/ferrohealth/ferroehr:5.4.2@sha256:f14559e5fc5ce2333959eb8f6158f6728a4b13759f36df7923a175e6be368b19
   restart: unless-stopped
   configs:
     - source: ferroehr-config
@@ -65,7 +67,7 @@ x-ferroehr-node: &ferroehr-node
 
 # One node's database, FerroEHR's own PostgreSQL image.
 x-ferroehr-postgres: &ferroehr-postgres
-  image: ghcr.io/ferrohealth/ferroehr-postgres:5.4.0@sha256:d53e852397c469ef8fbebeafe3110d7b3500cdbf5cab444302b4b1ece84cb349
+  image: ghcr.io/ferrohealth/ferroehr-postgres:5.4.2@sha256:e0dbac9d2d825ad02b45899560d913e0a74673d835b82711031459cb5d68aff9
   restart: unless-stopped
   environment:
     # FerroEHR's quickstart development credentials.
@@ -128,7 +130,7 @@ services:
 
   ferroterm:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferroterm:0.2.0@sha256:9f49b97631d92c31d165adcfb9f8891d2e1cb62a9001b9ce3a411ffc2a8bb6c7
+    image: ghcr.io/ferrohealth/ferroterm:0.3.0@sha256:51b4b86a4a88911096db1fb168a9b5f2729a88aa8f0b1f1bfc8340cc589cc771
     restart: unless-stopped
     ports:
       - "127.0.0.1:8083:8080"
@@ -186,7 +188,7 @@ services:
   # facade compiles them at boot against the templates the CDR serves.
   ferrobridge:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrobridge:0.0.11@sha256:fe8a369cb097c4c8d5079986b8d01d00136c73cfed3a52a90f2ec2c93f1337f1
+    image: ghcr.io/ferrohealth/ferrobridge:0.0.13@sha256:70572641853dd4cc37e7fad9076106dbbc0186cb05a15fbd7fe1eca98bc4e03c
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:
@@ -218,7 +220,7 @@ services:
 
   ferrofed:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrofed:0.0.12@sha256:b5c6214c7ea186ddcb29b6bf0fea596fb6b0a2864b6ea1cc3afa9b7befe7632e
+    image: ghcr.io/ferrohealth/ferrofed:0.0.13@sha256:59e8349688fb4cb896920df9e976887b0051388a6acf0c83a4b36b6510ade64e
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:
@@ -228,6 +230,8 @@ services:
         condition: service_healthy
       ferroehr-b:
         condition: service_healthy
+      ferropix:
+        condition: service_healthy
     environment:
       FERROFED_CONFIG: /etc/ferrofed/ferrofed.toml
       FERROFED__SERVER__LISTEN: 0.0.0.0:8080
@@ -236,6 +240,8 @@ services:
     secrets:
       - source: ferrofed_signing_key
         target: /run/secrets/ferrofed/signing-key.pem
+      - source: ferrofed_pix_client_secret
+        target: /run/secrets/ferrofed/pix-client-secret
     volumes:
       - type: bind
         source: ./ferrofed/ferrofed.toml
@@ -253,6 +259,69 @@ services:
       retries: 30
       start_period: 10s
 
+  # FerroPIX, the lane's Master Patient Index, in the issuer's network
+  # namespace like FerroFED and FerroBRIDGE. The data key and the database URL
+  # are file secrets run.sh writes under .work/.
+  ferropix:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferropix:0.0.5@sha256:6d42e2f9498eb0a801401149d19134cb6f54c2db3d2c499ffe8ba77ad902a8d5
+    restart: unless-stopped
+    network_mode: service:issuer
+    depends_on:
+      issuer:
+        condition: service_started
+      ferropix-postgres:
+        condition: service_healthy
+    environment:
+      FERROPIX_CONFIG: /etc/ferropix/ferropix.toml
+      FERROPIX__SERVER__LISTEN: 0.0.0.0:8070
+      FERROPIX__TELEMETRY__FORMAT: json
+      FERROPIX__USAGE_REPORT__ENABLED: "false"
+    secrets:
+      - ferropix-db-url
+      - ferropix-data-key
+    volumes:
+      - type: bind
+        source: ./ferropix/ferropix.toml
+        target: /etc/ferropix/ferropix.toml
+        read_only: true
+      # The audit spool, owned by the image's user (uid 65532).
+      - ferropix-state:/var/lib/ferropix
+    read_only: true
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ferropix", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  # FerroPIX's cross-reference store, the PostgreSQL image FerroPIX's
+  # quickstart pins. The server connects as the database owner the image
+  # creates.
+  ferropix-postgres:
+    image: postgres:18.6@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ferropix
+      POSTGRES_USER: ferropix
+      POSTGRES_PASSWORD_FILE: /run/secrets/ferropix-postgres-password
+    secrets:
+      - ferropix-postgres-password
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "ferropix", "-d", "ferropix"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    # The entrypoint starts as root to fix ownership and drops to the postgres
+    # user itself, so this image keeps the capabilities that needs.
+    security_opt:
+      - no-new-privileges:true
+
 configs:
   # The configuration both FerroEHR nodes share: FerroEHR's quickstart
   # Basic user and scopes, with no role gate.
@@ -266,6 +335,16 @@ secrets:
   # FerroFED's P-384 signing key, a development key run.sh makes.
   ferrofed_signing_key:
     file: ./.work/secrets/ferrofed-signing-key.pem
+  # FerroFED's client secret at the lane's issuer, which accepts any.
+  ferrofed_pix_client_secret:
+    file: ./.work/secrets/ferrofed-pix-client-secret
+  ferropix-db-url:
+    file: ./.work/secrets/ferropix-db-url
+  ferropix-data-key:
+    file: ./.work/secrets/ferropix-data-key
+  ferropix-postgres-password:
+    file: ./.work/secrets/ferropix-postgres-password
 
 volumes:
   ferrobridge-state:
+  ferropix-state:

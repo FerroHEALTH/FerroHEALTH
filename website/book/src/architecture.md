@@ -183,11 +183,10 @@ What it checks, step by step:
 | 2 | FerroEHR, two nodes | Each node takes the synthetic templates, an EHR for the patient under its own `ehr_id`, and a composition. |
 | 3 | FerroBRIDGE and FerroTERM | A `Condition` written through FerroBRIDGE's FHIR facade with a coding that carries no display reads back with the display FerroTERM's `$lookup` gave as its text, and node A stores the code with that display. |
 | 4 | FerroEHR | Node A holds two compositions for the patient and node B one. |
-| 5 | FerroFED | One query, sent once, is answered from both nodes, and each row names the node it came from. |
-| 6 | FerroPIX | Both sites feed the patient (ITI-104), the cross-reference names both nodes' `ehr_id`s (PIXm, ITI-83), and a demographics search finds one person (PDQm, ITI-78). FerroFED then resolves the patient through FerroPIX. |
+| 5 | FerroPIX | Both sites feed the patient (ITI-104), the cross-reference names both nodes' `ehr_id`s (PIXm, ITI-83), and a demographics search finds one person (PDQm, ITI-78). |
+| 6 | FerroFED | It resolves the patient through FerroPIX as its PIXm Manager, then one query, sent once, is answered from both nodes, and each row names the node it came from. |
 
-The FerroPIX steps join the lane once FerroPIX publishes its first server
-image. The patient summary FerroFED builds from both nodes, with codes
+The patient summary FerroFED builds from both nodes, with codes
 translated through FerroTERM, joins once the FerroFED and FerroPIX releases
 that serve it are published
 ([#66](https://github.com/FerroHEALTH/FerroHEALTH/issues/66)).

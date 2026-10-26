@@ -9,9 +9,8 @@
 #
 #   e2e/family/run.sh [--keep]
 #
-# --keep leaves the stack running after the last step. compose.pix.yaml and
-# the FerroPIX steps join once that overlay pins the FerroPIX image. FAMILY_E2E_COMPOSE names the
-# compose command, `docker compose` by default.
+# --keep leaves the stack running after the last step. FAMILY_E2E_COMPOSE
+# names the compose command, `docker compose` by default.
 #
 # Each step prints what it asks of which product. A failure prints one line,
 # "family-e2e: FAIL <product> <call>: <what was wrong>", the answer it got,
@@ -68,15 +67,7 @@ for arg in "$@"; do
   esac
 done
 
-# FerroPIX joins once compose.pix.yaml pins its image; FAMILY_E2E_PIX=0 or 1
-# overrides that.
-pix="${FAMILY_E2E_PIX:-}"
-if [[ -z "$pix" ]]; then
-  pix=0
-  grep -qE 'image: ghcr\.io/ferrohealth/ferropix:[^@[:space:]]+@sha256:' compose.pix.yaml && pix=1
-fi
 files=(-f compose.yaml)
-[[ "$pix" == 1 ]] && files+=(-f compose.pix.yaml)
 read -r -a compose_cmd <<<"${FAMILY_E2E_COMPOSE:-docker compose}"
 
 compose() {
@@ -175,7 +166,7 @@ step lane "fetching the synthetic fixtures from the FerroBRIDGE testkit"
 for entry in "${FIXTURES[@]}"; do
   path="${entry%% *}"
   want="${entry##* }"
-  curl -fsSL "$FIXTURE_BASE/$path" -o "$WORK/fixtures/$path" ||
+  curl --proto '=https' --proto-redir '=https' -fsSL "$FIXTURE_BASE/$path" -o "$WORK/fixtures/$path" ||
     fail lane "GET fixture $path" "could not be fetched"
   [[ "$(sha256 "$WORK/fixtures/$path")" == "$want" ]] ||
     fail lane "GET fixture $path" "its SHA-256 is not the pinned one"
@@ -188,19 +179,16 @@ printf 'ferroehr' >"$WORK/secrets/cdr_password"
 openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-384 \
   -out "$WORK/secrets/ferrofed-signing-key.pem" 2>/dev/null
 printf 'family-e2e' >"$WORK/secrets/ferrofed-pix-client-secret"
-if [[ "$pix" == 1 ]]; then
-  openssl rand -base64 32 >"$WORK/secrets/ferropix-data-key"
-  pix_password="$(openssl rand -hex 16)"
-  printf '%s' "$pix_password" >"$WORK/secrets/ferropix-postgres-password"
-  printf 'postgresql://ferropix:%s@ferropix-postgres:5432/ferropix' "$pix_password" \
-    >"$WORK/secrets/ferropix-db-url"
-fi
+openssl rand -base64 32 >"$WORK/secrets/ferropix-data-key"
+pix_password="$(openssl rand -hex 16)"
+printf '%s' "$pix_password" >"$WORK/secrets/ferropix-postgres-password"
+printf 'postgresql://ferropix:%s@ferropix-postgres:5432/ferropix' "$pix_password" \
+  >"$WORK/secrets/ferropix-db-url"
 chmod 644 "$WORK"/secrets/*
 
 trap cleanup EXIT
 
-first=(issuer ferroterm ferroehr-a ferroehr-b)
-[[ "$pix" == 1 ]] && first+=(ferropix)
+first=(issuer ferroterm ferroehr-a ferroehr-b ferropix)
 step lane "starting ${first[*]}"
 compose pull --quiet
 compose up -d --wait "${first[@]}" || fail lane "compose up" "a service did not turn healthy"
@@ -316,46 +304,44 @@ expect FerroEHR "node B POST /query/aql" 200 "$status"
 holds FerroEHR "node B POST /query/aql" '.rows | length == 1' "node B does not hold one composition for the patient"
 
 # FerroPIX: both sites feed the patient, and the cross-reference links them.
-if [[ "$pix" == 1 ]]; then
-  for site in "a $DOMAIN_A $EHR_A" "b $DOMAIN_B $EHR_B"; do
-    read -r name domain ehr <<<"$site"
-    source_token="$(token "family-e2e-source-$name" "system/Patient.cud")"
-    step FerroPIX "PUT /fhir/Patient?identifier=$domain|<ehr_id> (ITI-104, site $name)"
-    jq -n --arg d "$domain" --arg e "$ehr" --arg ns "$PATIENT_SYSTEM" --arg id "$PATIENT_VALUE" '{
-      resourceType: "Patient",
-      identifier: [{system: $d, value: $e}, {system: $ns, value: $id}],
-      name: [{family: "Lane", given: ["Family"]}], gender: "unknown", birthDate: "1970-01-01"}' \
-      >"$WORK/patient.json"
-    status="$(call PUT "$PIX/Patient" -G --data-urlencode "identifier=$domain|$ehr" \
-      -H "Authorization: Bearer $source_token" -H 'Content-Type: application/fhir+json' \
-      -H 'Accept: application/fhir+json' --data-binary "@$WORK/patient.json")"
-    [[ "$status" == 201 || "$status" == 200 ]] ||
-      fail FerroPIX "PUT /fhir/Patient (ITI-104, site $name)" "answered $status"
-  done
+for site in "a $DOMAIN_A $EHR_A" "b $DOMAIN_B $EHR_B"; do
+  read -r name domain ehr <<<"$site"
+  source_token="$(token "family-e2e-source-$name" "system/Patient.cud")"
+  step FerroPIX "PUT /fhir/Patient?identifier=$domain|<ehr_id> (ITI-104, site $name)"
+  jq -n --arg d "$domain" --arg e "$ehr" --arg ns "$PATIENT_SYSTEM" --arg id "$PATIENT_VALUE" '{
+    resourceType: "Patient",
+    identifier: [{system: $d, value: $e}, {system: $ns, value: $id}],
+    name: [{family: "Lane", given: ["Family"]}], gender: "unknown", birthDate: "1970-01-01"}' \
+    >"$WORK/patient.json"
+  status="$(call PUT "$PIX/Patient" -G --data-urlencode "identifier=$domain|$ehr" \
+    -H "Authorization: Bearer $source_token" -H 'Content-Type: application/fhir+json' \
+    -H 'Accept: application/fhir+json' --data-binary "@$WORK/patient.json")"
+  [[ "$status" == 201 || "$status" == 200 ]] ||
+    fail FerroPIX "PUT /fhir/Patient (ITI-104, site $name)" "answered $status"
+done
 
-  consumer_token="$(token family-e2e-client "system/Patient.rs")"
-  step FerroPIX "POST /fhir/Patient/\$ihe-pix (ITI-83)"
-  jq -n --arg src "$PATIENT_SYSTEM|$PATIENT_VALUE" --arg a "$DOMAIN_A" --arg b "$DOMAIN_B" '{
-    resourceType: "Parameters", parameter: [
-      {name: "sourceIdentifier", valueString: $src},
-      {name: "targetSystem", valueString: $a}, {name: "targetSystem", valueString: $b}]}' \
-    >"$WORK/pix.json"
-  status="$(call POST "$PIX/Patient/\$ihe-pix" -H "Authorization: Bearer $consumer_token" \
-    -H 'Content-Type: application/fhir+json' -H 'Accept: application/fhir+json' \
-    --data-binary "@$WORK/pix.json")"
-  expect FerroPIX "POST /fhir/Patient/\$ihe-pix" 200 "$status"
-  A="$EHR_A" B="$EHR_B" holds FerroPIX "POST /fhir/Patient/\$ihe-pix" \
-    '[.parameter[] | select(.name == "targetIdentifier") | .valueIdentifier.value] | sort == ([env.A, env.B] | sort)' \
-    "the cross-reference does not name both nodes' ehr_ids"
+consumer_token="$(token family-e2e-client "system/Patient.rs")"
+step FerroPIX "POST /fhir/Patient/\$ihe-pix (ITI-83)"
+jq -n --arg src "$PATIENT_SYSTEM|$PATIENT_VALUE" --arg a "$DOMAIN_A" --arg b "$DOMAIN_B" '{
+  resourceType: "Parameters", parameter: [
+    {name: "sourceIdentifier", valueString: $src},
+    {name: "targetSystem", valueString: $a}, {name: "targetSystem", valueString: $b}]}' \
+  >"$WORK/pix.json"
+status="$(call POST "$PIX/Patient/\$ihe-pix" -H "Authorization: Bearer $consumer_token" \
+  -H 'Content-Type: application/fhir+json' -H 'Accept: application/fhir+json' \
+  --data-binary "@$WORK/pix.json")"
+expect FerroPIX "POST /fhir/Patient/\$ihe-pix" 200 "$status"
+A="$EHR_A" B="$EHR_B" holds FerroPIX "POST /fhir/Patient/\$ihe-pix" \
+  '[.parameter[] | select(.name == "targetIdentifier") | .valueIdentifier.value] | sort == ([env.A, env.B] | sort)' \
+  "the cross-reference does not name both nodes' ehr_ids"
 
-  step FerroPIX "GET /fhir/Patient?identifier= (ITI-78)"
-  status="$(call GET "$PIX/Patient" -G --data-urlencode "identifier=$PATIENT_SYSTEM|$PATIENT_VALUE" \
-    -H "Authorization: Bearer $consumer_token" -H 'Accept: application/fhir+json')"
-  expect FerroPIX "GET /fhir/Patient (ITI-78)" 200 "$status"
-  holds FerroPIX "GET /fhir/Patient (ITI-78)" \
-    '[.entry[]? | select(.resource.resourceType == "Patient")] | length == 1' \
-    "the search does not find exactly one person for the patient"
-fi
+step FerroPIX "GET /fhir/Patient?identifier= (ITI-78)"
+status="$(call GET "$PIX/Patient" -G --data-urlencode "identifier=$PATIENT_SYSTEM|$PATIENT_VALUE" \
+  -H "Authorization: Bearer $consumer_token" -H 'Accept: application/fhir+json')"
+expect FerroPIX "GET /fhir/Patient (ITI-78)" 200 "$status"
+holds FerroPIX "GET /fhir/Patient (ITI-78)" \
+  '[.entry[]? | select(.resource.resourceType == "Patient")] | length == 1' \
+  "the search does not find exactly one person for the patient"
 
 # FerroFED: one query answered from both nodes, each row carrying its node.
 step lane "starting ferrofed"

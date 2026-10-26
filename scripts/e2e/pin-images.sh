@@ -9,11 +9,9 @@
 #
 # For each image it reads the product's latest GitHub release (gh api), asks
 # GHCR's registry API anonymously for the digest of that tag, and rewrites the
-# reference in e2e/family/compose.yaml and e2e/family/compose.pix.yaml in
-# place. An image whose release tag has no published image yet keeps its pin
-# and is reported, so a release still building moves on the next run. The
-# FerroPIX overlay's unpinned image line takes its first pin the same way.
-# --check rewrites nothing and exits 1 when a pin is behind. The Refresh
+# reference in e2e/family/compose.yaml in place. An image whose release tag has
+# no published image yet keeps its pin and is reported, so a release still
+# building moves on the next run. --check rewrites nothing and exits 1 when a pin is behind. The Refresh
 # workflow runs it beside render-releases.sh. No specification governs it:
 # our own design.
 
@@ -22,7 +20,7 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$root"
 
-readonly FILES=(e2e/family/compose.yaml e2e/family/compose.pix.yaml)
+readonly FILES=(e2e/family/compose.yaml)
 # image name, then the repository whose release it ships with.
 readonly IMAGES=(
   "ferroehr FerroEHR"
@@ -76,18 +74,13 @@ for entry in "${IMAGES[@]}"; do
   want="ghcr.io/ferrohealth/$name:$version@$sha"
   for file in "${FILES[@]}"; do
     [[ -f "$file" ]] || continue
-    # The FerroPIX overlay names its image by a variable until the first pin.
-    if ! grep -qE "ghcr\.io/ferrohealth/$name:[^@[:space:]]+@sha256:" "$file" &&
-      ! { [[ "$name" == ferropix ]] && grep -q 'FERROPIX_IMAGE' "$file"; }; then
-      continue
-    fi
+    grep -qE "ghcr\.io/ferrohealth/$name:[^@[:space:]]+@sha256:" "$file" || continue
     grep -qF "$want" "$file" && continue
     behind=1
     echo "pin-images: $file moves ghcr.io/ferrohealth/$name to $version"
     [[ "$check" -eq 1 ]] && continue
     WANT="$want" NAME="$name" perl -pi -e '
       s{ghcr\.io/ferrohealth/\Q$ENV{NAME}\E:[^\@\s]+\@sha256:[0-9a-f]{64}}{$ENV{WANT}}g;
-      s{\$\{FERROPIX_IMAGE:\?[^}]*\}}{$ENV{WANT}}g if $ENV{NAME} eq "ferropix";
     ' "$file"
   done
 done

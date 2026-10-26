@@ -1,0 +1,31 @@
+{
+  "resourceType": "ConceptMap",
+  "id": "family-e2e-finding-to-target",
+  "url": "http://example.org/fhir/ConceptMap/family-e2e-finding-to-target",
+  "version": "1.0.0",
+  "name": "FamilyE2eFindingToTarget",
+  "title": "FerroHEALTH family lane finding map",
+  "status": "active",
+  "experimental": true,
+  "publisher": "FerroHEALTH family end-to-end lane",
+  "description": "Maps the synthetic findings onto the synthetic target codes: alpha as an equivalent, beta as a wider concept.",
+  "sourceUri": "http://example.org/fhir/ValueSet/family-e2e-findings",
+  "group": [
+    {
+      "source": "http://example.org/fhir/CodeSystem/family-e2e-finding",
+      "target": "http://example.org/fhir/CodeSystem/family-e2e-target",
+      "element": [
+        {
+          "code": "alpha",
+          "display": "Family lane finding alpha",
+          "target": [{ "code": "T-ALPHA", "display": "Target finding alpha", "equivalence": "equivalent" }]
+        },
+        {
+          "code": "beta",
+          "display": "Family lane finding beta",
+          "target": [{ "code": "T-GROUP", "display": "Target finding group", "equivalence": "wider" }]
+        }
+      ]
+    }
+  ]
+}

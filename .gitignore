@@ -37,3 +37,6 @@ _site/
 # Per-machine agent settings and git worktrees
 .claude/settings.local.json
 .claude/worktrees/
+
+# The family end-to-end lane's secrets and fetched fixtures (e2e/family/run.sh).
+e2e/family/.work/

@@ -1,0 +1,19 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "family-e2e-target",
+  "url": "http://example.org/fhir/CodeSystem/family-e2e-target",
+  "version": "1.0.0",
+  "name": "FamilyE2eTarget",
+  "title": "FerroHEALTH family lane target codes",
+  "status": "active",
+  "experimental": true,
+  "publisher": "FerroHEALTH family end-to-end lane",
+  "description": "Synthetic target codes the family lane translates its findings into.",
+  "caseSensitive": true,
+  "content": "complete",
+  "count": 2,
+  "concept": [
+    { "code": "T-ALPHA", "display": "Target finding alpha" },
+    { "code": "T-GROUP", "display": "Target finding group" }
+  ]
+}

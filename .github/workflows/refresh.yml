@@ -1,13 +1,15 @@
 # SPDX-FileCopyrightText: Cadasto B.V.
 # SPDX-License-Identifier: Apache-2.0
 
-# Refresh: keep the committed release fallbacks as fresh as the deployed page.
+# Refresh: keep the committed release fallbacks as fresh as the deployed page,
+# and the family end-to-end lane's image pins on each product's latest release.
 #
 # The page renders each product's latest release, its date and the last push
 # at assembly time, so the deployed site is fresh on its own. The values
 # committed in index.html are the fallback for an assembly without a token,
 # and they rot unless something moves them. This workflow renders them in
-# place on a schedule and, when the file changed, opens one pull request on a
+# place on a schedule, moves the lane's pins with scripts/e2e/pin-images.sh,
+# and, when a file changed, opens one pull request on a
 # fixed branch (or updates the open one) and enables auto-merge on it.
 #
 # A pull request opened with the workflow token starts no workflow run of its
@@ -53,15 +55,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: scripts/site/render-releases.sh website/landing/index.html | tee render.log
 
+      - name: Move the family lane's image pins
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/e2e/pin-images.sh | tee pins.log
+
       - name: Did anything move
         id: diff
         run: |
-          if git diff --quiet -- website/landing/index.html; then
+          if git diff --quiet -- website/landing/index.html e2e/family; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "refresh: the committed fallbacks already match the latest releases."
+            echo "refresh: the committed fallbacks and pins already match the latest releases."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            git --no-pager diff -- website/landing/index.html
+            git --no-pager diff -- website/landing/index.html e2e/family
           fi
 
       - name: Commit on the refresh branch and push it
@@ -73,13 +80,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -q -B "$BRANCH"
-          git add website/landing/index.html
+          git add website/landing/index.html e2e/family
           {
             echo "$TITLE"
             echo
             echo "Rendered by scripts/site/render-releases.sh from each product's repository:"
             echo
             grep -E '^render-releases: Ferro' render.log | sed 's/^render-releases: /- /' || true
+            grep -E '^pin-images: .* moves ' pins.log | sed 's/^pin-images: /- /' || true
           } > commit.msg
           git commit -q -F commit.msg
           # The token travels in an Authorization header, the way actions/checkout
@@ -99,9 +107,10 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           {
-            echo "The committed release fallbacks in \`website/landing/index.html\` moved. Rendered by \`scripts/site/render-releases.sh\` from each product's repository:"
+            echo "The committed release fallbacks in \`website/landing/index.html\`, or the family lane's image pins in \`e2e/family/\`, moved. Rendered by \`scripts/site/render-releases.sh\` and \`scripts/e2e/pin-images.sh\` from each product's repository:"
             echo
             grep -E '^render-releases: Ferro' render.log | sed 's/^render-releases: /- /' || true
+            grep -E '^pin-images: .* moves ' pins.log | sed 's/^pin-images: /- /' || true
             echo
             echo "Opened by the Refresh workflow ($RUN_URL). The required checks are dispatched onto this branch and auto-merge is enabled, so it merges by itself when they pass."
           } > pr.md
@@ -122,6 +131,7 @@ jobs:
         run: |
           gh workflow run ci.yml --repo "$REPO" --ref "$BRANCH"
           gh workflow run pages.yml --repo "$REPO" --ref "$BRANCH"
+          gh workflow run family-e2e.yml --repo "$REPO" --ref "$BRANCH"
 
       - name: Enable auto-merge
         if: steps.diff.outputs.changed == 'true'

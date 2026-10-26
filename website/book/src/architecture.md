@@ -163,3 +163,64 @@ Five rules hold across the family:
   implementation, sending to an Audit Record Repository the deployment runs.
   FerroEHR, FerroFED and FerroPIX write their audit trails through it, and
   FerroEHR and FerroFED their EHDS access records.
+
+## The family end-to-end lane
+
+Each product tests itself, and some test against one sibling. The
+[family end-to-end lane](https://github.com/FerroHEALTH/FerroHEALTH/tree/main/e2e/family)
+runs the products together: it starts the published container image of each
+one, side by side, and drives one synthetic patient through all of them. No
+specification governs a test across products, so the lane is the family's own
+design. It runs
+[on GitHub Actions](https://github.com/FerroHEALTH/FerroHEALTH/actions/workflows/family-e2e.yml)
+every week, on demand, and on every pull request that changes it.
+
+What it checks, step by step:
+
+| Step | Product | What the lane asserts |
+|---|---|---|
+| 1 | FerroTERM | It serves the synthetic code systems, value set and concept map mounted into it: a display by `$lookup`, a member by `$validate-code`, a translation by `$translate`. |
+| 2 | FerroEHR, two nodes | Each node takes the synthetic templates, an EHR for the patient under its own `ehr_id`, and a composition. |
+| 3 | FerroBRIDGE and FerroTERM | A `Condition` written through FerroBRIDGE's FHIR facade with a coding that carries no display reads back with the display FerroTERM's `$lookup` gave as its text, and node A stores the code with that display. |
+| 4 | FerroEHR | Node A holds two compositions for the patient and node B one. |
+| 5 | FerroPIX | Both sites feed the patient (ITI-104), the cross-reference names both nodes' `ehr_id`s (PIXm, ITI-83), and a demographics search finds one person (PDQm, ITI-78). |
+| 6 | FerroFED | It resolves the patient through FerroPIX as its PIXm Manager, then one query, sent once, is answered from both nodes, and each row names the node it came from. |
+
+The patient summary FerroFED builds from both nodes, with codes
+translated through FerroTERM, joins once the FerroFED and FerroPIX releases
+that serve it are published
+([#66](https://github.com/FerroHEALTH/FerroHEALTH/issues/66)).
+
+Every product checks its callers as it would in a deployment. The lane runs
+a development OpenID Provider, the one FerroPIX's quickstart runs, and gets
+an access token from it for each call to FerroFED, FerroBRIDGE and FerroPIX.
+The FerroEHR nodes take their quickstart's Basic user. Every product's usage
+report is switched off, and all data are invented for the test.
+
+### Running the lane on your own machine
+
+You need Docker with Compose, `curl`, `jq` and `openssl`, and room for up to ten
+containers. Nothing is built: Compose pulls each published image.
+
+```sh
+git clone https://github.com/FerroHEALTH/FerroHEALTH.git
+cd FerroHEALTH
+e2e/family/run.sh
+```
+
+The script prints each call it makes. A failure prints one line naming the
+product and the call, the answer it got and the logs of the stack, and the
+script exits `1`. It stops and removes the stack at the end; add `--keep` to
+leave it running and call the products yourself on the loopback ports the
+compose file lists.
+
+### How the pins follow the releases
+
+The compose file names each image by its release and by the digest of that
+release's image, so a run uses exactly the images it names. Every six hours
+the family site's refresh workflow reads each product's latest release, asks
+the container registry for the digest of its image, and opens one pull
+request that moves every pin that changed, with the lane run on it. A
+release whose image is not published yet keeps the old pin until the next
+run. The same check runs at the start of every lane run and reports a pin
+that is behind.

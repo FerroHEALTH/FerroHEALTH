@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+# The context of the family lane: one profile onto the synthetic
+# ferrobridge.diagnose.v1 template, which run.sh uploads to FerroEHR node A.
+# The profile URL is example.org, which RFC 6761 section 6.5 reserves for
+# examples.
+grammar: FHIRConnect/v1.0.0
+type: context
+metadata:
+  name: family_condition.context
+  version: 1.0.0
+spec:
+  system: FHIR
+  version: R4
+context:
+  profile:
+    url: "http://example.org/fhir/StructureDefinition/family-e2e-condition"
+  template:
+    id: "ferrobridge.diagnose.v1"
+  archetypes:
+    - "family_condition"
+  start: "family_condition"

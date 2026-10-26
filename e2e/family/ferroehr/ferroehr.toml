@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The configuration both FerroEHR nodes of the family lane share, mounted
+# read-only at /etc/ferroehr/ferroehr.toml. It is FerroEHR's quickstart
+# posture: one Basic user, ferroehr / ferroehr (the hash is Argon2id of
+# "ferroehr"), with every SMART on openEHR resource scope and no role gate.
+# Development credentials, NOT for anything real. compose.yaml sets each
+# node's database and system_id in the environment.
+
+deployment_profile = "sandbox"
+
+[server]
+bind = "0.0.0.0:8080"
+
+[auth]
+enabled = true
+
+[[auth.basic.users]]
+user = "ferroehr"
+password_hash = "$argon2id$v=19$m=19456,t=2,p=1$ZmVycm9laHJEZXZTYWx0$be5nPwWjfUl1qvSrvkvqvdMOuCgM0VFcN/VN4MFLjT8"
+scopes = ["user/composition-*.cruds", "user/template-*.cruds", "user/aql-*.cruds", "__ferroehr.platform"]
+
+[authz.rbac]
+enabled = false
+
+[authz.rbac.basic_roles]
+ferroehr = ["ADMIN", "USER"]

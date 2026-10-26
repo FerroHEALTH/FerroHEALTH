@@ -14,6 +14,7 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-26 | [How the products fit together](architecture.md) | The family end-to-end lane: what it runs and asserts, how to run it on your own machine, and how its image pins follow each release. |
 | 2026-10-26 | [How the products fit together](architecture.md) | FerroTASK is restored as the planned product, in the diagram and in the text; FerroPIX is drawn solid as a released, running server; FerroFORMS is greyed out because it is paused. |
 | 2026-10-26 | [FerroHEALTH documentation](index.md) | FerroTASK is restored as the planned product; FerroPIX's row no longer says its server is being built. |
 | 2026-10-26 | [Licensing and trademarks](licensing.md) | FerroTASK's licence row is restored. |

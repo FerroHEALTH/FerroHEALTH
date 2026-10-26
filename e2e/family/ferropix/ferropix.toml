@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# FerroPIX in the family lane, mounted read-only at
+# /etc/ferropix/ferropix.toml by compose.pix.yaml. The production profile on
+# a loopback base, as FerroPIX's quickstart runs it, with both secrets read
+# from files. Every key is on
+# <https://ferropix.eu/docs/operate/configuration.html>.
+
+profile = "production"
+
+[server]
+listen = "0.0.0.0:8070"
+public_base_url = "http://localhost:8070"
+
+[db]
+url_file = "/run/secrets/ferropix-db-url"
+data_key_file = "/run/secrets/ferropix-data-key"
+
+[auth]
+audience = ["http://localhost:8070/fhir"]
+
+# The lane's issuer, and the Patient Identity Sources it vouches for.
+[[auth.issuer]]
+issuer = "http://localhost:8180/family"
+clients = ["family-e2e-source-a", "family-e2e-source-b", "family-e2e-source-registry"]
+
+# Each node's ehr_ids form a local domain, fed by that site's Source. The
+# patient's identifier is an authoritative domain both sites carry, which the
+# deterministic match links on. Every system lies in the example arc
+# urn:oid:2.999 that ITU-T X.660 reserves.
+[[domain]]
+system = "urn:oid:2.999.10"
+name = "Site A, FerroEHR node A ehr_ids"
+kind = "local"
+source_client_id = "family-e2e-source-a"
+
+[[domain]]
+system = "urn:oid:2.999.20"
+name = "Site B, FerroEHR node B ehr_ids"
+kind = "local"
+source_client_id = "family-e2e-source-b"
+
+[[domain]]
+system = "urn:oid:2.999.1.1"
+name = "Family lane patient identifier"
+kind = "authoritative"
+source_client_id = "family-e2e-source-registry"
+
+[usage_report]
+enabled = false

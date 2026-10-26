@@ -1,0 +1,359 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The family end-to-end lane: the published images of FerroEHR (two nodes),
+# FerroTERM, FerroBRIDGE, FerroFED and FerroPIX side by side, driven by run.sh
+# through one synthetic patient. FerroPIX is the lane's Master Patient Index:
+# both sites feed it (ITI-104), and FerroFED resolves the patient through it as
+# its PIXm Manager (ITI-83). No specification governs a cross-product test: our
+# own design.
+#
+#   e2e/family/run.sh            secrets, start, seed, every assertion, stop
+#   e2e/family/run.sh --keep     the same, and leave the stack running
+#
+# Nothing here builds an image. Every product image is pinned by its release
+# tag and the digest of its image index, and scripts/e2e/pin-images.sh moves
+# both to each product's latest release (the Refresh workflow runs it).
+#
+# THE ISSUER. NAV's mock-oauth2-server, the development OpenID Provider the
+# FerroPIX quickstart and testkit pin, signs every access token the lane uses.
+# A product reads an issuer over plain http only on loopback (RFC 8414 §2), so
+# the issuer owns a network namespace and FerroFED, FerroBRIDGE and FerroPIX
+# join it: each sees the issuer at http://localhost:8180/family, as run.sh
+# does through the published port. A development issuer, NOT for anything real.
+#
+# CREDENTIALS. The FerroEHR nodes run FerroEHR's quickstart Basic user
+# ferroehr / ferroehr, and FerroFED reaches them with it, as the FerroFED
+# quickstart does. FerroBRIDGE reads its CDR password from a file secret that
+# run.sh writes under .work/, which git ignores, beside FerroFED's signing key.
+# Development credentials only.
+#
+# USAGE REPORTS. A test lane is not an installation, so every product's report
+# to FerroPULSE is switched off here.
+#
+# PORTS. Every published port binds the loopback interface.
+#
+#   127.0.0.1:8180  the issuer          127.0.0.1:8081  FerroEHR node A
+#   127.0.0.1:8080  FerroFED            127.0.0.1:8082  FerroEHR node B
+#   127.0.0.1:8090  FerroBRIDGE         127.0.0.1:8083  FerroTERM
+
+name: ferrohealth-family-e2e
+
+# The isolation floor every product service takes.
+x-hardened: &hardened
+  cap_drop: [ALL]
+  security_opt:
+    - no-new-privileges:true
+
+# One FerroEHR node; each service below adds its database and system_id.
+x-ferroehr-node: &ferroehr-node
+  <<: *hardened
+  image: ghcr.io/ferrohealth/ferroehr:5.4.2@sha256:f14559e5fc5ce2333959eb8f6158f6728a4b13759f36df7923a175e6be368b19
+  restart: unless-stopped
+  configs:
+    - source: ferroehr-config
+      target: /etc/ferroehr/ferroehr.toml
+  # The configuration is a file mount, so the root filesystem can be
+  # read-only, which FerroEHR's quickstart notes for a mounted file.
+  read_only: true
+  tmpfs:
+    - /tmp
+  healthcheck:
+    test: ["CMD", "/usr/local/bin/ferroehr", "healthcheck"]
+    interval: 5s
+    timeout: 5s
+    retries: 30
+    start_period: 20s
+
+# One node's database, FerroEHR's own PostgreSQL image.
+x-ferroehr-postgres: &ferroehr-postgres
+  image: ghcr.io/ferrohealth/ferroehr-postgres:5.4.2@sha256:e0dbac9d2d825ad02b45899560d913e0a74673d835b82711031459cb5d68aff9
+  restart: unless-stopped
+  environment:
+    # FerroEHR's quickstart development credentials.
+    POSTGRES_PASSWORD: postgres
+    PG_INIT_USER: ferroehr
+    PG_INIT_PASSWORD: ferroehr
+    PG_INIT_DB: ferroehr
+  # The entrypoint starts as root to chown the data directory and drops to
+  # `postgres`, so it keeps exactly the capabilities that needs.
+  cap_drop: [ALL]
+  cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+  security_opt:
+    - no-new-privileges:true
+  read_only: true
+  tmpfs:
+    - /tmp
+    - /run
+    - /var/run/postgresql
+    - /var/lib/postgresql
+  healthcheck:
+    # Over TCP: the init server listens on the Unix socket alone.
+    test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ferroehr -d ferroehr"]
+    interval: 5s
+    timeout: 5s
+    retries: 30
+    start_period: 10s
+
+services:
+  issuer:
+    <<: *hardened
+    image: ghcr.io/navikt/mock-oauth2-server:6.1.3@sha256:2a813381bf282da46ff36ff386059e7903e25865056af8149f4fb3f1441916b8
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8180:8180"
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8090:8090"
+      # FerroPIX's port, which answers only with compose.pix.yaml.
+      - "127.0.0.1:8070:8070"
+    environment:
+      SERVER_PORT: "8180"
+      # One token callback for the client credentials grant. A Patient
+      # Identity Source is its own subject, as PIXm asks; every other client
+      # acts for one synthetic clinician with the IHE IUA purpose of use
+      # FerroFED requires. The audiences are the three products that check
+      # tokens, each an RFC 9068 `at+jwt`. `$$` is a literal `$` to compose.
+      JSON_CONFIG: >-
+        {"tokenCallbacks":[{"issuerId":"family","requestMappings":[
+        {"requestParam":"client_id","match":"family-e2e-source-.*","typeHeader":"at+jwt",
+        "claims":{"sub":"$${clientId}","client_id":"$${clientId}",
+        "aud":["http://localhost:8070/fhir"],"scope":"$${scope}"}},
+        {"requestParam":"grant_type","match":"client_credentials","typeHeader":"at+jwt",
+        "claims":{"sub":"family-e2e-clinician","client_id":"$${clientId}",
+        "aud":["family-e2e-ferrofed","http://localhost:8090/fhir","http://localhost:8070/fhir"],
+        "scope":"$${scope}",
+        "extensions":{"ihe_iua":{"subject_organization_id":"urn:oid:2.999.7",
+        "purpose_of_use":[{"system":"http://terminology.hl7.org/CodeSystem/v3-ActReason","code":"TREAT"}]}}}}]}]}
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  ferroterm:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferroterm:0.3.0@sha256:51b4b86a4a88911096db1fb168a9b5f2729a88aa8f0b1f1bfc8340cc589cc771
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8083:8080"
+    environment:
+      # The synthetic code systems, value set and concept map, mounted below.
+      FERROTERM_CODESYSTEMS: /data/codesystems
+      FERROTERM_LOG_FORMAT: json
+      FERROTERM_USAGE_REPORT: "off"
+    volumes:
+      - type: bind
+        source: ./terminology
+        target: /data/codesystems
+        read_only: true
+    read_only: true
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ferroterm", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  ferroehr-a-postgres:
+    <<: *ferroehr-postgres
+
+  ferroehr-b-postgres:
+    <<: *ferroehr-postgres
+
+  ferroehr-a:
+    <<: *ferroehr-node
+    depends_on:
+      ferroehr-a-postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8081:8080"
+    environment:
+      FERROEHR__DB__URL: postgres://ferroehr:ferroehr@ferroehr-a-postgres:5432/ferroehr
+      FERROEHR__SERVER__SYSTEM_ID: node-a.family-e2e.local
+      FERROEHR__LOG__FORMAT: json
+      FERROEHR__USAGE_REPORT__ENABLED: "false"
+
+  ferroehr-b:
+    <<: *ferroehr-node
+    depends_on:
+      ferroehr-b-postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8082:8080"
+    environment:
+      FERROEHR__DB__URL: postgres://ferroehr:ferroehr@ferroehr-b-postgres:5432/ferroehr
+      FERROEHR__SERVER__SYSTEM_ID: node-b.family-e2e.local
+      FERROEHR__LOG__FORMAT: json
+      FERROEHR__USAGE_REPORT__ENABLED: "false"
+
+  # Started by run.sh once node A holds the template its mappings name: the
+  # facade compiles them at boot against the templates the CDR serves.
+  ferrobridge:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferrobridge:0.0.13@sha256:70572641853dd4cc37e7fad9076106dbbc0186cb05a15fbd7fe1eca98bc4e03c
+    restart: unless-stopped
+    network_mode: service:issuer
+    depends_on:
+      issuer:
+        condition: service_started
+      ferroehr-a:
+        condition: service_healthy
+      ferroterm:
+        condition: service_healthy
+    environment:
+      FERROBRIDGE_CONFIG: /etc/ferrobridge/config.toml
+      FERROBRIDGE__SERVER__LISTEN: 0.0.0.0:8090
+      FERROBRIDGE__TELEMETRY__FORMAT: json
+      FERROBRIDGE__USAGE_REPORT__ENABLED: "false"
+    secrets:
+      - cdr_password
+    volumes:
+      - type: bind
+        source: ./ferrobridge/config.toml
+        target: /etc/ferrobridge/config.toml
+        read_only: true
+      - type: bind
+        source: ./ferrobridge/mappings
+        target: /etc/ferrobridge/mappings
+        read_only: true
+      # The facade's identity store, owned by the image's user (uid 65532).
+      - ferrobridge-state:/home/nonroot
+    read_only: true
+
+  ferrofed:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferrofed:0.0.13@sha256:59e8349688fb4cb896920df9e976887b0051388a6acf0c83a4b36b6510ade64e
+    restart: unless-stopped
+    network_mode: service:issuer
+    depends_on:
+      issuer:
+        condition: service_started
+      ferroehr-a:
+        condition: service_healthy
+      ferroehr-b:
+        condition: service_healthy
+      ferropix:
+        condition: service_healthy
+    environment:
+      FERROFED_CONFIG: /etc/ferrofed/ferrofed.toml
+      FERROFED__SERVER__LISTEN: 0.0.0.0:8080
+      FERROFED__TELEMETRY__FORMAT: json
+      FERROFED__USAGE_REPORT__ENABLED: "false"
+    secrets:
+      - source: ferrofed_signing_key
+        target: /run/secrets/ferrofed/signing-key.pem
+      - source: ferrofed_pix_client_secret
+        target: /run/secrets/ferrofed/pix-client-secret
+    volumes:
+      - type: bind
+        source: ./ferrofed/ferrofed.toml
+        target: /etc/ferrofed/ferrofed.toml
+        read_only: true
+      - type: bind
+        source: ./ferrofed/registry.toml
+        target: /etc/ferrofed/registry.toml
+        read_only: true
+    read_only: true
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ferrofed", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  # FerroPIX, the lane's Master Patient Index, in the issuer's network
+  # namespace like FerroFED and FerroBRIDGE. The data key and the database URL
+  # are file secrets run.sh writes under .work/.
+  ferropix:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferropix:0.0.5@sha256:6d42e2f9498eb0a801401149d19134cb6f54c2db3d2c499ffe8ba77ad902a8d5
+    restart: unless-stopped
+    network_mode: service:issuer
+    depends_on:
+      issuer:
+        condition: service_started
+      ferropix-postgres:
+        condition: service_healthy
+    environment:
+      FERROPIX_CONFIG: /etc/ferropix/ferropix.toml
+      FERROPIX__SERVER__LISTEN: 0.0.0.0:8070
+      FERROPIX__TELEMETRY__FORMAT: json
+      FERROPIX__USAGE_REPORT__ENABLED: "false"
+    secrets:
+      - ferropix-db-url
+      - ferropix-data-key
+    volumes:
+      - type: bind
+        source: ./ferropix/ferropix.toml
+        target: /etc/ferropix/ferropix.toml
+        read_only: true
+      # The audit spool, owned by the image's user (uid 65532).
+      - ferropix-state:/var/lib/ferropix
+    read_only: true
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ferropix", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  # FerroPIX's cross-reference store, the PostgreSQL image FerroPIX's
+  # quickstart pins. FerroPIX refuses a superuser, so it connects as the
+  # `ferropix` role ferropix/10-ferropix-role.sh creates on the first start;
+  # the superuser's password is the ferropix-postgres-password secret.
+  ferropix-postgres:
+    image: postgres:18.6@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ferropix
+      POSTGRES_PASSWORD_FILE: /run/secrets/ferropix-postgres-password
+    secrets:
+      - ferropix-postgres-password
+      - ferropix-db-password
+    volumes:
+      - type: bind
+        source: ./ferropix/10-ferropix-role.sh
+        target: /docker-entrypoint-initdb.d/10-ferropix-role.sh
+        read_only: true
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "postgres", "-d", "ferropix"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    # The entrypoint starts as root to fix ownership and drops to the postgres
+    # user itself, so this image keeps the capabilities that needs.
+    security_opt:
+      - no-new-privileges:true
+
+configs:
+  # The configuration both FerroEHR nodes share: FerroEHR's quickstart
+  # Basic user and scopes, with no role gate.
+  ferroehr-config:
+    file: ./ferroehr/ferroehr.toml
+
+secrets:
+  # FerroEHR's quickstart password, which FerroBRIDGE sends as Basic.
+  cdr_password:
+    file: ./.work/secrets/cdr_password
+  # FerroFED's P-384 signing key, a development key run.sh makes.
+  ferrofed_signing_key:
+    file: ./.work/secrets/ferrofed-signing-key.pem
+  # FerroFED's client secret at the lane's issuer, which accepts any.
+  ferrofed_pix_client_secret:
+    file: ./.work/secrets/ferrofed-pix-client-secret
+  ferropix-db-url:
+    file: ./.work/secrets/ferropix-db-url
+  ferropix-data-key:
+    file: ./.work/secrets/ferropix-data-key
+  ferropix-postgres-password:
+    file: ./.work/secrets/ferropix-postgres-password
+  # The ferropix role's password, read once by the init script.
+  ferropix-db-password:
+    file: ./.work/secrets/ferropix-db-password
+
+volumes:
+  ferrobridge-state:
+  ferropix-state:

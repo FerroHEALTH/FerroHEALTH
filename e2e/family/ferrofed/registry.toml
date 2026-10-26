@@ -1,0 +1,39 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The registry document of the family lane: the two FerroEHR nodes FerroFED
+# federates, each at its ITS-REST API root on the compose network, with the
+# system_id compose.yaml configures the node to stamp. The format is
+# FerroFED's own (<https://ferrofed.eu/docs/operate/registry.html>).
+
+[[organisation]]
+id = "org-a"
+name = "Site A (FerroEHR node A)"
+
+[[organisation]]
+id = "org-b"
+name = "Site B (FerroEHR node B)"
+
+[[node]]
+id = "node-a"
+organisation = "org-a"
+system_id = "node-a.family-e2e.local"
+
+[[node]]
+id = "node-b"
+organisation = "org-b"
+system_id = "node-b.family-e2e.local"
+
+[[endpoint]]
+id = "node-a-query"
+node = "node-a"
+url = "http://ferroehr-a:8080/ferroehr/rest/openehr"
+connection_type = "openehr-rest-query"
+managing_organisation = "org-a"
+
+[[endpoint]]
+id = "node-b-query"
+node = "node-b"
+url = "http://ferroehr-b:8080/ferroehr/rest/openehr"
+connection_type = "openehr-rest-query"
+managing_organisation = "org-b"

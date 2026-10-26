@@ -64,7 +64,7 @@ crates compiled into the products and never run on its own:
 ![What calls what across the FerroHEALTH family](assets/diagrams/ferrohealth-architecture.svg)
 
 The [family website](https://ferrohealth.eu/) shows the latest release of
-each product and library, and which product is paused.
+each product and library, and the products that are paused or planned.
 
 ## The family book
 

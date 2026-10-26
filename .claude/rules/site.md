@@ -32,8 +32,8 @@ beyond that script and the pinned mdbook, no runtime dependency.
   and never the SVG. `assets/diagrams/README.md` carries the conventions and
   the raster command.
 - **A planned product says what it is for, and its one status is rendered.**
-  The page lists no planned product today: FerroSYS is a set of shared
-  crates and FerroTASK is in no family plan. A product the owner plans is a dashed
+  FerroTASK has a name, a domain and a repository
+  with its licence and brand, and no release. It is a dashed
   card in the products section with the product's job, the standards it
   intends to speak, a GitHub link, the domain as text (linked only once it
   serves a page) and a `data-repo` badge that `scripts/site/render-releases.sh`
@@ -44,8 +44,7 @@ beyond that script and the pinned mdbook, no runtime dependency.
   pull request renders the tag; that is when the card moves into the released
   grid, its site is linked once it serves a page, and it joins the status
   table. FerroPIX made that move with its first release, and its site is
-  linked now that `ferropix.eu` serves one; its card says the server is
-  being built.
+  linked now that `ferropix.eu` serves one.
 - **A shared library is never a product.** FerroAUTH, FerroAUDIT, FerroUI and FerroSYS
   are crates the products compile in, and none of them runs on its own. They
   have their own section (`#libraries`), cards in the parent's steel
@@ -163,7 +162,7 @@ product books link it.
 - FerroHEALTH owns iron and steel. Each product owns its hue, and the page
   spends a product hue only where that product is named: the card rule, the
   dot, the diagram box, the hero glow. The glow and the mark carry the four
-  strokes only; FerroPIX and FerroFED have no stroke,
+  strokes only; FerroPIX, FerroFED and FerroTASK have no stroke,
   released or not, because they frame the data path and are not on it.
 - Every product's hue in `assets/brand/tokens.css` is copied verbatim from
   that product's own `tokens.css`. When a product changes its palette, copy

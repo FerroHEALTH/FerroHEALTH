@@ -26,6 +26,7 @@ which licence:
 | FerroBRIDGE | [`LICENSE`](https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/LICENSE) | [ferrobridge.eu](https://ferrobridge.eu/docs/evaluate/licensing.html) |
 | FerroFED | [`LICENSE`](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE) | [ferrofed.eu](https://ferrofed.eu/docs/evaluate/licensing.html) |
 | FerroPIX | [`LICENSE`](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE) | [ferropix.eu](https://ferropix.eu/docs/evaluate/licensing.html) |
+| FerroTASK | [`LICENSE`](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE) | none yet |
 
 The shared libraries carry their own `LICENSE` on the same terms:
 
@@ -80,6 +81,8 @@ than you and your affiliates:
 | FerroAUDIT | records, sends, or stores audit records of access to health data |
 | FerroUI | operates a user interface built with it |
 | FerroSYS | operates a health-data server built with it |
+
+The planned product's licence is in its repository, linked above.
 
 ## The Change Date
 

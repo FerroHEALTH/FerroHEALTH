@@ -14,6 +14,9 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-26 | [How the products fit together](architecture.md) | FerroTASK is restored as the planned product, in the diagram and in the text; FerroPIX is drawn solid as a released, running server; FerroFORMS is greyed out because it is paused. |
+| 2026-10-26 | [FerroHEALTH documentation](index.md) | FerroTASK is restored as the planned product; FerroPIX's row no longer says its server is being built. |
+| 2026-10-26 | [Licensing and trademarks](licensing.md) | FerroTASK's licence row is restored. |
 | 2026-10-26 | [How the products fit together](architecture.md) | FerroSYS is a set of shared crates beside FerroAUTH, FerroAUDIT and FerroUI, never a control plane; it leaves the products and the diagram's instance for the library band. FerroTASK, in no family plan, leaves the page and the diagram. |
 | 2026-10-26 | [FerroHEALTH documentation](index.md) | No planned products: FerroSYS joins the shared libraries, and FerroTASK, in no family plan, is no longer listed. |
 | 2026-10-26 | [Licensing and trademarks](licensing.md) | FerroSYS's licence is listed with the shared libraries, with the use its Additional Use Grant names; FerroTASK's row is gone and its name stays in the brand terms. |

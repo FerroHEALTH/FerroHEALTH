@@ -81,6 +81,9 @@ step() {
 # fail PRODUCT CALL WHAT: the one failure line, then the answer it got.
 fail() {
   echo "family-e2e: FAIL $1 $2: $3" >&2
+  if [[ -s "$WORK/curl.err" ]]; then
+    echo "family-e2e: curl said: $(head -c 2000 "$WORK/curl.err")" >&2
+  fi
   if [[ -s "$WORK/answer" ]]; then
     echo "family-e2e: the answer was: $(head -c 2000 "$WORK/answer")" >&2
   fi
@@ -100,12 +103,16 @@ cleanup() {
 }
 
 # call METHOD URL [CURL_ARGS...]: one request; prints the status and keeps the
-# answer in $WORK/answer. A transport failure prints 000.
+# answer in $WORK/answer and curl's error in $WORK/curl.err, both emptied
+# first, so a report never shows an earlier call's. A transport failure prints
+# 000 once.
 call() {
-  local method="$1" url="$2"
+  local method="$1" url="$2" status
   shift 2
-  curl -4 -sS -X "$method" "$url" -o "$WORK/answer" -w '%{http_code}' "$@" 2>"$WORK/curl.err" ||
-    printf '000'
+  : >"$WORK/answer"
+  status="$(curl -4 -sS -X "$method" "$url" -o "$WORK/answer" -w '%{http_code}' "$@" \
+    2>"$WORK/curl.err")" || status=000
+  printf '%s' "${status:-000}"
 }
 
 # expect PRODUCT CALL WANT GOT: the status the call had to answer.

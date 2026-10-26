@@ -33,9 +33,7 @@ relies on is the revision that release pins.
   release lane requires and from which the end month of the five-year support
   commitment is computed.
 - **The other product of the system:** FerroBRIDGE, with its own version and
-  date on its own releases. From the release that moves the central access
-  log to FerroSYS ([FerroEHR#3661](https://github.com/FerroHEALTH/FerroEHR/issues/3661)), FerroSYS is the third product, with its own
-  version and date.
+  date on its own releases.
 
 State: available.
 

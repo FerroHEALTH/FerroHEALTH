@@ -21,25 +21,24 @@ FHIR, OMOP, federation or IHE profile, and when a product needs another's
 function it calls that server as a client.
 [FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS) (an openEHR form
 builder and renderer, `ferroforms.eu`) is paused: the site keeps its listing
-and says so where it describes its status. Two more are planned,
-each with a domain and a repository that holds its licence and its brand and
-no release yet:
-[FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (the control plane,
-`ferrosys.eu`) and [FerroTASK](https://github.com/FerroHEALTH/FerroTASK)
-(task planning and decision support over openEHR PROC and GDL2,
-`ferrotask.eu`). Ferro is *ferrum*, iron, which Rust is an oxide
-of.
+and says so where it describes its status. No product is planned: FerroTASK
+is in no family plan and the site does not present it. Ferro is *ferrum*,
+iron, which Rust is an oxide of.
 
-The products are built from three **shared libraries**, which are not
+The products are built from four **shared libraries**, which are not
 products and never appear in a product list, card, count or the status table:
 [FerroAUTH](https://github.com/FerroHEALTH/FerroAUTH), renamed from FerroSMART
 on 2026-10-25 (`ferrohealth-smart`, authentication: the SMART and OAuth 2.0
 resource server that checks tokens and issues none, and `ferrohealth-authz`,
 the policy decision, with 0.1.0 in preparation),
 [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) (`ihe-atna` and
-`ehds-logging`, the whole audit trail and the EHDS access record) and
+`ehds-logging`, the whole audit trail and the EHDS access record),
 [FerroUI](https://github.com/FerroHEALTH/FerroUI) (`ferrohealth-ui`, the
-components of every console, and every console is reactive). The page gives
+components of every console, and every console is reactive) and
+[FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (`ferrohealth-secret`,
+`-config`, `-telemetry`, `-health`, `-server` and `-usage-report`: the system
+plumbing every product shares, being built toward its v0.1.0 milestone; never a
+control plane or a central service). The page gives
 them their own section, and the diagram a band outside the instance frame
 with no edges. The protocol clients and models a product publishes for the
 others (`fhir-types` and `ferrobridge-term` from FerroBRIDGE, `ihe-iti` and
@@ -146,7 +145,8 @@ and narrow.
   `.github/workflows/refresh.yml` moves it through an auto-merged pull request
   when a product releases. `scripts/checks/no-typed-version.sh` fails the build
   on a version outside a marker, in the page and the diagram.
-- **A planned product is a dashed card, and says only what it is for.** It
+- **A planned product is a dashed card, and says only what it is for.** None
+  is listed today. It
   names the product, the job and the intended standards, links its repository
   and its `LICENSE`, shows the domain as text until it serves a page, and
   carries one `data-repo` badge that renders "code moved <day>" from the
@@ -160,14 +160,14 @@ and narrow.
   system list or a crate list moves with a product release and belongs on that
   product's site. The page names the standard and links the pin.
 - **The parent owns no hue.** FerroFORMS is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo; FerroPIX, FerroFED, FerroSYS
-  and FerroTASK are plum, azure, olive and emerald. FerroHEALTH is
+  is teal, FerroBRIDGE is indigo; FerroPIX and FerroFED are plum and azure.
+  The shared libraries, FerroSYS included, own no hue. FerroHEALTH is
   iron and steel, and spends a product hue only where that product is named. Every product's values in
   `assets/brand/tokens.css` are copied verbatim from its own `tokens.css`; a
   new hue is chosen with `scripts/brand/hue-distance.py` before it goes there.
   The mark stays at four strokes: they are the data path (FerroFORMS, FerroEHR,
-  FerroTERM, FerroBRIDGE), and FerroPIX, FerroFED, FerroSYS and
-  FerroTASK frame it, released or not.
+  FerroTERM, FerroBRIDGE), and FerroPIX and FerroFED frame it, released or
+  not.
 - **No product is an authorisation server.** Each product is its own SMART
   App Launch 2.x resource server against the deployment's authorization
   server, because one central service would hold the signing key every

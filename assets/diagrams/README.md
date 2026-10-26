@@ -8,8 +8,8 @@ site: a product README, the books, a slide, an issue.
 
 | File | What it shows |
 |---|---|
-| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the four services around them, with the shared libraries in a band under them |
-| `ferrohealth-architecture.png` | the same at 2400x1800, for the rare consumer that renders no SVG at all |
+| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the two services around them, with the shared libraries in a band under them |
+| `ferrohealth-architecture.png` | the same at 2400x1608, for the rare consumer that renders no SVG at all |
 
 ## How it is drawn
 
@@ -36,7 +36,7 @@ The landing page loads the SVG with `<img>`, and so can anything else:
 
 ```html
 <img src="https://ferrohealth.eu/assets/diagrams/ferrohealth-architecture.svg"
-     width="1200" height="900" alt="...">
+     width="1200" height="804" alt="...">
 ```
 
 In a Markdown file, reference the SVG:
@@ -58,7 +58,7 @@ Do not screenshot the page to get the diagram. The file is the diagram.
 
 ## What it says
 
-The frame is one FerroHEALTH instance serving one tenant. The eight inside are
+The frame is one FerroHEALTH instance serving one tenant. The six inside are
 the family; clinicians, applications, HL7 FHIR, HL7 Version 2 senders, the OMOP
 database and other organisations sit outside it. The family is five products
 that reach each other only over published protocols, each in its own lane:
@@ -71,16 +71,17 @@ instances.
 Left to right is the order data moves. The four servers are the data path:
 FerroFORMS takes the record down, FerroEHR keeps it, FerroTERM gives its codes
 meaning, FerroBRIDGE carries it out. FerroFORMS is paused and still drawn,
-solid, with "paused" in its box, because it is not a server waiting to run. FerroPIX, FerroFED, FerroSYS
-and FerroTASK frame that path. A server not running yet is drawn dashed, as is
-every call into one: FerroSYS and FerroTASK are planned, and FerroPIX
-publishes its identity crates while its server is being built. FerroFED runs
-and is drawn solid.
+solid, with "paused" in its box, because it is not a server waiting to run.
+FerroPIX and FerroFED frame that path. A server not running yet is drawn
+dashed, as is every call into one: FerroPIX publishes its identity crates
+while its server is being built. FerroFED runs and is drawn solid.
 
 Under the frame, a second band holds the shared libraries: FerroAUTH
 (`ferrohealth-smart` and `ferrohealth-authz`, authentication and the policy
-decision; renamed from FerroSMART on 2026-10-25), FerroAUDIT (`ihe-atna`, `ehds-logging`) and FerroUI
-(`ferrohealth-ui`). They sit outside the instance because they run inside the
+decision; renamed from FerroSMART on 2026-10-25), FerroAUDIT (`ihe-atna`,
+`ehds-logging`), FerroUI (`ferrohealth-ui`) and FerroSYS (`ferrohealth-secret`,
+`-config`, `-telemetry`, `-health`, `-server`, `-usage-report`: the system
+plumbing every product shares, never a control plane or a central service). They sit outside the instance because they run inside the
 products that compile them in, never on their own, and no edge reaches them
 because nothing calls a library over the network. They carry no product hue.
 The generator refuses a library box inside the instance frame, a hue or a
@@ -123,16 +124,6 @@ specification it speaks, with a few exceptions worth knowing:
   in on FerroBRIDGE's MLLP listener and are mapped through HL7's Version 2 to
   FHIR guide into the CDR. The HL7 Version 2 identity feed and queries go to
   FerroPIX, which draws no outside sender because its server is being built.
-- **FerroSYS has no edges at all.** Every server reports health, telemetry and
-  events to it and is configured from it, so it is drawn as a band under
-  everything, the mirror of the FerroTERM band above. A line from each box
-  would say nothing the band does not.
-- **FerroTASK is a client of the CDR.** openEHR Task Planning and GDL2 both
-  read the patient's data by archetype and template path, so FerroTASK reads
-  FerroEHR over `ITS-REST, AQL` and commits the state of each plan back, and
-  keeps no clinical record of its own. It sits in one row with FerroPIX and
-  FerroFED, the services around the data path, at the same size as both, and
-  its line climbs into the CDR's lower edge left of the index's lookup.
 - **No line crosses another.** The generator allows a crossing only where a
   hop is declared, and the drawing declares none.
 
@@ -160,14 +151,14 @@ media query inside the file swaps every colour on `prefers-color-scheme`, so one
 file serves a light and a dark reader.
 
 A product keeps its own hue: FerroFORMS rose, FerroEHR rust, FerroTERM teal,
-FerroBRIDGE indigo, and the provisional plum, azure, olive and emerald
-of FerroPIX, FerroFED, FerroSYS and FerroTASK. Everything else is iron, steel and
-graphite.
+FerroBRIDGE indigo, and the plum and azure of FerroPIX and FerroFED. The
+shared libraries, FerroSYS included, carry no hue. Everything else is iron,
+steel and graphite.
 
 ## Regenerating the raster
 
 ```bash
-rsvg-convert -w 2400 -h 1800 \
+rsvg-convert -w 2400 -h 1608 \
   assets/diagrams/ferrohealth-architecture.svg \
   -o assets/diagrams/ferrohealth-architecture.png
 ```

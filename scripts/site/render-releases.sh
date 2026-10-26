@@ -36,10 +36,10 @@ set -euo pipefail
 
 readonly FILE="${1:?usage: $0 FILE}"
 readonly OWNER=FerroHEALTH
-readonly PRODUCTS=(FerroFORMS FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroFED FerroSYS FerroTASK)
+readonly PRODUCTS=(FerroFORMS FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroFED)
 # The shared libraries are no products, and their cards carry a release the
 # same way, so the same markers fill them.
-readonly LIBRARIES=(FerroAUTH FerroAUDIT FerroUI)
+readonly LIBRARIES=(FerroAUTH FerroAUDIT FerroUI FerroSYS)
 
 [ -f "$FILE" ] || { echo "render-releases: no such file: $FILE" >&2; exit 1; }
 

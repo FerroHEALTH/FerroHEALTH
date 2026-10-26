@@ -32,8 +32,8 @@ beyond that script and the pinned mdbook, no runtime dependency.
   and never the SVG. `assets/diagrams/README.md` carries the conventions and
   the raster command.
 - **A planned product says what it is for, and its one status is rendered.**
-  FerroSYS and FerroTASK have a name, a domain and a repository
-  with their licence and brand, and no release. Each is a dashed
+  The page lists no planned product today: FerroSYS is a set of shared
+  crates and FerroTASK is in no family plan. A product the owner plans is a dashed
   card in the products section with the product's job, the standards it
   intends to speak, a GitHub link, the domain as text (linked only once it
   serves a page) and a `data-repo` badge that `scripts/site/render-releases.sh`
@@ -46,11 +46,12 @@ beyond that script and the pinned mdbook, no runtime dependency.
   table. FerroPIX made that move with its first release, and its site is
   linked now that `ferropix.eu` serves one; its card says the server is
   being built.
-- **A shared library is never a product.** FerroAUTH, FerroAUDIT and FerroUI
+- **A shared library is never a product.** FerroAUTH, FerroAUDIT, FerroUI and FerroSYS
   are crates the products compile in, and none of them runs on its own. They
   have their own section (`#libraries`), cards in the parent's steel
   (`.product-lib`, no product hue and no mark), a `data-rel` badge from their
-  repository and no row in the status table, and they never count toward a
+  repository (a `data-repo` badge until a first release, as FerroSYS has now)
+  and no row in the status table, and they never count toward a
   number of products. Their `LICENSE` is linked in the licensing section and
   checked by `scripts/checks/licence-links.sh`. The diagram draws them in a
   band outside the instance frame with no edges, and its generator refuses
@@ -162,7 +163,7 @@ product books link it.
 - FerroHEALTH owns iron and steel. Each product owns its hue, and the page
   spends a product hue only where that product is named: the card rule, the
   dot, the diagram box, the hero glow. The glow and the mark carry the four
-  strokes only; FerroPIX, FerroFED, FerroSYS and FerroTASK have no stroke,
+  strokes only; FerroPIX and FerroFED have no stroke,
   released or not, because they frame the data path and are not on it.
 - Every product's hue in `assets/brand/tokens.css` is copied verbatim from
   that product's own `tokens.css`. When a product changes its palette, copy

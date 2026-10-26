@@ -115,7 +115,13 @@ product books link it.
 - **The page addresses are fixed.** Product books and release notes link
   `manufacturer.html`, `security.html`, `post-market.html`, `cra.html`,
   `ehds/intended-purpose.html`, `ehds/shared-responsibility.html`,
-  `licensing.html` and `architecture.html`. A page that moves leaves an
+  `ehds/information-sheet.html`, `ehds/instructions-for-use.html`,
+  `ehds/readiness.html`, `ehds/technical-documentation.html`,
+  `licensing.html` and `architecture.html`. Each product's release lane
+  fetches the information sheet and the instructions for use from this
+  repository at the commit it pins, checks the page's `Revised` line against
+  the date it pins, and appends its own per-release facts under the page's
+  last heading, "This copy", so those two pages keep that heading last. A page that moves leaves an
   `[output.html.redirect]` entry in `book.toml`, and a reworded heading is
   checked for links to its old anchor in the product books.
 

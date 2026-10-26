@@ -195,6 +195,46 @@ jobs:
       - name: Every book page is dated, and revisions.md agrees
         run: scripts/checks/book-revisions.sh
 
+  # The readiness record and the technical documentation index of the EHDS EHR
+  # system are rendered from website/book/ehds.yaml. A status typed into a page
+  # instead of the source would rot the first time a requirement moved, so
+  # this re-renders and diffs. It needs no token. yq (mikefarah, v4) and jq
+  # ship on the runner image.
+  ehds-pages:
+    name: ehds pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: The EHDS pages match their source
+        run: scripts/render/ehds-pages.sh --check
+
+  # The EHDS source names issues in two trackers, FerroEHR's and FerroBRIDGE's.
+  # A row that says planned about work both trackers have closed is a stale
+  # claim on a compliance page, and a row naming an issue that does not exist
+  # links nowhere. The token reads the public issues of each repository.
+  ehds-tracker:
+    name: ehds tracker
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: The decision holds on its fixtures
+        run: scripts/checks/ehds-tracker.sh --self-test
+      - name: No planned row names only closed issues, and every issue exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/checks/ehds-tracker.sh
+
   # conclusion: the one status check the branch ruleset requires. It `needs`
   # every other job and runs on `always()`, so it reports even when a job is
   # skipped. It fails if any needed job failed or was cancelled, and passes when
@@ -235,6 +275,8 @@ jobs:
       - versions
       - licensing
       - book-revisions
+      - ehds-pages
+      - ehds-tracker
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5

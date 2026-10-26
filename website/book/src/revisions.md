@@ -14,6 +14,9 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-26 | [The EHDS EHR system: readiness](ehds/readiness.md) | FerroEHR ships the whole logging component; the planned move of the access log to a FerroSYS service, which is not planned, is gone. |
+| 2026-10-26 | [Annex III 1: a detailed description of the EHR system](ehds/annex-iii-1-description.md) | FerroSYS is no longer named as a planned third product of the EHR system. |
+| 2026-10-26 | [Annex III 6: a copy of the EU declaration of conformity](ehds/annex-iii-6-declaration-of-conformity.md) | FerroSYS is no longer named as a planned third product of the EHR system. |
 | 2026-10-26 | [Revisions](revisions.md) | The EHDS system documents joined the book. |
 | 2026-10-26 | [FerroHEALTH documentation](index.md) | The EHDS system's information sheet, instructions for use, readiness record and technical documentation are listed. |
 | 2026-10-26 | [The EHDS EHR system: information sheet](ehds/information-sheet.md) | First revision: the system's information sheet (EHDS Art. 38), moved from FerroEHR's book and written for both products. The version of the system is the release of the product a copy accompanies, with the oldest release of the other product it is tested against, and each release appends its own versions. |

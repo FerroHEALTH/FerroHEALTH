@@ -23,8 +23,7 @@ applies to EHR systems from 26 March 2029 (EHDS Art. 105).
   act requiring one. It names the EHR system, FerroEHR and FerroBRIDGE, with
   the version of each and the version of the shared logging crate
   `ehds-logging` that FerroEHR's logging component is built on, and carries
-  the content of EHDS Annex IV and CRA Annex V. Once the central access log moves to FerroSYS ([FerroEHR#3661](https://github.com/FerroHEALTH/FerroEHR/issues/3661)), it names
-  FerroSYS as the third product and its part of the logging component.
+  the content of EHDS Annex IV and CRA Annex V.
 - **Where it is published.** EHDS Art. 39(4): a declaration drawn up in a
   digital format "shall be made accessible online for the expected lifetime of
   the EHR system and, in any event, for at least 10 years from the placing on

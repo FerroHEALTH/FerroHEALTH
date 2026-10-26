@@ -13,17 +13,20 @@ through FHIRconnect and to the OMOP Common Data Model through OMOCL, and
 clinical HL7 Version 2 messages mapped in through HL7's Version 2 to FHIR guide),
 [FerroFED](https://github.com/FerroHEALTH/FerroFED) (the federation gateway),
 [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) (the Master Patient Index
-with the IHE identity profiles; it publishes its identity crates, the server
-is being built, and `ferropix.eu` serves its site) and
+with the IHE identity profiles; it publishes its identity crates and runs as a
+released server, and `ferropix.eu` serves its site) and
 [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) (the HL7 FHIR
 terminology server). A product stays in its own lane: FerroEHR implements no
 FHIR, OMOP, federation or IHE profile, and when a product needs another's
 function it calls that server as a client.
 [FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS) (an openEHR form
 builder and renderer, `ferroforms.eu`) is paused: the site keeps its listing
-and says so where it describes its status. No product is planned: FerroTASK
-is in no family plan and the site does not present it. Ferro is *ferrum*,
-iron, which Rust is an oxide of.
+and says so where it describes its status. One more is planned, with a
+domain and a repository that holds its licence and its brand and no release
+yet: [FerroTASK](https://github.com/FerroHEALTH/FerroTASK)
+(task planning and decision support over openEHR PROC and GDL2,
+`ferrotask.eu`). Ferro is *ferrum*, iron, which Rust is an oxide
+of.
 
 The products are built from four **shared libraries**, which are not
 products and never appear in a product list, card, count or the status table:
@@ -145,8 +148,7 @@ and narrow.
   `.github/workflows/refresh.yml` moves it through an auto-merged pull request
   when a product releases. `scripts/checks/no-typed-version.sh` fails the build
   on a version outside a marker, in the page and the diagram.
-- **A planned product is a dashed card, and says only what it is for.** None
-  is listed today. It
+- **A planned product is a dashed card, and says only what it is for.** It
   names the product, the job and the intended standards, links its repository
   and its `LICENSE`, shows the domain as text until it serves a page, and
   carries one `data-repo` badge that renders "code moved <day>" from the
@@ -160,14 +162,14 @@ and narrow.
   system list or a crate list moves with a product release and belongs on that
   product's site. The page names the standard and links the pin.
 - **The parent owns no hue.** FerroFORMS is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo; FerroPIX and FerroFED are plum and azure.
-  The shared libraries, FerroSYS included, own no hue. FerroHEALTH is
+  is teal, FerroBRIDGE is indigo; FerroPIX, FerroFED and FerroTASK are plum,
+  azure and emerald. The shared libraries, FerroSYS included, own no hue. FerroHEALTH is
   iron and steel, and spends a product hue only where that product is named. Every product's values in
   `assets/brand/tokens.css` are copied verbatim from its own `tokens.css`; a
   new hue is chosen with `scripts/brand/hue-distance.py` before it goes there.
   The mark stays at four strokes: they are the data path (FerroFORMS, FerroEHR,
-  FerroTERM, FerroBRIDGE), and FerroPIX and FerroFED frame it, released or
-  not.
+  FerroTERM, FerroBRIDGE), and FerroPIX, FerroFED and FerroTASK frame it,
+  released or not.
 - **No product is an authorisation server.** Each product is its own SMART
   App Launch 2.x resource server against the deployment's authorization
   server, because one central service would hold the signing key every

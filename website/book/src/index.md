@@ -25,12 +25,19 @@ the others only over published protocols.
 | FerroEHR | The openEHR Clinical Data Repository, over openEHR ITS-REST and AQL | <https://ferroehr.eu/docs/latest/> | [FerroHEALTH/FerroEHR](https://github.com/FerroHEALTH/FerroEHR) |
 | FerroBRIDGE | openEHR to HL7 FHIR and to the OMOP Common Data Model, and clinical HL7 Version 2 messages mapped in | <https://ferrobridge.eu/docs/> | [FerroHEALTH/FerroBRIDGE](https://github.com/FerroHEALTH/FerroBRIDGE) |
 | FerroFED | The federation gateway | <https://ferrofed.eu/docs/> | [FerroHEALTH/FerroFED](https://github.com/FerroHEALTH/FerroFED) |
-| FerroPIX | The Master Patient Index, with the IHE identity profiles; it publishes its identity crates, and the server is being built | <https://ferropix.eu/docs/> | [FerroHEALTH/FerroPIX](https://github.com/FerroHEALTH/FerroPIX) |
+| FerroPIX | The Master Patient Index, with the IHE identity profiles; it also publishes its identity crates | <https://ferropix.eu/docs/> | [FerroHEALTH/FerroPIX](https://github.com/FerroHEALTH/FerroPIX) |
 | FerroTERM | The HL7 FHIR terminology server | <https://ferroterm.eu/docs/> | [FerroHEALTH/FerroTERM](https://github.com/FerroHEALTH/FerroTERM) |
 
 FerroFORMS, an openEHR form builder and renderer, is paused. Its
 documentation stays at <https://ferroforms.eu/docs/> and its repository at
 [FerroHEALTH/FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS).
+
+One more is planned. It has a repository that holds its licence and its
+brand, and no release or book yet:
+
+| Planned | What it is for | Repository |
+|---|---|---|
+| FerroTASK | Task planning and decision support over openEHR | [FerroHEALTH/FerroTASK](https://github.com/FerroHEALTH/FerroTASK) |
 
 The family site, <https://ferrohealth.eu/>, shows what each product has
 released and when its code last moved.

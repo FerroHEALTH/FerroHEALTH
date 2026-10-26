@@ -109,16 +109,15 @@ switch back to branch-based publishing.
   page and left to rot. The page shows a release and a date and lets the reader
   judge.
 - **The parent owns no hue.** FerroFORMS is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo, and FerroPIX and FerroFED are plum and
-  azure, chosen by measurement. The shared libraries own no hue; FerroHEALTH is iron and
+  is teal, FerroBRIDGE is indigo, and FerroPIX, FerroFED and FerroTASK are
+  plum, azure and emerald, chosen by measurement. The shared libraries own no hue; FerroHEALTH is iron and
   steel, and borrows a hue only where its product is named. See
   [`assets/brand/README.md`](assets/brand/README.md).
-- **A planned product says what it is for and nothing it has not done.** None
-  is listed today. Its
+- **A planned product says what it is for and nothing it has not done.** Its
   card names the product and the job, links its repository, shows the domain
   as text until it serves a page, and carries one rendered badge. The mark
   stays at four strokes: FerroFORMS, FerroEHR, FerroTERM and FerroBRIDGE are
-  the data path, and FerroPIX and FerroFED frame it.
+  the data path, and FerroPIX, FerroFED and FerroTASK frame it.
 - **Authorisation stays with each product.** Every product is its own SMART
   App Launch 2.x resource server against the deployment's authorization
   server, through FerroAUTH's `ferrohealth-smart` in its own process. The family runs

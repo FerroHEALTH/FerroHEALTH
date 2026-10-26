@@ -36,6 +36,8 @@
   --ferrohealth-pix-light: #C084FC;
   --ferrohealth-fed: #0369A1;         /* FerroFED, azure */
   --ferrohealth-fed-light: #7DD3FC;
+  --ferrohealth-task: #065F46;        /* FerroTASK, emerald */
+  --ferrohealth-task-light: #34D399;
 
   /* Roles */
   --ferrohealth-brand: var(--ferrohealth-steel);

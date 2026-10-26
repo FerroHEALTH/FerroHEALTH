@@ -8,7 +8,7 @@ site: a product README, the books, a slide, an issue.
 
 | File | What it shows |
 |---|---|
-| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the two services around them, with the shared libraries in a band under them |
+| `ferrohealth-architecture.svg` | what calls what across the four servers of the data path and the three services around them, with the shared libraries in a band under them |
 | `ferrohealth-architecture.png` | the same at 2400x1608, for the rare consumer that renders no SVG at all |
 
 ## How it is drawn
@@ -58,7 +58,7 @@ Do not screenshot the page to get the diagram. The file is the diagram.
 
 ## What it says
 
-The frame is one FerroHEALTH instance serving one tenant. The six inside are
+The frame is one FerroHEALTH instance serving one tenant. The seven inside are
 the family; clinicians, applications, HL7 FHIR, HL7 Version 2 senders, the OMOP
 database and other organisations sit outside it. The family is five products
 that reach each other only over published protocols, each in its own lane:
@@ -71,10 +71,12 @@ instances.
 Left to right is the order data moves. The four servers are the data path:
 FerroFORMS takes the record down, FerroEHR keeps it, FerroTERM gives its codes
 meaning, FerroBRIDGE carries it out. FerroFORMS is paused and still drawn,
-solid, with "paused" in its box, because it is not a server waiting to run.
-FerroPIX and FerroFED frame that path. A server not running yet is drawn
-dashed, as is every call into one: FerroPIX publishes its identity crates
-while its server is being built. FerroFED runs and is drawn solid.
+greyed out (a grey fill, outline and text, with "paused" in its box), because
+it is present and not in use, which is not a server waiting to run.
+FerroPIX, FerroFED and FerroTASK frame that path. A server not running yet is
+drawn dashed, as is every call into one: FerroTASK is planned. FerroPIX and
+FerroFED are released, running servers and are drawn solid, with every edge
+into them.
 
 Under the frame, a second band holds the shared libraries: FerroAUTH
 (`ferrohealth-smart` and `ferrohealth-authz`, authentication and the policy
@@ -123,7 +125,13 @@ specification it speaks, with a few exceptions worth knowing:
 - **`MLLP` is the bridge's listener.** Clinical HL7 Version 2 messages come
   in on FerroBRIDGE's MLLP listener and are mapped through HL7's Version 2 to
   FHIR guide into the CDR. The HL7 Version 2 identity feed and queries go to
-  FerroPIX, which draws no outside sender because its server is being built.
+  FerroPIX; the diagram draws no outside sender for them.
+- **FerroTASK is a client of the CDR.** openEHR Task Planning and GDL2 both
+  read the patient's data by archetype and template path, so FerroTASK reads
+  FerroEHR over `ITS-REST, AQL` and commits the state of each plan back, and
+  keeps no clinical record of its own. It sits in one row with FerroPIX and
+  FerroFED, the services around the data path, at the same size as both, and
+  its line climbs into the CDR's lower edge left of the index's lookup.
 - **No line crosses another.** The generator allows a crossing only where a
   hop is declared, and the drawing declares none.
 
@@ -139,9 +147,9 @@ FerroBRIDGE's `website/book/src/integrate/fhir-facade.md` and
 and FerroEHR's `website/book/src/installation/config-integrations.md` for
 `$validate-code` as the default membership operation. FerroFED's edges are
 its architecture, in its own repository, and its tracker is the record of the
-build. A dashed edge is a design intent: FerroEHR's resolution through
-FerroPIX is FerroHEALTH/FerroEHR#3380, and FerroPIX's README states the
-profiles it serves.
+build. FerroEHR's lookup at FerroPIX is FerroHEALTH/FerroEHR#3380, and
+FerroPIX's README states the profiles it serves. A dashed edge is a design
+intent: FerroTASK's read of the CDR.
 
 ## Colours and theme
 
@@ -151,7 +159,8 @@ media query inside the file swaps every colour on `prefers-color-scheme`, so one
 file serves a light and a dark reader.
 
 A product keeps its own hue: FerroFORMS rose, FerroEHR rust, FerroTERM teal,
-FerroBRIDGE indigo, and the plum and azure of FerroPIX and FerroFED. The
+FerroBRIDGE indigo, and the plum, azure and emerald of FerroPIX, FerroFED and
+FerroTASK. FerroFORMS, paused, gives up its rose for grey. The
 shared libraries, FerroSYS included, carry no hue. Everything else is iron,
 steel and graphite.
 

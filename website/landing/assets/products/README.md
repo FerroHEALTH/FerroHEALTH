@@ -14,6 +14,7 @@ Verbatim copies of each product's primary icon, taken from that product's own
 | `ferrobridge-icon.svg` | <https://github.com/FerroHEALTH/FerroBRIDGE> `assets/brand/ferrobridge-icon.svg` |
 | `ferropix-icon.svg` | <https://github.com/FerroHEALTH/FerroPIX> `assets/brand/ferropix-icon.svg` |
 | `ferrofed-icon.svg` | <https://github.com/FerroHEALTH/FerroFED> `assets/brand/ferrofed-icon.svg` |
+| `ferrotask-icon.svg` | <https://github.com/FerroHEALTH/FerroTASK> `assets/brand/ferrotask-icon.svg` |
 
 The landing page's Content Security Policy is `default-src 'self'`, so the page
 loads no image from another origin. That is why these are copies. Refresh a file
@@ -29,8 +30,9 @@ two tones from the product's own pair). When each repository opened, its mark
 moved there as `assets/brand/<product>-icon.svg` and became the source, under
 that product's licence. The files here are copies of those, like the other
 four, and are refreshed from there and never edited here.
+FerroTASK's mark was drawn in its own repository the day it opened, in the
+same grammar, and this file is a copy of it from the start.
 
 FerroSYS is a set of shared crates and carries no product mark here: its
 steel lockup lives in its own repository's `assets/brand/`, and the page shows
-it as a library card with no mark. FerroTASK is in no family plan, and its
-copy left this directory with its card.
+it as a library card with no mark.

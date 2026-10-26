@@ -47,17 +47,17 @@ in the FerroHEALTH repository. Select it to open it at full size.
 
 ## Reading the diagram
 
-The frame is one FerroHEALTH instance serving one organisation. The six
+The frame is one FerroHEALTH instance serving one organisation. The seven
 inside are the products; clinicians, applications, HL7 FHIR, HL7 Version 2
 senders, the OMOP database and other organisations sit outside it. A dashed
-outline is a server not running yet (FerroPIX's server is being built), and a
-dashed line is a call into one. The band under the frame holds
+outline is a server not running yet (FerroTASK is planned), and a dashed line
+is a call into one. FerroFORMS is greyed out because it is paused. The band under the frame holds
 the shared libraries, which run inside the products and take no call.
 
 Left to right is the order data moves. The top row is the data path:
 FerroFORMS takes the record down, FerroEHR keeps it, FerroTERM gives its codes
 meaning, and FerroBRIDGE carries it out and brings HL7 Version 2 messages in.
-FerroPIX and FerroFED frame that path. An arrowhead
+FerroPIX, FerroFED and FerroTASK frame that path. An arrowhead
 points at what is called or written to, and each edge names the
 specification it speaks.
 
@@ -78,7 +78,7 @@ specification it speaks.
 | FerroFED | FerroPIX | IHE PIXm | who the patient is and where the records are, before it dispatches a query |
 | FerroFED | FerroEHR and other organisations' openEHR CDRs | the openEHR REST API and AQL | each node's part of the answer, merged with the node named |
 
-These calls come once the server behind them runs:
+Two more products sit beside the table:
 
 - **FerroPIX** is the Master Patient Index, and identity and the IHE identity
   profiles are its job alone. It answers IHE PIXm, PDQm and PMIR, and the
@@ -89,6 +89,8 @@ These calls come once the server behind them runs:
   carries can be the pseudonym FerroPIX mints. FerroPIX publishes the crates
   of the identity specifications, `ihe-iti` and `nl-generic-functions`, the
   Dutch Generic Functions, for every product to use.
+- **FerroTASK** reads FerroEHR over the openEHR REST API and AQL for task
+  plans and GDL2 guidelines, and commits the state of each plan back.
 
 Every call in the table speaks a published specification, so any product can
 be swapped for another implementation of the same standard: FerroTERM for any

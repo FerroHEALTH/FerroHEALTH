@@ -180,8 +180,9 @@ openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-384 \
   -out "$WORK/secrets/ferrofed-signing-key.pem" 2>/dev/null
 printf 'family-e2e' >"$WORK/secrets/ferrofed-pix-client-secret"
 openssl rand -base64 32 >"$WORK/secrets/ferropix-data-key"
+openssl rand -hex 16 | tr -d '\n' >"$WORK/secrets/ferropix-postgres-password"
 pix_password="$(openssl rand -hex 16)"
-printf '%s' "$pix_password" >"$WORK/secrets/ferropix-postgres-password"
+printf '%s' "$pix_password" >"$WORK/secrets/ferropix-db-password"
 printf 'postgresql://ferropix:%s@ferropix-postgres:5432/ferropix' "$pix_password" \
   >"$WORK/secrets/ferropix-db-url"
 chmod 644 "$WORK"/secrets/*

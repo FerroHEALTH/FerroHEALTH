@@ -7,7 +7,7 @@
 #   scripts/diagrams/ferrohealth-architecture.py OUT.svg
 #
 # The diagram is declared below as boxes and edges and drawn from those
-# declarations, because a picture of eight components and their calls is where
+# declarations, because a picture of the products and their calls is where
 # a hand-placed label drifts onto a line. Before the script writes, it asserts
 # what a reader would otherwise have to catch: no two boxes overlap, every
 # product sits inside the frame and every outside party outside it, every edge
@@ -18,8 +18,8 @@
 #
 # What the picture says is in assets/diagrams/README.md. In short: left to
 # right is the order data moves, the four servers in the top row are the data
-# path, and the services below and beside them frame it. An arrowhead points at what is
-# called or written to. A dashed outline is a planned product, and a dashed
+# path, and the three services below them frame it. An arrowhead points at what is
+# called or written to. A dashed outline is a server not running yet, and a dashed
 # edge a call into one. Where a line has to cross another it hops over it with
 # a small arc, and a crossing is allowed only where a hop is declared. The
 # shared libraries sit in their own band under the frame, with no edges: they
@@ -30,37 +30,35 @@ import sys
 from dataclasses import dataclass, field
 from typing import Optional
 
-W, H = 1200, 900
+W, H = 1200, 804
 Y = 36  # everything below the frame's label line moves down this much
 
 # The frame: what is FerroHEALTH and what is the outside world. One instance
 # serves one tenant: every product is single-tenant, and an organisation that
 # serves several runs several instances.
-FRAME = (176, 8, 720, 708)  # x, y, w, h
+FRAME = (176, 8, 720, 612)  # x, y, w, h
 FRAME_LABEL = "ONE FERROHEALTH INSTANCE · ONE TENANT"
-INSIDE = {"term", "forms", "ehr", "bridge", "pix", "fed", "sys", "task"}
+INSIDE = {"term", "forms", "ehr", "bridge", "pix", "fed", "task"}
 STEEL = ("#3f6070", "#8fb6c4")
 
 # The library band: the crates every product is built from. Under the frame
 # and outside it, because a library is part of each product that uses it and
 # runs nowhere on its own; no edge reaches it, because every product would
 # carry one and a line would read as a call over the network.
-LIB_FRAME = (176, 732, 720, 128)  # x, y, w, h
+LIB_FRAME = (176, 636, 720, 128)  # x, y, w, h
 LIB_LABEL = "SHARED LIBRARIES · BUILT INTO THE PRODUCTS, NEVER RUN ON THEIR OWN"
-LIBRARIES = {"smart", "audit", "ui"}
+LIBRARIES = {"smart", "audit", "ui", "sys"}
 
 # assets/brand/tokens.css, as literal values: a standalone SVG cannot read the
 # page's custom properties. Light is written as presentation attributes, dark
 # as the one <style> block, so a renderer that drops <style> still gets a
 # legible light drawing.
 HUES = {
-    "forms": ("#c2185b", "#e04f84"),
     "ehr": ("#b7431b", "#d97742"),
     "term": ("#0d9488", "#2dd4bf"),
     "bridge": ("#4f46e5", "#a5b4fc"),
     "pix": ("#6b21a8", "#c084fc"),
     "fed": ("#0369a1", "#7dd3fc"),
-    "sys": ("#5b6b16", "#bef264"),
     "task": ("#065f46", "#34d399"),
 }
 GROUND = ("#f5f7fa", "#131a26")
@@ -68,6 +66,10 @@ BOX_FILL = ("#ffffff", "#0b1020")
 BOX_STROKE = ("#dde3eb", "#243044")
 INK = ("#0f172a", "#eef2f7")
 MUTED = ("#58616e", "#a4aebc")
+# A paused product keeps its place and loses its hue: a grey fill, a grey
+# outline and grey text, so it reads as present and not in use.
+PAUSED_FILL = ("#eef1f5", "#1b2232")
+PAUSED_STROKE = ("#a9b2bf", "#4b5668")
 
 SANS = "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
@@ -88,6 +90,7 @@ class Box:
     subs: list = field(default_factory=list)
     hue: Optional[str] = None
     planned: bool = False
+    paused: bool = False
     title_size: float = 15
     why: str = ""
 
@@ -154,8 +157,10 @@ BOXES = [
             "release: which releases it serves is a fact its own site renders."),
     Box("clinicians", 8, 174, 128, 60, "Clinicians", subs=["doctors and nurses"],
         why="The person the whole family exists for."),
-    Box("forms", 206, 160, 160, 88, "FerroFORMS", hue="forms",
-        subs=["templates to forms", "forms to compositions"]),
+    Box("forms", 206, 160, 160, 88, "FerroFORMS", paused=True,
+        subs=["templates to forms", "paused"],
+        why="Paused, and still drawn, in grey: it is a client of the CDR and of the\n"
+            "terminology server like any other, and the owner keeps it listed."),
     Box("ehr", 452, 160, 160, 88, "FerroEHR", hue="ehr",
         subs=["openEHR CDR, AQL", "PostgreSQL"]),
     Box("bridge", 698, 160, 168, 88, "FerroBRIDGE", hue="bridge",
@@ -166,19 +171,22 @@ BOXES = [
             "its own lane, so it never reads as something FerroFORMS sits in front of."),
     Box("fhir", 1000, 116, 190, 56, "HL7 FHIR", subs=["a facade, stores nothing"]),
     Box("omop", 1000, 224, 190, 56, "OMOP CDM", subs=["a batch load, for research"]),
-    Box("pix", 452, 440, 168, 88, "FerroPIX", hue="pix", planned=True,
+    Box("v2", 1000, 332, 190, 56, "HL7 Version 2", title_size=14, subs=["clinical message senders"],
+        why="Clinical HL7 Version 2 messages come into the bridge over MLLP and are mapped\n"
+            "through HL7's Version 2 to FHIR guide into the CDR. Identity feeds go to FerroPIX."),
+    Box("pix", 452, 440, 168, 88, "FerroPIX", hue="pix",
         subs=["Master Patient Index", "IHE PIX, PDQ, PMIR"],
-        why="Under the CDR whose records it locates. Dashed while its server is being\n"
-            "built. The CDR resolves each EHR's subject through it and feeds it, the\n"
-            "gateway asks it where a record is; an application that opens a record asks\n"
-            "it the same way, and FerroFORMS receives the EHR it is launched with and\n"
-            "asks nobody."),
+        why="Under the CDR whose records it locates, a released server drawn solid.\n"
+            "Identity and the IHE profiles are its job alone: the gateway asks it\n"
+            "where a record is, the CDR is to look an EHR's subject up there as a client,\n"
+            "an application that opens a record asks it the same way, and FerroFORMS\n"
+            "receives the EHR it is launched with and asks nobody."),
     Box("fed", 698, 440, 168, 88, "FerroFED", hue="fed",
         subs=["federation gateway", "one query, every node"],
         why="Under FerroBRIDGE, on the side where data leaves, and level with the other\n"
             "organisations it talks to. The federation tier of the openEHR federation\n"
-            "proposal: a transparent ITS-REST intermediary that resolves the patient\n"
-            "first, then dispatches ordinary AQL to each node's own EHR id."),
+            "proposal: a transparent ITS-REST intermediary that asks FerroPIX who the\n"
+            "patient is, then dispatches ordinary AQL to each node's own EHR id."),
     Box("task", 206, 440, 168, 88, "FerroTASK", hue="task", planned=True,
         subs=["task plans", "GDL2 guidelines"],
         why="Task Planning and GDL2 both read the patient's data by archetype path, so\n"
@@ -189,19 +197,21 @@ BOXES = [
     Box("others", 1000, 456, 190, 56, "Other organisations",
         subs=["federation nodes"],
         why="Level with the gateway, because FerroFED is the only path to them."),
-    Box("sys", 206, 592, 660, 76, "FerroSYS", hue="sys", planned=True,
-        subs=["health, telemetry, event log, notifications, configuration · every server reports to it"],
-        why="The mirror of the FerroTERM band: meaning above the servers, operations\n"
-            "below them. No edges, because every one of the six boxes above would carry\n"
-            "one and the band already says so."),
-    Box("smart", 206, 736, 208, 76, "FerroSMART", subs=["ferrohealth-smart", "checks tokens, issues none"],
-        why="The SMART App Launch and OAuth 2.0 resource server each product runs in\n"
-            "its own process, against the deployment's own authorization server."),
-    Box("audit", 432, 736, 208, 76, "FerroAUDIT", subs=["ihe-atna, ehds-logging", "audit trail, EHDS access log"],
-        why="The IHE ATNA and BALP audit trail and the EHDS access record, sent to an\n"
-            "Audit Record Repository the deployment runs."),
-    Box("ui", 658, 736, 208, 76, "FerroUI", subs=["ferrohealth-ui", "the consoles' components"],
-        why="The component library each product's operator console is built with."),
+    Box("smart", 206, 640, 150, 76, "FerroAUTH", subs=["ferrohealth-smart", "ferrohealth-authz"],
+        why="Renamed from FerroSMART. ferrohealth-smart is the SMART App Launch and\n"
+            "OAuth 2.0 resource server each product runs in its own process, against\n"
+            "the deployment's own authorization server; ferrohealth-authz makes the\n"
+            "policy decision."),
+    Box("audit", 376, 640, 150, 76, "FerroAUDIT", subs=["ihe-atna", "ehds-logging"],
+        why="The whole IHE ATNA and BALP audit trail (sending, forwarding, retrieving)\n"
+            "and the EHDS access record."),
+    Box("ui", 546, 640, 150, 76, "FerroUI", subs=["ferrohealth-ui", "every console"],
+        why="The component library each product's operator console is built with;\n"
+            "every console is reactive."),
+    Box("sys", 716, 640, 150, 76, "FerroSYS", subs=["system plumbing", "six shared crates"],
+        why="Secrets and redaction, configuration, logging and OpenTelemetry, health,\n"
+            "the HTTP stack and drain, and the usage report, as ferrohealth-* crates.\n"
+            "Shared crates like the others, never a control plane or a central service."),
 ]
 
 EDGES = [
@@ -216,12 +226,16 @@ EDGES = [
          why="Any client on the outside reaches the CDR on its own lane, under FerroFORMS,\n"
              "so it never reads as something FerroFORMS sits in front of."),
     Edge("bridge", "ehr", [(698, 204), (612, 204)], "ITS-REST", (655, 195, "middle"),
-         why="The bridge reads the CDR, so the arrow points at the CDR."),
+         why="The bridge reads the CDR and commits what it maps in, so the arrow points\n"
+             "at the CDR."),
     Edge("bridge", "term", [(782, 160), (782, 88)], "$lookup, $translate", (774, 130, "end"),
          why="The bridge resolves and translates codes for the FHIR side."),
     Edge("bridge", "fhir", [(866, 186), (980, 186), (980, 144), (1000, 144)], "FHIR facade",
          (938, 174, "middle"), both=True,
          why="FHIR is an exchange, so this edge carries a head at both ends."),
+    Edge("v2", "bridge", [(1000, 360), (840, 360), (840, 248)], "MLLP", (906, 351, "start"),
+         why="Clinical HL7 Version 2 messages, received on the bridge's MLLP listener and mapped\n"
+             "through HL7's Version 2 to FHIR guide."),
     Edge("bridge", "omop", [(866, 226), (980, 226), (980, 252), (1000, 252)], "SQL rows",
          (938, 214, "middle"),
          why="OMOP is a database schema, so this edge names no wire specification."),
@@ -229,18 +243,17 @@ EDGES = [
          (658, 412, "start"),
          why="The gateway queries the local record like any client, below the bridge's\n"
              "own read of it and into the CDR's right side, so the two never meet."),
-    Edge("ehr", "pix", [(560, 248), (560, 440)], "PIXm, PDQm\nPIXm feed", (568, 344, "start"), planned=True,
-         why="The CDR resolves the subject of each EHR through the index (PIXm ITI-83,\n"
-             "PDQm ITI-78), and it is the one component that knows the moment an EHR is\n"
-             "created or its subject changes, so it also feeds the index (ITI-104). The\n"
-             "subject its EHR_STATUS carries is the pseudonym the index mints."),
-    Edge("fed", "pix", [(698, 504), (620, 504)], "PIXm", (655, 495, "middle"), planned=True,
+    Edge("ehr", "pix", [(560, 248), (560, 440)], "PIXm, PDQm", (568, 344, "start"),
+         why="The CDR is to look the subject of an EHR up at the index as a client\n"
+             "(PIXm ITI-83, PDQm ITI-78), so its EHR_STATUS can carry the pseudonym the\n"
+             "index mints. It implements no IHE profile and runs no identity of its own."),
+    Edge("fed", "pix", [(698, 504), (620, 504)], "PIXm", (655, 495, "middle"),
          why="Where is the record: the gateway asks the index before it fans out."),
     Edge("task", "ehr", [(320, 440), (320, 380), (500, 380), (500, 248)], "ITS-REST, AQL",
          (410, 369, "middle"), planned=True,
          why="A task plan and a guideline read the record and commit back to it, over\n"
              "the same API any client uses. The line climbs from the services' row into\n"
-             "the CDR's lower edge, left of the index's feed and clear of every other line."),
+             "the CDR's lower edge, left of the index's lookup and clear of every other line."),
     Edge("fed", "others", [(866, 484), (1000, 484)], "ITS-REST, AQL", (946, 473, "middle"),
          why="A remote CDR is a node like the local one: the gateway sends it standard\n"
              "AQL scoped to that node's own EHR id and merges what comes back, with the\n"
@@ -252,7 +265,7 @@ EDGES = [
              "corridor where it crosses nothing."),
 ]
 
-LEGEND = (206, 848, "A dashed outline is a server not running yet, and a dashed line a call into one.")
+LEGEND = (206, 752, "A dashed outline is a server not running yet, and a dashed line a call into one.")
 
 
 for _b in BOXES:
@@ -512,15 +525,16 @@ def draw_box(b):
     out = ""
     if b.why:
         out += comment(b.why)
-    cls = "box" + (f" box-{b.hue}" if b.hue else "")
-    stroke = HUES[b.hue][0] if b.hue else BOX_STROKE[0]
+    cls = "box" + (f" box-{b.hue}" if b.hue else "") + (" box-paused" if b.paused else "")
+    stroke = PAUSED_STROKE[0] if b.paused else HUES[b.hue][0] if b.hue else BOX_STROKE[0]
+    box_fill = PAUSED_FILL[0] if b.paused else BOX_FILL[0]
     dash = ' stroke-dasharray="6 4"' if b.planned else ""
     out += (f'    <rect class="{cls}" x="{fmt(b.x)}" y="{fmt(b.y)}" width="{fmt(b.w)}" height="{fmt(b.h)}" '
-            f'rx="10" fill="{BOX_FILL[0]}" stroke="{stroke}" stroke-width="1.5"{dash}/>\n')
+            f'rx="10" fill="{box_fill}" stroke="{stroke}" stroke-width="1.5"{dash}/>\n')
     labels = box_labels(b)
     title, subs = labels[0], labels[1:]
-    tag = f" tag-{b.hue}" if b.hue else ""
-    fill = HUES[b.hue][0] if b.hue else INK[0]
+    tag = " tag-paused" if b.paused else f" tag-{b.hue}" if b.hue else ""
+    fill = MUTED[0] if b.paused else HUES[b.hue][0] if b.hue else INK[0]
     out += (f'    <text class="label{tag}" x="{fmt(title.x)}" y="{fmt(title.y)}" text-anchor="middle" '
             f'font-size="{fmt(b.title_size)}" font-weight="700" fill="{fill}">{b.title}</text>\n')
     for s in subs:
@@ -546,32 +560,39 @@ def dark_style():
         f".lib-label {{ fill: {MUTED[1]} }}",
     ]
     rules += [f".tag-{k} {{ fill: {v[1]} }}" for k, v in HUES.items()]
+    rules += [
+        f".box-paused {{ fill: {PAUSED_FILL[1]}; stroke: {PAUSED_STROKE[1]} }}",
+        f".tag-paused {{ fill: {MUTED[1]} }}",
+    ]
     body = "\n".join(f"      {r}" for r in rules)
     return f"  <style>\n    @media (prefers-color-scheme: dark) {{\n{body}\n    }}\n  </style>\n"
 
 
 TITLE = "What calls what across the FerroHEALTH family"
 DESC = (
-    "A clinician uses FerroFORMS in a browser. FerroFORMS expands value sets against FerroTERM "
-    "and commits compositions to FerroEHR over the openEHR ITS-REST API, which any other "
-    "application can call directly. FerroEHR validates coded values against FerroTERM. FerroBRIDGE "
+    "Five products reach each other only over published protocols. FerroEHR, the openEHR CDR, is "
+    "reached over the openEHR ITS-REST API and AQL, which any application can call directly, and it "
+    "validates coded values against FerroTERM, the FHIR terminology server, as a client. FerroBRIDGE "
     "reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges "
-    "resources with HL7 FHIR over its FHIR facade in both directions, and writes typed rows into an "
-    "OMOP Common Data Model database over SQL. Four services frame those four servers, and the "
-    "three not running yet are drawn dashed: "
-    "FerroEHR resolves the subject of each EHR through FerroPIX, the Master Patient Index whose "
-    "server is being built, over PIXm and PDQm, and feeds it each EHR it creates; applications send "
-    "FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other "
-    "organisations' openEHR CDRs as federation nodes; and FerroSYS, the control plane, "
-    "spans everything as the band every server reports to; FerroTASK, the task planning and "
-    "decision support server, reads FerroEHR over ITS-REST and AQL and commits the state of each "
-    "plan back to it. Each server checks the access tokens it is handed against the deployment's own "
-    "authorization server, so no FerroHEALTH service holds the key every server depends on. "
-    "A frame around the eight marks one "
-    "FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, OMOP and other organisations sit outside it. "
-    "Under the frame, a band holds the three shared libraries the products are built from, which never "
-    "run on their own: FerroSMART checks access tokens and issues none, FerroAUDIT writes the audit "
-    "trail and the EHDS access record, and FerroUI holds the components of the operator consoles."
+    "resources with HL7 FHIR over its FHIR face in both directions, receives clinical HL7 Version 2 "
+    "messages over MLLP, and writes typed rows into an OMOP Common Data Model database over SQL. "
+    "FerroFORMS, the form builder, is paused and drawn in grey: a clinician uses it in a browser, and "
+    "it expands value sets against FerroTERM and commits compositions to FerroEHR over ITS-REST. Three "
+    "services frame the data path: FerroPIX, the Master Patient Index, owns identity and the IHE "
+    "profiles, and FerroEHR is to look the subject of each EHR up there as a client over PIXm and "
+    "PDQm; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks "
+    "FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' "
+    "openEHR CDRs as federation nodes; and FerroTASK, the planned task planning and decision support "
+    "server, drawn dashed, reads FerroEHR over ITS-REST and AQL and commits the state of each plan "
+    "back to it. Each server checks the access tokens it is handed against the deployment's own "
+    "authorization server, so no FerroHEALTH service holds the key every server depends on. A frame "
+    "around the seven marks one FerroHEALTH instance serving one tenant; clinicians, applications, "
+    "FHIR, HL7 Version 2 senders, OMOP and other organisations sit outside it. Under the frame, a band "
+    "holds the four shared libraries the products are built from, which never run on their own: "
+    "FerroAUTH authenticates callers and makes the policy decision, issuing no token, FerroAUDIT "
+    "writes the audit trail and the EHDS access record, FerroUI holds the components of the operator "
+    "consoles, every one of them reactive, and FerroSYS holds the system plumbing every product "
+    "shares, from secrets and configuration to telemetry, health, the HTTP stack and the usage report."
 )
 
 HEADER = (
@@ -584,7 +605,7 @@ HEADER = (
     "     presentation attribute. The ground is the page's surface colour, so the\n"
     "     file blends into the section it sits in. Left to right is the order data\n"
     "     moves, the four servers in the top row are the data path, and the\n"
-    "     services below and beside them frame it. An arrowhead points at what is\n"
+    "     three services below them frame it. An arrowhead points at what is\n"
     "     called or written to. The band under the frame is the shared libraries. -->\n"
 )
 

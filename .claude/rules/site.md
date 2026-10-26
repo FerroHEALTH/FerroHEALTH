@@ -32,8 +32,8 @@ beyond that script and the pinned mdbook, no runtime dependency.
   and never the SVG. `assets/diagrams/README.md` carries the conventions and
   the raster command.
 - **A planned product says what it is for, and its one status is rendered.**
-  FerroSYS and FerroTASK have a name, a domain and a repository
-  with their licence and brand, and no release. Each is a dashed
+  FerroTASK has a name, a domain and a repository
+  with its licence and brand, and no release. It is a dashed
   card in the products section with the product's job, the standards it
   intends to speak, a GitHub link, the domain as text (linked only once it
   serves a page) and a `data-repo` badge that `scripts/site/render-releases.sh`
@@ -44,17 +44,29 @@ beyond that script and the pinned mdbook, no runtime dependency.
   pull request renders the tag; that is when the card moves into the released
   grid, its site is linked once it serves a page, and it joins the status
   table. FerroPIX made that move with its first release, and its site is
-  linked now that `ferropix.eu` serves one; its card says the server is
-  being built.
-- **A shared library is never a product.** FerroSMART, FerroAUDIT and FerroUI
+  linked now that `ferropix.eu` serves one.
+- **A shared library is never a product.** FerroAUTH, FerroAUDIT, FerroUI and FerroSYS
   are crates the products compile in, and none of them runs on its own. They
   have their own section (`#libraries`), cards in the parent's steel
   (`.product-lib`, no product hue and no mark), a `data-rel` badge from their
-  repository and no row in the status table, and they never count toward a
+  repository (a `data-repo` badge until a first release, as FerroSYS has now)
+  and no row in the status table, and they never count toward a
   number of products. Their `LICENSE` is linked in the licensing section and
   checked by `scripts/checks/licence-links.sh`. The diagram draws them in a
   band outside the instance frame with no edges, and its generator refuses
   an edge into one.
+- **Each product is described in its own lane.** The page, the book and the
+  diagram follow `.claude/memory/family-architecture.md`: FerroEHR is the
+  openEHR CDR and serves no FHIR, OMOP, federation or IHE profile; FHIR, OMOP
+  and clinical HL7 Version 2 are FerroBRIDGE's; federation is FerroFED's, which asks
+  FerroPIX who a patient is and keeps no identity of its own; identity and the
+  IHE profiles are FerroPIX's; terminology is FerroTERM's. A product that
+  needs another's function calls it as a client, and the copy says so. Every
+  console is reactive, so no text says an action reloads the page.
+- **FerroFORMS is paused, and listed.** The owner holds `ferroforms.eu` and the
+  page keeps its card, its row and its licence link. Where the page or the
+  book describes its status, it says the product is paused; it is never
+  counted among the five products and never removed.
 - **No hand-typed version, and no hand-typed status.** A fact a product moves
   carries a marker (`data-rel`, `data-rel-plain`, `data-rel-date`,
   `data-pushed`) and is filled by `scripts/site/render-releases.sh` from that
@@ -150,7 +162,7 @@ product books link it.
 - FerroHEALTH owns iron and steel. Each product owns its hue, and the page
   spends a product hue only where that product is named: the card rule, the
   dot, the diagram box, the hero glow. The glow and the mark carry the four
-  strokes only; FerroPIX, FerroFED, FerroSYS and FerroTASK have no stroke,
+  strokes only; FerroPIX, FerroFED and FerroTASK have no stroke,
   released or not, because they frame the data path and are not on it.
 - Every product's hue in `assets/brand/tokens.css` is copied verbatim from
   that product's own `tokens.css`. When a product changes its palette, copy

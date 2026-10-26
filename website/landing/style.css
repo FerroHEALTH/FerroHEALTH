@@ -25,7 +25,6 @@
   /* the four around it, from each product's own tokens.css */
   --fh-pix: #6b21a8;
   --fh-fed: #0369a1;
-  --fh-sys: #5b6b16;
   --fh-task: #065f46;
   /* light theme */
   --fh-bg: #ffffff;
@@ -54,7 +53,6 @@
     --fh-bridge: #a5b4fc;
     --fh-pix: #c084fc;
     --fh-fed: #7dd3fc;
-    --fh-sys: #bef264;
     --fh-task: #34d399;
     --fh-bg: #0b1020;
     --fh-surface: #131a26;
@@ -290,8 +288,13 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
 .product-bridge { --hue: var(--fh-bridge); }
 .product-pix { --hue: var(--fh-pix); }
 .product-fed { --hue: var(--fh-fed); }
-.product-sys { --hue: var(--fh-sys); }
 .product-task { --hue: var(--fh-task); }
+/* A paused product keeps its card in grey, like its box in the diagram: the
+   hue gives way to the muted tone, the ground to the surface, the mark to
+   greyscale. */
+.product.paused { --hue: var(--fh-muted); background: var(--fh-surface); }
+.product.paused h3 a { color: var(--fh-muted); }
+.product.paused .product-head img { filter: grayscale(1); opacity: 0.7; }
 /* A shared library is no product and owns no hue, so its card spends the
    parent's steel. */
 .product-lib { --hue: var(--fh-accent); }

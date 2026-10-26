@@ -3,19 +3,20 @@
 
 # FerroHEALTH brand
 
-FerroHEALTH is the family name for servers that are built and released
-separately: [FerroFORMS](https://ferroforms.eu/), an openEHR® form builder and
-renderer; [FerroEHR](https://ferroehr.eu/), an openEHR Clinical Data
-Repository; [FerroTERM](https://ferroterm.eu/), an HL7® FHIR® terminology
-server; [FerroBRIDGE](https://ferrobridge.eu/), a bridge from openEHR to FHIR
-and to the OMOP Common Data Model; [FerroFED](https://ferrofed.eu/), an
-openEHR federation gateway; and FerroPIX, a Master Patient Index whose server
-is being built. Two more are planned around them: FerroSYS as the control
-plane and FerroTASK for task planning and decision support. The shared
-libraries the products are built from (FerroSMART, FerroAUDIT, FerroUI) are
-no products: they own no hue and no stroke, and the page shows them in the
-parent's steel. Ferro is *ferrum*, iron, which is
-what Rust is an oxide of.
+FerroHEALTH is the family name for five servers that are built and released
+separately and reach each other only over published protocols:
+[FerroEHR](https://ferroehr.eu/), the openEHR® Clinical Data Repository;
+[FerroBRIDGE](https://ferrobridge.eu/), openEHR to HL7® FHIR® and to the OMOP
+Common Data Model; [FerroFED](https://ferrofed.eu/), the federation gateway;
+[FerroPIX](https://ferropix.eu/), the Master Patient Index; and [FerroTERM](https://ferroterm.eu/), the HL7 FHIR terminology
+server. [FerroFORMS](https://ferroforms.eu/), an openEHR form builder and
+renderer, is paused and keeps its hue and its stroke. One more is planned
+around them: FerroTASK for task planning and decision support. The shared libraries
+the products are built from (FerroAUTH, FerroAUDIT, FerroUI, FerroSYS) are no
+products: they own no hue and no stroke, and the page shows them in the
+parent's steel. FerroSYS's own steel lockup lives in its repository's
+`assets/brand/`. Ferro is *ferrum*,
+iron, which is what Rust is an oxide of.
 
 The parent follows the same file set, naming, variant list, and raster pipeline
 as the products. What it does differently is colour: each product owns a hue,
@@ -43,10 +44,10 @@ per-product mark.
 
 **The mark stays at four strokes.** Four is where a stroke per product stops
 scaling: a fifth segment in the same width is not legible at any size the mark
-is used at. The family has grown to eight names, and the decision is that the
+is used at. The family has grown to seven product names, and the decision is that the
 four strokes are the data path and nothing else: the form, the record, the
 meaning, the way out. The services around it (FerroPIX,
-FerroFED, FerroSYS, FerroTASK) are drawn as the frame around that path in the
+FerroFED, FerroTASK) are drawn as the frame around that path in the
 architecture diagram; they get a hue and a mark of their own, and no stroke in
 this one, whether they have released or not. Their colour lives on the product
 cards and in the diagram, where it can grow without limit.
@@ -95,8 +96,12 @@ day its repository opened, and went into its `tokens.css` first.
 |---|---|---|---|
 | FerroPIX | plum | `#6B21A8` | `#C084FC` |
 | FerroFED | azure | `#0369A1` | `#7DD3FC` |
-| FerroSYS | olive | `#5B6B16` | `#BEF264` |
 | FerroTASK | emerald | `#065F46` | `#34D399` |
+
+FerroSYS's olive (`#5B6B16`, `#BEF264`) left `tokens.css` on 2026-10-26:
+FerroSYS is a set of shared crates, so it takes the parent's steel like every
+shared library. The numbers below are the palette as it was chosen, with
+olive in it.
 
 They were chosen the same way, by `scripts/brand/hue-distance.py`, which
 scores every pair in `tokens.css` for its worst-case CIEDE2000 distance over
@@ -119,7 +124,7 @@ where it was.
 
 The table records the palette as it was chosen, with a bronze hue for a
 planned authorisation service in it. The family dropped that service on
-2026-10-19, and its hue left `tokens.css` with it. The floor of the eight hues that remain is still 4.5, between
+2026-10-19, and its hue left `tokens.css` with it. The floor of the seven hues that remain is still 4.5, between
 FerroBRIDGE and FerroFED, as the script reports.
 
 Every value holds at least 4.5:1 against its ground, so a hue can carry text

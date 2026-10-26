@@ -14,7 +14,18 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
-| 2026-10-24 | [How the products fit together](architecture.md) | The family end-to-end lane: what it runs and asserts, how to run it on your own machine, and how its image pins follow each release. |
+| 2026-10-26 | [How the products fit together](architecture.md) | The family end-to-end lane: what it runs and asserts, how to run it on your own machine, and how its image pins follow each release. |
+| 2026-10-26 | [How the products fit together](architecture.md) | FerroTASK is restored as the planned product, in the diagram and in the text; FerroPIX is drawn solid as a released, running server; FerroFORMS is greyed out because it is paused. |
+| 2026-10-26 | [FerroHEALTH documentation](index.md) | FerroTASK is restored as the planned product; FerroPIX's row no longer says its server is being built. |
+| 2026-10-26 | [Licensing and trademarks](licensing.md) | FerroTASK's licence row is restored. |
+| 2026-10-26 | [How the products fit together](architecture.md) | FerroSYS is a set of shared crates beside FerroAUTH, FerroAUDIT and FerroUI, never a control plane; it leaves the products and the diagram's instance for the library band. FerroTASK, in no family plan, leaves the page and the diagram. |
+| 2026-10-26 | [FerroHEALTH documentation](index.md) | No planned products: FerroSYS joins the shared libraries, and FerroTASK, in no family plan, is no longer listed. |
+| 2026-10-26 | [Licensing and trademarks](licensing.md) | FerroSYS's licence is listed with the shared libraries, with the use its Additional Use Grant names; FerroTASK's row is gone and its name stays in the brand terms. |
+| 2026-10-25 | [How the products fit together](architecture.md) | The family as five products, each in its own lane, with the protocol each speaks; FerroBRIDGE takes clinical HL7 Version 2 messages in over MLLP; FerroFED asks FerroPIX who a patient is; FerroEHR no longer feeds FerroPIX and is to look a subject up there as a client; the protocol clients and models stay with the product that owns them; every console is reactive; FerroFORMS is paused; FerroSMART is renamed FerroAUTH and holds `ferrohealth-authz` beside `ferrohealth-smart`. |
+| 2026-10-25 | [FerroHEALTH documentation](index.md) | The five products and what each owns; FerroFORMS is paused; FerroSMART is renamed FerroAUTH, which holds authentication and the policy decision; every console is reactive. |
+| 2026-10-25 | [Licensing and trademarks](licensing.md) | FerroSMART is renamed FerroAUTH. |
+| 2026-10-25 | [Security](security.md) | FerroSMART is renamed FerroAUTH. |
+| 2026-10-24 | [Security](security.md) | The family's fix-time targets by severity, counted from the confirmed assessment, and the acknowledgement and assessment times in the family wording; the per-product table gains a fix-time column, and the FerroEHR, FerroFED, FerroPIX, FerroAUDIT and FerroSMART rows state the family times. |
 | 2026-10-24 | [FerroHEALTH documentation](index.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
 | 2026-10-24 | [How the products fit together](architecture.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |
 | 2026-10-24 | [The Cyber Resilience Act](cra.md) | FerroCHART is renamed FerroFORMS, at ferroforms.eu. |

@@ -314,7 +314,10 @@ for site in "a $DOMAIN_A $EHR_A" "b $DOMAIN_B $EHR_B"; do
     identifier: [{system: $d, value: $e}, {system: $ns, value: $id}],
     name: [{family: "Lane", given: ["Family"]}], gender: "unknown", birthDate: "1970-01-01"}' \
     >"$WORK/patient.json"
-  status="$(call PUT "$PIX/Patient" -G --data-urlencode "identifier=$domain|$ehr" \
+  # The conditional update names the patient in the query and sends the
+  # resource as the body, so the identifier is encoded into the URL itself.
+  identifier="$(jq -rn --arg v "$domain|$ehr" '$v | @uri')"
+  status="$(call PUT "$PIX/Patient?identifier=$identifier" \
     -H "Authorization: Bearer $source_token" -H 'Content-Type: application/fhir+json' \
     -H 'Accept: application/fhir+json' --data-binary "@$WORK/patient.json")"
   [[ "$status" == 201 || "$status" == 200 ]] ||

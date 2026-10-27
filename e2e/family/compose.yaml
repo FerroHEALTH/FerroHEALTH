@@ -130,7 +130,7 @@ services:
 
   ferroterm:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferroterm:0.3.0@sha256:51b4b86a4a88911096db1fb168a9b5f2729a88aa8f0b1f1bfc8340cc589cc771
+    image: ghcr.io/ferrohealth/ferroterm:0.3.1@sha256:ca034ec8488697fe7ebe357ac67f2a3e10028f3e288514125a3156208bb1e67f
     restart: unless-stopped
     ports:
       - "127.0.0.1:8083:8080"
@@ -264,7 +264,7 @@ services:
   # are file secrets run.sh writes under .work/.
   ferropix:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferropix:0.0.5@sha256:6d42e2f9498eb0a801401149d19134cb6f54c2db3d2c499ffe8ba77ad902a8d5
+    image: ghcr.io/ferrohealth/ferropix:0.0.8@sha256:981418dd0a44d6f768b8d2c1c407c14cafe465547165628871fd37c6d2640e92
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:

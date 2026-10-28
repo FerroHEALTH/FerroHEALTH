@@ -43,7 +43,7 @@
 
 revised:
   readiness: "2026-10-28"
-  technical_documentation: "2026-10-26"
+  technical_documentation: "2026-10-28"
 
 regulation:
   title: >-
@@ -537,7 +537,9 @@ technical_documentation:
         note: >-
           No declaration has been drawn up: the Article 36 common
           specifications and the Article 40 testing environment it would rest
-          on are not available.
+          on are not available. A draft, unsigned and marked as declaring
+          nothing, lays out the Annex IV and CRA Annex V points with the facts
+          that exist and the statements that are not made.
 
 # Annex I, the priority categories of personal electronic health data for
 # primary use. The headings are the Annex's own; `characteristics` is the

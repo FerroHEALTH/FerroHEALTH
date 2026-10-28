@@ -14,6 +14,8 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-28 | [How the products fit together](architecture.md) | FerroSYS no longer reads as unreleased: every crate is published, the FerroSYS releases page names the current versions, and the products that use it are named. |
+| 2026-10-28 | [FerroHEALTH documentation](index.md) | FerroSYS's row says its crates are published and links the FerroSYS releases page. |
 | 2026-10-26 | [The EHDS EHR system: readiness](ehds/readiness.md) | FerroEHR ships the whole logging component; the planned move of the access log to a FerroSYS service, which is not planned, is gone. |
 | 2026-10-26 | [Annex III 1: a detailed description of the EHR system](ehds/annex-iii-1-description.md) | FerroSYS is no longer named as a planned third product of the EHR system. |
 | 2026-10-26 | [Annex III 6: a copy of the EU declaration of conformity](ehds/annex-iii-6-declaration-of-conformity.md) | FerroSYS is no longer named as a planned third product of the EHR system. |

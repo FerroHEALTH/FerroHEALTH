@@ -1,6 +1,6 @@
 # How the products fit together
 
-Revised 2026-10-26.
+Revised 2026-10-28.
 
 The FerroHEALTH family is five products, each its own server, image and
 repository, and each reaches the others only over a published protocol. No
@@ -111,7 +111,7 @@ outside the instance with no edges.
 | [FerroAUTH](https://github.com/FerroHEALTH/FerroAUTH) | `ferrohealth-smart`, `ferrohealth-authz` | Authentication and the policy decision. `ferrohealth-smart` is the SMART App Launch, SMART on openEHR and OAuth 2.0 resource server: token validation against the authorization server's keys, the authenticated subject with its scopes and roles, the patient compartment, machine authentication, and one audit line per request. It checks tokens and never issues one. `ferrohealth-authz` makes the policy decision (ABAC, Cedar, a remote PDP), with its first usable release in preparation. The repository was renamed from FerroSMART on 2026-10-25, and the crate names stay. | FerroEHR, FerroTERM, FerroBRIDGE, FerroFED and FerroPIX |
 | [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The whole audit trail: the IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with sending, the store-and-forward spool ITI-20 asks of a sender, forwarding and retrieving; and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroEHR, FerroFED and FerroPIX |
 | [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The one source for the user interface of every operator console: the components, the stylesheet with a theme per product, and the design. Every console built on it is reactive, so an action never reloads the whole page. Each console moves onto a new release in one rollout with the others, as [its console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md) describes | the consoles of FerroEHR, FerroTERM, FerroBRIDGE and FerroFED |
-| [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | `ferrohealth-secret`, `ferrohealth-config`, `ferrohealth-telemetry`, `ferrohealth-health`, `ferrohealth-server`, `ferrohealth-usage-report` | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report. It is a set of crates like FerroAUTH and FerroAUDIT, never a control plane or a central service, and it is being built, with no release yet. | the products, as each crate is released |
+| [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | `ferrohealth-secret`, `ferrohealth-config`, `ferrohealth-telemetry`, `ferrohealth-health`, `ferrohealth-server`, `ferrohealth-usage-report` | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report. It is a set of crates like FerroAUTH and FerroAUDIT, never a control plane or a central service. Every crate is published on crates.io on its own release line, and [the FerroSYS releases](https://github.com/FerroHEALTH/FerroSYS/releases) name the current version of each. | FerroEHR, FerroTERM, FerroBRIDGE and FerroPIX |
 
 The protocol clients and models stay with the product that owns the
 protocol, and every other product uses them from there:

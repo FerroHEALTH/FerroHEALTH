@@ -343,8 +343,10 @@ requirements:
         evidence:
           - text: The five elements mapped onto fields, gaps included
             href: https://ferroehr.eu/docs/latest/audit.html#the-ehds-logging-elements-mapped
-          - text: The category map a deployment declares
+          - text: The shipped category map, and the one a deployment declares
             href: https://ferroehr.eu/docs/latest/installation/config-audit.html#auditcategories
+          - text: How a deployment declares the natural person behind a token
+            href: instructions-for-use.md#authentication-and-access
         gap: >-
           Points (a), (d) and (e) are recorded: the accessing organisation, the
           time, and the origins of the served data read from the FEEDER_AUDIT
@@ -352,11 +354,18 @@ requirements:
           beside the capped set. Point (b) records the authenticated principal
           and, when the deployment declares how a token names the natural
           person, the acting mode and the professional a client application
-          acts for. Point
-          (c) is recorded through the `[audit.categories]` map the deployment
-          declares from its templates and archetypes to the Art. 14(1)
-          categories, classified by `ehds-logging`; FerroEHR ships no map, so
-          until one is declared every access is recorded unclassified. Records in the demographic
+          acts for; the instructions for use say how to declare it. Point (c)
+          is recorded through a category map from templates and archetypes to
+          the Art. 14(1) categories, classified by `ehds-logging`. FerroEHR
+          ships a map for the published CKM templates and COMPOSITION
+          archetypes whose data sit in one priority category, which applies
+          until the deployment declares its own; the production profile
+          refuses to start while no map applies. An access to data the map in
+          force does not name is recorded unclassified, never guessed: the
+          shipped map leaves out the generic report containers, which carry
+          laboratory, imaging and other reports alike, and CKM publishes no
+          composition for an electronic dispensation, so a deployment declares
+          its own templates. Records in the demographic
           domain carry no category, because no priority category lives there.
           The FHIR rendering of a read or a query carries the origins of the
           served data. The DICOM rendering

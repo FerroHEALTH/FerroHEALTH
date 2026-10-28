@@ -14,6 +14,8 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-28 | [The EHDS EHR system: readiness](ehds/readiness.md) | Annex II 3.2: FerroEHR ships a category map that applies until a deployment declares its own, the production profile refuses to start while no map applies, and the instructions for use say how to declare the natural person behind a token. |
+| 2026-10-28 | [The EHDS EHR system: instructions for use](ehds/instructions-for-use.md) | The access log: FerroEHR's shipped category map, and how to declare the natural person behind a token in `[authz.professional]` (Annex II 3.2(b)). |
 | 2026-10-28 | [The EHDS EHR system: readiness](ehds/readiness.md) | The interoperability component is FerroBRIDGE's published `eehrxf` crate; its row and Annex II 2.1 to 2.3 link FerroBRIDGE's pages for the component and for receiving a document. |
 | 2026-10-28 | [How the products fit together](architecture.md) | FerroSYS no longer reads as unreleased: every crate is published, the FerroSYS releases page names the current versions, and the products that use it are named. |
 | 2026-10-28 | [FerroHEALTH documentation](index.md) | FerroSYS's row says its crates are published and links the FerroSYS releases page. |

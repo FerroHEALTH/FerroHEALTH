@@ -1,6 +1,6 @@
 # The EHDS EHR system: instructions for use
 
-Revised 2026-10-26.
+Revised 2026-10-28.
 
 These are the instructions for use of the EHR system that FerroEHR and
 FerroBRIDGE form together. A copy accompanies each release of either product,
@@ -192,10 +192,15 @@ host = "arr.example.org"              # RFC 5425 TLS on port 6514
   record forever
   ([retention, and who chooses it](https://ferroehr.eu/docs/latest/audit.html#retention-and-who-chooses-it),
   [`[audit.store]`](https://ferroehr.eu/docs/latest/installation/config-audit.html#auditstore-the-local-audit-record-repository)).
-- **The priority categories.** Declare which of your templates carry which
-  EHDS Art. 14(1) category in `[audit.categories]`, so every access record
-  names the categories it served (Annex II 3.2(c)). FerroEHR ships no map, and
-  without one every access is recorded `unclassified`
+- **The priority categories.** Every access record names the EHDS Art. 14(1)
+  categories of the data it served (Annex II 3.2(c)), through a map from
+  templates and archetypes to categories. FerroEHR ships a map for the
+  published CKM templates and COMPOSITION archetypes of one category, which
+  applies while `[audit.categories]` declares no template and no archetype.
+  Declare your own templates there: a declared map replaces the shipped one
+  whole, and an access to data the map in force does not name is recorded
+  `unclassified`. The `production` profile refuses to start while no map
+  applies
   ([`[audit.categories]`](https://ferroehr.eu/docs/latest/installation/config-audit.html#auditcategories)).
   The same map keys retention periods on a category
   ([retention by category](https://ferroehr.eu/docs/latest/compliance/retention.html#keying-a-period-on-a-priority-category)).
@@ -213,6 +218,21 @@ host = "arr.example.org"              # RFC 5425 TLS on port 6514
   Both are off by default: until you configure them your identity provider
   alone decides the assurance level, and a token issued to a client
   application is recorded as that client, not as a person.
+- Annex II 3.2(b) asks the access log to name the natural person who
+  accessed the data. Declare the claim your identity provider puts the
+  person's identifier in, and, for a client application acting for a
+  professional, the claim that carries the professional:
+
+  ```toml
+  [authz.professional]
+  claim = "sub"                    # the claim naming the natural person
+  client_tokens = "sub_is_client"  # a token whose sub is its client_id is a client token
+  acting_for_claim = "act.sub"     # the professional a client token acts for
+  ```
+
+  A patient-data request whose token names no natural person, and is no
+  client token acting for one, is then refused with `403`, and every access
+  record carries the acting mode and the professional.
 - Set `[authz.rbac] ehr_access_default = "restricted"` and write the per-EHR
   access settings, or accept `open_ehr_access_default` by name with the reason
   ([per-EHR access control](https://ferroehr.eu/docs/latest/security.html#per-ehr-access-control-ehr_access)).

@@ -14,6 +14,7 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-28 | [The EHDS EHR system: readiness](ehds/readiness.md) | Annex II 1.1 cites the logging component's stated performance and its release measurement; 1.2 says the chart has no default posture and why the `hostUsers: false` run is still open; 1.4 records the first run against independent ATNA implementations and the defects it found; 3.4 keys retention and access rights on the origin and the category. |
 | 2026-10-28 | [Annex III 6: a copy of the EU declaration of conformity](ehds/annex-iii-6-declaration-of-conformity.md) | A draft of the one declaration for both acts, point by point against EHDS Annex IV and CRA Annex V: the identification and the manufacturer filled, every statement only an assessment and a signature can make marked not made. Not a declaration, attached to no release. |
 | 2026-10-28 | [The EHDS EHR system: technical documentation](ehds/technical-documentation.md) | Annex III point 6 notes the draft. |
 | 2026-10-28 | [The EHDS EHR system: readiness](ehds/readiness.md) | Annex II 1.3 names, right by right, what FerroEHR provides for Chapter II and the two parts it does not provide yet, each with its FerroEHR issue. |

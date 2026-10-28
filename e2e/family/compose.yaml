@@ -48,7 +48,7 @@ x-hardened: &hardened
 # One FerroEHR node; each service below adds its database and system_id.
 x-ferroehr-node: &ferroehr-node
   <<: *hardened
-  image: ghcr.io/ferrohealth/ferroehr:5.4.2@sha256:f14559e5fc5ce2333959eb8f6158f6728a4b13759f36df7923a175e6be368b19
+  image: ghcr.io/ferrohealth/ferroehr:5.5.0@sha256:e1b15849a3792481a7f16680081b1ae6a2d7160d66e5cb1657fcef5cccfed0dc
   restart: unless-stopped
   configs:
     - source: ferroehr-config
@@ -67,7 +67,7 @@ x-ferroehr-node: &ferroehr-node
 
 # One node's database, FerroEHR's own PostgreSQL image.
 x-ferroehr-postgres: &ferroehr-postgres
-  image: ghcr.io/ferrohealth/ferroehr-postgres:5.4.2@sha256:e0dbac9d2d825ad02b45899560d913e0a74673d835b82711031459cb5d68aff9
+  image: ghcr.io/ferrohealth/ferroehr-postgres:5.5.0@sha256:dfe1d5c1bb95d31d3f6ff00fec03cd76ae20d57d20e6225b31e5bc68adf7fa81
   restart: unless-stopped
   environment:
     # FerroEHR's quickstart development credentials.
@@ -264,7 +264,7 @@ services:
   # are file secrets run.sh writes under .work/.
   ferropix:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferropix:0.0.8@sha256:981418dd0a44d6f768b8d2c1c407c14cafe465547165628871fd37c6d2640e92
+    image: ghcr.io/ferrohealth/ferropix:0.0.10@sha256:f44b2b12f0f12a6f0b1c7e2afc9611c649d501606b96d48e4471e0952826a504
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:

@@ -42,7 +42,7 @@
 # its line 3 carries and revisions.md records (scripts/checks/book-revisions.sh).
 
 revised:
-  readiness: "2026-10-26"
+  readiness: "2026-10-28"
   technical_documentation: "2026-10-26"
 
 regulation:
@@ -80,11 +80,16 @@ components:
     status: open
     note: >-
       Shipped by FerroBRIDGE, the other product of the EHR system Cadasto B.V.
-      declares, which holds the mappings from openEHR to the European
-      electronic health record exchange format and reads FerroEHR over
-      ITS-REST. The format itself is set by implementing acts under Article
-      15(1) that have not been adopted, so no component can emit it yet.
-      FerroEHR itself carries no FHIR mapping.
+      declares, as its published crate `eehrxf`, which FerroBRIDGE builds and
+      publishes and every product that needs the component pins exactly: the
+      dataset model read from the Xt-EHR logical models, the crosswalk of each
+      Art. 14(1) category to the HL7 Europe profiles, the exchange format in
+      FHIR, the receipt of a document and the mapping between openEHR and
+      that format ([the component's pages](https://ferrobridge.eu/docs/evaluate/interoperability-component.html)).
+      FerroBRIDGE reads FerroEHR over ITS-REST. The format itself is set by
+      implementing acts under Article 15(1) that have not been adopted, so the
+      component is built against their published proxies and no component can
+      claim it yet. FerroEHR itself carries no FHIR mapping.
   - id: logging
     name: European logging software component for EHR systems
     status: partial
@@ -249,6 +254,8 @@ requirements:
         evidence:
           - text: The interoperability component is FerroBRIDGE's part of the system
             href: https://ferroehr.eu/docs/latest/compliance/intended-purpose.html#what-the-intended-purpose-excludes
+          - text: The interoperability component, FerroBRIDGE's `eehrxf` crate
+            href: https://ferrobridge.eu/docs/evaluate/interoperability-component.html
       - id: "2.2"
         summary: >-
           Such a system can receive personal electronic health data in that
@@ -257,6 +264,9 @@ requirements:
         question: >-
           Carried by FerroBRIDGE, and waiting on the same Art. 15(1)
           implementing acts as 2.1.
+        evidence:
+          - text: Receiving a document, in FerroBRIDGE's `eehrxf` crate
+            href: https://ferrobridge.eu/docs/evaluate/receiving-documents.html
       - id: "2.3"
         summary: >-
           A system designed to provide access to personal electronic health
@@ -265,6 +275,9 @@ requirements:
         question: >-
           Carried by FerroBRIDGE, and waiting on the same Art. 15(1)
           implementing acts as 2.1.
+        evidence:
+          - text: Receiving a document, in FerroBRIDGE's `eehrxf` crate
+            href: https://ferrobridge.eu/docs/evaluate/receiving-documents.html
       - id: "2.4"
         summary: >-
           A system that lets a user enter structured personal electronic

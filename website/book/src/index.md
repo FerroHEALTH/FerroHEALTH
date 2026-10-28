@@ -1,6 +1,6 @@
 # FerroHEALTH documentation
 
-Revised 2026-10-26.
+Revised 2026-10-28.
 
 This book holds what is true for every FerroHEALTH product: who makes them,
 how a vulnerability or a complaint reaches the manufacturer, what the
@@ -55,7 +55,7 @@ shares, never a product's domain.
 | FerroAUTH | `ferrohealth-smart`, `ferrohealth-authz` | Authentication, through the SMART App Launch, SMART on openEHR and OAuth 2.0 resource server that checks the access tokens a product is handed against the deployment's authorization server and issues none; and the policy decision, with the first usable release of `ferrohealth-authz` in preparation. Renamed from FerroSMART on 2026-10-25 | [FerroHEALTH/FerroAUTH](https://github.com/FerroHEALTH/FerroAUTH) |
 | FerroAUDIT | `ihe-atna`, `ehds-logging` | The whole IHE ATNA and BALP audit trail, and the record of each access to electronic health data that the EHDS Regulation asks of an EHR system | [FerroHEALTH/FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) |
 | FerroUI | `ferrohealth-ui` | The one source for the user interface of every operator console, each of them reactive ([the console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md)) | [FerroHEALTH/FerroUI](https://github.com/FerroHEALTH/FerroUI) |
-| FerroSYS | `ferrohealth-secret`, `ferrohealth-config`, `ferrohealth-telemetry`, `ferrohealth-health`, `ferrohealth-server`, `ferrohealth-usage-report` | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report; shared crates, never a control plane or a central service | [FerroHEALTH/FerroSYS](https://github.com/FerroHEALTH/FerroSYS) |
+| FerroSYS | `ferrohealth-secret`, `ferrohealth-config`, `ferrohealth-telemetry`, `ferrohealth-health`, `ferrohealth-server`, `ferrohealth-usage-report` | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report; shared crates, never a control plane or a central service, each published on crates.io ([the FerroSYS releases](https://github.com/FerroHEALTH/FerroSYS/releases)) | [FerroHEALTH/FerroSYS](https://github.com/FerroHEALTH/FerroSYS) |
 
 [How the products fit together](architecture.md#the-shared-libraries) says
 which product uses which.

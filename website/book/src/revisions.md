@@ -14,6 +14,7 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-10-28 | [The EHDS EHR system: readiness](ehds/readiness.md) | The interoperability component is FerroBRIDGE's published `eehrxf` crate; its row and Annex II 2.1 to 2.3 link FerroBRIDGE's pages for the component and for receiving a document. |
 | 2026-10-28 | [How the products fit together](architecture.md) | FerroSYS no longer reads as unreleased: every crate is published, the FerroSYS releases page names the current versions, and the products that use it are named. |
 | 2026-10-28 | [FerroHEALTH documentation](index.md) | FerroSYS's row says its crates are published and links the FerroSYS releases page. |
 | 2026-10-26 | [The EHDS EHR system: readiness](ehds/readiness.md) | FerroEHR ships the whole logging component; the planned move of the access log to a FerroSYS service, which is not planned, is gone. |

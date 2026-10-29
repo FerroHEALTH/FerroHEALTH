@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# FerroBRIDGE in the demo, mounted read-only at /etc/ferrobridge/config.toml:
+# the FHIR R4 facade over FerroEHR member A, with FerroTERM as its terminology
+# server and Keycloak checking every caller. It runs the family lane's
+# mapping (e2e/family/ferrobridge/mappings). Every key is on
+# <https://ferrobridge.eu/docs/operate/configuration.html>.
+#
+# DEMO CREDENTIALS, NOT FOR PRODUCTION: the Keycloak client secret below.
+
+[cdr]
+base_url = "http://ferroehr-a:8080/ferroehr/rest/openehr/v1"
+
+[cdr.credentials.oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrobridge-cdr"
+client_auth = "client_secret_post"
+client_secret = "demo-ferrobridge-cdr"
+scope = "system/composition-*.cruds system/template-*.cruds system/aql-*.cruds"
+ca_file = "/run/demo-tls/ca.crt"
+
+# FerroTERM's R4 base. Its read surface takes no credential.
+[terminology]
+base_url = "http://ferroterm:8080/r4"
+wire_version = "r4"
+
+[mappings]
+directory = "/etc/ferrobridge/mappings"
+
+# Member A's EHRs name their patients by FerroPIX pseudonym, so a resource
+# names its subject in member A's clinical domain, urn:oid:2.999.7.1.
+[facade]
+enabled = true
+base_url = "http://localhost:8090/fhir"
+ehr_policy = "existing"
+identity_store = "/home/nonroot/identity.redb"
+composition_language = "en"
+composition_territory = "NL"
+system_id = "ferrobridge.ferrohealth-demo.local"
+
+[operations]
+enabled = true
+composition_language = "en"
+composition_territory = "NL"
+
+[operator]
+enabled = true
+
+[auth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+audience = ["http://localhost:8090/fhir"]
+token_profile = "jwt"
+ca_file = "/run/demo-tls/ca.crt"
+
+[usage_report]
+enabled = false

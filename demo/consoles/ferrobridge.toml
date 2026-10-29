@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The FerroBRIDGE console in the demo, mounted read-only and named by its _CONFIG variable in
+# compose.yaml. It signs in through the demo realm with PKCE and forwards the
+# signed-in user's access token. It reads no CA file of its own, so
+# compose.yaml points SSL_CERT_FILE at the demo CA.
+#
+# DEMO CREDENTIALS, NOT FOR PRODUCTION: the Keycloak client secret below.
+
+[bridge]
+base_url = "http://ferrobridge:8080/"
+
+[oidc]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+authorization_endpoint = "https://keycloak.localhost:8443/realms/ferrohealth-demo/protocol/openid-connect/auth"
+token_endpoint = "https://keycloak.localhost:8443/realms/ferrohealth-demo/protocol/openid-connect/token"
+jwks_uri = "https://keycloak.localhost:8443/realms/ferrohealth-demo/protocol/openid-connect/certs"
+end_session_endpoint = "https://keycloak.localhost:8443/realms/ferrohealth-demo/protocol/openid-connect/logout"
+post_logout_redirect_uri = "http://localhost:3005/"
+client_id = "ferrobridge-console"
+client_secret = "demo-ferrobridge-console"
+redirect_uri = "http://localhost:3005/auth/callback"
+scopes = ["openid", "profile", "__ferrobridge.operator", "user/*.cruds"]
+
+# Plain http on localhost, which every console admits for an unsecured cookie.
+[session]
+secure_cookie = false

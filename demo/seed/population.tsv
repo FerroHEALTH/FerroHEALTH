@@ -1,0 +1,117 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The FerroPIX population of the demo, read by seed/ferropix.sh. Every name,
+# address, number and BSN is invented; each BSN passes the eleven-proof. The
+# group says what the seed does with a row: `single` and `bsn-link` records
+# feed the index (a shared BSN links), the pair groups give the review queue
+# its grades, `decide-*` and `merge-*` pairs are decided or merged by the
+# steward, and `hl7v2` rows arrive from hospital E over MLLP. `-` is absent.
+#
+# group	pair	hospital	number	given	family	gender	birth_date	bsn	street	postcode	city	telephone	email
+single	-	a	A-2001	Nora	van Os	female	1987-02-28	700000379	Industrieweg 20	4811 GA	Breda	+31 6 88248615	nora.vanos@example.nl
+single	-	a	A-2002	Nora	Wouters	female	2018-10-22	700000744	Industrieweg 144	9711 DM	Groningen	+31 6 93689226	nora.wouters@example.nl
+single	-	a	A-2003	Milan	de Haan	male	2013-11-20	700001116	Kerkstraat 109	3011 RE	Rotterdam	+31 6 49889889	milan.dehaan@example.nl
+single	-	a	A-2004	Julia	van Dam	female	1970-03-18	700001487	Eikenlaan 71	5038 ZZ	Tilburg	+31 6 34062121	julia.vandam@example.nl
+single	-	a	A-2005	Esther	Boersma	female	1952-04-06	700001852	Molenweg 178	9711 KT	Groningen	+31 6 73229572	esther.boersma@example.nl
+single	-	a	A-2006	Wouter	van Beek	male	2012-06-09	700002224	Dorpsstraat 46	1012 VB	Amsterdam	+31 6 20516317	wouter.vanbeek@example.nl
+single	-	b	B-2001	Daan	de Graaf	male	1978-11-09	700002595	Marktplein 78	9711 BM	Groningen	+31 6 38738403	daan.degraaf@example.nl
+single	-	b	B-2002	Hendrik	Prins	male	1999-02-20	700002960	Dorpsstraat 108	5038 BG	Tilburg	+31 6 64827909	hendrik.prins@example.nl
+single	-	b	B-2003	Thijs	Koster	male	1942-12-24	700003332	Schoolstraat 36	3511 ZB	Utrecht	+31 6 68904586	thijs.koster@example.nl
+single	-	b	B-2004	Anouk	Vermeulen	female	2016-10-13	700003708	Molenweg 171	5611 WD	Eindhoven	+31 6 45570675	anouk.vermeulen@example.nl
+single	-	b	B-2005	Sanne	Wolters	female	1971-02-18	700004075	Marktplein 58	9711 RV	Groningen	+31 6 12805448	sanne.wolters@example.nl
+single	-	b	B-2006	Ingrid	Jacobs	female	1964-08-08	700004440	Lindelaan 140	6211 EJ	Maastricht	+31 6 18654037	ingrid.jacobs@example.nl
+single	-	c	C-2001	Sanne	Hermans	female	1988-12-04	700004816	Marktplein 124	6511 RM	Nijmegen	+31 6 68532281	sanne.hermans@example.nl
+single	-	c	C-2002	Ingrid	Bakker	female	1991-04-07	700005183	Molenweg 143	7311 PW	Apeldoorn	+31 6 14977840	ingrid.bakker@example.nl
+single	-	c	C-2003	Hendrik	de Lange	male	1986-11-20	700005559	Havenstraat 43	4811 FB	Breda	+31 6 96529507	hendrik.delange@example.nl
+single	-	c	C-2004	Ruben	van Leeuwen	male	2004-09-18	700005924	Nieuwstraat 108	2511 MV	Den Haag	+31 6 76117181	ruben.vanleeuwen@example.nl
+single	-	c	C-2005	Wouter	Sanders	male	2007-04-08	700006291	Nieuwstraat 99	6211 GV	Maastricht	+31 6 82833723	wouter.sanders@example.nl
+single	-	c	C-2006	Ingrid	Hendriks	female	2017-03-26	700006667	Julianalaan 162	5611 ZP	Eindhoven	+31 6 94636206	ingrid.hendriks@example.nl
+single	-	d	D-2001	Luuk	Meijer	male	1996-09-26	700007039	Julianalaan 179	3011 RH	Rotterdam	+31 6 63494401	luuk.meijer@example.nl
+single	-	d	D-2002	Maarten	Mol	male	1968-06-23	700007404	Molenweg 60	1315 LW	Almere	+31 6 19389602	maarten.mol@example.nl
+single	-	d	D-2003	Wouter	Verhoeven	male	2014-07-28	700007775	Prinsengracht 47	2311 HK	Leiden	+31 6 81928817	wouter.verhoeven@example.nl
+single	-	d	D-2004	Lotte	Vos	female	1932-11-18	700008147	Prinsengracht 116	8011 RZ	Zwolle	+31 6 51992226	lotte.vos@example.nl
+single	-	d	D-2005	Sara	van den Broek	female	2003-07-25	700008512	Wilhelminastraat 20	4811 AK	Breda	+31 6 75920137	sara.vandenbroek@example.nl
+single	-	d	D-2006	Wouter	Smit	male	1959-10-04	700008883	Prinsengracht 50	5611 DE	Eindhoven	+31 6 61962900	wouter.smit@example.nl
+bsn-link	L1	c	C-2007	Eva	Kuipers	female	1993-04-11	700009255	Beatrixstraat 60	3511 WK	Utrecht	+31 6 19862250	eva.kuipers@example.nl
+bsn-link	L1	a	A-2007	Eva	Kuipers	female	1993-04-11	700009255	Beatrixstraat 60	3511 WK	Utrecht	+31 6 19862250	eva.kuipers@example.nl
+bsn-link	L1	b	B-2007	Eva	Kuipers	female	1993-04-11	700009255	Kerkstraat 11	3511 HL	Utrecht	+31 6 19862250	eva.kuipers@example.nl
+bsn-link	L1	d	D-2007	Eva	Kuipers	female	1993-04-11	700009255	Eikenlaan 1	5611 SV	Eindhoven	+31 6 19862250	eva.kuipers@example.nl
+bsn-link	L2	d	D-2008	Tess	Molenaar	female	1947-04-14	700009620	Parkweg 58	3511 RD	Utrecht	+31 6 33758018	tess.molenaar@example.nl
+bsn-link	L2	a	A-2008	Tess	Molenaar	female	1947-04-14	700009620	Industrieweg 169	7311 WV	Apeldoorn	+31 6 33758018	tess.molenaar@example.nl
+bsn-link	L2	b	B-2008	Tess	Molenaar	female	1947-04-14	700009620	Parkweg 58	3511 RD	Utrecht	+31 6 33758018	tess.molenaar@example.nl
+bsn-link	L2	c	C-2008	Tess	Molenaar	female	1947-04-14	700009620	Kerkstraat 21	8011 PV	Zwolle	+31 6 33758018	tess.molenaar@example.nl
+bsn-link	L3	b	B-2009	Anouk	Willems	female	1998-10-06	700009991	Industrieweg 84	8011 MN	Zwolle	+31 6 82541690	anouk.willems@example.nl
+bsn-link	L3	a	A-2009	Anouk	Willems	female	1998-10-06	700009991	Molenweg 144	2311 PV	Leiden	+31 6 82541690	anouk.willems@example.nl
+bsn-link	L3	c	C-2009	Anouk	Willems	female	1998-10-06	700009991	Nieuwstraat 11	3011 AV	Rotterdam	+31 6 82541690	anouk.willems@example.nl
+bsn-link	L4	b	B-2010	Hanna	Janssen	female	1992-01-19	700010361	Lindelaan 76	7311 PA	Apeldoorn	+31 6 58553174	hanna.janssen@example.nl
+bsn-link	L4	d	D-2009	Hanna	Janssen	female	1992-01-19	700010361	Schoolstraat 103	6511 LJ	Nijmegen	+31 6 58553174	hanna.janssen@example.nl
+bsn-link	L4	c	C-2010	Hanna	Janssen	female	1992-01-19	700010361	Schoolstraat 103	6511 LJ	Nijmegen	+31 6 58553174	hanna.janssen@example.nl
+bsn-link	L4	a	A-2010	Hanna	Janssen	female	1992-01-19	700010361	Schoolstraat 103	6511 LJ	Nijmegen	+31 6 58553174	hanna.janssen@example.nl
+bsn-link	L5	d	D-2010	Liam	Peters	male	1940-02-04	700010737	Prinsengracht 108	2311 RL	Leiden	+31 6 42358730	liam.peters@example.nl
+bsn-link	L5	b	B-2011	Liam	Peters	male	1940-02-04	700010737	Prinsengracht 108	2311 RL	Leiden	+31 6 42358730	liam.peters@example.nl
+bsn-link	L5	c	C-2011	Liam	Peters	male	1940-02-04	700010737	Prinsengracht 108	2311 RL	Leiden	+31 6 42358730	liam.peters@example.nl
+bsn-link	L6	d	D-2011	Anouk	Veenstra	female	1948-09-04	700011109	Nieuwstraat 140	6211 WA	Maastricht	+31 6 45325432	anouk.veenstra@example.nl
+bsn-link	L6	a	A-2011	Anouk	Veenstra	female	1948-09-04	700011109	Stationsweg 176	6811 XA	Arnhem	+31 6 45325432	anouk.veenstra@example.nl
+bsn-link	L6	c	C-2012	Anouk	Veenstra	female	1948-09-04	700011109	Dorpsstraat 170	8011 LP	Zwolle	+31 6 45325432	anouk.veenstra@example.nl
+bsn-link	L6	b	B-2012	Anouk	Veenstra	female	1948-09-04	700011109	Dorpsstraat 170	8011 LP	Zwolle	+31 6 45325432	anouk.veenstra@example.nl
+bsn-link	L7	a	A-2012	Annemiek	de Wit	female	1963-08-22	700011845	Stationsweg 58	5038 FS	Tilburg	+31 6 38795732	annemiek.dewit@example.nl
+bsn-link	L7	d	D-2012	Annemiek	de Wit	female	1963-08-22	700011845	Industrieweg 126	6811 JM	Arnhem	+31 6 38795732	annemiek.dewit@example.nl
+bsn-link	L8	b	B-2013	Saar	Kramer	female	1961-03-17	700012217	Marktplein 20	5038 PG	Tilburg	+31 6 14519178	saar.kramer@example.nl
+bsn-link	L8	d	D-2013	Saar	Kramer	female	1961-03-17	700012217	Industrieweg 15	2511 FZ	Den Haag	+31 6 14519178	saar.kramer@example.nl
+bsn-link	L9	c	C-2013	Milan	de Groot	male	1946-11-12	700012588	Dorpsstraat 29	1315 RT	Almere	+31 6 53570643	milan.degroot@example.nl
+bsn-link	L9	a	A-2013	Milan	de Groot	male	1946-11-12	700012588	Dorpsstraat 29	1315 RT	Almere	+31 6 53570643	milan.degroot@example.nl
+bsn-link	L9	b	B-2014	Milan	de Groot	male	1946-11-12	700012588	Dorpsstraat 29	1315 RT	Almere	+31 6 53570643	milan.degroot@example.nl
+bsn-link	L9	d	D-2014	Milan	de Groot	male	1946-11-12	700012588	Dorpsstraat 29	1315 RT	Almere	+31 6 53570643	milan.degroot@example.nl
+bsn-link	L10	d	D-2015	Wouter	Kuijpers	male	2002-03-18	700012953	Schoolstraat 141	1315 CT	Almere	+31 6 12151711	wouter.kuijpers@example.nl
+bsn-link	L10	b	B-2015	Wouter	Kuijpers	male	2002-03-18	700012953	Havenstraat 131	8011 XN	Zwolle	+31 6 12151711	wouter.kuijpers@example.nl
+bsn-link	L10	c	C-2014	Wouter	Kuijpers	male	2002-03-18	700012953	Prinsengracht 79	6211 SL	Maastricht	+31 6 12151711	wouter.kuijpers@example.nl
+bsn-link	L10	a	A-2014	Wouter	Kuijpers	male	2002-03-18	700012953	Industrieweg 116	1315 MF	Almere	+31 6 12151711	wouter.kuijpers@example.nl
+bsn-conflict	X1	a	A-2015	Noah	van der Linden	male	1982-02-07	700013325	Prinsengracht 16	9711 FA	Groningen	+31 6 46089580	noah.vanderlinden@example.nl
+bsn-conflict	X1	c	C-2015	Noah	van der Linden	male	1975-02-07	700013325	Prinsengracht 16	9711 FA	Groningen	+31 6 46089580	noah.vanderlinden@example.nl
+certain	C1	a	A-2016	Hanna	Bosman	female	1981-12-19	-	Dorpsstraat 169	3511 CF	Utrecht	+31 6 69570905	hanna.bosman@example.nl
+certain	C1	b	B-2016	Hanna	Bosman	female	1981-12-19	-	Dorpsstraat 169	3511 CF	Utrecht	+31 6 69570905	hanna.bosman@example.nl
+certain	C2	b	B-2017	Ingrid	van der Heijden	female	2009-07-01	-	Marktplein 58	1012 BE	Amsterdam	+31 6 26904924	ingrid.vanderheijden@example.nl
+certain	C2	c	C-2016	Ingrid	van der Heijden	female	2009-07-01	-	Marktplein 58	1012 BE	Amsterdam	-	-
+certain	C3	c	C-2017	Ruben	Blom	male	1957-07-17	-	Dorpsstraat 33	4811 DH	Breda	+31 6 39697123	ruben.blom@example.nl
+certain	C3	d	D-2016	Ruben	Blom	male	1957-07-17	-	Dorpsstraat 33	4811 DH	Breda	+31 6 39697123	ruben.blom@example.nl
+probable	P1	a	A-2017	Gijs	Visser	male	1966-03-14	-	Kerkstraat 64	5038 XW	Tilburg	+31 6 44032831	gijs.visser@example.nl
+probable	P1	b	B-2018	Willem	Visser	male	1966-03-14	-	-	-	-	-	-
+probable	P2	b	B-2019	Marieke	Timmermans	female	1984-08-05	-	Eikenlaan 55	5038 WB	Tilburg	+31 6 78729249	marieke.timmermans@example.nl
+probable	P2	d	D-2017	Iris	Timmermans	female	1984-08-05	-	-	-	-	-	-
+probable	P3	a	A-2018	Daan	van den Berg	male	1939-07-05	-	Kerkstraat 39	3511 ZA	Utrecht	+31 6 32885156	daan.vandenberg@example.nl
+probable	P3	c	C-2018	Sander	van den Berg	male	1939-07-05	-	-	-	-	-	-
+possible	Q1	a	A-2019	Hendrik	Hoekstra	male	2000-10-15	-	Julianalaan 19	9711 DM	Groningen	+31 6 44778691	hendrik.hoekstra@example.nl
+possible	Q1	c	C-2019	Joost	Hoekstra	male	2000-10-15	-	-	-	-	+31 6 12121212	-
+possible	Q2	b	B-2020	Marieke	van Wijk	female	1962-08-05	-	Stationsweg 106	5611 NJ	Eindhoven	+31 6 74577190	marieke.vanwijk@example.nl
+possible	Q2	d	D-2018	Esther	van Wijk	female	1962-08-05	-	-	-	-	+31 6 34343434	-
+possible	Q3	c	C-2020	Eva	Gerritsen	female	1951-10-10	-	Prinsengracht 178	2511 BX	Den Haag	+31 6 53819577	eva.gerritsen@example.nl
+possible	Q3	a	A-2020	Judith	Gerritsen	female	1951-10-10	-	-	-	-	-	other.mail@example.nl
+control	N1	a	A-2021	Sem	Peeters	male	1933-01-26	-	Eikenlaan 12	6811 NV	Arnhem	+31 6 97908181	sem.peeters@example.nl
+control	N1	d	D-2019	Kees	Peeters	male	1933-01-26	-	-	9999 ZZ	-	-	-
+control	N2	b	B-2021	Eva	van de Ven	female	1967-09-15	-	Kerkstraat 69	1012 EG	Amsterdam	+31 6 47363916	eva.vandeven@example.nl
+control	N2	c	C-2021	Hanna	van de Ven	female	1967-09-15	-	-	9998 ZZ	-	-	-
+decide-not-a-match	T1	a	A-2022	Tess	Maas	female	1955-10-03	-	Stationsweg 130	2511 GL	Den Haag	-	-
+decide-not-a-match	T1	b	B-2022	Maarten	Maas	male	1955-10-03	-	Stationsweg 130	2511 GL	Den Haag	-	-
+decide-not-a-match	T2	a	A-2023	Lotte	van den Heuvel	female	1953-09-08	-	Molenweg 113	7311 CM	Apeldoorn	-	-
+decide-not-a-match	T2	b	B-2023	Kees	van den Heuvel	male	1953-09-08	-	Molenweg 113	7311 CM	Apeldoorn	-	-
+decide-link	D1	a	A-2024	Levi	Bos	male	1935-11-12	-	Dorpsstraat 21	8011 PF	Zwolle	+31 6 25463856	levi.bos@example.nl
+decide-link	D1	d	D-2020	Levi	Bos	male	1935-11-12	-	Dorpsstraat 21	8011 PF	Zwolle	+31 6 25463856	levi.bos@example.nl
+decide-link	D2	c	C-2022	Iris	van Dijk	female	2010-02-09	-	Nieuwstraat 34	2511 AV	Den Haag	+31 6 37248590	iris.vandijk@example.nl
+decide-link	D2	b	B-2024	Iris	van Dijk	female	2010-02-09	-	Nieuwstraat 34	2511 AV	Den Haag	+31 6 37248590	iris.vandijk@example.nl
+decide-defer	F1	b	B-2025	Pieter	van der Meer	male	1937-09-05	-	Parkweg 180	5611 JG	Eindhoven	+31 6 99279590	pieter.vandermeer@example.nl
+decide-defer	F1	a	A-2025	Pieter	van der Meer	male	1937-09-05	-	Parkweg 180	5611 JG	Eindhoven	+31 6 99279590	pieter.vandermeer@example.nl
+decide-defer	F2	d	D-2021	Lars	van Vliet	male	1931-08-18	-	Eikenlaan 16	2311 NX	Leiden	+31 6 20994306	lars.vanvliet@example.nl
+decide-defer	F2	c	C-2023	Lars	van Vliet	male	1931-08-18	-	Eikenlaan 16	2311 NX	Leiden	+31 6 20994306	lars.vanvliet@example.nl
+merge-keep	M1	a	A-2026	Emma	Dijkstra	female	1943-09-10	-	Parkweg 175	2011 DC	Haarlem	+31 6 75807511	emma.dijkstra@example.nl
+merge-keep	M1	c	C-2024	Emma	Huisman	female	1943-09-10	-	Parkweg 69	1315 SS	Almere	+31 6 60104893	annemiek.huisman@example.nl
+merge-revert	M2	a	A-2027	Julia	Postma	female	2015-08-10	-	Wilhelminastraat 42	9711 ZK	Groningen	+31 6 73675423	julia.postma@example.nl
+merge-revert	M2	c	C-2025	Julia	Schouten	female	2015-08-10	-	Schoolstraat 119	1315 LE	Almere	+31 6 52000118	lotte.schouten@example.nl
+hl7v2	-	e	E-2001	Hanna	van der Wal	female	2005-02-08	700013696	Stationsweg 35	3511 JA	Utrecht	+31 6 64390273	hanna.vanderwal@example.nl
+hl7v2	-	e	E-2002	Lotte	de Bruijn	female	1995-07-10	700014068	Schoolstraat 44	1012 AT	Amsterdam	+31 6 11891115	lotte.debruijn@example.nl
+hl7v2	-	e	E-2003	Mila	de Jong	female	1989-03-28	700014433	Parkweg 136	8011 VD	Zwolle	+31 6 82895384	mila.dejong@example.nl
+hl7v2	-	e	E-2004	Jesse	van der Veen	male	1944-04-28	700014809	Schoolstraat 58	6811 SX	Arnhem	+31 6 65632589	jesse.vanderveen@example.nl
+hl7v2	-	e	E-2005	Pieter	Smits	male	1975-07-25	700015176	Industrieweg 66	1012 KE	Amsterdam	+31 6 10523798	pieter.smits@example.nl
+hl7v2	-	e	E-2006	Pieter	Mulder	male	1945-02-02	700015541	Nieuwstraat 129	2011 NX	Haarlem	+31 6 76106123	pieter.mulder@example.nl
+hl7v2	-	e	E-2007	Pieter	Brouwer	male	2008-07-17	700015917	Lindelaan 134	1012 HE	Amsterdam	+31 6 31101037	pieter.brouwer@example.nl
+hl7v2	-	e	E-2900	Nora	van Os	female	1987-02-28	700000379	-	-	-	-	-

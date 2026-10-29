@@ -2,25 +2,26 @@
 # SPDX-FileCopyrightText: Cadasto B.V.
 # SPDX-License-Identifier: Apache-2.0
 #
-# pin-images.sh: move every product image of the family end-to-end lane to
-# that product's latest release, by tag and by the digest of its image index.
+# pin-images.sh: move every product image of the family end-to-end lane and
+# the family demo to that product's latest release, by tag and by the digest
+# of its image index.
 #
 #   scripts/e2e/pin-images.sh [--check]
 #
 # For each image it reads the product's latest GitHub release (gh api), asks
 # GHCR's registry API anonymously for the digest of that tag, and rewrites the
-# reference in e2e/family/compose.yaml in place. An image whose release tag has
-# no published image yet keeps its pin and is reported, so a release still
-# building moves on the next run. --check rewrites nothing and exits 1 when a pin is behind. The Refresh
-# workflow runs it beside render-releases.sh. No specification governs it:
-# our own design.
+# reference in e2e/family/compose.yaml and demo/compose.yaml in place. An
+# image whose release tag has no published image yet keeps its pin and is
+# reported, so a release still building moves on the next run. --check
+# rewrites nothing and exits 1 when a pin is behind. The Refresh workflow runs
+# it beside render-releases.sh. No specification governs it: our own design.
 
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$root"
 
-readonly FILES=(e2e/family/compose.yaml)
+readonly FILES=(e2e/family/compose.yaml demo/compose.yaml)
 # image name, then the repository whose release it ships with.
 readonly IMAGES=(
   "ferroehr FerroEHR"
@@ -29,6 +30,11 @@ readonly IMAGES=(
   "ferrobridge FerroBRIDGE"
   "ferrofed FerroFED"
   "ferropix FerroPIX"
+  "ferroehr-viewer FerroEHR"
+  "ferroterm-console FerroTERM"
+  "ferrobridge-console FerroBRIDGE"
+  "ferrofed-console FerroFED"
+  "ferropix-console FerroPIX"
 )
 readonly ACCEPT='application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json'
 

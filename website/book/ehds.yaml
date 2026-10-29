@@ -42,7 +42,7 @@
 # its line 3 carries and revisions.md records (scripts/checks/book-revisions.sh).
 
 revised:
-  readiness: "2026-10-28"
+  readiness: "2026-10-29"
   technical_documentation: "2026-10-28"
 
 regulation:
@@ -259,18 +259,24 @@ requirements:
           is outbox-driven, so a record survives a repository outage; the
           instructions for use name both. `scripts/interop/atna.sh` runs the
           transactions against independent implementations from published
-          images. Its first run, on 2026-10-28: syslog-ng received every
-          syslog message over RFC 5425 TLS, each a well-formed DICOM PS3.15
-          `AuditMessage`; HAPI FHIR, as the FHIR feed's repository, refused
-          the classified records because the shared `ehds-logging` crate names
-          an openEHR object by an opaque `what.reference`
+          images. Its first run, on 2026-10-28, found two defects on
+          FerroEHR's side, both fixed: the shared `ehds-logging` crate named
+          an openEHR object by an opaque `what.reference`, which HAPI FHIR
+          refused
           ([FerroAUDIT#127](https://github.com/FerroHEALTH/FerroAUDIT/issues/127)),
-          and its validator, with IHE BALP loaded, refused one unclassified
-          record that lacked the `entity:data` slice
+          and one unclassified record lacked the BALP `entity:data` slice
           ([FerroEHR#4353](https://github.com/FerroHEALTH/FerroEHR/issues/4353)).
-          The ITI-81 comparison with HAPI's search waits on the feed
-          delivering every record. FerroEHR claims no interoperability with a
-          medical device; a device manufacturer that claims it carries
+          The run of 2026-10-29, on FerroEHR's main build with the FerroAUDIT
+          release that fixes the first
+          ([FerroEHR#4365](https://github.com/FerroHEALTH/FerroEHR/issues/4365)),
+          found no disagreement: HAPI FHIR, from the image the script pins,
+          accepted all 71 records of the window and its validator, with IHE
+          BALP loaded, found no error; syslog-ng received all 72 syslog messages over RFC 5425 TLS,
+          each a well-formed DICOM PS3.15 `AuditMessage`; and ten ITI-81
+          searches answered the same records on FerroEHR and on HAPI FHIR.
+          The fixes ship in FerroEHR's next release; a released version
+          before it still writes the reference HAPI FHIR refuses. FerroEHR claims no
+          interoperability with a medical device; a device manufacturer that claims it carries
           Art. 27(1).
   - group: "2"
     heading: Requirements for interoperability

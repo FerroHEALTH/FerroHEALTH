@@ -131,14 +131,25 @@ requirements:
             href: https://ferroehr.eu/docs/latest/compliance/intended-purpose.html
           - text: The hazard log of the logging component
             href: https://ferroehr.eu/docs/latest/compliance/hazard-log.html
+          - text: The logging component's stated performance, and the test that measures it
+            href: https://ferroehr.eu/docs/latest/compliance/logging-performance.html
         gap: >-
           Cadasto B.V. states the intended purpose, and the hazard log assesses
           the logging component against it in normal conditions of use, each
           hazard with its control and the test that shows it. H9, an emergency
           access to data restricted under EHDS Art. 8, is controlled by the
           emergency access role and the emergency mark on its record. The
+          logging component's intended performance is stated as claims a test
+          checks: every composition create and read recorded exactly once and
+          every AQL execution at least once, no access succeeding without its
+          record, a bounded cost in latency and throughput against the same
+          workload with the log off, and a bounded ITI-81 retrieval time.
+          `scripts/perf/audit.sh` measures them on every release candidate; a
+          claim not met refuses the release, and the summary is attached to
+          the release as its performance evaluation (Annex III point 2). The
           interoperability component's assessment is FerroBRIDGE's. The
-          Regulation names no method for showing performance or safety, and no
+          Regulation names no method or figure for showing performance or
+          safety, so the claims and the method are Cadasto B.V.'s own, and no
           conformity assessment has examined either.
       - id: "1.2"
         summary: >-
@@ -185,11 +196,16 @@ requirements:
           ("operation not permitted"). That run therefore set
           `hostUsers: true`, and its record names `hostUsers: false` as not
           exercised; observing it needs a cluster whose node runtime can
-          create user-namespaced pods. The chart and the Compose files
-          still declare `sandbox` by default, so an installation that follows
-          the quickstart instead of the instructions runs the sandbox posture,
-          which must not hold real personal data; the server says so on every
-          boot and on `GET /ferroehr/rest/status`.
+          create user-namespaced pods. Tried again on 2026-10-28 with the
+          newest kind, Kubernetes, containerd and runc on a rootful podman
+          machine, the pod failed the same way: a kind node is itself a
+          container, so the run needs a VM or bare-metal node. The chart has
+          no default posture: it refuses to render until
+          `config.deployment_profile` names `sandbox` or `production`, so an
+          installation that follows a quickstart does not run the sandbox
+          posture by omission. The Compose files, the single-host evaluation
+          stacks, declare `sandbox` explicitly and say it must not hold real
+          personal data.
       - id: "1.3"
         summary: >-
           Interoperability, safety and security features uphold the rights of
@@ -232,6 +248,8 @@ requirements:
         evidence:
           - text: The access log's IHE ATNA transactions and mutual TLS
             href: https://ferroehr.eu/docs/latest/audit.html#node-authentication-iti-19-mutual-tls
+          - text: The run against independent ATNA implementations
+            href: https://ferroehr.eu/docs/latest/audit.html#against-independent-atna-implementations
           - text: Medical device purposes are outside the intended purpose
             href: intended-purpose.md
         gap: >-
@@ -239,9 +257,21 @@ requirements:
           ITI-20 feeds, ITI-81 retrieval, ITI-19 mutual TLS. The syslog feed
           sends over RFC 5425 TLS only, through `ihe-atna`, and the FHIR feed
           is outbox-driven, so a record survives a repository outage; the
-          instructions for use name both. FerroEHR claims no
-          interoperability with a medical device; a device manufacturer that
-          claims it carries Art. 27(1).
+          instructions for use name both. `scripts/interop/atna.sh` runs the
+          transactions against independent implementations from published
+          images. Its first run, on 2026-10-28: syslog-ng received every
+          syslog message over RFC 5425 TLS, each a well-formed DICOM PS3.15
+          `AuditMessage`; HAPI FHIR, as the FHIR feed's repository, refused
+          the classified records because the shared `ehds-logging` crate names
+          an openEHR object by an opaque `what.reference`
+          ([FerroAUDIT#127](https://github.com/FerroHEALTH/FerroAUDIT/issues/127)),
+          and its validator, with IHE BALP loaded, refused one unclassified
+          record that lacked the `entity:data` slice
+          ([FerroEHR#4353](https://github.com/FerroHEALTH/FerroEHR/issues/4353)).
+          The ITI-81 comparison with HAPI's search waits on the feed
+          delivering every record. FerroEHR claims no interoperability with a
+          medical device; a device manufacturer that claims it carries
+          Art. 27(1).
   - group: "2"
     heading: Requirements for interoperability
     items:
@@ -396,28 +426,26 @@ requirements:
         evidence:
           - text: Retention periods keyed on a priority category
             href: https://ferroehr.eu/docs/latest/compliance/retention.html#keying-a-period-on-a-priority-category
+          - text: Retention periods keyed on a registered origin
+            href: https://ferroehr.eu/docs/latest/compliance/retention.html#keying-a-period-on-an-origin
           - text: The access-log horizon in calendar years, and its floors
             href: https://ferroehr.eu/docs/latest/installation/config-audit.html#auditstore-the-local-audit-record-repository
-          - text: Access rights per EHR, per role and per template
+          - text: Access rights per EHR, per role, per template, category and origin
             href: https://ferroehr.eu/docs/latest/security.html#abac-attribute-based-fine-grained
         gap: >-
-          A retention period can be keyed on the priority category of clinical
-          content, through the category map the deployment declares, and an
-          unclassified object takes the longest period configured for its
-          kind. The access log's horizon is set in calendar years
-          (`retention_years`), with a three-year floor in every EU Member State
-          (Art. 9(2)) and a longer national floor where one applies. Access
-          rights can be keyed on the template through ABAC; the category is not
-          itself an authorisation attribute. Neither retention nor access
-          rights are keyed on the ORIGIN of the data. The origins FerroEHR
-          records are the `FEEDER_AUDIT` originating-system ids a sending system
-          chooses, as free text, and data committed directly carries none, so a
-          period keyed on an origin could neither be checked against a declared
-          vocabulary, as a category is, nor reach the data without a feeder
-          audit; keying on origin first needs a register of the origins a
-          deployment recognises. The archival tier moves records without
-          expiring them.
-
+          A retention period can be keyed on the category of clinical content,
+          through the category map in force, and on the origin of the data,
+          through the `[origins]` register of the origins a deployment
+          recognises: each by the id its data carry, with the clients whose
+          direct commits come from it, so data committed directly carries the
+          committing client's origin. An unclassified object takes the longest
+          period configured for its kind. The access log's horizon is set in
+          calendar years (`retention_years`), with a three-year floor in every
+          EU Member State (Art. 9(2)) and a longer national floor where one
+          applies. Access rights can be keyed on the template, the category
+          and the origin: the ABAC request carries all three as resource
+          attributes a Cedar policy or a remote decision point can name. The
+          archival tier moves records without expiring them.
 # Annex III, "Technical documentation". The elements Article 37(2) requires,
 # with the page of this book (website/book/src/ehds/) that holds each and the
 # published material it cites.

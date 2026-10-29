@@ -1,0 +1,99 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The configuration the four FerroEHR members of the demo share, mounted
+# read-only at /etc/ferroehr/ferroehr.toml. compose.yaml gives each member its
+# database, its system_id, its clinical domain and its FerroPIX consumer in
+# the environment. Every key is on <https://ferroehr.eu/docs/>.
+#
+# DEMO CREDENTIALS, NOT FOR PRODUCTION: the Basic user ferroehr / ferroehr
+# (the hash is Argon2id of "ferroehr") and the Keycloak client secrets.
+
+deployment_profile = "sandbox"
+
+[server]
+listen = "0.0.0.0:8080"
+# The sandbox dataset uploads templates of a few MiB.
+body_limit_bytes = 67108864
+
+[rest]
+cors_permissive = true
+
+[admin]
+enabled = true
+
+# The viewer's Server pages: build information, health, metrics and logging,
+# for an administrator.
+[management]
+enabled = true
+
+[management.endpoints]
+info = "admin_only"
+metrics = "admin_only"
+loggers = "admin_only"
+health = "admin_only"
+status = "admin_only"
+
+# The subscription API the viewer lists; no broker runs, so nothing is sent.
+[events]
+admin_api = true
+
+# Keycloak signs every bearer token; up.sh seeds over Basic beside it.
+[auth]
+enabled = true
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+audience = ["ferroehr"]
+# Keycloak types its access tokens JWT, not RFC 9068 at+jwt.
+token_profile = "jwt"
+role_claims = ["realm_access.roles"]
+ca_file = "/run/demo-tls/ca.crt"
+
+[[auth.basic.users]]
+user = "ferroehr"
+password_hash = "$argon2id$v=19$m=19456,t=2,p=1$ZmVycm9laHJEZXZTYWx0$be5nPwWjfUl1qvSrvkvqvdMOuCgM0VFcN/VN4MFLjT8"
+scopes = ["user/composition-*.cruds", "user/template-*.cruds", "user/aql-*.cruds", "__ferroehr.platform"]
+roles = ["ADMIN", "USER"]
+
+# The roles the viewer's access control shows: READONLY refuses every write.
+[authz.rbac]
+enabled = true
+
+# The SMART discovery document, from Keycloak's endpoints; compose.yaml sets
+# each member's public_base_url. The service clients whose system/aql-*
+# grants count.
+[smart]
+enabled = true
+backend_clients = ["ferrofed-gateway", "ferrobridge-cdr"]
+
+[terminology]
+api_enabled = true
+
+[terminology.server]
+enabled = true
+url = "http://ferroterm:8080/r4b"
+fail_on_error = false
+
+# Each member's EHR_STATUS names its patient by the pseudonym FerroPIX mints in
+# that member's clinical domain; the list holds all four so one file serves
+# every member, and compose.yaml names the member's own as assigning_authority.
+[privacy]
+subject_namespaces = ["urn:oid:2.999.7.1", "urn:oid:2.999.7.2", "urn:oid:2.999.7.3", "urn:oid:2.999.7.4"]
+
+[ehr_index]
+provider = "ihe"
+pixm_url = "https://ferropix:8080/fhir"
+
+[ehr_index.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+[ehr_index.oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_auth = "client_secret_post"
+scope = "system/Patient.rs"
+ca_file = "/run/demo-tls/ca.crt"
+
+[cohort]
+subjects = true
+
+[usage_report]
+enabled = false

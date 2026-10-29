@@ -1,0 +1,139 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The FerroFED gateway in the demo, mounted read-only at
+# /etc/ferrofed/ferrofed.toml. It federates the four members of registry.toml
+# and resolves a patient to each member's ehr_id through FerroPIX (ITI-83).
+# Every key is on <https://ferrofed.eu/docs/operate/configuration.html>.
+#
+# DEMO CREDENTIALS, NOT FOR PRODUCTION: the Keycloak client secrets, which
+# up.sh writes as files because managed revisions hold no inline secret.
+
+# The development profile admits the members over plain http inside the
+# compose network.
+profile = "development"
+
+[server]
+drain_delay_ms = 0
+# The address clients reach, which every Location names.
+public_url = "http://localhost:8080"
+# Template uploads of a few MiB, as the members take them.
+body_limit_bytes = 67108864
+
+[registry]
+document = "/etc/ferrofed/registry.toml"
+
+[federation]
+id = "ferrohealth-demo"
+per_node_timeout_ms = 10000
+overall_timeout_ms = 25000
+node_selection = "ask-all"
+# A query that names no namespace is about the demo's patient identifier.
+default_namespace = "urn:oid:2.999.1.1"
+fan_out_stored_queries = true
+fan_out_template_upload = true
+demographic_endpoint = "member-a-query"
+
+# product_scope and ca_file belong to [auth], never to an [[auth.issuer]].
+[auth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+audience = ["ferrofed"]
+token_profile = "jwt"
+ca_file = "/run/demo-tls/ca.crt"
+product_scope = "__ferrofed.operator"
+
+[signing]
+key_file = "/run/secrets/ferrofed-signing-key.pem"
+# The JWK Set is published under server.public_url, which FerroFED derives.
+
+# The stored-query registry and the configuration revisions, kept on the
+# ferrofed-state volume.
+[stored_queries]
+path = "/var/lib/ferrofed/stored-queries.redb"
+
+[config]
+ui = "managed"
+path = "/var/lib/ferrofed/config-revisions.redb"
+
+# The admin listener the console's configuration, revision and repair pages
+# read, inside the compose network only.
+[metrics]
+listen = "0.0.0.0:9464"
+allow_remote = true
+
+[credentials."member-a-query".oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrofed-gateway"
+client_auth = "client_secret_post"
+client_secret_file = "/run/secrets/ferrofed-gateway-secret"
+scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
+ca_file = "/run/demo-tls/ca.crt"
+
+[credentials."member-b-query".oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrofed-gateway"
+client_auth = "client_secret_post"
+client_secret_file = "/run/secrets/ferrofed-gateway-secret"
+scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
+ca_file = "/run/demo-tls/ca.crt"
+
+[credentials."member-c-query".oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrofed-gateway"
+client_auth = "client_secret_post"
+client_secret_file = "/run/secrets/ferrofed-gateway-secret"
+scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
+ca_file = "/run/demo-tls/ca.crt"
+
+[credentials."member-d-query".oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrofed-gateway"
+client_auth = "client_secret_post"
+client_secret_file = "/run/secrets/ferrofed-gateway-secret"
+scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
+ca_file = "/run/demo-tls/ca.crt"
+
+# FerroPIX, over HTTPS from the demo CA. Each member maps to its ehr_id domain.
+[[pixm.manager]]
+url = "https://ferropix:8080/fhir/"
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+[pixm.manager.members]
+"member-a" = "urn:oid:2.999.2.1"
+"member-b" = "urn:oid:2.999.2.2"
+"member-c" = "urn:oid:2.999.2.3"
+"member-d" = "urn:oid:2.999.2.4"
+"member-e" = "urn:oid:2.999.2.5"
+
+[pixm.manager.credentials.oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrofed-pix"
+client_auth = "client_secret_post"
+client_secret_file = "/run/secrets/ferrofed-pix-secret"
+scope = "system/Patient.rs"
+ca_file = "/run/demo-tls/ca.crt"
+
+# PDQm against FerroPIX: the Demographics service.
+[pdqm]
+url = "https://ferropix:8080/fhir/"
+transaction = "iti-78"
+master = "urn:oid:2.999.1.1"
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+[pdqm.namespaces]
+"urn:oid:2.16.840.1.113883.2.4.6.3" = "urn:oid:2.16.840.1.113883.2.4.6.3"
+
+[pdqm.credentials.oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrofed-pix"
+client_auth = "client_secret_post"
+client_secret_file = "/run/secrets/ferrofed-pix-secret"
+scope = "system/Patient.rs"
+ca_file = "/run/demo-tls/ca.crt"
+
+[[trust.issuer]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+demographic_clients = ["demo-seed"]
+
+[usage_report]
+enabled = false

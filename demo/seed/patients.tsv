@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The demo's synthetic patients, read by up.sh. The first four are the
+# FerroFED quickstart patients (urn:oid:2.999.1.1), each with a test BSN that
+# passes the eleven-proof and a patient number at every hospital whose member
+# holds an EHR for them; ffd-test-0004 is known at hospital A and has no EHR.
+# Every name, date and number is invented.
+#
+# patient	given	family	gender	birth_date	bsn	members
+ffd-test-0001	Eva	Visser	female	1958-03-14	900000016	a b c d
+ffd-test-0002	Daan	Smit	male	1971-11-02	900000028	b d
+ffd-test-0003	Lotte	Meijer	female	1989-06-27	900000041	c
+ffd-test-0004	Bram	Mulder	male	2001-01-09	900000053	-

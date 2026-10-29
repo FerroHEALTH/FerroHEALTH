@@ -40,3 +40,6 @@ _site/
 
 # The family end-to-end lane's secrets and fetched fixtures (e2e/family/run.sh).
 e2e/family/.work/
+
+# The family demo's CA, keys, secrets and downloads (demo/up.sh).
+demo/.work/

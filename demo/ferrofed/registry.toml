@@ -1,0 +1,100 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The registry document of the demo: the four hospitals and their FerroEHR
+# members, each at its ITS-REST API root on the compose network, with the
+# system_id compose.yaml gives the member. The format is FerroFED's own
+# (<https://ferrofed.eu/docs/operate/registry.html>).
+
+[[organisation]]
+id = "hospital-a"
+name = "Hospital A"
+
+[[node]]
+id = "member-a"
+organisation = "hospital-a"
+system_id = "member-a.ferrohealth-demo.local"
+product = "FerroEHR"
+version = "5.5.0"
+
+[[endpoint]]
+id = "member-a-query"
+node = "member-a"
+url = "http://ferroehr-a:8080/ferroehr/rest/openehr"
+connection_type = "openehr-rest-query"
+managing_organisation = "hospital-a"
+
+[[organisation]]
+id = "hospital-b"
+name = "Hospital B"
+
+[[node]]
+id = "member-b"
+organisation = "hospital-b"
+system_id = "member-b.ferrohealth-demo.local"
+product = "FerroEHR"
+version = "5.5.0"
+
+[[endpoint]]
+id = "member-b-query"
+node = "member-b"
+url = "http://ferroehr-b:8080/ferroehr/rest/openehr"
+connection_type = "openehr-rest-query"
+managing_organisation = "hospital-b"
+
+[[organisation]]
+id = "hospital-c"
+name = "Hospital C"
+
+[[node]]
+id = "member-c"
+organisation = "hospital-c"
+system_id = "member-c.ferrohealth-demo.local"
+product = "FerroEHR"
+version = "5.5.0"
+
+[[endpoint]]
+id = "member-c-query"
+node = "member-c"
+url = "http://ferroehr-c:8080/ferroehr/rest/openehr"
+connection_type = "openehr-rest-query"
+managing_organisation = "hospital-c"
+
+[[organisation]]
+id = "hospital-d"
+name = "Hospital D"
+
+[[node]]
+id = "member-d"
+organisation = "hospital-d"
+system_id = "member-d.ferrohealth-demo.local"
+product = "FerroEHR"
+version = "5.5.0"
+
+[[endpoint]]
+id = "member-d-query"
+node = "member-d"
+url = "http://ferroehr-d:8080/ferroehr/rest/openehr"
+connection_type = "openehr-rest-query"
+managing_organisation = "hospital-d"
+
+# A fifth hospital whose member is suspended: the console shows it Off, and the
+# gateway never asks it.
+[[organisation]]
+id = "hospital-e"
+name = "Hospital E"
+
+[[node]]
+id = "member-e"
+organisation = "hospital-e"
+system_id = "member-e.ferrohealth-demo.local"
+product = "FerroEHR"
+version = "5.5.0"
+
+[[endpoint]]
+id = "member-e-query"
+node = "member-e"
+url = "http://ferroehr-e:8080/ferroehr/rest/openehr"
+connection_type = "openehr-rest-query"
+managing_organisation = "hospital-e"
+status = "suspended"

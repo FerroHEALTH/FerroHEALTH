@@ -1,0 +1,1402 @@
+{
+  "realm": "ferrohealth-demo",
+  "displayName": "FerroHEALTH demo (development credentials, not for production)",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": false,
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 3600,
+  "roles": {
+    "realm": [
+      {
+        "name": "ADMIN",
+        "description": "FerroEHR administrator"
+      },
+      {
+        "name": "USER",
+        "description": "FerroEHR user"
+      },
+      {
+        "name": "READONLY",
+        "description": "FerroEHR read-only user"
+      },
+      {
+        "name": "ferropix-steward",
+        "description": "FerroPIX data steward"
+      },
+      {
+        "name": "ferropix-admin",
+        "description": "FerroPIX administrator"
+      },
+      {
+        "name": "ferrofed-operator",
+        "description": "FerroFED operator"
+      },
+      {
+        "name": "ferrobridge-operator",
+        "description": "FerroBRIDGE operator"
+      },
+      {
+        "name": "ferroterm-admin",
+        "description": "FerroTERM administrator"
+      }
+    ]
+  },
+  "clientScopes": [
+    {
+      "name": "basic",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "sub",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-sub-mapper",
+          "config": {
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "auth_time",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "config": {
+            "user.session.note": "AUTH_TIME",
+            "claim.name": "auth_time",
+            "jsonType.label": "long",
+            "id.token.claim": "true",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "profile",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "config": {
+            "user.attribute": "username",
+            "claim.name": "preferred_username",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "full name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-full-name-mapper",
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "roles",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "config": {
+            "claim.name": "realm_access.roles",
+            "multivalued": "true",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "name": "demo-audiences",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "audience ferroehr",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferroehr",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience ferrofed",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferrofed",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience ferropix",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferropix",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience ferroterm",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferroterm",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience http://localhost:8090/fhir",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "http://localhost:8090/fhir",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience ferroehr-viewer",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferroehr-viewer",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience ferropix-console",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferropix-console",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience ferrofed-console",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferrofed-console",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience ferroterm-console",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferroterm-console",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        },
+        {
+          "name": "audience ferrobridge-console",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferrobridge-console",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ihe-iua-treat",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "ihe_iua",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "extensions.ihe_iua",
+            "claim.value": "{\"subject_organization_id\": \"urn:oid:2.999.7\", \"purpose_of_use\": [{\"system\": \"http://terminology.hl7.org/CodeSystem/v3-ActReason\", \"code\": \"TREAT\"}]}",
+            "jsonType.label": "JSON",
+            "access.token.claim": "true",
+            "id.token.claim": "false"
+          }
+        }
+      ]
+    },
+    {
+      "name": "user/composition-*.cruds",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "user/template-*.cruds",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "user/aql-*.cruds",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "__ferroehr.platform",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "system/composition-*.cruds",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "system/template-*.cruds",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "system/aql-*.cruds",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "system/aql-*.s",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "system/Patient.rs",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "system/Patient.cud",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "user/*.cruds",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "__ferropix.steward",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "__ferropix.admin",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "__ferrofed.operator",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "__ferrobridge.operator",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    },
+    {
+      "name": "__ferroterm.admin",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": []
+    }
+  ],
+  "defaultDefaultClientScopes": [
+    "basic",
+    "roles"
+  ],
+  "defaultOptionalClientScopes": [],
+  "scopeMappings": [
+    {
+      "clientScope": "__ferropix.steward",
+      "roles": [
+        "ferropix-steward"
+      ]
+    },
+    {
+      "clientScope": "__ferropix.admin",
+      "roles": [
+        "ferropix-admin"
+      ]
+    },
+    {
+      "clientScope": "__ferrofed.operator",
+      "roles": [
+        "ferrofed-operator"
+      ]
+    },
+    {
+      "clientScope": "__ferrobridge.operator",
+      "roles": [
+        "ferrobridge-operator"
+      ]
+    },
+    {
+      "clientScope": "__ferroterm.admin",
+      "roles": [
+        "ferroterm-admin"
+      ]
+    },
+    {
+      "clientScope": "__ferroehr.platform",
+      "roles": [
+        "ADMIN"
+      ]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "ferroehr-viewer",
+      "name": "ferroehr-viewer",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferroehr-viewer",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "user/composition-*.cruds",
+        "user/template-*.cruds",
+        "user/aql-*.cruds",
+        "__ferroehr.platform",
+        "profile"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferroehr-viewer",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3001/*##http://localhost:3006/*##http://localhost:3007/*##http://localhost:3008/*"
+      },
+      "redirectUris": [
+        "http://localhost:3001/*",
+        "http://localhost:3006/*",
+        "http://localhost:3007/*",
+        "http://localhost:3008/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3001",
+        "http://localhost:3006",
+        "http://localhost:3007",
+        "http://localhost:3008"
+      ]
+    },
+    {
+      "clientId": "ferropix-console",
+      "name": "ferropix-console",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferropix-console",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "__ferropix.steward",
+        "__ferropix.admin",
+        "profile"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferropix-console",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3002/*"
+      },
+      "redirectUris": [
+        "http://localhost:3002/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3002"
+      ]
+    },
+    {
+      "clientId": "ferrofed-console",
+      "name": "ferrofed-console",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferrofed-console",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "__ferrofed.operator",
+        "user/aql-*.cruds",
+        "user/composition-*.cruds",
+        "ihe-iua-treat",
+        "profile"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferrofed-console",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3003/*"
+      },
+      "redirectUris": [
+        "http://localhost:3003/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3003"
+      ]
+    },
+    {
+      "clientId": "ferroterm-console",
+      "name": "ferroterm-console",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferroterm-console",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "user/*.cruds",
+        "__ferroterm.admin",
+        "profile"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferroterm-console",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3004/*"
+      },
+      "redirectUris": [
+        "http://localhost:3004/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3004"
+      ]
+    },
+    {
+      "clientId": "ferrobridge-console",
+      "name": "ferrobridge-console",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferrobridge-console",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "__ferrobridge.operator",
+        "user/*.cruds",
+        "profile"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferrobridge-console",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3005/*"
+      },
+      "redirectUris": [
+        "http://localhost:3005/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3005"
+      ]
+    },
+    {
+      "clientId": "ferrofed-gateway",
+      "name": "ferrofed-gateway",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferrofed-gateway",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/template-*.cruds",
+        "system/composition-*.cruds",
+        "system/aql-*.cruds"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferrofed-gateway",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "ferrofed-pix",
+      "name": "ferrofed-pix",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferrofed-pix",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.rs"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferrofed-pix",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "ferrobridge-cdr",
+      "name": "ferrobridge-cdr",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferrobridge-cdr",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/composition-*.cruds",
+        "system/template-*.cruds",
+        "system/aql-*.cruds"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferrobridge-cdr",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "ferroehr-a",
+      "name": "ferroehr-a",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferroehr-a",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.rs"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferroehr-a",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "ferroehr-b",
+      "name": "ferroehr-b",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferroehr-b",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.rs"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferroehr-b",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "ferroehr-c",
+      "name": "ferroehr-c",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferroehr-c",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.rs"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferroehr-c",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "ferroehr-d",
+      "name": "ferroehr-d",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferroehr-d",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.rs"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "ferroehr-d",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "hospital-a",
+      "name": "hospital-a",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-hospital-a",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.cud"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "hospital-a",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "hospital-b",
+      "name": "hospital-b",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-hospital-b",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.cud"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "hospital-b",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "hospital-c",
+      "name": "hospital-c",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-hospital-c",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.cud"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "hospital-c",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "hospital-d",
+      "name": "hospital-d",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-hospital-d",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "system/Patient.cud"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "hospital-d",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "demo-seed",
+      "name": "demo-seed",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-seed",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "user/aql-*.cruds",
+        "ihe-iua-treat",
+        "user/template-*.cruds",
+        "user/composition-*.cruds",
+        "__ferrofed.operator"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "demo-seed",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "demo-seed-fhir",
+      "name": "demo-seed-fhir",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-seed-fhir",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "user/*.cruds"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "demo-seed-fhir",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    },
+    {
+      "clientId": "demo-steward",
+      "name": "demo-steward",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-steward",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "defaultClientScopes": [
+        "basic",
+        "roles",
+        "demo-audiences",
+        "__ferropix.steward",
+        "__ferropix.admin"
+      ],
+      "optionalClientScopes": [],
+      "protocolMappers": [
+        {
+          "name": "client_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "client_id",
+            "claim.value": "demo-steward",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "attributes": {}
+    }
+  ],
+  "users": [
+    {
+      "username": "demo",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Dana",
+      "lastName": "Demo",
+      "email": "demo@demo.ferrohealth.invalid",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "demo",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN",
+        "USER",
+        "ferropix-steward",
+        "ferropix-admin",
+        "ferrofed-operator",
+        "ferrobridge-operator",
+        "ferroterm-admin"
+      ]
+    },
+    {
+      "username": "steward",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Sam",
+      "lastName": "Demo",
+      "email": "steward@demo.ferrohealth.invalid",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "steward",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "USER",
+        "ferropix-steward"
+      ]
+    },
+    {
+      "username": "auditor",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Alex",
+      "lastName": "Demo",
+      "email": "auditor@demo.ferrohealth.invalid",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "auditor",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "USER",
+        "READONLY"
+      ]
+    },
+    {
+      "username": "service-account-ferrofed-gateway",
+      "enabled": true,
+      "serviceAccountClientId": "ferrofed-gateway",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-ferrofed-pix",
+      "enabled": true,
+      "serviceAccountClientId": "ferrofed-pix",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-ferrobridge-cdr",
+      "enabled": true,
+      "serviceAccountClientId": "ferrobridge-cdr",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-ferroehr-a",
+      "enabled": true,
+      "serviceAccountClientId": "ferroehr-a",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-ferroehr-b",
+      "enabled": true,
+      "serviceAccountClientId": "ferroehr-b",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-ferroehr-c",
+      "enabled": true,
+      "serviceAccountClientId": "ferroehr-c",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-ferroehr-d",
+      "enabled": true,
+      "serviceAccountClientId": "ferroehr-d",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-hospital-a",
+      "enabled": true,
+      "serviceAccountClientId": "hospital-a",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-hospital-b",
+      "enabled": true,
+      "serviceAccountClientId": "hospital-b",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-hospital-c",
+      "enabled": true,
+      "serviceAccountClientId": "hospital-c",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-hospital-d",
+      "enabled": true,
+      "serviceAccountClientId": "hospital-d",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-demo-seed",
+      "enabled": true,
+      "serviceAccountClientId": "demo-seed",
+      "realmRoles": [
+        "USER",
+        "ferrofed-operator"
+      ]
+    },
+    {
+      "username": "service-account-demo-seed-fhir",
+      "enabled": true,
+      "serviceAccountClientId": "demo-seed-fhir",
+      "realmRoles": [
+        "USER"
+      ]
+    },
+    {
+      "username": "service-account-demo-steward",
+      "enabled": true,
+      "serviceAccountClientId": "demo-steward",
+      "realmRoles": [
+        "USER",
+        "ferropix-steward",
+        "ferropix-admin"
+      ]
+    }
+  ]
+}

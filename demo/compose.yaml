@@ -1,0 +1,578 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# The FerroHEALTH family demo: every product and every console, on the
+# published images, signed in through one Keycloak realm. Start, seed and stop
+# it with the scripts beside this file; README.md is the walkthrough.
+#
+#   demo/up.sh       certificates, start, seed, print every URL and the login
+#   demo/down.sh     stop it and delete its data
+#
+# DEMO CREDENTIALS, NOT FOR PRODUCTION. The realm's users (demo / demo,
+# steward / steward, auditor / auditor), its client secrets, the Keycloak admin
+# (admin / admin), FerroEHR's Basic user and the database passwords are
+# written in the files of this directory. The development CA and every key
+# are made by up.sh under .work/, which git ignores.
+#
+# THE ISSUER. Keycloak serves https://keycloak.localhost:8443/realms/
+# ferrohealth-demo. The containers reach it through a network alias of that
+# name, and a browser resolves every *.localhost name to loopback, where the
+# published port lands, so both sides read one issuer URL with no hosts entry.
+# Every server trusts the development CA through its ca_file key; a console
+# with no such key reads it through SSL_CERT_FILE.
+#
+# PORTS. Every published port binds the loopback interface.
+#
+#   8443  Keycloak             3001  FerroEHR viewer, member A
+#                              3006  FerroEHR viewer, member B
+#                              3007  FerroEHR viewer, member C
+#                              3008  FerroEHR viewer, member D
+#   8080  FerroFED gateway     3002  FerroPIX console
+#   8081  FerroEHR member A    3003  FerroFED console
+#   8082  FerroEHR member B    3004  FerroTERM console
+#   8083  FerroEHR member C    3005  FerroBRIDGE console
+#   8084  FerroEHR member D
+#   8085  FerroTERM            8070  FerroPIX (HTTPS)
+#   8090  FerroBRIDGE          2575  FerroPIX HL7 v2 (MLLP)
+#
+# Nothing here builds an image. Every image is pinned by its release tag and
+# the digest of its image index, and scripts/e2e/pin-images.sh moves the
+# product images to each product's latest release. No specification governs a
+# cross-product demo: our own design.
+
+name: ferrohealth-demo
+
+x-hardened: &hardened
+  cap_drop: [ALL]
+  security_opt:
+    - no-new-privileges:true
+
+x-demo-tls: &demo-tls
+  type: bind
+  source: ./.work/tls
+  target: /run/demo-tls
+  read_only: true
+
+x-ferroehr-member: &ferroehr-member
+  <<: *hardened
+  image: ghcr.io/ferrohealth/ferroehr:5.5.0@sha256:e1b15849a3792481a7f16680081b1ae6a2d7160d66e5cb1657fcef5cccfed0dc
+  restart: unless-stopped
+  depends_on:
+    ferroehr-postgres:
+      condition: service_healthy
+    ferropix:
+      condition: service_healthy
+    keycloak:
+      condition: service_healthy
+  volumes:
+    - type: bind
+      source: ./ferroehr/member.toml
+      target: /etc/ferroehr/ferroehr.toml
+      read_only: true
+    - *demo-tls
+  read_only: true
+  tmpfs:
+    - /tmp
+  healthcheck:
+    test: ["CMD", "/usr/local/bin/ferroehr", "healthcheck"]
+    interval: 5s
+    timeout: 5s
+    retries: 60
+    start_period: 20s
+
+x-console: &console
+  <<: *hardened
+  restart: unless-stopped
+  read_only: true
+  environment: &console-env
+    SSL_CERT_FILE: /run/demo-tls/ca.crt
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1@sha256:a78d6b79572168cb25886b80a8b5b8d4ed4390743e3eecb810538683e209dd6b
+    restart: unless-stopped
+    command: ["start-dev", "--import-realm"]
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: https://keycloak.localhost:8443
+      KC_HTTPS_PORT: "8443"
+      KC_HTTPS_CERTIFICATE_FILE: /run/demo-tls/keycloak.crt
+      KC_HTTPS_CERTIFICATE_KEY_FILE: /run/demo-tls/keycloak.key
+    networks:
+      default:
+        aliases: [keycloak.localhost]
+    ports:
+      # The in-network and the published port must be the same number, so
+      # the issuer URL is the same on both sides.
+      - "127.0.0.1:8443:8443"
+    volumes:
+      - type: bind
+        source: ./keycloak/ferrohealth-demo-realm.json
+        target: /opt/keycloak/data/import/ferrohealth-demo-realm.json
+        read_only: true
+      - *demo-tls
+    healthcheck:
+      # The image has no curl; bash asks the realm's discovery document over
+      # the in-container http listener of start-dev.
+      test:
+        - CMD-SHELL
+        - >-
+          exec 3<>/dev/tcp/127.0.0.1/8080 &&
+          printf 'GET /realms/ferrohealth-demo/.well-known/openid-configuration HTTP/1.0\r\nHost: localhost\r\n\r\n' >&3 &&
+          head -n1 <&3 | grep -q ' 200 '
+      interval: 5s
+      timeout: 5s
+      retries: 120
+      start_period: 30s
+
+  # FerroTERM's index of ICD-10-CM, built once by up.sh from the CMS release
+  # it fetches into .work/ferroterm-releases, with the published image's own
+  # builder. The volume mounts over /data/state, which the image owns as its
+  # user, so the builder may write and the server reads the result.
+  ferroterm-build:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferroterm:0.3.2@sha256:f67d42e1e3bb5155f0e368c39b43f51151876d3359ef143d8dc1dc99e0ed7f72
+    profiles: [build]
+    entrypoint: ["/usr/local/bin/ferroterm-build"]
+    environment:
+      FERROTERM_INDEX_ROOT: /data/state/index
+    volumes:
+      - ferroterm-state:/data/state
+      - type: bind
+        source: ./.work/ferroterm-releases
+        target: /releases
+        read_only: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=4g
+
+  ferroterm:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferroterm:0.3.2@sha256:f67d42e1e3bb5155f0e368c39b43f51151876d3359ef143d8dc1dc99e0ed7f72
+    restart: unless-stopped
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8085:8080"
+    environment:
+      FERROTERM__TERMINOLOGY__INDEX: /data/state/index
+      # The family lane's synthetic code systems, which FerroBRIDGE's mapping
+      # names, and the two FHIR packages up.sh unpacks, beside the index.
+      FERROTERM__TERMINOLOGY__CODE_SYSTEMS: /data/codesystems,/data/packages/hl7.terminology.r4/package,/data/packages/hl7.fhir.uv.v2mappings/package
+      FERROTERM__FHIR__BASE_URL: http://localhost:8085
+      # Where the console's edits are kept.
+      FERROTERM__TERMINOLOGY__RESOURCES: /data/state/resources.redb
+      FERROTERM__ADMIN__LISTEN: 0.0.0.0:8081
+      FERROTERM__AUTH__ISSUER: https://keycloak.localhost:8443/realms/ferrohealth-demo
+      FERROTERM__AUTH__AUDIENCE: ferroterm
+      FERROTERM__AUTH__TOKEN_PROFILE: jwt
+      FERROTERM__AUTH__CA_FILE: /run/demo-tls/ca.crt
+      FERROTERM__TELEMETRY__FORMAT: json
+      FERROTERM__USAGE_REPORT__ENABLED: "false"
+    volumes:
+      - ferroterm-state:/data/state
+      - type: bind
+        source: ../e2e/family/terminology
+        target: /data/codesystems
+        read_only: true
+      - type: bind
+        source: ./.work/ferroterm-packages
+        target: /data/packages
+        read_only: true
+      - *demo-tls
+    read_only: true
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ferroterm", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+
+  ferroterm-console:
+    <<: *console
+    image: ghcr.io/ferrohealth/ferroterm-console:0.3.2@sha256:21870bbaca09668bc4eee3c87be589c03a542b759f3ad575375ca018fde0ad52
+    depends_on:
+      ferroterm:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3004:3000"
+    environment:
+      <<: *console-env
+      FERROTERM_CONSOLE_CONFIG: /etc/ferroterm-console/console.toml
+    volumes:
+      - type: bind
+        source: ./consoles/ferroterm.toml
+        target: /etc/ferroterm-console/console.toml
+        read_only: true
+      - *demo-tls
+
+  # The one database server of the four members, FerroEHR's own image; the
+  # mounted script gives members B, C and D a database each.
+  ferroehr-postgres:
+    image: ghcr.io/ferrohealth/ferroehr-postgres:5.5.0@sha256:dfe1d5c1bb95d31d3f6ff00fec03cd76ae20d57d20e6225b31e5bc68adf7fa81
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PG_INIT_USER: ferroehr_a
+      PG_INIT_PASSWORD: ferroehr_a_demo
+      PG_INIT_DB: ferroehr_a
+      DEMO_MEMBER_DATABASES: ferroehr_b ferroehr_c ferroehr_d
+    volumes:
+      - type: bind
+        source: ./ferroehr/20-member-databases.sh
+        target: /docker-entrypoint-initdb.d/20-member-databases.sh
+        read_only: true
+    # The entrypoint starts as root to chown the data directory and drops to
+    # `postgres`, so it keeps exactly the capabilities that needs.
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/run/postgresql
+      - /var/lib/postgresql
+    healthcheck:
+      # Over TCP: the port answers only once every init script has run.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ferroehr_a -d ferroehr_a"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 20s
+
+  ferroehr-a:
+    <<: *ferroehr-member
+    ports:
+      - "127.0.0.1:8081:8080"
+    environment:
+      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
+      FERROEHR__DB__URL: postgres://ferroehr_a:ferroehr_a_demo@ferroehr-postgres:5432/ferroehr_a
+      FERROEHR__REST__SYSTEM_ID: member-a.ferrohealth-demo.local
+      FERROEHR__EHR_INDEX__ASSIGNING_AUTHORITY: urn:oid:2.999.7.1
+      FERROEHR__EHR_INDEX__OAUTH__CLIENT_ID: ferroehr-a
+      FERROEHR__EHR_INDEX__OAUTH__CLIENT_SECRET: demo-ferroehr-a
+      FERROEHR__SMART__PUBLIC_BASE_URL: http://localhost:8081
+
+  ferroehr-b:
+    <<: *ferroehr-member
+    ports:
+      - "127.0.0.1:8082:8080"
+    environment:
+      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
+      FERROEHR__DB__URL: postgres://ferroehr_b:ferroehr_b_demo@ferroehr-postgres:5432/ferroehr_b
+      FERROEHR__REST__SYSTEM_ID: member-b.ferrohealth-demo.local
+      FERROEHR__EHR_INDEX__ASSIGNING_AUTHORITY: urn:oid:2.999.7.2
+      FERROEHR__EHR_INDEX__OAUTH__CLIENT_ID: ferroehr-b
+      FERROEHR__EHR_INDEX__OAUTH__CLIENT_SECRET: demo-ferroehr-b
+      FERROEHR__SMART__PUBLIC_BASE_URL: http://localhost:8082
+
+  ferroehr-c:
+    <<: *ferroehr-member
+    ports:
+      - "127.0.0.1:8083:8080"
+    environment:
+      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
+      FERROEHR__DB__URL: postgres://ferroehr_c:ferroehr_c_demo@ferroehr-postgres:5432/ferroehr_c
+      FERROEHR__REST__SYSTEM_ID: member-c.ferrohealth-demo.local
+      FERROEHR__EHR_INDEX__ASSIGNING_AUTHORITY: urn:oid:2.999.7.3
+      FERROEHR__EHR_INDEX__OAUTH__CLIENT_ID: ferroehr-c
+      FERROEHR__EHR_INDEX__OAUTH__CLIENT_SECRET: demo-ferroehr-c
+      FERROEHR__SMART__PUBLIC_BASE_URL: http://localhost:8083
+
+  ferroehr-d:
+    <<: *ferroehr-member
+    ports:
+      - "127.0.0.1:8084:8080"
+    environment:
+      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
+      FERROEHR__DB__URL: postgres://ferroehr_d:ferroehr_d_demo@ferroehr-postgres:5432/ferroehr_d
+      FERROEHR__REST__SYSTEM_ID: member-d.ferrohealth-demo.local
+      FERROEHR__EHR_INDEX__ASSIGNING_AUTHORITY: urn:oid:2.999.7.4
+      FERROEHR__EHR_INDEX__OAUTH__CLIENT_ID: ferroehr-d
+      FERROEHR__EHR_INDEX__OAUTH__CLIENT_SECRET: demo-ferroehr-d
+      FERROEHR__SMART__PUBLIC_BASE_URL: http://localhost:8084
+
+  # One viewer per member. Each sends the signed-in user's own token to its
+  # member, so the member's role gate decides what each demo user may do.
+  ferroehr-viewer: &ferroehr-viewer
+    <<: *console
+    image: ghcr.io/ferrohealth/ferroehr-viewer:5.5.0@sha256:0e8dc8513e7327789edd981ea2296578776ff01ad917b78d5b09dcdb008b622a
+    depends_on:
+      ferroehr-a:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3001:3000"
+    environment: &viewer-env
+      <<: *console-env
+      FERROEHR_VIEWER__CDR__BASE_URL: http://ferroehr-a:8080
+      FERROEHR_VIEWER__SESSION__COOKIE_SECURE: "false"
+      FERROEHR_VIEWER__AUTH__OIDC__ENABLED: "true"
+      FERROEHR_VIEWER__AUTH__OIDC__ISSUER: https://keycloak.localhost:8443/realms/ferrohealth-demo
+      FERROEHR_VIEWER__AUTH__OIDC__CLIENT_ID: ferroehr-viewer
+      FERROEHR_VIEWER__AUTH__OIDC__CLIENT_SECRET: demo-ferroehr-viewer
+      FERROEHR_VIEWER__AUTH__OIDC__PUBLIC_BASE_URL: http://localhost:3001
+      FERROEHR_VIEWER__AUTH__OIDC__TLS__TRUST_ROOTS_FILE: /run/demo-tls/ca.crt
+    volumes:
+      - *demo-tls
+
+  ferroehr-viewer-b:
+    <<: *ferroehr-viewer
+    depends_on:
+      ferroehr-b:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3006:3000"
+    environment:
+      <<: *viewer-env
+      FERROEHR_VIEWER__CDR__BASE_URL: http://ferroehr-b:8080
+      FERROEHR_VIEWER__AUTH__OIDC__PUBLIC_BASE_URL: http://localhost:3006
+
+  ferroehr-viewer-c:
+    <<: *ferroehr-viewer
+    depends_on:
+      ferroehr-c:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3007:3000"
+    environment:
+      <<: *viewer-env
+      FERROEHR_VIEWER__CDR__BASE_URL: http://ferroehr-c:8080
+      FERROEHR_VIEWER__AUTH__OIDC__PUBLIC_BASE_URL: http://localhost:3007
+
+  ferroehr-viewer-d:
+    <<: *ferroehr-viewer
+    depends_on:
+      ferroehr-d:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3008:3000"
+    environment:
+      <<: *viewer-env
+      FERROEHR_VIEWER__CDR__BASE_URL: http://ferroehr-d:8080
+      FERROEHR_VIEWER__AUTH__OIDC__PUBLIC_BASE_URL: http://localhost:3008
+
+  ferropix-postgres:
+    image: postgres:18.6@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ferropix
+      POSTGRES_PASSWORD_FILE: /run/secrets/ferropix-postgres-password
+    secrets:
+      - ferropix-postgres-password
+      - ferropix-db-password
+    volumes:
+      # FerroPIX refuses a superuser; the family lane's script makes the
+      # restricted role it connects as.
+      - type: bind
+        source: ../e2e/family/ferropix/10-ferropix-role.sh
+        target: /docker-entrypoint-initdb.d/10-ferropix-role.sh
+        read_only: true
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "postgres", "-d", "ferropix"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+
+  ferropix:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferropix:0.0.12@sha256:01adb1e7cc91b46409cc315162200fb99a712a9232508d5c85a228554d22d6d3
+    restart: unless-stopped
+    depends_on:
+      ferropix-postgres:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8070:8080"
+      # Hospital E's HL7 v2 feed (MLLP).
+      - "127.0.0.1:2575:2575"
+    environment:
+      FERROPIX_CONFIG: /etc/ferropix/ferropix.toml
+      FERROPIX__TELEMETRY__FORMAT: json
+    secrets:
+      - ferropix-db-url
+      - ferropix-data-key
+    volumes:
+      - type: bind
+        source: ./ferropix/ferropix.toml
+        target: /etc/ferropix/ferropix.toml
+        read_only: true
+      - *demo-tls
+      # The audit spool, owned by the image's user.
+      - ferropix-state:/var/lib/ferropix
+    read_only: true
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ferropix", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+
+  ferropix-console:
+    <<: *console
+    image: ghcr.io/ferrohealth/ferropix-console:0.0.12@sha256:a33d2f17eb713eaa6024ba7dc46363eb46e900db4e630eab1bcab6574e4dde8f
+    depends_on:
+      ferropix:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3002:3000"
+    environment:
+      <<: *console-env
+      FERROPIX_CONSOLE_CONFIG: /etc/ferropix-console/console.toml
+    volumes:
+      - type: bind
+        source: ./consoles/ferropix.toml
+        target: /etc/ferropix-console/console.toml
+        read_only: true
+      - *demo-tls
+
+  ferrofed:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferrofed:0.0.14@sha256:8269011ab811b6fc2e0d99259f1c54da1f5cfea841d0ef93eec80a5c268e22b3
+    restart: unless-stopped
+    depends_on:
+      ferroehr-a:
+        condition: service_healthy
+      ferroehr-b:
+        condition: service_healthy
+      ferroehr-c:
+        condition: service_healthy
+      ferroehr-d:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      FERROFED_CONFIG: /etc/ferrofed/ferrofed.toml
+      FERROFED__SERVER__LISTEN: 0.0.0.0:8080
+      FERROFED__TELEMETRY__FORMAT: json
+    secrets:
+      - ferrofed-signing-key.pem
+      - ferrofed-gateway-secret
+      - ferrofed-pix-secret
+    volumes:
+      - type: bind
+        source: ./ferrofed/ferrofed.toml
+        target: /etc/ferrofed/ferrofed.toml
+        read_only: true
+      - type: bind
+        source: ./ferrofed/registry.toml
+        target: /etc/ferrofed/registry.toml
+        read_only: true
+      - *demo-tls
+      # The stored-query registry and the configuration revisions.
+      - ferrofed-state:/var/lib/ferrofed
+    read_only: true
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ferrofed", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+
+  ferrofed-console:
+    <<: *console
+    image: ghcr.io/ferrohealth/ferrofed-console:0.0.14@sha256:5e9da4dd1b3b9b01cf64fe806c395d1c642b3d850bc84c12ffade2222fd835dc
+    depends_on:
+      ferrofed:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3003:3000"
+    environment:
+      <<: *console-env
+      FERROFED_CONSOLE_CONFIG: /etc/ferrofed-console/console.toml
+    volumes:
+      - type: bind
+        source: ./consoles/ferrofed.toml
+        target: /etc/ferrofed-console/console.toml
+        read_only: true
+      - *demo-tls
+
+  # Started by up.sh once member A holds the template its mapping names: the
+  # facade compiles its mappings at boot against the templates the CDR serves.
+  ferrobridge:
+    <<: *hardened
+    image: ghcr.io/ferrohealth/ferrobridge:0.0.14@sha256:42739e9bc8a120c1128d7fdba97b5fb2806f42507a47c49d33ac2882173fd56d
+    restart: unless-stopped
+    depends_on:
+      ferroehr-a:
+        condition: service_healthy
+      ferroterm:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8090:8080"
+    environment:
+      FERROBRIDGE_CONFIG: /etc/ferrobridge/config.toml
+      FERROBRIDGE__TELEMETRY__FORMAT: json
+    volumes:
+      - type: bind
+        source: ./ferrobridge/config.toml
+        target: /etc/ferrobridge/config.toml
+        read_only: true
+      - type: bind
+        source: ../e2e/family/ferrobridge/mappings
+        target: /etc/ferrobridge/mappings
+        read_only: true
+      - *demo-tls
+      # The facade's identity store, owned by the image's user.
+      - ferrobridge-state:/home/nonroot
+    read_only: true
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/ferrobridge", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 20s
+
+  ferrobridge-console:
+    <<: *console
+    image: ghcr.io/ferrohealth/ferrobridge-console:0.0.14@sha256:54477dc8ed11908cb7d30223a84be652e092a58493c7e9b74865a5c72be1cfa4
+    depends_on:
+      ferrobridge:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3005:3000"
+    environment:
+      <<: *console-env
+      FERROBRIDGE_CONSOLE_CONFIG: /etc/ferrobridge-console/console.toml
+    volumes:
+      - type: bind
+        source: ./consoles/ferrobridge.toml
+        target: /etc/ferrobridge-console/console.toml
+        read_only: true
+      - *demo-tls
+
+secrets:
+  ferrofed-signing-key.pem:
+    file: ./.work/secrets/ferrofed-signing-key.pem
+  ferrofed-gateway-secret:
+    file: ./.work/secrets/ferrofed-gateway-secret
+  ferrofed-pix-secret:
+    file: ./.work/secrets/ferrofed-pix-secret
+  ferropix-db-url:
+    file: ./.work/secrets/ferropix-db-url
+  ferropix-data-key:
+    file: ./.work/secrets/ferropix-data-key
+  ferropix-postgres-password:
+    file: ./.work/secrets/ferropix-postgres-password
+  ferropix-db-password:
+    file: ./.work/secrets/ferropix-db-password
+
+volumes:
+  ferrofed-state:
+  ferroterm-state:
+  ferropix-state:
+  ferrobridge-state:

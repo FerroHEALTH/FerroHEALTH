@@ -1,0 +1,179 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# FerroPIX in the demo, mounted read-only at /etc/ferropix/ferropix.toml: the
+# one Master Patient Index the FerroFED gateway, the four FerroEHR members and
+# the FerroPIX console use. It serves HTTPS from a certificate of the demo CA,
+# because a FerroEHR member reads its PIX Manager only over HTTPS or loopback.
+# Every key is on <https://ferropix.eu/docs/operate/configuration.html>.
+# Every identifier system lies in the example arc urn:oid:2.999 (ITU-T X.660),
+# apart from the Dutch BSN.
+
+profile = "production"
+public_base_url = "https://localhost:8070"
+
+[server]
+listen = "0.0.0.0:8080"
+
+[server.tls]
+certificate_file = "/run/demo-tls/ferropix.crt"
+key_file = "/run/demo-tls/ferropix.key"
+
+[db]
+url_file = "/run/secrets/ferropix-db-url"
+data_key_file = "/run/secrets/ferropix-data-key"
+
+[auth]
+audience = ["ferropix"]
+ca_file = "/run/demo-tls/ca.crt"
+
+[[auth.issuer]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+token_profile = "jwt"
+
+# The Patient Identity Sources: one per hospital, and the registry that
+# vouches for the two authoritative domains no hospital owns.
+[[trust.issuer]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+clients = ["hospital-a", "hospital-b", "hospital-c", "hospital-d", "hospital-e", "demo-registry"]
+
+[operator]
+enabled = true
+
+# ITI-104's Remove Patient Option, which the seed uses once.
+[pixm]
+remove_patient = true
+
+# Hospital E feeds over HL7 v2 (ITI-8) on MLLP, published on 127.0.0.1:2575.
+[hl7v2]
+enabled = true
+
+[[hl7v2.senders]]
+application = "ADT"
+facility = "HOSP_E"
+domain = "urn:oid:2.999.3.5"
+
+[hl7v2.namespaces]
+"urn:oid:2.999.3.5" = "HOSPE"
+"urn:oid:2.16.840.1.113883.2.4.6.3" = "NLMINBIZA"
+
+# Every grade goes to the review queue, so the steward flow has a certain, a
+# probable and a possible pair to decide.
+[matching]
+auto_link = false
+
+[[domain]]
+system = "urn:oid:2.999.1.1"
+name = "FerroHEALTH demo patient identifier"
+kind = "authoritative"
+source_client_id = "demo-registry"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.16.840.1.113883.2.4.6.3"
+name = "BSN (test numbers only)"
+kind = "authoritative"
+source_client_id = "demo-registry"
+
+# Each hospital's patient numbers, and the ehr_ids of its FerroEHR member,
+# which FerroFED resolves a patient to.
+[[domain]]
+system = "urn:oid:2.999.3.1"
+name = "Hospital A patient number"
+kind = "local"
+source_client_id = "hospital-a"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.999.3.2"
+name = "Hospital B patient number"
+kind = "local"
+source_client_id = "hospital-b"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.999.3.3"
+name = "Hospital C patient number"
+kind = "local"
+source_client_id = "hospital-c"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.999.3.4"
+name = "Hospital D patient number"
+kind = "local"
+source_client_id = "hospital-d"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.999.2.1"
+name = "Member A (Hospital A) ehr_id"
+kind = "local"
+source_client_id = "hospital-a"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.999.2.2"
+name = "Member B (Hospital B) ehr_id"
+kind = "local"
+source_client_id = "hospital-b"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.999.2.3"
+name = "Member C (Hospital C) ehr_id"
+kind = "local"
+source_client_id = "hospital-c"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.999.2.4"
+name = "Member D (Hospital D) ehr_id"
+kind = "local"
+source_client_id = "hospital-d"
+sensitive = false
+
+[[domain]]
+system = "urn:oid:2.999.3.5"
+name = "Hospital E patient number (HL7 v2)"
+kind = "local"
+source_client_id = "hospital-e"
+sensitive = false
+
+# The ehr_ids of FerroFED's suspended fifth member, which never feeds.
+[[domain]]
+system = "urn:oid:2.999.2.5"
+name = "Member E (suspended) ehr_id"
+kind = "local"
+source_client_id = "hospital-e"
+sensitive = false
+
+# Each member's clinical domain: FerroPIX mints the pseudonym its EHR_STATUS
+# carries the first time that member asks.
+[[pseudonym_domain]]
+namespace = "urn:oid:2.999.7.1"
+name = "Member A clinical domain"
+consumer_client_id = "ferroehr-a"
+
+[[pseudonym_domain]]
+namespace = "urn:oid:2.999.7.2"
+name = "Member B clinical domain"
+consumer_client_id = "ferroehr-b"
+
+[[pseudonym_domain]]
+namespace = "urn:oid:2.999.7.3"
+name = "Member C clinical domain"
+consumer_client_id = "ferroehr-c"
+
+[[pseudonym_domain]]
+namespace = "urn:oid:2.999.7.4"
+name = "Member D clinical domain"
+consumer_client_id = "ferroehr-d"
+
+# A research registry's domain, with no consumer: only a steward mints in it.
+[[pseudonym_domain]]
+namespace = "urn:oid:2.999.7.9"
+name = "Research registry"
+
+[usage_report]
+enabled = false

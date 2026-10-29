@@ -130,7 +130,7 @@ services:
 
   ferroterm:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferroterm:0.3.1@sha256:ca034ec8488697fe7ebe357ac67f2a3e10028f3e288514125a3156208bb1e67f
+    image: ghcr.io/ferrohealth/ferroterm:0.3.2@sha256:f67d42e1e3bb5155f0e368c39b43f51151876d3359ef143d8dc1dc99e0ed7f72
     restart: unless-stopped
     ports:
       - "127.0.0.1:8083:8080"
@@ -188,7 +188,7 @@ services:
   # facade compiles them at boot against the templates the CDR serves.
   ferrobridge:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrobridge:0.0.13@sha256:70572641853dd4cc37e7fad9076106dbbc0186cb05a15fbd7fe1eca98bc4e03c
+    image: ghcr.io/ferrohealth/ferrobridge:0.0.14@sha256:42739e9bc8a120c1128d7fdba97b5fb2806f42507a47c49d33ac2882173fd56d
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:

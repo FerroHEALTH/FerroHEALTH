@@ -5,7 +5,7 @@
 
 One command starts every FerroHEALTH product and its console on your machine,
 seeds them with synthetic patients, and signs you in to all of them through one
-Keycloak realm as `demo` / `demo`.
+Keycloak as `demo` / `demo`.
 
 Everything here uses demo credentials. Never use this setup, its passwords or
 its keys for real patient data.
@@ -14,7 +14,7 @@ its keys for real patient data.
 
 | Product | Console | What the demo holds |
 |---|---|---|
-| Keycloak | <https://keycloak.localhost:8443/admin> (`admin` / `admin`) | the realm `ferrohealth-demo`: three users, one client per console and one per server that calls another |
+| Keycloak | <https://keycloak.localhost:8443/admin> (`admin` / `admin`) | `ferrohealth-demo`: three users, one client per console and one per server that calls another |
 | FerroEHR, four members | a viewer per member: A <http://localhost:3001>, B <http://localhost:3006>, C <http://localhost:3007>, D <http://localhost:3008> | A is an academic hospital with FerroEHR's sandbox dataset, B a GP practice, C a public health service with its laboratory, D an outpatient clinic; every patient has a year of vital signs and the member's own compositions |
 | FerroPIX | <http://localhost:3002> | about 150 records from five hospitals, hospital E's over HL7 v2; a review queue at every grade, decided candidates, a kept and a reverted merge, the members' pseudonyms and a research registry |
 | FerroFED | <http://localhost:3003> | the gateway over the four members and a suspended fifth, resolving patients through FerroPIX (PIXm and PDQm), with stored queries, an integrity incident and managed configuration revisions |
@@ -170,7 +170,7 @@ curl -s -H "Authorization: Bearer $token" http://localhost:8090/fhir/Condition/<
 ## How the pieces trust each other
 
 Each product checks Keycloak's tokens itself; none of them issues tokens. The
-servers read the realm at `https://keycloak.localhost:8443/realms/ferrohealth-demo`
+servers read the issuer at `https://keycloak.localhost:8443/realms/ferrohealth-demo`
 and trust the development CA through their `ca_file` setting. The containers
 reach that name through a network alias, and your browser resolves every
 `*.localhost` name to loopback, so the issuer URL is the same on both sides.

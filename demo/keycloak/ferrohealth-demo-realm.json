@@ -117,7 +117,7 @@
       },
       "protocolMappers": [
         {
-          "name": "realm roles",
+          "name": "realm-role mapper",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
           "config": {

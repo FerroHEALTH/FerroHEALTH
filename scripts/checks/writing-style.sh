@@ -37,6 +37,16 @@ states_the_attribution_rule() {
   esac
 }
 
+# A Keycloak realm import is Keycloak's schema, whose keys and claims (`realm`,
+# `realm_access`) are its own names, not prose. It is still checked for em
+# dashes and attribution, only not for the buzzword list.
+names_keycloak_schema() {
+  case "$1" in
+    demo/keycloak/*.json) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 readonly BUZZWORDS='delve|robust|elevate|testament|landscape|leverage|tapestry|underscore|foster|realm|seamless|seamlessly|empower|unlock|cutting-edge|state-of-the-art|game-changing|holistic|synergy|streamline|harness|pivotal'
 readonly ATTRIBUTION='co-authored-by:[[:space:]]*.*(claude|anthropic|\[bot\])|generated[[:space:]]+with[[:space:]]+.*claude|generated[[:space:]]+by[[:space:]]+.*claude|assisted-by:[[:space:]]*.*claude'
 
@@ -72,7 +82,8 @@ for file in "${files[@]}"; do
   checked=$((checked + 1))
 
   check "$file" '—' 'em dash: use a comma, a period, parentheses, or a colon.' || fail=1
-  check "$file" "(^|[^[:alnum:]-])($BUZZWORDS)([^[:alnum:]-]|$)" 'buzzword: use the plain word.' || fail=1
+  names_keycloak_schema "$file" ||
+    check "$file" "(^|[^[:alnum:]-])($BUZZWORDS)([^[:alnum:]-]|$)" 'buzzword: use the plain word.' || fail=1
   states_the_attribution_rule "$file" && continue
   check "$file" "$ATTRIBUTION" 'AI attribution: text describes only the change.' || fail=1
 done

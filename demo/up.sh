@@ -107,7 +107,7 @@ call() {
   printf '%s' "${status:-000}"
 }
 
-# token CLIENT: a client credentials token of the demo realm; every demo
+# token CLIENT: a client credentials token from the demo's Keycloak; every demo
 # client's secret is `demo-` and its id, and a `demo-` client's is its id.
 token() {
   local status secret="demo-$1"

@@ -220,7 +220,7 @@ services:
 
   ferrofed:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrofed:0.0.14@sha256:8269011ab811b6fc2e0d99259f1c54da1f5cfea841d0ef93eec80a5c268e22b3
+    image: ghcr.io/ferrohealth/ferrofed:0.0.15@sha256:f6a7b5cc0a4b085b2661bfb96ceda52211260a6d3e182a9ceb8054e47c039d8a
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:

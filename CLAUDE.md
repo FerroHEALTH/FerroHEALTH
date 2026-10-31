@@ -228,9 +228,8 @@ with `scripts/gh/fields.sh new` so it carries all three from the start. A Task
 carries exactly one work-kind label (documentation/chore/refactor/perf/test/
 ci), and an area label is added as needed (`site`, `brand`, `build`). Read an
 issue with `gh issue view <n> --json title,body,comments`, never `--comments`,
-which prints nothing for an issue without comments. A PR declares `Closes #N`
-and keeps the template's ticked licensing checkbox
-(`contribution-licence-guard`). Work that belongs in a product repository is
+which prints nothing for an issue without comments. A PR declares `Closes #N`.
+Work that belongs in a product repository is
 filed there, with the evidence from here. The SessionStart hook prints the
 open list with `<Type/Priority>` after each title.
 

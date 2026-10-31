@@ -144,7 +144,7 @@ switch back to branch-based publishing.
 The site, the scripts and the documentation are licensed under the Apache
 License 2.0 ([`LICENSE`](LICENSE)). The brand assets in `assets/brand/` and
 `assets/diagrams/` are all rights reserved, under the terms in
-[`TRADEMARKS.md`](TRADEMARKS.md). By submitting a contribution you:
+[`TRADEMARKS.md`](TRADEMARKS.md). By opening a pull request you:
 
 1. certify that you wrote it, or otherwise have the right to submit it under
    these terms;
@@ -161,10 +161,8 @@ You keep your copyright, and each file keeps its licence for everyone, the
 maintainer included. Point 3 is what keeps the work one work under one
 licensor, the same terms every repository in the Ferro family carries, so a
 transfer of the project can cover every line, not only the maintainer's own.
-There is no separate agreement to sign: the pull request template carries a
-checkbox recording your acceptance of these terms, and a pull request from a
-person does not merge without it (the `contribution-licence-guard` check, backed
-by `scripts/checks/contribution-licence.sh`).
+There is no separate agreement to sign and no box to tick: opening the pull
+request is your acceptance of these terms.
 
 ## Security
 

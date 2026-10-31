@@ -146,7 +146,7 @@ International. None of these organisations endorse FerroHEALTH.
 ## Contributions
 
 The released products and the shared libraries accept contributions on the
-same terms. By submitting a contribution to one of them you:
+same terms. By opening a pull request in one of them you:
 
 1. certify that you wrote it, or otherwise have the right to submit it under
    these terms;
@@ -163,10 +163,8 @@ same terms. By submitting a contribution to one of them you:
 You keep your copyright. Point 3 is what lets each product stay one work with
 one licensor: a commercial licence, a change of the licence parameters, or a
 transfer of the project can then cover every line, not only the maintainer's
-own. There is no separate agreement to sign: each repository's pull request
-template carries a checkbox recording your acceptance of these terms, and a
-pull request from a person does not merge without it (the
-`contribution-licence-guard` check).
+own. There is no separate agreement to sign and no box to tick: opening the
+pull request is your acceptance of these terms.
 
 This site and its documentation, including this book, are Apache-2.0
 ([`LICENSE`](https://github.com/FerroHEALTH/FerroHEALTH/blob/main/LICENSE)),

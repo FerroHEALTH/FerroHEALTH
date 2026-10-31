@@ -42,7 +42,7 @@
 # its line 3 carries and revisions.md records (scripts/checks/book-revisions.sh).
 
 revised:
-  readiness: "2026-10-29"
+  readiness: "2026-10-31"
   technical_documentation: "2026-10-28"
 
 regulation:
@@ -223,19 +223,26 @@ requirements:
           for the Member State's access service or the health professional
           access service to serve each right, what FerroEHR provides, and what
           stays with the deployer or the Member State. FerroEHR provides that
-          part for access (Art. 3(1)), proxy access through a token that names
-          the person (Art. 4(2)), rectification (Art. 6), portability
-          (Art. 7), the restriction of access with its emergency override
-          (Art. 8, Art. 11(5)), the information on access with its three-year
-          floor (Art. 9), and an opt-out through the whole-EHR restriction
-          (Art. 10). Two parts are not provided yet: marking what a person
-          inserts and refusing a patient-context change to what a professional
-          committed (Art. 5,
-          [FerroEHR#4350](https://github.com/FerroHEALTH/FerroEHR/issues/4350)),
-          and withholding newly registered data from the person until a
-          professional releases it where a Member State delays access
-          (Art. 3(3),
-          [FerroEHR#4351](https://github.com/FerroHEALTH/FerroEHR/issues/4351)).
+          part for access (Art. 3(1)), the Member State's delay of that access
+          until a professional releases the data (Art. 3(3),
+          [FerroEHR#4509](https://github.com/FerroHEALTH/FerroEHR/pull/4509)),
+          proxy access through a token that names the person (Art. 4(2)),
+          marking what a person inserts and refusing the person's change to
+          what a professional committed (Art. 5,
+          [FerroEHR#4510](https://github.com/FerroHEALTH/FerroEHR/pull/4510)),
+          rectification (Art. 6), portability (Art. 7), the restriction of
+          access with its emergency override (Art. 8, Art. 11(5)), and the
+          information on access with its three-year floor, which leaves a held
+          record out of the person's own trail until release (Art. 9). The
+          Art. 3(3) and Art. 5 parts are merged for FerroEHR's next release.
+          The deployer turns the delay on only where its Member State's law
+          provides it, with the categories and the period that law sets, and
+          gives the person's access service `patient/` scopes only.
+          One part is not provided yet: a mark for the opt-out a Member State
+          may provide (Art. 10,
+          [FerroEHR#4516](https://github.com/FerroHEALTH/FerroEHR/issues/4516)).
+          The Art. 8 whole-EHR restriction is not that opt-out: it leaves the
+          person's own access open.
           The copy in the European exchange format (Art. 3(2)) is FerroBRIDGE's
           interoperability component and waits on the Art. 15(1) implementing
           acts.

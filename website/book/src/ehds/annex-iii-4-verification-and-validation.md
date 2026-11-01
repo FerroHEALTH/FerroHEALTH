@@ -1,6 +1,6 @@
 # Annex III 4: verification and validation results
 
-Revised 2026-10-26.
+Revised 2026-11-01.
 
 EHDS Annex III point 4 ([EUR-Lex](https://eur-lex.europa.eu/eli/reg/2025/327/oj)): "The results and
 critical analyses of all verifications and validation tests undertaken to
@@ -41,11 +41,13 @@ requirements as set out in Parts I and II of Annex I".
   the date it names. It is the critical analysis; it is the manufacturer's,
   and no authority has examined it.
 - **The openEHR specifications.** FerroEHR's conformance record under
-  `docs/conformance/ferroehr/` (the statement, the report and the per-case
-  results of an independent instrument's runs), published on
-  [`conformance.md`](https://ferroehr.eu/docs/latest/conformance.html). It shows
-  conformity to the openEHR specifications, which is not conformity to
-  Annex II.
+  `docs/conformance/ferroehr/`: `results.json` and `summary.md`, the run of the
+  latest released Veredictum profile, an independent instrument, against a
+  composed deployment. It gives the BASE and the OPTIONS result, the badges in
+  FerroEHR's README show the same, and FerroEHR publishes it on its
+  [conformance page](https://ferroehr.eu/docs/latest/conformance.html). It
+  names no conformance tier and no certificate. It shows conformity to the
+  openEHR specifications, which is not conformity to Annex II.
 - **The CRA Annex I requirements.** The evidence and the status of each point
   of Part I(2) and Part II in the
   [risk assessment](https://ferroehr.eu/docs/latest/compliance/cra-risk-assessment.html),

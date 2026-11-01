@@ -14,6 +14,8 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-11-01 | [The EHDS EHR system: technical documentation](ehds/technical-documentation.md) | The test evidence names FerroEHR's conformance record as it stands: the released Veredictum profile's `results.json` and `summary.md`, the BASE and OPTIONS result and the README badges, with no tier and no certificate. |
+| 2026-11-01 | [Annex III 4: verification and validation results](ehds/annex-iii-4-verification-and-validation.md) | The openEHR evidence names FerroEHR's conformance record as it stands: the released Veredictum profile's `results.json` and `summary.md`, the BASE and OPTIONS result and the README badges, with no tier and no certificate. |
 | 2026-10-31 | [The EHDS EHR system: shared responsibility](ehds/shared-responsibility.md) | Chapter II right by right: the Art. 3(3) delayed access and the Art. 5 rules for what a person inserts are FerroEHR's, merged in FerroEHR#4509 and FerroEHR#4510; the Art. 9 row says a held record stays out of the person's own trail until release; the Art. 10 opt-out is planned in FerroEHR#4516, and the Art. 8 restriction is no longer offered as it. FerroEHR's configuration read is `GET {ext}/admin/config`, outside the openEHR base path. |
 | 2026-10-31 | [The EHDS EHR system: readiness](ehds/readiness.md) | Annex II 1.3 names the Art. 3(3) and Art. 5 parts as FerroEHR's, and the Art. 10 opt-out as the one part not provided yet. |
 | 2026-10-29 | [The EHDS EHR system: readiness](ehds/readiness.md) | Annex II 1.4 records the run of 2026-10-29 against independent ATNA implementations, with no disagreement, and the two fixes it rests on, which ship in FerroEHR's next release. |

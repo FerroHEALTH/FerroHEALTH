@@ -20,8 +20,12 @@ data_key_file = "/run/secrets/ferropix-data-key"
 [auth]
 audience = ["http://localhost:8070/fhir"]
 
-# The lane's issuer, and the Patient Identity Sources it vouches for.
+# The lane's issuer.
 [[auth.issuer]]
+issuer = "http://localhost:8180/family"
+
+# The Patient Identity Sources the lane's issuer vouches for.
+[[trust.issuer]]
 issuer = "http://localhost:8180/family"
 clients = ["family-e2e-source-a", "family-e2e-source-b", "family-e2e-source-registry"]
 

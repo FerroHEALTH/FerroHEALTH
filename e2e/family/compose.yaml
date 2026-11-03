@@ -167,8 +167,9 @@ services:
       - "127.0.0.1:8081:8080"
     environment:
       FERROEHR__DB__URL: postgres://ferroehr:ferroehr@ferroehr-a-postgres:5432/ferroehr
-      FERROEHR__SERVER__SYSTEM_ID: node-a.family-e2e.local
-      FERROEHR__LOG__FORMAT: json
+      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
+      FERROEHR__REST__SYSTEM_ID: node-a.family-e2e.local
+      FERROEHR__TELEMETRY__FORMAT: json
       FERROEHR__USAGE_REPORT__ENABLED: "false"
 
   ferroehr-b:
@@ -180,15 +181,16 @@ services:
       - "127.0.0.1:8082:8080"
     environment:
       FERROEHR__DB__URL: postgres://ferroehr:ferroehr@ferroehr-b-postgres:5432/ferroehr
-      FERROEHR__SERVER__SYSTEM_ID: node-b.family-e2e.local
-      FERROEHR__LOG__FORMAT: json
+      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
+      FERROEHR__REST__SYSTEM_ID: node-b.family-e2e.local
+      FERROEHR__TELEMETRY__FORMAT: json
       FERROEHR__USAGE_REPORT__ENABLED: "false"
 
   # Started by run.sh once node A holds the template its mappings name: the
   # facade compiles them at boot against the templates the CDR serves.
   ferrobridge:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrobridge:0.0.14@sha256:42739e9bc8a120c1128d7fdba97b5fb2806f42507a47c49d33ac2882173fd56d
+    image: ghcr.io/ferrohealth/ferrobridge:0.0.15@sha256:f8e4b1f748f8292dc3b621b5b2ae058bb7ac33acbc451db3ff59ce0bbdb9c240
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:
@@ -264,7 +266,7 @@ services:
   # are file secrets run.sh writes under .work/.
   ferropix:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferropix:0.0.12@sha256:01adb1e7cc91b46409cc315162200fb99a712a9232508d5c85a228554d22d6d3
+    image: ghcr.io/ferrohealth/ferropix:0.0.13@sha256:c9af700cbaf2ae2d32af400a7f01cc50d455b4c26aa2ff3fa8a8d988120a3905
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:

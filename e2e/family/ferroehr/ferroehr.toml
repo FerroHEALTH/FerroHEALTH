@@ -25,3 +25,8 @@ roles = ["ADMIN", "USER"]
 
 [authz.rbac]
 enabled = false
+
+# Each node keeps its own map of patients to EHRs: the lane feeds FerroPIX
+# through its Patient Identity Sources, and the nodes ask no PIXm manager.
+[ehr_index]
+provider = "local"

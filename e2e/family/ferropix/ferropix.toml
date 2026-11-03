@@ -8,10 +8,10 @@
 # <https://ferropix.eu/docs/operate/configuration.html>.
 
 profile = "production"
+public_base_url = "http://localhost:8070"
 
 [server]
 listen = "0.0.0.0:8070"
-public_base_url = "http://localhost:8070"
 
 [db]
 url_file = "/run/secrets/ferropix-db-url"

@@ -19,7 +19,8 @@
 # THE POSITION. Cadasto B.V. is the manufacturer of each tagged release of
 # both products, and the EHR system is FerroEHR and FerroBRIDGE together:
 # FerroEHR ships the European logging software component, FerroBRIDGE the
-# European interoperability software component.
+# European interoperability software component and the logging component's
+# recording of its own FHIR facade's accesses (FerroBRIDGE#1377).
 #
 # STATUS VOCABULARY. A status is about the SOFTWARE, never about conformity:
 # no conformity assessment has been carried out and no EU declaration of
@@ -42,7 +43,7 @@
 # its line 3 carries and revisions.md records (scripts/checks/book-revisions.sh).
 
 revised:
-  readiness: "2026-10-31"
+  readiness: "2026-11-03"
   technical_documentation: "2026-11-01"
 
 regulation:
@@ -108,8 +109,19 @@ components:
       record outside the demographic domain carries a category; a token that
       names a client application is recorded as that client, together with
       the professional it acts for when the deployment declares the claim
-      that names one. FerroEHR ships the whole component: the recording, the
-      store, the review, the retention and the retrieval of the log.
+      that names one. FerroEHR ships the recording of the accesses to its own
+      API, and the store, the review, the retention and the retrieval of its
+      log. The openEHR REST API carries no end-user identity, so FerroEHR's
+      record of an access through FerroBRIDGE's FHIR facade names
+      FerroBRIDGE's credential. From the first FerroBRIDGE release that
+      carries [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377), FerroBRIDGE records each access an
+      authenticated caller makes through its facade itself, when the
+      deployment enables its `[audit]` section (off by default): the Annex II
+      3.2 record through `ehds-logging`, sent as an IHE BALP `AuditEvent`
+      through `ihe-atna` over the ITI-20 FHIR feed to the Audit Record
+      Repository the deployment configures. It fails closed, refusing an
+      access whose record it cannot take before it calls FerroEHR
+      ([FerroBRIDGE's access record](https://ferrobridge.eu/docs/operate/access-record.html)).
 
 # Annex II, "Essential requirements for the harmonised software components of
 # EHR systems and for products for which interoperability with EHR systems has
@@ -405,7 +417,14 @@ requirements:
           beside the capped set. Point (b) records the authenticated principal
           and, when the deployment declares how a token names the natural
           person, the acting mode and the professional a client application
-          acts for; the instructions for use say how to declare it. Point (c)
+          acts for; the instructions for use say how to declare it. An
+          access through FerroBRIDGE's FHIR facade reaches FerroEHR under
+          FerroBRIDGE's credential, which is the principal FerroEHR records;
+          from the first FerroBRIDGE release that carries
+          [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377),
+          FerroBRIDGE's own record of that access names the caller its token
+          verified, with the five elements, when its `[audit]` section is
+          enabled. Point (c)
           is recorded through a category map from templates and archetypes to
           the Art. 14(1) categories, classified by `ehds-logging`. FerroEHR
           ships a map for the published CKM templates and COMPOSITION
@@ -647,14 +666,17 @@ decisions:
     text: >-
       **The EHR system is FerroEHR and FerroBRIDGE together.** FerroEHR ships
       the European logging software component (Annex II 3), FerroBRIDGE the
-      European interoperability software component (Annex II 2.1 to 2.3).
-      The two are independent of each other (Art. 2(2)(n) and (o), Art.
-      30(1)(b)) because they are separate products that meet only over
-      ITS-REST. The technical documentation and the declaration of conformity
-      name the pair; FerroBRIDGE declares the interoperability component's
-      requirements, FerroEHR the logging component's and the system-level
-      ones of Annex II 1.
-    issues: ["FerroEHR#3606"]
+      European interoperability software component (Annex II 2.1 to 2.3) and,
+      from the first release that carries FerroBRIDGE#1377, the logging
+      component's recording of the accesses of its FHIR facade. The two components stay independent of each other
+      (Art. 2(2)(n) and (o), Art. 30(1)(b)): the products meet only over
+      ITS-REST, and inside FerroBRIDGE only its server links `ehds-logging`
+      and `ihe-atna`, never the interoperability component's crate. The
+      technical documentation and the declaration of conformity name the
+      pair; FerroBRIDGE declares the interoperability component's
+      requirements and its facade recording, FerroEHR the rest of the
+      logging component's and the system-level ones of Annex II 1.
+    issues: ["FerroEHR#3606", "FerroBRIDGE#1301", "FerroBRIDGE#1377"]
   - id: one-documentation
     text: >-
       **One documentation set for the EHDS and the CRA.** From 11 December

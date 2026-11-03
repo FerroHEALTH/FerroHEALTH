@@ -1,6 +1,6 @@
 # The EHDS EHR system: instructions for use
 
-Revised 2026-10-28.
+Revised 2026-11-03.
 
 These are the instructions for use of the EHR system that FerroEHR and
 FerroBRIDGE form together. A copy accompanies each release of either product,
@@ -54,15 +54,17 @@ against FerroBRIDGE's [FHIR face](https://ferrobridge.eu/docs/integrate/fhir-fac
 ## The two products, and how they meet
 
 FerroEHR is the Clinical Data Repository: it holds the records and the access
-log. FerroBRIDGE reads and writes FerroEHR over the openEHR REST API and gives
-the records a FHIR face, an OMOP Common Data Model export and an HL7 Version 2 entry
-point. FerroEHR's record stays the record: FerroBRIDGE's identity map holds no
+log of its own API. FerroBRIDGE reads and writes FerroEHR over the openEHR REST
+API and gives the records a FHIR face, an OMOP Common Data Model export and an
+HL7 Version 2 entry point, and records the accesses of its FHIR face itself
+(below). FerroEHR's record stays the record: FerroBRIDGE's identity map holds no
 clinical content, and its OMOP export is a copy written into a database you
 provide. Install FerroEHR
 first, then point FerroBRIDGE at it ([how the products fit
 together](../architecture.md)). A deployment that needs only the record and
 its access log can run FerroEHR alone; the interoperability component of the
-EHR system is FerroBRIDGE's.
+EHR system is FerroBRIDGE's, and so is the record of an access through its FHIR
+face.
 
 ## What it runs on
 
@@ -271,6 +273,17 @@ controller's.
   credential FerroBRIDGE presents to the CDR, as a file secret
   ([`[cdr.credentials]`](https://ferrobridge.eu/docs/operate/configuration.html#cdrcredentials-and-terminologycredentials)).
   FerroEHR's access log records FerroBRIDGE's accesses under it.
+- **Record the accesses of the FHIR face.** The openEHR REST API carries no
+  end-user identity, so FerroEHR's record of a FHIR face access names
+  FerroBRIDGE's credential and no natural person. From the first FerroBRIDGE
+  release that carries [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377), turn on `[audit]` and give it the FHIR base of
+  your Audit Record Repository and a private spool directory: FerroBRIDGE then
+  writes the Annex II 3.2 record of each access an authenticated caller makes
+  through the face and sends it as an IHE BALP `AuditEvent`. `[audit]` is off
+  by default and needs `[facade]` and `[auth]` on. It fails closed: a full
+  spool refuses the access with `503` before FerroEHR is called, so size the
+  spool for the longest outage of the repository you plan for
+  ([the access record](https://ferrobridge.eu/docs/operate/access-record.html), [`[audit]`](https://ferrobridge.eu/docs/operate/configuration.html#audit)).
 - **Pseudonymise the OMOP export** where the research use calls for it
   ([`[cdm.pseudonymisation]`](https://ferrobridge.eu/docs/operate/configuration.html#cdmpseudonymisation)).
 - **The usage report.** FerroBRIDGE sends its own usage report, on by default

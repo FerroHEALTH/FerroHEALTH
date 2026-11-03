@@ -1,6 +1,6 @@
 # The EHDS EHR system: information sheet
 
-Revised 2026-10-26.
+Revised 2026-11-03.
 
 This is the information sheet of the EHR system that FerroEHR and FerroBRIDGE
 form together. A copy accompanies each release of either product, free of
@@ -54,9 +54,10 @@ release".
   FerroEHR, the openEHR Clinical Data Repository, ships the European logging
   software component. FerroBRIDGE, the bridge from openEHR to HL7 FHIR and to
   the OMOP Common Data Model, ships the European interoperability software
-  component. The two are separate products on their own release lines and
-  meet only over the openEHR REST API
-  ([how the products fit together](../architecture.md)).
+  component and, from the first release that carries [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377), the logging
+  component's recording of the accesses of its FHIR facade. The two are
+  separate products on their own release lines and meet only over the openEHR
+  REST API ([how the products fit together](../architecture.md)).
 - **Version:** the release of the product this copy accompanies, with the
   oldest release of the other product it is tested against. A copy attached
   to a FerroEHR release names that FerroEHR release and the oldest FerroBRIDGE
@@ -133,9 +134,9 @@ release.
 | openEHR ITS-REST | FerroEHR serves it, FerroBRIDGE calls it | the REST API between the two products and to clinical applications |
 | openEHR Archetype Query Language (AQL) | FerroEHR serves it, FerroBRIDGE sends it | queries |
 | openEHR canonical JSON and XML, and the simplified formats | FerroEHR | serialisation and data entry |
-| IHE ATNA (ITI-19, ITI-20, ITI-81) and the IHE Basic Audit Log Patterns | FerroEHR | the access log |
+| IHE ATNA (ITI-19, ITI-20, ITI-81) and the IHE Basic Audit Log Patterns | FerroEHR; FerroBRIDGE sends ITI-20 with the Basic Audit Log Patterns | the access log; FerroBRIDGE's record of its FHIR facade's accesses |
 | DICOM PS3.15 audit message | FerroEHR | the access log over syslog |
-| HL7 FHIR `AuditEvent` | FerroEHR | the access log as FHIR |
+| HL7 FHIR `AuditEvent` | FerroEHR and FerroBRIDGE | the access log as FHIR; FerroBRIDGE's record of its FHIR facade's accesses |
 | Syslog over TLS (RFC 5424, RFC 5425) | FerroEHR | the access-log feed |
 | HL7 FHIR RESTful API and resources | FerroBRIDGE | the FHIR face of the records |
 | FHIRconnect | FerroBRIDGE | the mappings between openEHR and FHIR |

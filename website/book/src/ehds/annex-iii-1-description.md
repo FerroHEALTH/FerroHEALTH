@@ -1,6 +1,6 @@
 # Annex III 1: a detailed description of the EHR system
 
-Revised 2026-10-26.
+Revised 2026-11-03.
 
 EHDS Annex III point 1 ([EUR-Lex](https://eur-lex.europa.eu/eli/reg/2025/327/oj)) asks for "a detailed
 description of the EHR system", in ten points. CRA Annex VII point 1
@@ -8,7 +8,10 @@ description of the EHR system", in ten points. CRA Annex VII point 1
 product with digital elements; its points (a), (b) and (d) are answered here
 beside the EHDS points they repeat. This page documents FerroEHR's part of
 the EHR system: the logging component and the system-level requirements.
-FerroBRIDGE documents the interoperability component with its own releases.
+FerroBRIDGE documents the interoperability component with its own releases,
+and, from the first release that carries [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377), the logging component's
+recording of the accesses of its FHIR facade
+([its access record](https://ferrobridge.eu/docs/operate/access-record.html)).
 FerroEHR's book pages are cited from its latest release; each FerroEHR
 release freezes its own copy of the book, and the copy of this page a release
 relies on is the revision that release pins.

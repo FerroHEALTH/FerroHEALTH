@@ -1,6 +1,6 @@
 # Annex III 6: a copy of the EU declaration of conformity
 
-Revised 2026-10-28.
+Revised 2026-11-03.
 
 EHDS Annex III point 6 ([EUR-Lex](https://eur-lex.europa.eu/eli/reg/2025/327/oj)): "A copy of the EU
 declaration of conformity." CRA Annex VII point 7 ([EUR-Lex](https://eur-lex.europa.eu/eli/reg/2024/2847/oj))
@@ -22,8 +22,25 @@ applies to EHR systems from 26 March 2029 (EHDS Art. 105).
   for a single declaration where a product is subject to more than one Union
   act requiring one. It names the EHR system, FerroEHR and FerroBRIDGE, with
   the version of each and the version of the shared logging crate
-  `ehds-logging` that FerroEHR's logging component is built on, and carries
-  the content of EHDS Annex IV and CRA Annex V.
+  `ehds-logging` that each product's part of the logging component is built
+  on, and carries the content of EHDS Annex IV and CRA Annex V.
+- **Which product records which access.** The European logging software
+  component sits in both products. FerroEHR records every access to its own
+  API. From the first FerroBRIDGE release that carries
+  [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377),
+  FerroBRIDGE records every access an authenticated caller makes through its
+  FHIR facade, when the deployment enables its `[audit]` section, which is off
+  by default. It does so because the openEHR REST API carries no end-user
+  identity, so FerroEHR's record of a facade access names only FerroBRIDGE's
+  credential. FerroBRIDGE writes the Annex II 3.2 record through
+  `ehds-logging` and sends it as an IHE BALP `AuditEvent` through `ihe-atna`
+  to the Audit Record Repository `[audit]` names. Recording fails closed:
+  FerroBRIDGE refuses an access whose record it cannot take, before it calls
+  FerroEHR, and withholds the answer when the record of a finished access
+  cannot be stored
+  ([the access record](https://ferrobridge.eu/docs/operate/access-record.html)).
+  The store, the review and the retrieval of FerroEHR's log stay with
+  FerroEHR.
 - **Where it is published.** EHDS Art. 39(4): a declaration drawn up in a
   digital format "shall be made accessible online for the expected lifetime of
   the EHR system and, in any event, for at least 10 years from the placing on
@@ -56,7 +73,7 @@ question) and signs it ([FerroEHR#3696](https://github.com/FerroHEALTH/FerroEHR/
 
 | Point | EHDS Annex IV | CRA Annex V | Draft content |
 |---|---|---|---|
-| Identification | 1. name of the EHR system, version, unambiguous reference | 1. name, type, unique identification; 4. object of the declaration, allowing traceability | The FerroHEALTH EHR system: FerroEHR, an openEHR clinical data repository with the European logging software component, and FerroBRIDGE, with the European interoperability software component (EHDS Art. 2(2)(n) and (o)). Each product by the release tag of the version covered, its container image digest and its signed release artefacts, and the version of the shared logging crate `ehds-logging` FerroEHR is built with. Filled from the release it first covers. |
+| Identification | 1. name of the EHR system, version, unambiguous reference | 1. name, type, unique identification; 4. object of the declaration, allowing traceability | The FerroHEALTH EHR system: FerroEHR, an openEHR clinical data repository with the European logging software component for the accesses to its own API, and FerroBRIDGE, with the European interoperability software component and, from the first release that carries [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377), the European logging software component for the accesses of its FHIR facade (EHDS Art. 2(2)(n) and (o)). Each product by the release tag of the version covered, its container image digest and its signed release artefacts, and the version of the shared logging crate `ehds-logging` each product is built with. Filled from the release it first covers. |
 | Manufacturer | 2. name and address | 2. name and address | Cadasto B.V., Comeniusstraat 2d, 1817 MS Alkmaar, The Netherlands ([the manufacturer](../manufacturer.md)). |
 | Responsibility | 3. issued under the sole responsibility of the manufacturer | 3. issued under the sole responsibility of the provider | "This EU declaration of conformity is issued under the sole responsibility of Cadasto B.V." Not made until signed. |
 | Conformity | 4. in conformity with Chapter III, complemented by the result from the testing environment of Art. 40 | 5. in conformity with the relevant Union harmonisation legislation | Not made. Annex II has not been shown fulfilled ([readiness](readiness.md) lists each requirement), the Art. 40 testing environment is not published, and no conformity assessment has examined the system. The acts it would name: Regulation (EU) 2025/327 and Regulation (EU) 2024/2847, in one declaration (EHDS Art. 39(2), CRA Art. 28(3)). |

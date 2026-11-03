@@ -1,6 +1,6 @@
 # Annex III 4: verification and validation results
 
-Revised 2026-11-01.
+Revised 2026-11-03.
 
 EHDS Annex III point 4 ([EUR-Lex](https://eur-lex.europa.eu/eli/reg/2025/327/oj)): "The results and
 critical analyses of all verifications and validation tests undertaken to
@@ -34,7 +34,15 @@ requirements as set out in Parts I and II of Annex I".
   codes against the vendored HL7 Europe packages, the written records against
   the vendored BALP patterns and the store-and-forward against the vendored
   ITI-20 text; they run on every FerroAUDIT pull request and before each of
-  its releases.
+  its releases. FerroBRIDGE's recording of its FHIR facade's accesses
+  ([FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377))
+  is asserted in FerroBRIDGE's
+  `app/ferrobridge-server/tests/it/facade/auth/access_record.rs`: create,
+  read, update, transaction and search each send one `AuditEvent` naming the
+  caller, the category, the EHR and the CDR, a full spool refuses the access
+  with `503` and no call to FerroEHR, and a request the guard refuses leaves
+  no record. FerroBRIDGE's CI runs them on each pull request that reaches
+  its server.
 - **Annex II, row by row.** The
   [readiness record](readiness.md) gives
   the status and the evidence for each requirement, read against the text on

@@ -136,9 +136,9 @@ services:
       - "127.0.0.1:8083:8080"
     environment:
       # The synthetic code systems, value set and concept map, mounted below.
-      FERROTERM_CODESYSTEMS: /data/codesystems
-      FERROTERM_LOG_FORMAT: json
-      FERROTERM_USAGE_REPORT: "off"
+      FERROTERM__TERMINOLOGY__CODE_SYSTEMS: /data/codesystems
+      FERROTERM__TELEMETRY__FORMAT: json
+      FERROTERM__USAGE_REPORT__ENABLED: "false"
     volumes:
       - type: bind
         source: ./terminology

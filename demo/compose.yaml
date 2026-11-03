@@ -387,7 +387,7 @@ services:
 
   ferropix:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferropix:0.0.12@sha256:01adb1e7cc91b46409cc315162200fb99a712a9232508d5c85a228554d22d6d3
+    image: ghcr.io/ferrohealth/ferropix:0.0.13@sha256:c9af700cbaf2ae2d32af400a7f01cc50d455b4c26aa2ff3fa8a8d988120a3905
     restart: unless-stopped
     depends_on:
       ferropix-postgres:
@@ -424,7 +424,7 @@ services:
 
   ferropix-console:
     <<: *console
-    image: ghcr.io/ferrohealth/ferropix-console:0.0.12@sha256:a33d2f17eb713eaa6024ba7dc46363eb46e900db4e630eab1bcab6574e4dde8f
+    image: ghcr.io/ferrohealth/ferropix-console:0.0.13@sha256:b66cecccc5daeb218cf2664a029750b71700ffc64b84d1e2faaf31e49f476ad0
     depends_on:
       ferropix:
         condition: service_healthy
@@ -442,7 +442,7 @@ services:
 
   ferrofed:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrofed:0.0.14@sha256:8269011ab811b6fc2e0d99259f1c54da1f5cfea841d0ef93eec80a5c268e22b3
+    image: ghcr.io/ferrohealth/ferrofed:0.0.15@sha256:f6a7b5cc0a4b085b2661bfb96ceda52211260a6d3e182a9ceb8054e47c039d8a
     restart: unless-stopped
     depends_on:
       ferroehr-a:
@@ -485,7 +485,7 @@ services:
 
   ferrofed-console:
     <<: *console
-    image: ghcr.io/ferrohealth/ferrofed-console:0.0.14@sha256:5e9da4dd1b3b9b01cf64fe806c395d1c642b3d850bc84c12ffade2222fd835dc
+    image: ghcr.io/ferrohealth/ferrofed-console:0.0.15@sha256:10dc3ce0e04873781edfc13649654fb8316805c96caf7c4d6e1c762b6961104f
     depends_on:
       ferrofed:
         condition: service_healthy
@@ -505,7 +505,7 @@ services:
   # facade compiles its mappings at boot against the templates the CDR serves.
   ferrobridge:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrobridge:0.0.14@sha256:42739e9bc8a120c1128d7fdba97b5fb2806f42507a47c49d33ac2882173fd56d
+    image: ghcr.io/ferrohealth/ferrobridge:0.0.15@sha256:f8e4b1f748f8292dc3b621b5b2ae058bb7ac33acbc451db3ff59ce0bbdb9c240
     restart: unless-stopped
     depends_on:
       ferroehr-a:
@@ -539,7 +539,7 @@ services:
 
   ferrobridge-console:
     <<: *console
-    image: ghcr.io/ferrohealth/ferrobridge-console:0.0.14@sha256:54477dc8ed11908cb7d30223a84be652e092a58493c7e9b74865a5c72be1cfa4
+    image: ghcr.io/ferrohealth/ferrobridge-console:0.0.15@sha256:b1782286660caac58f2bb56346cfbea57a11ed134205e7b47cc27be94d4ead46
     depends_on:
       ferrobridge:
         condition: service_healthy

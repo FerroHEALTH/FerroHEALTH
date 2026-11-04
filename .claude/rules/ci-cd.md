@@ -47,10 +47,13 @@ about the change.
 
 `refresh.yml` runs every six hours. It renders the committed fallbacks in
 `index.html` in place with `scripts/site/render-releases.sh` and, when the file
-changed, commits on `chore/refresh-release-fallbacks`, opens or updates one pull
-request, dispatches `ci.yml` and `pages.yml` onto that branch (a pull request
-the workflow token opens starts no run of its own), and enables auto-merge. The
-squash merge is signed by GitHub, which satisfies the ruleset. Nothing in it
+changed, resets `chore/refresh-release-fallbacks` to the main commit it
+rendered against and commits there through the GraphQL `createCommitOnBranch`
+mutation, opens or updates one pull request, dispatches `ci.yml` and
+`pages.yml` onto that branch (a pull request the workflow token opens starts no
+run of its own), and enables auto-merge. GitHub signs both the API commit and
+the squash merge, which satisfies the ruleset's signature rule; a `git commit`
+pushed from the runner is unsigned and leaves the pull request blocked. Nothing in it
 needs a secret beyond the workflow token.
 
 ## The published site

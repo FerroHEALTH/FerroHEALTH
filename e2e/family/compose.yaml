@@ -266,7 +266,7 @@ services:
   # are file secrets run.sh writes under .work/.
   ferropix:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferropix:0.0.13@sha256:c9af700cbaf2ae2d32af400a7f01cc50d455b4c26aa2ff3fa8a8d988120a3905
+    image: ghcr.io/ferrohealth/ferropix:0.0.14@sha256:389f40d144fe2ef3d79c1c1628e9a662a058961b1650c5541e601addc27112d8
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:

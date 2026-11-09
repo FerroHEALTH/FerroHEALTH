@@ -37,7 +37,8 @@ the policy decision, with 0.1.0 in preparation),
 [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) (`ihe-atna` and
 `ehds-logging`, the whole audit trail and the EHDS access record),
 [FerroUI](https://github.com/FerroHEALTH/FerroUI) (`ferrohealth-ui`, the
-components of every console, and every console is reactive) and
+components of every console, and every console is server-rendered since
+FerroUI 0.6, owner 2026-10-29, FerroUI #510) and
 [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (`ferrohealth-secret`,
 `-config`, `-telemetry`, `-health`, `-server` and `-usage-report`: the system
 plumbing every product shares, being built toward its v0.1.0 milestone; never a
@@ -133,6 +134,17 @@ and narrow.
 
 ## IMPORTANT hard rules
 
+- **Family rules carried in `.claude/memory/` (index `MEMORY.md`).** A removal
+  aid (a named refusal of a removed or renamed config key, flag, env variable,
+  route or format) lives exactly one release and the next release deletes it
+  fully; no legacy support is ever kept (owner hard rule 2026-11-09,
+  `no-compat-shims.md`). Build the proper solution even when it breaks an API
+  and moves the minor version (owner 2026-11-08, `no-half-solutions.md`). A
+  production value map goes only through the terminology server, never an
+  embedded copy (owner 2026-11-09, `terminology-via-server.md`). Where the
+  EHDS Regulation conflicts with an openEHR or other standard's text, the
+  Regulation wins, and EHDS work is never reverted to pass a conformance row
+  (owner 2026-11-09, `ehds-above-openehr.md`).
 - **Nothing loads from another origin.** The page's CSP is `default-src 'self'`,
   carried in a `<meta http-equiv>` because GitHub Pages sets no response
   headers. No web font, no analytics, no CDN, no hotlinked image, no inline

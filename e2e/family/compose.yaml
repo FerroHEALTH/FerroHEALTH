@@ -131,7 +131,7 @@ services:
 
   ferroterm:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferroterm:0.4.2@sha256:1853486ae6f85a66424561cbf90f9905027c38d506bdeb24a9e1a831b4b97424
+    image: ghcr.io/ferrohealth/ferroterm:0.4.4@sha256:74bbc5c36ae7bf575003c4f2ff16f020a98b5745ae0c81253725d4cf5d1fd01e
     restart: unless-stopped
     ports:
       - "127.0.0.1:8083:8080"

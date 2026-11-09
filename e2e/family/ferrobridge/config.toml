@@ -33,6 +33,10 @@ composition_language = "en"
 composition_territory = "NL"
 system_id = "ferrobridge.family-e2e.local"
 
-[auth]
+# The lane's issuer: the clinician's token is admitted through the lane's one
+# client.
+[[auth.issuer]]
 issuer = "http://localhost:8180/family"
+kind = "persons"
 audience = ["http://localhost:8090/fhir"]
+first_party_clients = ["family-e2e-client"]

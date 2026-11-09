@@ -109,13 +109,14 @@ services:
     environment:
       SERVER_PORT: "8180"
       # One token callback for the client credentials grant. A Patient
-      # Identity Source is its own subject, as PIXm asks; every other client
-      # acts for one synthetic clinician with the IHE IUA purpose of use
-      # FerroFED requires. The audiences are the three products that check
-      # tokens, each an RFC 9068 `at+jwt`. `$$` is a literal `$` to compose.
+      # Identity Source is its own subject, as PIXm asks, and so is FerroFED's
+      # PIXm client, a machine to FerroPIX; every other client acts for one
+      # synthetic clinician with the IHE IUA purpose of use FerroFED requires.
+      # The audiences are the three products that check tokens, each an
+      # RFC 9068 `at+jwt`. `$$` is a literal `$` to compose.
       JSON_CONFIG: >-
         {"tokenCallbacks":[{"issuerId":"family","requestMappings":[
-        {"requestParam":"client_id","match":"family-e2e-source-.*","typeHeader":"at+jwt",
+        {"requestParam":"client_id","match":"family-e2e-(source-.*|ferrofed)","typeHeader":"at+jwt",
         "claims":{"sub":"$${clientId}","client_id":"$${clientId}",
         "aud":["http://localhost:8070/fhir"],"scope":"$${scope}"}},
         {"requestParam":"grant_type","match":"client_credentials","typeHeader":"at+jwt",

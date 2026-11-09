@@ -1,6 +1,6 @@
 # The Cyber Resilience Act
 
-Revised 2026-10-24.
+Revised 2026-11-09.
 
 The Cyber Resilience Act (CRA, Regulation (EU) 2024/2847) sets cybersecurity
 requirements for "a software or hardware product and its remote data
@@ -31,9 +31,9 @@ assessment and its own Annex II information in its own book.
 Cadasto B.V. is the manufacturer of each tagged release of every FerroHEALTH
 product in the sense of CRA Art. 3(13)
 ([the manufacturer](manufacturer.md)). Each tagged release is one product with
-digital elements. Its single point of contact (CRA Art. 13(17)) is
-[info@cadasto.com](mailto:info@cadasto.com), beside GitHub private
-vulnerability reporting on each product's repository
+digital elements. Its single point of contact for vulnerability reports (CRA
+Art. 13(17)) is [security@cadasto.com](mailto:security@cadasto.com), beside
+GitHub private vulnerability reporting on each product's repository
 ([security](security.md#reporting-a-vulnerability)).
 
 A library a product publishes on its own, such as the `openehr-*` crates

@@ -1,6 +1,6 @@
 # Post-market
 
-Revised 2026-10-24.
+Revised 2026-11-09.
 
 This page is the post-market procedure Cadasto B.V. runs as manufacturer of
 every FerroHEALTH product: how to complain or report an incident, how a report
@@ -69,7 +69,7 @@ contains, and put the product's name in the subject:
 
 | What | Channel | Who reads it |
 |---|---|---|
-| A vulnerability, including one you have seen exploited | GitHub private vulnerability reporting on the product's repository, or [info@cadasto.com](mailto:info@cadasto.com) with "*Product* vulnerability" in the subject ([security](security.md#reporting-a-vulnerability)) | the maintainer; an email is forwarded by Cadasto B.V. the same day |
+| A vulnerability, including one you have seen exploited | GitHub private vulnerability reporting on the product's repository, or [security@cadasto.com](mailto:security@cadasto.com) with "*Product* vulnerability" in the subject ([security](security.md#reporting-a-vulnerability)) | the maintainer; an email is forwarded by Cadasto B.V. the same day |
 | Anything that harmed a person, or could have | [info@cadasto.com](mailto:info@cadasto.com), subject "*Product* incident" | Cadasto B.V., forwarded to the maintainer the same day |
 | Any other complaint | [info@cadasto.com](mailto:info@cadasto.com), subject "*Product* complaint", or a public GitHub issue on the product's repository | Cadasto B.V. and the maintainer |
 
@@ -80,7 +80,7 @@ deployment for this purpose; its book says which.
 
 An emailed vulnerability report runs through the same procedure as a private
 GitHub report. Its arrival is the moment the manufacturer becomes aware for
-CRA Art. 14, so whoever reads info@cadasto.com forwards a message about a
+CRA Art. 14, so whoever reads security@cadasto.com forwards a message about a
 vulnerability or an exploit to the maintainer at once and writes down the hour
 it arrived.
 
@@ -361,7 +361,7 @@ them:
 5. The list of distributors, importers and known users to whom the
    EHDS Art. 30(1)(j) and (n) notices go, which is the register of economic
    operators of EHDS Art. 35.
-6. Whether info@cadasto.com should publish an encryption key for
+6. Whether security@cadasto.com should publish an encryption key for
    vulnerability reports, and who reads that inbox and forwards a report the
    same day, including outside working hours.
 7. The 30-day ceiling on delaying an advisory's technical details, which the

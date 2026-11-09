@@ -14,6 +14,10 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-11-09 | [Security](security.md) | A vulnerability report by email goes to security@cadasto.com, the manufacturer's address for vulnerability reports, in place of info@cadasto.com. |
+| 2026-11-09 | [Post-market](post-market.md) | A vulnerability report by email goes to security@cadasto.com; incidents, complaints and requests from an authority stay at info@cadasto.com. |
+| 2026-11-09 | [The EHDS EHR system: information sheet](ehds/information-sheet.md) | Vulnerability reports go to security@cadasto.com; the single point of contact stays info@cadasto.com. |
+| 2026-11-09 | [The Cyber Resilience Act](cra.md) | The single point of contact for vulnerability reports is security@cadasto.com. |
 | 2026-11-03 | [Annex III 6: a copy of the EU declaration of conformity](ehds/annex-iii-6-declaration-of-conformity.md) | The draft names the logging component in both products: FerroEHR records the accesses to its own API, and FerroBRIDGE, from the first release that carries FerroBRIDGE#1377 and with its `[audit]` section enabled, records each access to its FHIR facade through `ehds-logging` and sends it as an IHE BALP `AuditEvent` through `ihe-atna`, failing closed. The declaration names the `ehds-logging` version of each product. |
 | 2026-11-03 | [The EHDS EHR system: readiness](ehds/readiness.md) | The logging component and Annex II 3.2: FerroEHR's record of an access through FerroBRIDGE's FHIR facade names the bridge's credential, and FerroBRIDGE records each access to its FHIR facade from the first release that carries FerroBRIDGE#1377, naming the natural person, failing closed. The EHR system decision names FerroBRIDGE#1301 and FerroBRIDGE#1377, and says how the two components stay independent. |
 | 2026-11-03 | [The EHDS EHR system: information sheet](ehds/information-sheet.md) | (b) and (e): FerroBRIDGE records each access to its FHIR facade from the first release that carries FerroBRIDGE#1377, over IHE ITI-20 as a BALP `AuditEvent`. |

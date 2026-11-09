@@ -1,6 +1,6 @@
 # The EHDS EHR system: information sheet
 
-Revised 2026-11-03.
+Revised 2026-11-09.
 
 This is the information sheet of the EHR system that FerroEHR and FerroBRIDGE
 form together. A copy accompanies each release of either product, free of
@@ -39,7 +39,7 @@ its authorised representative".
 | Single point of contact | [info@cadasto.com](mailto:info@cadasto.com) |
 | Website | <https://www.cadasto.com/contact/> |
 | Authorised representative | none: Cadasto B.V. is established in the Union |
-| Vulnerability reports | each product's `SECURITY.md`, or info@cadasto.com ([security](../security.md)) |
+| Vulnerability reports | each product's `SECURITY.md`, or security@cadasto.com ([security](../security.md)) |
 | Complaints and serious incidents | info@cadasto.com ([post-market](../post-market.md)) |
 
 Cadasto B.V. is the manufacturer of both products and of every other

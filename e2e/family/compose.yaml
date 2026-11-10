@@ -191,7 +191,7 @@ services:
   # facade compiles them at boot against the templates the CDR serves.
   ferrobridge:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrobridge:0.0.22@sha256:cb16c040449ca6c0b590fafffba7bdc87ab66830ca157de0dacd9ab5987cdf6b
+    image: ghcr.io/ferrohealth/ferrobridge:0.0.23@sha256:04e747a3ef7fedf2b40a43f4535e708a19bbd5390ec4bd016ecb4d94b1f83c31
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:
@@ -223,7 +223,7 @@ services:
 
   ferrofed:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrofed:0.0.16@sha256:df81b47856ab1c4b04a85fd52bcfda998ad35582fe3ca4515392332c78279f27
+    image: ghcr.io/ferrohealth/ferrofed:0.0.18@sha256:8dca494be28e97f21478e9c9c71760be3dbcd1a836570cf22e876663ffccf776
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:
@@ -267,7 +267,7 @@ services:
   # are file secrets run.sh writes under .work/.
   ferropix:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferropix:0.0.21@sha256:83f8bd464a252a3ab1cefeb6d19d3738f1c1e6019fa32ee028405eb99adaa9c5
+    image: ghcr.io/ferrohealth/ferropix:0.0.25@sha256:4fcbabdd21bfc8993c94afe9043c25e7c2a651b872aebbd4d86935ff4c57cba5
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:

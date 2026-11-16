@@ -1,6 +1,6 @@
 # The EHDS EHR system: instructions for use
 
-Revised 2026-11-03.
+Revised 2026-11-16.
 
 These are the instructions for use of the EHR system that FerroEHR and
 FerroBRIDGE form together. A copy accompanies each release of either product,
@@ -135,22 +135,22 @@ Member State sets. Each links its reference.
 #### The deployment profile
 
 ```toml
-deployment_profile = "production"
-deployment_accepts = []
+[deployment]
+profile = "production"
+accepts = []
 ```
 
 The shipped default is `sandbox`, which must not hold real personal data.
 `production` refuses to start while a separation is open and not accepted by
-name in `deployment_accepts`: shared database credentials or clusters, an
-undeclared pseudonym namespace, the access log off or failing open, the open
-per-EHR access default, migrations on a runtime
+name in `[deployment] accepts`: shared database credentials or clusters, an
+undeclared pseudonym namespace, the access log off, no category map in force,
+the open per-EHR access default, migrations on a runtime
 credential, authentication off, the role gate off while authentication is
 on, a plaintext listener on a routable address
-(the separate management port included), change events published to a plain
-`amqp://` broker, an audit FHIR feed on an `http://` URL, a multimedia store
-with `allow_http = true`. Each refusal names the gap
+(the separate management port included), an audit FHIR feed on an `http://`
+URL, a multimedia store with `allow_http = true`. Each refusal names the gap
 and what to change
-([`deployment_profile`](https://ferroehr.eu/docs/latest/installation/configuration.html#deployment_profile)).
+([the deployment profile](https://ferroehr.eu/docs/latest/security/go-live-checklist.html#2-the-deployment-profile-is-production-and-the-server-boots)).
 A gap you accept by name is stated on every boot and on
 `GET /management/status`. Behind a TLS-terminating ingress you accept
 `plaintext_listener` by name. The Helm chart and the Compose files declare
@@ -166,44 +166,44 @@ Replace its example names with your own.
 ```toml
 [audit]
 enabled = true
-fail_mode = "closed"
 purpose_codes = ["TREAT", "ETREAT"]   # the codes you agree with your callers
 emergency_purpose_codes = ["ETREAT"]  # marks an EHDS Art. 11(5) emergency access
 legal_basis = "gdpr-art-9-2-h"
 
-[audit.store]
-enabled = true
-retention_years = 5                   # at or above the floor that applies to you
-
 [audit.syslog]                        # or [audit.fhir_feed] for a FHIR ARR
-enabled = true
-host = "arr.example.org"              # RFC 5425 TLS on port 6514
+url = "tls://arr.example.org:6514"    # RFC 5425 TLS
 ```
 
-- **Fail closed.** `fail_mode = "closed"` refuses an operation whose access
-  record cannot be taken, with a `503`. The shipped `open` serves it and
-  counts the loss.
+- **Every access is recorded or refused.** The server writes each access
+  record to its local store before the response leaves, and refuses an
+  operation whose record cannot be written with a `503`. There is no fail
+  mode to choose, and the local store is always on while auditing is
+  ([how a record is written](https://ferroehr.eu/docs/latest/audit.html#how-a-record-is-written)).
 - **Forward a copy off the box.** The local store shares the database it
   audits. Forward the log to a sink the server's own credentials cannot
   rewrite, over TLS syslog or the FHIR feed
   ([getting the log out](https://ferroehr.eu/docs/latest/audit.html#getting-the-log-out)).
-- **Retention.** Set `[audit.store] retention_years` (or `retention_days`).
-  In every EU Member State the server refuses a horizon shorter than three
-  years (EHDS Art. 9(2)), and five years in the Netherlands, for the
-  jurisdictions your `[privacy.identifier_scan]` rules name; `0` keeps every
-  record forever
-  ([retention, and who chooses it](https://ferroehr.eu/docs/latest/audit.html#retention-and-who-chooses-it),
-  [`[audit.store]`](https://ferroehr.eu/docs/latest/installation/config-audit.html#auditstore-the-local-audit-record-repository)).
+- **Retention.** How long the access log keeps a record is your access
+  policy in the CDR, no configuration key: write `log_retention` on your
+  `ACCESS_POLICY`, with the period, whether the EHDS binds you, and the floors
+  and ceilings your law sets, each with its provision. The server refuses a
+  period shorter than three years in the Union (EHDS Art. 9(2)) or outside a
+  bound you declared, and reads `degraded` on its `log_retention` indicator
+  while your policy states no retention. FerroEHR ships no table of national
+  law
+  ([retention, and who chooses it](https://ferroehr.eu/docs/latest/audit.html#retention-and-who-chooses-it)).
 - **The priority categories.** Every access record names the EHDS Art. 14(1)
   categories of the data it served (Annex II 3.2(c)), through a map from
   templates and archetypes to categories. FerroEHR ships a map for the
   published CKM templates and COMPOSITION archetypes of one category, which
-  applies while `[audit.categories]` declares no template and no archetype.
-  Declare your own templates there: a declared map replaces the shipped one
-  whole, and an access to data the map in force does not name is recorded
-  `unclassified`. The `production` profile refuses to start while no map
-  applies
-  ([`[audit.categories]`](https://ferroehr.eu/docs/latest/installation/config-audit.html#auditcategories)).
+  applies while the audit category register declares no template and no
+  archetype. The map is data in the CDR, no configuration key: declare your own
+  templates by writing the register at `{ext}/admin/registers/audit-categories`.
+  A declared map replaces the shipped one whole, a change applies on the next
+  request, and an access to data the map in force does not name is recorded
+  `unclassified`. Under the `production` profile the register refuses a write
+  that would leave no map in force
+  ([the audit category register](https://ferroehr.eu/docs/latest/installation/config-audit.html#the-audit-category-register)).
   The same map keys retention periods on a category
   ([retention by category](https://ferroehr.eu/docs/latest/compliance/retention.html#keying-a-period-on-a-priority-category)).
 
@@ -214,27 +214,26 @@ host = "arr.example.org"              # RFC 5425 TLS on port 6514
   authentication is for service accounts and development.
 - Declare the assurance level patient data requires in
   [`[authz.assurance]`](https://ferroehr.eu/docs/latest/installation/config-auth.html#authzassurance-the-assurance-level-patient-data-requires),
-  mapping each `acr` value your identity provider emits to an eIDAS level, and
-  declare how a token names the natural person in
-  [`[authz.professional]`](https://ferroehr.eu/docs/latest/installation/config-auth.html#authzprofessional-the-natural-person-behind-a-token).
-  Both are off by default: until you configure them your identity provider
-  alone decides the assurance level, and a token issued to a client
-  application is recorded as that client, not as a person.
+  mapping each `acr` value your identity provider emits to an eIDAS level.
+  It is off by default: until you configure it your identity provider alone
+  decides the assurance level.
 - Annex II 3.2(b) asks the access log to name the natural person who
-  accessed the data. Declare the claim your identity provider puts the
-  person's identifier in, and, for a client application acting for a
-  professional, the claim that carries the professional:
-
-  ```toml
-  [authz.professional]
-  claim = "sub"                    # the claim naming the natural person
-  client_tokens = "sub_is_client"  # a token whose sub is its client_id is a client token
-  acting_for_claim = "act.sub"     # the professional a client token acts for
-  ```
-
-  A patient-data request whose token names no natural person, and is no
-  client token acting for one, is then refused with `403`, and every access
-  record carries the acting mode and the professional.
+  accessed the data. FerroEHR binds every person who signs in to a
+  demographic `PERSON` in the CDR: name the healthcare provider you act for in
+  `[authz.party_binding] provider`, and map each Basic user in
+  `[[authz.party_binding.basic_user]]`. The issuer's `kind` classifies a
+  caller, and a client application that acts for a person needs the
+  `act_for_persons` grant in the CDR. Every access record carries the acting
+  mode and the professional
+  ([`[authz.party_binding]`](https://ferroehr.eu/docs/latest/installation/config-auth.html#authzparty_binding)).
+- Who may do what is policy in the CDR, read on every request: system
+  clients, imports and exports, federation agreements, the roles of Basic
+  users, reading one subject's access log and acting as an access service
+  are each a grant on a policy party. `[authz.grants] allowed` names the
+  operations a grant may carry, and `[authz.rbac] first_admin` names the Basic
+  user who holds the administrator role from the configuration. Write these
+  grants before the deployment holds patient data
+  ([operational policy](https://ferroehr.eu/docs/latest/operational-policy.html#what-the-grants-decide)).
 - Set `[authz.rbac] ehr_access_default = "restricted"` and write the per-EHR
   access settings, or accept `open_ehr_access_default` by name with the reason
   ([per-EHR access control](https://ferroehr.eu/docs/latest/security.html#per-ehr-access-control-ehr_access)).
@@ -303,7 +302,7 @@ holding patient data.
 |---|---|---|
 | Apply security updates | as soon as a release carries one; only the newest release is supported, and Cadasto B.V. publishes security fixes for at least five years after each release, only in the newest release (CRA Art. 13(8) and (10)) | subscribe to the release feed and poll the security advisories ([how long a version is supported](https://ferroehr.eu/docs/latest/operations.html#how-long-the-version-you-pinned-is-supported)), then [upgrade](https://ferroehr.eu/docs/latest/operations.html#upgrades); the server's `support.status` reads `ended` once the end month of the commitment has passed |
 | Take and test backups, one per domain | daily backups (the chart's backup jobs run nightly when enabled); a restore test at least once a year and after each upgrade that migrates the schema | [backup and point-in-time recovery](https://ferroehr.eu/docs/latest/operations.html#backup-and-point-in-time-recovery) |
-| Act on an access-log chain finding | the server verifies the chain daily by default (`[audit.store] verify_interval_seconds = 86400`); act on every finding | the `audit_chain` readiness indicator and the `atna_audit_chain_findings` metric ([tamper evidence](https://ferroehr.eu/docs/latest/audit.html#tamper-evidence)) |
+| Act on an access-log chain finding | the server verifies the chain every hour by default (`[audit.store] verify_interval = "1h"`); act on every finding | the `audit_chain` readiness indicator and the `atna_audit_chain_findings` metric ([tamper evidence](https://ferroehr.eu/docs/latest/audit.html#tamper-evidence)) |
 | Watch the access log's loss counters | continuously, with an alert | the `atna_audit_*` metrics ([observability](https://ferroehr.eu/docs/latest/operations.html#observability)) |
 | Review the access log | on the schedule your organisation's policy sets | ITI-81 retrieval or your forwarding sink ([audit trail](https://ferroehr.eu/docs/latest/audit.html)) |
 | Sweep for stale decomposition | after a release whose changelog says so | [storage integrity](https://ferroehr.eu/docs/latest/operations-admin-apis.html#storage-integrity) |
@@ -355,11 +354,10 @@ knows of for this release.
 ### FerroEHR: security
 
 - The shipped defaults favour a first boot: the `sandbox` profile, TLS off,
-  the open per-EHR access default, the access log failing open. The
-  `production` profile refuses them unless accepted by name.
-- No authentication assurance level is required, and no natural person is
-  asked of a token, until `[authz.assurance]` and
-  `[authz.professional]` are configured.
+  the open per-EHR access default. The `production` profile refuses them
+  unless accepted by name.
+- No authentication assurance level is required until `[authz.assurance]`
+  is configured.
 - An emergency access in the vital interest of the patient (EHDS Art. 11(5))
   is marked only when the caller declares one of
   `[audit] emergency_purpose_codes`

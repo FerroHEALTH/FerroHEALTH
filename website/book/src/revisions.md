@@ -14,6 +14,7 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-11-16 | [The EHDS EHR system: instructions for use](ehds/instructions-for-use.md) | FerroEHR settings name only keys FerroEHR reads: `[deployment] profile` and `accepts`, `[audit.syslog] url` and `[audit.store] verify_interval`. The access log has no fail mode and its local store no switch. Its retention is `ACCESS_POLICY.log_retention` and its category map the audit category register, both in the CDR. The natural person comes from the party binding, and who may do what is a policy grant under `[authz.grants] allowed`. |
 | 2026-11-09 | [Security](security.md) | A vulnerability report by email goes to security@cadasto.com, the manufacturer's address for vulnerability reports, in place of info@cadasto.com. |
 | 2026-11-09 | [Post-market](post-market.md) | A vulnerability report by email goes to security@cadasto.com; incidents, complaints and requests from an authority stay at info@cadasto.com. |
 | 2026-11-09 | [The EHDS EHR system: information sheet](ehds/information-sheet.md) | Vulnerability reports go to security@cadasto.com; the single point of contact stays info@cadasto.com. |

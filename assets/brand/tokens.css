@@ -38,6 +38,8 @@
   --ferrohealth-fed-light: #7DD3FC;
   --ferrohealth-task: #065F46;        /* FerroTASK, emerald */
   --ferrohealth-task-light: #34D399;
+  --ferrohealth-smart: #78350F;       /* FerroSMART, bronze, the deep shade of its yellow */
+  --ferrohealth-smart-light: #FBBF24; /* the yellow, on a dark ground */
 
   /* Roles */
   --ferrohealth-brand: var(--ferrohealth-steel);

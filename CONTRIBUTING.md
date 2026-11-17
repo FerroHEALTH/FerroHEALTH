@@ -118,12 +118,12 @@ switch back to branch-based publishing.
   as text until it serves a page, and carries one rendered badge. The mark
   stays at four strokes: FerroFORMS, FerroEHR, FerroTERM and FerroBRIDGE are
   the data path, and FerroPIX, FerroFED and FerroTASK frame it.
-- **Authorisation stays with each product.** Every product is its own SMART
-  App Launch 2.x resource server against the deployment's authorization
-  server, through FerroAUTH's `ferrohealth-smart` in its own process. The family runs
-  no central authorisation service, because one would hold the signing key
-  every product's access depends on.
-- **A library is never a product.** FerroAUTH, FerroAUDIT and FerroUI have
+- **Authorisation is checked in each product.** Every product is its own
+  SMART App Launch 2.x resource server, through FerroSMART's
+  `ferrohealth-smart` in its own process, against FerroSMART or any other
+  authorization server the deployment names. FerroSMART, the SMART
+  authorization server, is the one product that issues tokens.
+- **A library is never a product.** FerroAUDIT, FerroUI and FerroSYS have
   their own section, cards in the parent's steel, a rendered release and no
   row in the status table, and the diagram draws them in a band outside the
   instance frame with no edges.

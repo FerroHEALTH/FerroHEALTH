@@ -14,6 +14,11 @@ revision date, and the newest row here for each page carries the same date.
 
 | Date | Page | Change |
 |---|---|---|
+| 2026-11-17 | [How the products fit together](architecture.md) | FerroSMART, the SMART App Launch 2.x authorization server, is a product again, being built: it issues the access tokens, and every product checks them through its `ferrohealth-smart`. The repository is FerroSMART, renamed from FerroAUTH, and the shared libraries are FerroAUDIT, FerroUI and FerroSYS. |
+| 2026-11-17 | [FerroHEALTH documentation](index.md) | FerroSMART joins the products on the way, and the shared libraries are three. |
+| 2026-11-17 | [Licensing and trademarks](licensing.md) | FerroSMART is a product again, renamed from FerroAUTH. |
+| 2026-11-17 | [Security](security.md) | FerroAUTH is FerroSMART again; its row names the image it will publish. |
+| 2026-11-17 | [The EHDS EHR system: shared responsibility](ehds/shared-responsibility.md) | The person's rule lives in FerroSMART's `ferrohealth-smart`, the repository renamed from FerroAUTH. |
 | 2026-11-16 | [The EHDS EHR system: instructions for use](ehds/instructions-for-use.md) | FerroEHR settings name only keys FerroEHR reads: `[deployment] profile` and `accepts`, `[audit.syslog] url` and `[audit.store] verify_interval`. The access log has no fail mode and its local store no switch. Its retention is `ACCESS_POLICY.log_retention` and its category map the audit category register, both in the CDR. The natural person comes from the party binding, and who may do what is a policy grant under `[authz.grants] allowed`. |
 | 2026-11-09 | [Security](security.md) | A vulnerability report by email goes to security@cadasto.com, the manufacturer's address for vulnerability reports, in place of info@cadasto.com. |
 | 2026-11-09 | [Post-market](post-market.md) | A vulnerability report by email goes to security@cadasto.com; incidents, complaints and requests from an authority stay at info@cadasto.com. |

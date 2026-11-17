@@ -58,7 +58,7 @@ Do not screenshot the page to get the diagram. The file is the diagram.
 
 ## What it says
 
-The frame is one FerroHEALTH instance serving one tenant. The seven inside are
+The frame is one FerroHEALTH instance serving one tenant. The eight inside are
 the family; clinicians, applications, HL7 FHIR, HL7 Version 2 senders, the OMOP
 database and other organisations sit outside it. The family is five products
 that reach each other only over published protocols, each in its own lane:
@@ -74,13 +74,12 @@ meaning, FerroBRIDGE carries it out. FerroFORMS is paused and still drawn,
 greyed out (a grey fill, outline and text, with "paused" in its box), because
 it is present and not in use, which is not a server waiting to run.
 FerroPIX, FerroFED and FerroTASK frame that path. A server not running yet is
-drawn dashed, as is every call into one: FerroTASK is planned. FerroPIX and
+drawn dashed, as is every call into one: FerroTASK is planned, and
+FerroSMART is being built. FerroPIX and
 FerroFED are released, running servers and are drawn solid, with every edge
 into them.
 
-Under the frame, a second band holds the shared libraries: FerroAUTH
-(`ferrohealth-smart` and `ferrohealth-authz`, authentication and the policy
-decision; renamed from FerroSMART on 2026-10-25), FerroAUDIT (`ihe-atna`,
+Under the frame, a second band holds the shared libraries: FerroAUDIT (`ihe-atna`,
 `ehds-logging`), FerroUI (`ferrohealth-ui`) and FerroSYS (`ferrohealth-secret`,
 `-config`, `-telemetry`, `-health`, `-server`, `-usage-report`: the system
 plumbing every product shares, never a control plane or a central service). They sit outside the instance because they run inside the
@@ -101,12 +100,13 @@ specification it speaks, with a few exceptions worth knowing:
   rot.
 - **`SQL rows`** names no wire specification, because OMOP is a database schema.
   The OMOCL mappings compile to SQL that writes typed rows into the CDM tables.
-- **No authorisation server is drawn.** Each product is its own SMART App
-  Launch 2.x resource server, through FerroAUTH's `ferrohealth-smart`: it checks the
-  tokens it is handed against the deployment's own authorization server,
-  which sits outside the family. A
-  central FerroHEALTH authorisation service would hold the signing key every
-  product's access depends on, so there is none (owner, 2026-10-19).
+- **FerroSMART has no edge.** It is the SMART App Launch 2.x authorization
+  server (owner, 2026-11-16 and 2026-11-17), drawn in its yellow between the
+  CDR's two callers on the right. Each product is its own SMART App Launch
+  2.x resource server, through FerroSMART's `ferrohealth-smart`: it checks
+  the tokens it is handed against FerroSMART or any other authorization
+  server the deployment names. Every server would carry an edge to it, so
+  none is drawn.
 - **FerroFED follows the openEHR federation tier proposal.** It is a
   transparent ITS-REST intermediary: an application sends it an ordinary AQL
   query and never learns it was federated. It asks FerroPIX who the patient

@@ -50,7 +50,7 @@ family book, and the shared brand. It holds no product code.
 | [FerroFED](https://github.com/FerroHEALTH/FerroFED) | Connects records across organisations and borders, including the European MyHealth@EU exchange ([ferrofed.eu](https://ferrofed.eu/)) |
 | [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | Matches a patient's identities across organisations, over the IHE patient-index profiles ([ferropix.eu](https://ferropix.eu/)) |
 | [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | Serves the code systems, such as SNOMED CT, LOINC and ICD, over FHIR ([ferroterm.eu](https://ferroterm.eu/)) |
-| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | Issues the SMART access tokens health apps sign in with, behind the sign-in system an organisation already runs; being built, and its crates check every product's callers |
+| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | Issues the SMART access tokens health apps sign in with, behind the sign-in system an organisation already runs; being built, and its crates check every product's callers ([ferrosmart.eu](https://ferrosmart.eu/)) |
 
 Work every product needs lives in three shared libraries, each a set of Rust
 crates compiled into the products and never run on its own:

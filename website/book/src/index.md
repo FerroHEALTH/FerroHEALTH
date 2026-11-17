@@ -37,7 +37,7 @@ its brand, and no release of the product or book yet:
 
 | On the way | What it is for | Repository |
 |---|---|---|
-| FerroSMART | The SMART App Launch 2.x authorization server, being built; it also publishes the crates every product checks its callers with | [FerroHEALTH/FerroSMART](https://github.com/FerroHEALTH/FerroSMART) |
+| FerroSMART | The SMART App Launch 2.x authorization server, being built; it also publishes the crates every product checks its callers with; its book is at <https://ferrosmart.eu/docs/> | [FerroHEALTH/FerroSMART](https://github.com/FerroHEALTH/FerroSMART) |
 | FerroTASK | Task planning and decision support over openEHR | [FerroHEALTH/FerroTASK](https://github.com/FerroHEALTH/FerroTASK) |
 
 The family site, <https://ferrohealth.eu/>, shows what each product has

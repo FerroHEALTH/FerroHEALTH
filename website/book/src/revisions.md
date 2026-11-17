@@ -15,7 +15,7 @@ revision date, and the newest row here for each page carries the same date.
 | Date | Page | Change |
 |---|---|---|
 | 2026-11-17 | [How the products fit together](architecture.md) | FerroSMART, the SMART App Launch 2.x authorization server, is a product again, being built: it issues the access tokens, and every product checks them through its `ferrohealth-smart`. The repository is FerroSMART, renamed from FerroAUTH, and the shared libraries are FerroAUDIT, FerroUI and FerroSYS. |
-| 2026-11-17 | [FerroHEALTH documentation](index.md) | FerroSMART joins the products on the way, and the shared libraries are three. |
+| 2026-11-17 | [FerroHEALTH documentation](index.md) | FerroSMART joins the products on the way, with its book at ferrosmart.eu, and the shared libraries are three. |
 | 2026-11-17 | [Licensing and trademarks](licensing.md) | FerroSMART is a product again, renamed from FerroAUTH. |
 | 2026-11-17 | [Security](security.md) | FerroAUTH is FerroSMART again; its row names the image it will publish. |
 | 2026-11-17 | [The EHDS EHR system: shared responsibility](ehds/shared-responsibility.md) | The person's rule lives in FerroSMART's `ferrohealth-smart`, the repository renamed from FerroAUTH. |

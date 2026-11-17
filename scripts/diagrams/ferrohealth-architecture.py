@@ -38,7 +38,7 @@ Y = 36  # everything below the frame's label line moves down this much
 # serves several runs several instances.
 FRAME = (176, 8, 720, 612)  # x, y, w, h
 FRAME_LABEL = "ONE FERROHEALTH INSTANCE · ONE TENANT"
-INSIDE = {"term", "forms", "ehr", "bridge", "pix", "fed", "task"}
+INSIDE = {"term", "forms", "ehr", "bridge", "pix", "fed", "task", "smart"}
 STEEL = ("#3f6070", "#8fb6c4")
 
 # The library band: the crates every product is built from. Under the frame
@@ -47,7 +47,7 @@ STEEL = ("#3f6070", "#8fb6c4")
 # carry one and a line would read as a call over the network.
 LIB_FRAME = (176, 636, 720, 128)  # x, y, w, h
 LIB_LABEL = "SHARED LIBRARIES · BUILT INTO THE PRODUCTS, NEVER RUN ON THEIR OWN"
-LIBRARIES = {"smart", "audit", "ui", "sys"}
+LIBRARIES = {"audit", "ui", "sys"}
 
 # assets/brand/tokens.css, as literal values: a standalone SVG cannot read the
 # page's custom properties. Light is written as presentation attributes, dark
@@ -60,6 +60,7 @@ HUES = {
     "pix": ("#6b21a8", "#c084fc"),
     "fed": ("#0369a1", "#7dd3fc"),
     "task": ("#065f46", "#34d399"),
+    "smart": ("#78350f", "#fbbf24"),
 }
 GROUND = ("#f5f7fa", "#131a26")
 BOX_FILL = ("#ffffff", "#0b1020")
@@ -197,18 +198,21 @@ BOXES = [
     Box("others", 1000, 456, 190, 56, "Other organisations",
         subs=["federation nodes"],
         why="Level with the gateway, because FerroFED is the only path to them."),
-    Box("smart", 206, 640, 150, 76, "FerroAUTH", subs=["ferrohealth-smart", "ferrohealth-authz"],
-        why="Renamed from FerroSMART. ferrohealth-smart is the SMART App Launch and\n"
-            "OAuth 2.0 resource server each product runs in its own process, against\n"
-            "the deployment's own authorization server; ferrohealth-authz makes the\n"
-            "policy decision."),
-    Box("audit", 376, 640, 150, 76, "FerroAUDIT", subs=["ihe-atna", "ehds-logging"],
+    Box("smart", 664, 264, 166, 88, "FerroSMART", hue="smart", planned=True,
+        subs=["SMART App Launch 2.x", "authorization server"],
+        why="The SMART authorization server, being built: it issues the access tokens\n"
+            "with the launch context, behind the deployment's own sign-in. Every server\n"
+            "checks the tokens it is handed through FerroSMART's ferrohealth-smart crate,\n"
+            "against FerroSMART or any other authorization server the deployment names,\n"
+            "so no edge is drawn to it: every server would carry one. It sits between\n"
+            "the CDR's two callers on the right, clear of every line."),
+    Box("audit", 206, 640, 150, 76, "FerroAUDIT", subs=["ihe-atna", "ehds-logging"],
         why="The whole IHE ATNA and BALP audit trail (sending, forwarding, retrieving)\n"
             "and the EHDS access record."),
-    Box("ui", 546, 640, 150, 76, "FerroUI", subs=["ferrohealth-ui", "every console"],
+    Box("ui", 376, 640, 150, 76, "FerroUI", subs=["ferrohealth-ui", "every console"],
         why="The component library each product's operator console is built with;\n"
             "every console is reactive."),
-    Box("sys", 716, 640, 150, 76, "FerroSYS", subs=["system plumbing", "six shared crates"],
+    Box("sys", 546, 640, 150, 76, "FerroSYS", subs=["system plumbing", "six shared crates"],
         why="Secrets and redaction, configuration, logging and OpenTelemetry, health,\n"
             "the HTTP stack and drain, and the usage report, as ferrohealth-* crates.\n"
             "Shared crates like the others, never a control plane or a central service."),
@@ -584,12 +588,14 @@ DESC = (
     "FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' "
     "openEHR CDRs as federation nodes; and FerroTASK, the planned task planning and decision support "
     "server, drawn dashed, reads FerroEHR over ITS-REST and AQL and commits the state of each plan "
-    "back to it. Each server checks the access tokens it is handed against the deployment's own "
-    "authorization server, so no FerroHEALTH service holds the key every server depends on. A frame "
-    "around the seven marks one FerroHEALTH instance serving one tenant; clinicians, applications, "
+    "back to it. FerroSMART, the SMART App Launch authorization server being built, drawn dashed, "
+    "issues access tokens with the launch context behind the deployment's own sign-in, and each "
+    "server checks the tokens it is handed through FerroSMART's ferrohealth-smart crate, against "
+    "FerroSMART or any other authorization server the deployment names. A frame "
+    "around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, "
     "FHIR, HL7 Version 2 senders, OMOP and other organisations sit outside it. Under the frame, a band "
-    "holds the four shared libraries the products are built from, which never run on their own: "
-    "FerroAUTH authenticates callers and makes the policy decision, issuing no token, FerroAUDIT "
+    "holds the three shared libraries the products are built from, which never run on their own: "
+    "FerroAUDIT "
     "writes the audit trail and the EHDS access record, FerroUI holds the components of the operator "
     "consoles, every one of them reactive, and FerroSYS holds the system plumbing every product "
     "shares, from secrets and configuration to telemetry, health, the HTTP stack and the usage report."

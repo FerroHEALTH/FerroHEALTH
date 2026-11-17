@@ -44,8 +44,10 @@ beyond that script and the pinned mdbook, no runtime dependency.
   pull request renders the tag; that is when the card moves into the released
   grid, its site is linked once it serves a page, and it joins the status
   table. FerroPIX made that move with its first release, and its site is
-  linked now that `ferropix.eu` serves one.
-- **A shared library is never a product.** FerroAUTH, FerroAUDIT, FerroUI and FerroSYS
+  linked now that `ferropix.eu` serves one. FerroSMART, a product again
+  since 2026-11-17 and being built, has a card of the same kind until the
+  first release of its server.
+- **A shared library is never a product.** FerroAUDIT, FerroUI and FerroSYS
   are crates the products compile in, and none of them runs on its own. They
   have their own section (`#libraries`), cards in the parent's steel
   (`.product-lib`, no product hue and no mark), a `data-rel` badge from their

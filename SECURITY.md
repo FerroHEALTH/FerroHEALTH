@@ -17,11 +17,11 @@ which is where its maintainers and its release process are:
 - FerroBRIDGE: <https://github.com/FerroHEALTH/FerroBRIDGE/security/advisories/new>
 - FerroFED: <https://github.com/FerroHEALTH/FerroFED/security/advisories/new>
 - FerroPIX: <https://github.com/FerroHEALTH/FerroPIX/security/advisories/new>
+- FerroSMART: <https://github.com/FerroHEALTH/FerroSMART/security/advisories/new>
 
 A vulnerability in a shared library the products are built from goes to that
 library's queue the same way:
 
-- FerroAUTH: <https://github.com/FerroHEALTH/FerroAUTH/security/advisories/new>
 - FerroAUDIT: <https://github.com/FerroHEALTH/FerroAUDIT/security/advisories/new>
 - FerroUI: <https://github.com/FerroHEALTH/FerroUI/security/advisories/new>
 

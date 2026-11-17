@@ -15,6 +15,7 @@ Verbatim copies of each product's primary icon, taken from that product's own
 | `ferropix-icon.svg` | <https://github.com/FerroHEALTH/FerroPIX> `assets/brand/ferropix-icon.svg` |
 | `ferrofed-icon.svg` | <https://github.com/FerroHEALTH/FerroFED> `assets/brand/ferrofed-icon.svg` |
 | `ferrotask-icon.svg` | <https://github.com/FerroHEALTH/FerroTASK> `assets/brand/ferrotask-icon.svg` |
+| `ferrosmart-icon.svg` | <https://github.com/FerroHEALTH/FerroSMART> `assets/brand/ferrosmart-icon.svg` |
 
 The landing page's Content Security Policy is `default-src 'self'`, so the page
 loads no image from another origin. That is why these are copies. Refresh a file
@@ -32,6 +33,9 @@ that product's licence. The files here are copies of those, like the other
 four, and are refreshed from there and never edited here.
 FerroTASK's mark was drawn in its own repository the day it opened, in the
 same grammar, and this file is a copy of it from the start.
+FerroSMART's mark, the shield with the keyhole, is the one its repository has
+carried since it opened; the copy here dates from 2026-11-17, when the owner
+made FerroSMART a product again.
 
 FerroSYS is a set of shared crates and carries no product mark here: its
 steel lockup lives in its own repository's `assets/brand/`, and the page shows

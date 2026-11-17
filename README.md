@@ -50,13 +50,13 @@ family book, and the shared brand. It holds no product code.
 | [FerroFED](https://github.com/FerroHEALTH/FerroFED) | Connects records across organisations and borders, including the European MyHealth@EU exchange ([ferrofed.eu](https://ferrofed.eu/)) |
 | [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) | Matches a patient's identities across organisations, over the IHE patient-index profiles ([ferropix.eu](https://ferropix.eu/)) |
 | [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) | Serves the code systems, such as SNOMED CT, LOINC and ICD, over FHIR ([ferroterm.eu](https://ferroterm.eu/)) |
+| [FerroSMART](https://github.com/FerroHEALTH/FerroSMART) | Issues the SMART access tokens health apps sign in with, behind the sign-in system an organisation already runs; being built, and its crates check every product's callers |
 
-Work every product needs lives in four shared libraries, each a set of Rust
+Work every product needs lives in three shared libraries, each a set of Rust
 crates compiled into the products and never run on its own:
 
 | Library | What it does |
 |---|---|
-| [FerroAUTH](https://github.com/FerroHEALTH/FerroAUTH) | Sign-in and access control: SMART and OAuth 2.0 token checks, and the policy decision |
 | [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | The audit trail: IHE ATNA and BALP, and the EHDS access record |
 | [FerroUI](https://github.com/FerroHEALTH/FerroUI) | The components every operator console is built from |
 | [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | The system plumbing every product shares: secrets, configuration, telemetry, health, the HTTP stack and the usage report |

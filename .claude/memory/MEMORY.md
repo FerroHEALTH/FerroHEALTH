@@ -5,8 +5,9 @@
 
 - [Family architecture](family-architecture.md): owner 2026-10-25, five
   servers (FerroEHR, FerroBRIDGE, FerroFED, FerroPIX, FerroTERM) that reach
-  each other only over published protocols; shared crates (FerroAUTH,
-  FerroAUDIT, FerroUI, FerroSYS) for cross-cutting work, and FerroSYS is never
+  each other only over published protocols, and FerroSMART, the SMART
+  authorization server being built (owner 2026-11-17); shared crates
+  (FerroAUDIT, FerroUI, FerroSYS) for cross-cutting work, and FerroSYS is never
   a control plane; no product embeds another's
   domain; every console is server-rendered. A verbatim copy of the page every
   family repository carries.

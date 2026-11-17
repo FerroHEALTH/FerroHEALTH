@@ -11,8 +11,10 @@ Common Data Model; [FerroFED](https://ferrofed.eu/), the federation gateway;
 [FerroPIX](https://ferropix.eu/), the Master Patient Index; and [FerroTERM](https://ferroterm.eu/), the HL7 FHIR terminology
 server. [FerroFORMS](https://ferroforms.eu/), an openEHR form builder and
 renderer, is paused and keeps its hue and its stroke. One more is planned
-around them: FerroTASK for task planning and decision support. The shared libraries
-the products are built from (FerroAUTH, FerroAUDIT, FerroUI, FerroSYS) are no
+around them: FerroTASK for task planning and decision support. FerroSMART, the
+SMART App Launch authorization server, is a product again since 2026-11-17
+and is being built. The shared libraries
+the products are built from (FerroAUDIT, FerroUI, FerroSYS) are no
 products: they own no hue and no stroke, and the page shows them in the
 parent's steel. FerroSYS's own steel lockup lives in its repository's
 `assets/brand/`. Ferro is *ferrum*,
@@ -97,6 +99,7 @@ day its repository opened, and went into its `tokens.css` first.
 | FerroPIX | plum | `#6B21A8` | `#C084FC` |
 | FerroFED | azure | `#0369A1` | `#7DD3FC` |
 | FerroTASK | emerald | `#065F46` | `#34D399` |
+| FerroSMART | yellow | `#78350F` | `#FBBF24` |
 
 FerroSYS's olive (`#5B6B16`, `#BEF264`) left `tokens.css` on 2026-10-26:
 FerroSYS is a set of shared crates, so it takes the parent's steel like every
@@ -124,8 +127,14 @@ where it was.
 
 The table records the palette as it was chosen, with a bronze hue for a
 planned authorisation service in it. The family dropped that service on
-2026-10-19, and its hue left `tokens.css` with it. The floor of the seven hues that remain is still 4.5, between
-FerroBRIDGE and FerroFED, as the script reports.
+2026-10-19, and its hue left `tokens.css` with it. The owner made FerroSMART,
+the SMART authorization server, a product again on 2026-11-17, and its hue
+came back from its own `tokens.css`: the yellow `#FBBF24` on a dark ground,
+and on a light ground bronze `#78350F`, the deep shade of the same hue,
+because the yellow carries no text there (1.6:1). Its worst pair is 9.1,
+with FerroEHR on the light ground under protanopia, and the floor of the
+eight hues is still 4.5, between FerroBRIDGE and FerroFED, as the script
+reports.
 
 Every value holds at least 4.5:1 against its ground, so a hue can carry text
 on a card. A reader who cannot tell azure from indigo still has the name on

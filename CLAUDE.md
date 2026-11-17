@@ -25,15 +25,16 @@ and says so where it describes its status. One more is planned, with a
 domain and a repository that holds its licence and its brand and no release
 yet: [FerroTASK](https://github.com/FerroHEALTH/FerroTASK)
 (task planning and decision support over openEHR PROC and GDL2,
-`ferrotask.eu`). Ferro is *ferrum*, iron, which Rust is an oxide
+`ferrotask.eu`). [FerroSMART](https://github.com/FerroHEALTH/FerroSMART), the
+SMART App Launch 2.x authorization server, is a product again by the owner's
+decision of 2026-11-17 and is being built toward its first release; the
+repository also publishes the `ferrohealth-smart`, `ferrohealth-authz` and
+`ferrohealth-session` crates every product checks its callers with. Its hue
+is its yellow (`#78350F` on a light ground, `#FBBF24` on a dark one). Ferro is *ferrum*, iron, which Rust is an oxide
 of.
 
-The products are built from four **shared libraries**, which are not
+The products are built from three **shared libraries**, which are not
 products and never appear in a product list, card, count or the status table:
-[FerroAUTH](https://github.com/FerroHEALTH/FerroAUTH), renamed from FerroSMART
-on 2026-10-25 (`ferrohealth-smart`, authentication: the SMART and OAuth 2.0
-resource server that checks tokens and issues none, and `ferrohealth-authz`,
-the policy decision, with 0.1.0 in preparation),
 [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) (`ihe-atna` and
 `ehds-logging`, the whole audit trail and the EHDS access record),
 [FerroUI](https://github.com/FerroHEALTH/FerroUI) (`ferrohealth-ui`, the
@@ -46,8 +47,9 @@ control plane or a central service). The page gives
 them their own section, and the diagram a band outside the instance frame
 with no edges. The protocol clients and models a product publishes for the
 others (`fhir-types` and `ferrobridge-term` from FerroBRIDGE, `ihe-iti` and
-`nl-generic-functions` from FerroPIX, the `openehr-*` crates from FerroEHR)
-stay with the product that publishes them.
+`nl-generic-functions` from FerroPIX, the `openehr-*` crates from FerroEHR,
+the `ferrohealth-smart`, `-authz` and `-session` crates from FerroSMART) stay
+with the product that publishes them.
 
 The site also publishes the **family book** at <https://ferrohealth.eu/docs/>:
 the pages that hold for every product and for Cadasto B.V. as their
@@ -181,22 +183,22 @@ and narrow.
   system list or a crate list moves with a product release and belongs on that
   product's site. The page names the standard and links the pin.
 - **The parent owns no hue.** FerroFORMS is rose, FerroEHR is rust, FerroTERM
-  is teal, FerroBRIDGE is indigo; FerroPIX, FerroFED and FerroTASK are plum,
-  azure and emerald. The shared libraries, FerroSYS included, own no hue. FerroHEALTH is
+  is teal, FerroBRIDGE is indigo; FerroPIX, FerroFED, FerroTASK and
+  FerroSMART are plum, azure, emerald and yellow. The shared libraries, FerroSYS included, own no hue. FerroHEALTH is
   iron and steel, and spends a product hue only where that product is named. Every product's values in
   `assets/brand/tokens.css` are copied verbatim from its own `tokens.css`; a
   new hue is chosen with `scripts/brand/hue-distance.py` before it goes there.
   The mark stays at four strokes: they are the data path (FerroFORMS, FerroEHR,
   FerroTERM, FerroBRIDGE), and FerroPIX, FerroFED and FerroTASK frame it,
   released or not.
-- **No product is an authorisation server.** Each product is its own SMART
-  App Launch 2.x resource server against the deployment's authorization
-  server, because one central service would hold the signing key every
-  product's access depends on (owner, 2026-10-19). FerroAUTH's
-  `ferrohealth-smart` is the library each product does that with, in its own
-  process, and `ferrohealth-authz` makes the policy decision there too. Never add a central
-  FerroHEALTH authorisation service to the page, the book or the diagram, and
-  never draw FerroAUTH as one.
+- **FerroSMART is the one authorisation server.** It issues the SMART
+  access tokens and holds their signing keys, behind the deployment's own
+  sign-in (owner, 2026-11-16 and 2026-11-17). Every other product is its own
+  SMART App Launch 2.x resource server, through FerroSMART's
+  `ferrohealth-smart` in its own process, against FerroSMART or any other
+  authorization server the deployment names, and `ferrohealth-authz` makes
+  the policy decision there too. No other product and no library is drawn
+  or described as one.
 - **The brand artwork is all rights reserved.** The SVG, PNG and ICO files in
   `assets/brand/` and `assets/diagrams/` are under `TRADEMARKS.md`, and every
   SVG there carries `LicenseRef-FerroHEALTH-Brand`, a new one included. The

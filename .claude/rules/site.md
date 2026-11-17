@@ -46,7 +46,8 @@ beyond that script and the pinned mdbook, no runtime dependency.
   table. FerroPIX made that move with its first release, and its site is
   linked now that `ferropix.eu` serves one. FerroSMART, a product again
   since 2026-11-17 and being built, has a card of the same kind until the
-  first release of its server.
+  first release of its server, and its site is linked now that
+  `ferrosmart.eu` serves one.
 - **A shared library is never a product.** FerroAUDIT, FerroUI and FerroSYS
   are crates the products compile in, and none of them runs on its own. They
   have their own section (`#libraries`), cards in the parent's steel

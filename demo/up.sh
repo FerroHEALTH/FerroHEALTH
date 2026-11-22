@@ -47,10 +47,10 @@ readonly FHIR_PACKAGES=(
   "https://packages2.fhir.org/web/hl7.terminology.r4-7.5.0.tgz 1da3004587602c3f5120061abc2309fef1f96668a477a9964354fa9af6fa6e60"
   "https://packages2.fhir.org/web/hl7.fhir.uv.v2mappings-1.0.0.tgz 49004948e7589ccc663b3df89f831b3cbf4c2dd1ef67c859633dd50cc81581a0"
 )
-# FerroEHR v5.5.0, the release the members run: its sandbox seed and the
+# FerroEHR v5.7.0, the release the members run: its sandbox seed and the
 # corpus files the seed reads.
 readonly FERROEHR_REPO=https://github.com/FerroHEALTH/FerroEHR.git
-readonly FERROEHR_COMMIT=d25c95a974142ec13fe7b107fa098555ef1631c3
+readonly FERROEHR_COMMIT=7d85f0a1d2b86ca5bf2d43025090e6a102d99f74
 readonly FERROEHR_PATHS=(
   /scripts/sandbox/ /corpus/archetypes/adl2/ /corpus/fixtures/adl2/ /corpus/fixtures/composition/
   /corpus/templates/ckm/ /corpus/templates/dt_coded_text_binding_sct.opt
@@ -226,12 +226,6 @@ if [[ "$(git -C "$ferroehr_src" rev-parse HEAD 2>/dev/null)" != "$FERROEHR_COMMI
   git -C "$ferroehr_src" fetch -q --depth 1 --filter=blob:none origin "$FERROEHR_COMMIT" ||
     fail "could not fetch FerroEHR $FERROEHR_COMMIT"
   git -C "$ferroehr_src" checkout -q FETCH_HEAD
-  # The demo's FerroTERM serves no LOINC, so two LOINC-bound archetypes are
-  # stored where v5.5.0's pin expects them refused; FerroEHR's main moves the
-  # pin the same way under SANDBOX_TERMINOLOGY=without-loinc.
-  manifest="$ferroehr_src/scripts/sandbox/seed/manifest.json"
-  jq '.adl2.archetype_library.accepted = 233 | .adl2.archetype_library.refused = 89' \
-    "$manifest" >"$manifest.demo" && mv "$manifest.demo" "$manifest"
 fi
 
 step "pulling the images"
@@ -362,7 +356,9 @@ identities="$WORK/sandbox-identities"
       echo "subject $subject $(pseudonym a urn:oid:2.999.3.1 "$subject")"
     done
 } >"$identities"
-SANDBOX_BASE=http://127.0.0.1:8081 SANDBOX_IDENTITIES="$identities" \
+# The demo's FerroTERM serves no LOINC, which the seed's archetype-library
+# pin takes under SANDBOX_TERMINOLOGY=without-loinc.
+SANDBOX_BASE=http://127.0.0.1:8081 SANDBOX_IDENTITIES="$identities" SANDBOX_TERMINOLOGY=without-loinc \
   bash "$ferroehr_src/scripts/sandbox/reseed.sh" >"$WORK/sandbox.log" 2>&1 ||
   fail "the sandbox seed stopped; its log is demo/.work/sandbox.log"
 

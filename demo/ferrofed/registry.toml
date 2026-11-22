@@ -15,7 +15,7 @@ id = "member-a"
 organisation = "hospital-a"
 system_id = "member-a.ferrohealth-demo.local"
 product = "FerroEHR"
-version = "5.5.0"
+version = "5.7.0"
 
 [[endpoint]]
 id = "member-a-query"
@@ -33,7 +33,7 @@ id = "member-b"
 organisation = "hospital-b"
 system_id = "member-b.ferrohealth-demo.local"
 product = "FerroEHR"
-version = "5.5.0"
+version = "5.7.0"
 
 [[endpoint]]
 id = "member-b-query"
@@ -51,7 +51,7 @@ id = "member-c"
 organisation = "hospital-c"
 system_id = "member-c.ferrohealth-demo.local"
 product = "FerroEHR"
-version = "5.5.0"
+version = "5.7.0"
 
 [[endpoint]]
 id = "member-c-query"
@@ -69,7 +69,7 @@ id = "member-d"
 organisation = "hospital-d"
 system_id = "member-d.ferrohealth-demo.local"
 product = "FerroEHR"
-version = "5.5.0"
+version = "5.7.0"
 
 [[endpoint]]
 id = "member-d-query"
@@ -89,7 +89,7 @@ id = "member-e"
 organisation = "hospital-e"
 system_id = "member-e.ferrohealth-demo.local"
 product = "FerroEHR"
-version = "5.5.0"
+version = "5.7.0"
 
 [[endpoint]]
 id = "member-e-query"

@@ -10,7 +10,7 @@
 # health service with its laboratory, D an outpatient clinic. Every patient a
 # member holds, the FerroFED patients and that hospital's own six, gets three
 # vital-signs readings over the year and the member's own compositions, from
-# the curated examples of FerroEHR v5.5.0's corpus. Each hospital's patients
+# the curated examples of FerroEHR v5.7.0's corpus. Each hospital's patients
 # get an EHR at its member under their FerroPIX pseudonym, and their ehr_id
 # is fed back so FerroFED finds them by BSN.
 

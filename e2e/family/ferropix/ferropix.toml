@@ -20,15 +20,18 @@ data_key_file = "/run/secrets/ferropix-data-key"
 # The lane's issuer, a `persons` issuer: a Source's token, whose subject is
 # its client, is a machine's; the clinician's token is admitted through the
 # lane's one client.
-[[auth.issuer]]
+[auth.issuer.family]
 issuer = "http://localhost:8180/family"
 kind = "persons"
 audience = ["http://localhost:8070/fhir"]
+
+[auth.issuer.family.profile]
 first_party_clients = ["family-e2e-client"]
 
-# The Patient Identity Sources the lane's issuer vouches for.
+# The Patient Identity Sources the lane's issuer, named by its table, vouches
+# for.
 [[trust.issuer]]
-issuer = "http://localhost:8180/family"
+issuer = "family"
 clients = ["family-e2e-source-a", "family-e2e-source-b", "family-e2e-source-registry"]
 
 # Each node's ehr_ids form a local domain, fed by that site's Source. The

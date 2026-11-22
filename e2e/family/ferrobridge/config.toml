@@ -7,18 +7,20 @@
 # caller. compose.yaml sets the listener, the log format and the usage report.
 # Every key is on <https://ferrobridge.eu/docs/operate/configuration.html>.
 
-[cdr]
-base_url = "http://ferroehr-a:8080/ferroehr/rest/openehr/v1"
+[cdr.endpoint]
+url = "http://ferroehr-a:8080/ferroehr/rest/openehr/v1"
 
 # FerroEHR's quickstart user; the password is the cdr_password file secret.
-[cdr.credentials]
+[cdr.endpoint.credentials]
 user = "ferroehr"
 password_file = "/run/secrets/cdr_password"
 
 # FerroTERM's R4 base. Its read surface takes no credential.
 [terminology]
-base_url = "http://ferroterm:8080/r4"
 wire_version = "r4"
+
+[terminology.endpoint]
+url = "http://ferroterm:8080/r4"
 
 [mappings]
 directory = "/etc/ferrobridge/mappings"

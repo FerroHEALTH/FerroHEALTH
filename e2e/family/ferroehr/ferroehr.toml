@@ -9,13 +9,47 @@
 # Development credentials, NOT for anything real. compose.yaml sets each
 # node's database and system_id in the environment.
 
-deployment_profile = "sandbox"
+[deployment]
+profile = "sandbox"
 
 [server]
 listen = "0.0.0.0:8080"
 
 [auth]
 enabled = true
+
+# The identifier issuer the Basic user's party key sits under, as FerroEHR's
+# quickstart declares it: the issuer signs nothing, and its key set ships in
+# every FerroEHR image as the public half of a discarded key pair.
+[[auth.issuer]]
+issuer = "https://basic-users.ferroehr.invalid"
+kind = "persons"
+audience = ["ferroehr-basic-users"]
+jwks_file = "/opt/sandbox-posture/basic-users-jwks.json"
+
+[[auth.party]]
+issuer = "https://basic-users.ferroehr.invalid"
+identifier_issuer = "urn:ferroehr:basic-user"
+identifier_type = "login"
+
+# The lane's issuer, a `machines` issuer to the node: it signs the token of
+# the SCIM client that provisions the Basic user's PERSON (run.sh). The node
+# is outside the issuer's network namespace, so run.sh hands it the issuer's
+# key set as a file.
+[[auth.issuer]]
+issuer = "http://localhost:8180/family"
+kind = "machines"
+audience = ["ferroehr-scim"]
+jwks_file = "/etc/ferroehr/issuer/jwks.json"
+
+# SCIM provisioning (RFC 7644) for the lane's one SCIM client, which binds a
+# User under the Basic users' identifier issuer. compose.yaml sets each
+# node's public base URL.
+[[auth.scim.client]]
+issuer = "http://localhost:8180/family"
+client_id = "family-e2e-scim"
+scope = "ferroehr/scim"
+binding_issuer = "urn:ferroehr:basic-user"
 
 [[auth.basic.users]]
 user = "ferroehr"
@@ -26,7 +60,35 @@ roles = ["ADMIN", "USER"]
 [authz.rbac]
 enabled = false
 
+# The healthcare provider the node acts for, and the party key the Basic user
+# signs as, as FerroEHR's quickstart binds them. Example identifiers only.
+[authz.party_binding]
+provider = { issuer = "urn:oid:2.999.7.9", id = "family-e2e" }
+
+[[authz.party_binding.basic_user]]
+user = "ferroehr"
+key_issuer = "urn:ferroehr:basic-user"
+key = "ferroehr"
+
+# The person template a login's party key is written from, FerroEHR's
+# quickstart template, with the SCIM selectors it is provisioned through.
+[[authz.party_binding.person.template]]
+template_id = "openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0"
+default = true
+key = { path = "/details[id2]/items[id3]", type = "login" }
+user_name = { path = "/details[id2]/items[id3]", type = "scim_user_name" }
+external_id = { path = "/details[id2]/items[id3]", type = "scim_external_id" }
+
+[[authz.party_binding.person.attribute]]
+scim = "name.formatted"
+name = true
+path = { "openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0" = "/identities[id4]/details[id5]/items[id6]" }
+
+# The professional ROLE every bound PERSON performs.
+[authz.party_binding.professional_role]
+template_id = "openEHR-DEMOGRAPHIC-ROLE.healthcare_professional.v1.0.0"
+
 # Each node keeps its own map of patients to EHRs: the lane feeds FerroPIX
 # through its Patient Identity Sources, and the nodes ask no PIXm manager.
-[ehr_index]
-provider = "local"
+[record]
+subject_index = "local"

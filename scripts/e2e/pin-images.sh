@@ -13,8 +13,12 @@
 # reference in e2e/family/compose.yaml and demo/compose.yaml in place. An
 # image whose release tag has no published image yet keeps its pin and is
 # reported, so a release still building moves on the next run. --check
-# rewrites nothing and exits 1 when a pin is behind. The Refresh workflow runs
-# it beside render-releases.sh. No specification governs it: our own design.
+# rewrites nothing, prints one STALE line per pin behind (the pin, its file,
+# the release, and the release notes to read for the configuration the pin
+# moves with) and exits 1 when a pin is behind. The Refresh workflow runs it
+# beside render-releases.sh, and the Pin freshness workflow files an issue
+# per image from the --check lines. No specification governs it: our own
+# design.
 
 set -euo pipefail
 
@@ -83,8 +87,14 @@ for entry in "${IMAGES[@]}"; do
     grep -qE "ghcr\.io/ferrohealth/$name:[^@[:space:]]+@sha256:" "$file" || continue
     grep -qF "$want" "$file" && continue
     behind=1
+    if [[ "$check" -eq 1 ]]; then
+      old="$(grep -oE "ghcr\.io/ferrohealth/$name:[^@[:space:]]+@sha256:[0-9a-f]{64}" "$file" | grep -vF "$want" | head -n 1)"
+      old="${old#ghcr.io/ferrohealth/"$name":}"
+      printf 'STALE      ghcr.io/ferrohealth/%s: pinned %s in %s, latest release %s %s (https://github.com/FerroHEALTH/%s/releases/tag/%s) at %s@%s; check the Upgrade notes, Changed and Removed sections of every %s release after %s for configuration the pin moves with (https://github.com/FerroHEALTH/%s/releases)\n' \
+        "$name" "${old%@*}" "$file" "$repo" "$tag" "$repo" "$tag" "$version" "$sha" "$repo" "${old%@*}" "$repo"
+      continue
+    fi
     echo "pin-images: $file moves ghcr.io/ferrohealth/$name to $version"
-    [[ "$check" -eq 1 ]] && continue
     WANT="$want" NAME="$name" perl -pi -e '
       s{ghcr\.io/ferrohealth/\Q$ENV{NAME}\E:[^\@\s]+\@sha256:[0-9a-f]{64}}{$ENV{WANT}}g;
     ' "$file"

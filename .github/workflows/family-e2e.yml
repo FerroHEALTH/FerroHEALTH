@@ -9,7 +9,10 @@
 # It runs on demand, weekly, and on a pull request that touches the lane. The
 # Refresh workflow dispatches it onto its branch when a product release moves
 # a pin, because a pull request the workflow token opens starts no run of its
-# own. Nothing here builds an image or needs a secret.
+# own. Nothing here builds an image or needs a secret. A failed run that is
+# no pull request's (the schedule, a dispatch, the Refresh workflow's runs on
+# its branch) opens one issue or comments on the open one, so a red lane is
+# never silent.
 name: Family end-to-end
 
 on:
@@ -52,3 +55,54 @@ jobs:
 
       - name: Run the lane
         run: e2e/family/run.sh
+
+  # A red lane outside a pull request reaches the tracker: one open issue,
+  # with a comment per failed run while it stays open.
+  report:
+    name: report a red lane
+    needs: lane
+    if: failure() && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Open the issue, or comment on the open one
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TITLE: The family end-to-end lane is failing
+          EVENT: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          {
+            echo "The family end-to-end lane failed on \`$REF_NAME\` at \`$SHA\` ($EVENT): [the run]($RUN_URL)."
+            echo
+            echo "Its log names the product and the call of the broken step, followed by the stack's logs."
+          } > note.md
+          number="$(gh issue list --state open --limit 500 --json number,title \
+            --jq "[.[] | select(.title == \"$TITLE\")][0].number // empty")"
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body-file note.md
+            echo "commented on #$number"
+            exit 0
+          fi
+          {
+            cat note.md
+            echo
+            echo "Each further failed run outside a pull request comments here while this issue is open."
+            echo "When the lane fails on \`chore/refresh-release-fallbacks\`, a product release the Refresh"
+            echo "workflow moved the pins to broke it, and that pull request waits until the lane passes."
+          } > body.md
+          # fields.sh files the issue as a Bug at High priority and Low effort;
+          # this job's default token may not read the organisation's issue
+          # types, and then the issue lands bare for whoever picks it up.
+          bash scripts/gh/fields.sh new bug high low \
+            --title "$TITLE" --body-file body.md

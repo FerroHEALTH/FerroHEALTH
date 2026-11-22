@@ -56,6 +56,21 @@ the squash merge, which satisfies the ruleset's signature rule; a `git commit`
 pushed from the runner is unsigned and leaves the pull request blocked. Nothing in it
 needs a secret beyond the workflow token.
 
+`family-e2e.yml` runs the family end-to-end lane weekly, on dispatch and on a
+pull request that touches it. A failed run outside a pull request (the
+schedule, a dispatch, the Refresh workflow's runs on its branch) opens the
+issue `The family end-to-end lane is failing` through
+`scripts/gh/fields.sh new`, or comments on it while it is open, so a red lane
+is never silent.
+
+`pin-freshness.yml` runs `scripts/e2e/pin-images.sh --check` every Monday and
+opens one issue per product image pin behind its product's latest release or
+image index digest, titled `Pin behind the product's latest release: <image>`,
+naming the pin, the release and the release notes to read; it rewrites that
+issue's body while it stays open. A pin behind on `main` means the Refresh
+pull request did not merge, or the pin is the demo's, which moves by hand. A
+pull request that changes the lane runs it as a dry run that files nothing.
+
 ## The published site
 
 - The custom domain is configured in the repository's Pages settings.

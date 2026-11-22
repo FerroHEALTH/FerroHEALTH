@@ -108,8 +108,11 @@ in step.
 - `TRADEMARKS.md`: the brand terms (the artwork and the product names).
 - `.github/workflows/`: `ci.yml` (workflows, shell, prose, versions),
   `pages.yml` (assemble, check, deploy from main every six hours and on push),
-  and `refresh.yml` (re-render the committed fallbacks, open one pull request,
-  auto-merge).
+  `refresh.yml` (re-render the committed fallbacks, move the family lane's
+  pins, open one pull request, auto-merge), `family-e2e.yml` (the family
+  end-to-end lane, with one issue for a red run outside a pull request) and
+  `pin-freshness.yml` (one issue per product image pin behind its latest
+  release, weekly).
 
 ## Build and check
 

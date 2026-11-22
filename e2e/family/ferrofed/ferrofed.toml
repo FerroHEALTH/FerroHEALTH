@@ -12,25 +12,33 @@
 profile = "development"
 
 [server]
-drain_delay_ms = 0
-shutdown_timeout_ms = 30000
+drain_delay = "0ms"
+shutdown_timeout = "30s"
 
 [gateway]
-bindings_drain_timeout_ms = 5000
+bindings_drain_timeout = "5s"
 
 [registry]
 document = "/etc/ferrofed/registry.toml"
 
 [federation]
 id = "family-e2e"
-per_node_timeout_ms = 10000
-overall_timeout_ms = 25000
+per_node_timeout = "10s"
+overall_timeout = "25s"
 node_selection = "ask-all"
 
-# The lane's issuer, read over loopback in the issuer's network namespace.
-[auth]
+# The lane's issuer, read over loopback in the issuer's network namespace:
+# the clinician's token is admitted through the lane's one client, and its
+# IHE IUA claims carry the purpose of use.
+[[auth.issuer]]
 issuer = "http://localhost:8180/family"
+kind = "persons"
 audience = ["family-e2e-ferrofed"]
+first_party_clients = ["family-e2e-client"]
+
+[[auth.attributes]]
+issuer = "http://localhost:8180/family"
+mapping = "iua"
 
 # The gateway's development signing key, run.sh's file secret.
 [signing]
@@ -38,17 +46,19 @@ key_file = "/run/secrets/ferrofed/signing-key.pem"
 jwks_uri = "http://localhost:8080/.well-known/jwks.json"
 
 # FerroEHR's quickstart user, as the FerroFED quickstart sends it.
-[credentials."node-a-query"]
+[credentials."node-a-query".credentials]
 user = "ferroehr"
 password = "ferroehr"
 
-[credentials."node-b-query"]
+[credentials."node-b-query".credentials]
 user = "ferroehr"
 password = "ferroehr"
 
 # FerroPIX, reached over loopback in the issuer's network namespace. Each
 # node maps to the domain its ehr_ids are fed in.
 [[pixm.manager]]
+
+[pixm.manager.endpoint]
 url = "http://localhost:8070/fhir/"
 
 [pixm.manager.members]
@@ -56,7 +66,7 @@ url = "http://localhost:8070/fhir/"
 "node-b" = "urn:oid:2.999.20"
 
 # The OAuth 2.0 client credentials grant at the lane's issuer.
-[pixm.manager.credentials.oauth]
+[pixm.manager.endpoint.credentials.oauth]
 issuer = "http://localhost:8180/family"
 client_id = "family-e2e-ferrofed"
 client_auth = "client_secret_post"

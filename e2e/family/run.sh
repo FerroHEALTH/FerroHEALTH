@@ -55,6 +55,14 @@ readonly FIXTURES=(
   "opt/minimal_evaluation.opt d04d6b4a2e75726edd096a2ed545486b4d818f71ff4630ce4695c8165dd927e0"
   "composition/minimal_evaluation.json e644c18f2ef65f2f3f811015bf80112492a7cbac83c3650f34e7e2c55db85ad1"
 )
+# FerroEHR's professional PERSON and ROLE templates, which its party binding
+# names, from the FerroEHR release the nodes run (v5.7.0), each checked
+# against its SHA-256 before it is used.
+readonly DEFINITION_BASE=https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/7d85f0a1d2b86ca5bf2d43025090e6a102d99f74/deploy/definitions/professional
+readonly DEFINITIONS=(
+  "openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0.adls 22e0004006afb36e903841afecaa2541c7624f3f1d6e03dfeb5c9354ee370c7f"
+  "openEHR-DEMOGRAPHIC-ROLE.healthcare_professional.v1.0.0.adls a9cb003e2238dd4ba8d69b5184fc917102b538b198344d9507f303215b9a3fec"
+)
 
 keep=0
 for arg in "$@"; do
@@ -166,7 +174,7 @@ for tool in curl jq openssl; do
   command -v "$tool" >/dev/null || fail lane preflight "$tool is not installed"
 done
 
-mkdir -p "$WORK/secrets" "$WORK/fixtures/opt" "$WORK/fixtures/composition"
+mkdir -p "$WORK/secrets" "$WORK/fixtures/opt" "$WORK/fixtures/composition" "$WORK/definitions"
 : >"$WORK/answer"
 
 step lane "fetching the synthetic fixtures from the FerroBRIDGE testkit"
@@ -177,6 +185,16 @@ for entry in "${FIXTURES[@]}"; do
     fail lane "GET fixture $path" "could not be fetched"
   [[ "$(sha256 "$WORK/fixtures/$path")" == "$want" ]] ||
     fail lane "GET fixture $path" "its SHA-256 is not the pinned one"
+done
+
+step lane "fetching FerroEHR's professional templates"
+for entry in "${DEFINITIONS[@]}"; do
+  name="${entry%% *}"
+  want="${entry##* }"
+  curl --proto '=https' --proto-redir '=https' -fsSL "$DEFINITION_BASE/$name" -o "$WORK/definitions/$name" ||
+    fail lane "GET definition $name" "could not be fetched"
+  [[ "$(sha256 "$WORK/definitions/$name")" == "$want" ]] ||
+    fail lane "GET definition $name" "its SHA-256 is not the pinned one"
 done
 
 step lane "writing the development secrets under .work/"
@@ -195,6 +213,17 @@ printf 'postgresql://ferropix:%s@ferropix-postgres:5432/ferropix' "$pix_password
 chmod 644 "$WORK"/secrets/*
 
 trap cleanup EXIT
+
+step lane "starting the issuer and reading its key set for the FerroEHR nodes"
+compose up -d issuer || fail lane "compose up issuer" "the service did not start"
+mkdir -p "$WORK/issuer"
+for _ in $(seq 1 60); do
+  curl -fsS "$ISSUER/jwks" -o "$WORK/issuer/jwks.json" 2>/dev/null && break
+  sleep 1
+done
+jq -e '.keys | length > 0' "$WORK/issuer/jwks.json" >/dev/null 2>&1 ||
+  fail issuer "GET /family/jwks" "no key set"
+chmod 644 "$WORK/issuer/jwks.json"
 
 first=(issuer ferroterm ferroehr-a ferroehr-b ferropix)
 step lane "starting ${first[*]}"
@@ -227,6 +256,18 @@ expect FerroTERM "GET ConceptMap/\$translate" 200 "$status"
 holds FerroTERM "GET ConceptMap/\$translate" \
   '[.parameter[] | select(.name == "match") | .part[] | select(.name == "concept") | .valueCoding.code] | index("T-ALPHA") != null' \
   "alpha does not translate to T-ALPHA through the mounted concept map"
+
+# FerroEHR binds every Basic login to a demographic PERSON: the lane's SCIM
+# client provisions the Basic user at each node, and a User that exists
+# already (409) is kept.
+for root in "${NODE_A%/ferroehr/*}" "${NODE_B%/ferroehr/*}"; do
+  step FerroEHR "$root: POST /scim/v2/Users (the Basic user)"
+  scim_token="$(token family-e2e-scim ferroehr/scim)"
+  status="$(call POST "$root/scim/v2/Users" -H "Authorization: Bearer $scim_token" \
+    -H 'Content-Type: application/scim+json' \
+    --data '{"schemas":["urn:ietf:params:scim:schemas:core:2.0:User","urn:ietf:params:scim:schemas:extension:ferrohealth:2.0:User"],"userName":"ferroehr","urn:ietf:params:scim:schemas:extension:ferrohealth:2.0:User":{"loginIdentifier":"ferroehr"}}')"
+  [[ "$status" == 201 || "$status" == 409 ]] || fail FerroEHR "$root POST /scim/v2/Users" "answered $status"
+done
 
 # The two FerroEHR nodes: the templates, the patient's EHR at each, and one
 # composition committed directly at each.

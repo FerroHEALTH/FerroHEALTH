@@ -53,6 +53,13 @@ x-ferroehr-node: &ferroehr-node
   configs:
     - source: ferroehr-config
       target: /etc/ferroehr/ferroehr.toml
+  # The lane issuer's key set, which run.sh reads from the issuer before the
+  # nodes start.
+  volumes:
+    - type: bind
+      source: ./.work/issuer
+      target: /etc/ferroehr/issuer
+      read_only: true
   # The configuration is a file mount, so the root filesystem can be
   # read-only, which FerroEHR's quickstart notes for a mounted file.
   read_only: true
@@ -64,6 +71,32 @@ x-ferroehr-node: &ferroehr-node
     timeout: 5s
     retries: 30
     start_period: 20s
+
+# Stores FerroEHR's professional PERSON and ROLE templates, which the party
+# binding of ferroehr.toml names, in one node's database and exits; the node
+# refuses to boot while its store lacks them. run.sh fetches both files.
+x-ferroehr-definitions: &ferroehr-definitions
+  <<: *hardened
+  image: ghcr.io/ferrohealth/ferroehr:5.7.0@sha256:44c9268cb8a154df118a10ffe84329633f22923ea2cc54261ff0cea57a2ee7e7
+  command:
+    - definitions
+    - load
+    - /etc/ferroehr/definitions/openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0.adls
+    - /etc/ferroehr/definitions/openEHR-DEMOGRAPHIC-ROLE.healthcare_professional.v1.0.0.adls
+  configs:
+    - source: ferroehr-config
+      target: /etc/ferroehr/ferroehr.toml
+  volumes:
+    - type: bind
+      source: ./.work/definitions
+      target: /etc/ferroehr/definitions
+      read_only: true
+    - type: bind
+      source: ./.work/issuer
+      target: /etc/ferroehr/issuer
+      read_only: true
+  read_only: true
+  restart: "no"
 
 # One node's database, FerroEHR's own PostgreSQL image.
 x-ferroehr-postgres: &ferroehr-postgres
@@ -108,7 +141,8 @@ services:
       - "127.0.0.1:8070:8070"
     environment:
       SERVER_PORT: "8180"
-      # One token callback for the client credentials grant. A Patient
+      # One token callback for the client credentials grant. The SCIM client
+      # that provisions the nodes' Basic user is its own subject. A Patient
       # Identity Source is its own subject, as PIXm asks, and so is FerroFED's
       # PIXm client, a machine to FerroPIX; every other client acts for one
       # synthetic clinician with the IHE IUA purpose of use FerroFED requires.
@@ -116,6 +150,9 @@ services:
       # RFC 9068 `at+jwt`. `$$` is a literal `$` to compose.
       JSON_CONFIG: >-
         {"tokenCallbacks":[{"issuerId":"family","requestMappings":[
+        {"requestParam":"client_id","match":"family-e2e-scim","typeHeader":"at+jwt",
+        "claims":{"sub":"$${clientId}","client_id":"$${clientId}",
+        "aud":["ferroehr-scim"],"scope":"$${scope}"}},
         {"requestParam":"client_id","match":"family-e2e-(source-.*|ferrofed)","typeHeader":"at+jwt",
         "claims":{"sub":"$${clientId}","client_id":"$${clientId}",
         "aud":["http://localhost:8070/fhir"],"scope":"$${scope}"}},
@@ -156,20 +193,45 @@ services:
   ferroehr-a-postgres:
     <<: *ferroehr-postgres
 
+  ferroehr-a-definitions:
+    <<: *ferroehr-definitions
+    depends_on:
+      ferroehr-a-postgres:
+        condition: service_healthy
+    environment:
+      FERROEHR__DATABASE__URL: postgres://ferroehr:ferroehr@ferroehr-a-postgres:5432/ferroehr
+      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
+      FERROEHR__USAGE_REPORT__ENABLED: "false"
+      FERROEHR__AUTH__SCIM__PUBLIC_BASE_URL: http://127.0.0.1:8081
+
   ferroehr-b-postgres:
     <<: *ferroehr-postgres
+
+  ferroehr-b-definitions:
+    <<: *ferroehr-definitions
+    depends_on:
+      ferroehr-b-postgres:
+        condition: service_healthy
+    environment:
+      FERROEHR__DATABASE__URL: postgres://ferroehr:ferroehr@ferroehr-b-postgres:5432/ferroehr
+      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
+      FERROEHR__USAGE_REPORT__ENABLED: "false"
+      FERROEHR__AUTH__SCIM__PUBLIC_BASE_URL: http://127.0.0.1:8082
 
   ferroehr-a:
     <<: *ferroehr-node
     depends_on:
       ferroehr-a-postgres:
         condition: service_healthy
+      ferroehr-a-definitions:
+        condition: service_completed_successfully
     ports:
       - "127.0.0.1:8081:8080"
     environment:
-      FERROEHR__DB__URL: postgres://ferroehr:ferroehr@ferroehr-a-postgres:5432/ferroehr
+      FERROEHR__DATABASE__URL: postgres://ferroehr:ferroehr@ferroehr-a-postgres:5432/ferroehr
       FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
-      FERROEHR__REST__SYSTEM_ID: node-a.family-e2e.local
+      FERROEHR__API__SYSTEM_ID: node-a.family-e2e.local
+      FERROEHR__AUTH__SCIM__PUBLIC_BASE_URL: http://127.0.0.1:8081
       FERROEHR__TELEMETRY__FORMAT: json
       FERROEHR__USAGE_REPORT__ENABLED: "false"
 
@@ -178,12 +240,15 @@ services:
     depends_on:
       ferroehr-b-postgres:
         condition: service_healthy
+      ferroehr-b-definitions:
+        condition: service_completed_successfully
     ports:
       - "127.0.0.1:8082:8080"
     environment:
-      FERROEHR__DB__URL: postgres://ferroehr:ferroehr@ferroehr-b-postgres:5432/ferroehr
+      FERROEHR__DATABASE__URL: postgres://ferroehr:ferroehr@ferroehr-b-postgres:5432/ferroehr
       FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
-      FERROEHR__REST__SYSTEM_ID: node-b.family-e2e.local
+      FERROEHR__API__SYSTEM_ID: node-b.family-e2e.local
+      FERROEHR__AUTH__SCIM__PUBLIC_BASE_URL: http://127.0.0.1:8082
       FERROEHR__TELEMETRY__FORMAT: json
       FERROEHR__USAGE_REPORT__ENABLED: "false"
 
@@ -191,7 +256,7 @@ services:
   # facade compiles them at boot against the templates the CDR serves.
   ferrobridge:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferrobridge:0.0.24@sha256:6e14c783955da9ecd5683fbe781542580e2ebae18d0f4c07e888a1c086e05e59
+    image: ghcr.io/ferrohealth/ferrobridge:0.0.27@sha256:55cd3c398a58e9ebb5817fe5a694980c36f23b06258ee808574050b5249d521c
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:
@@ -267,7 +332,7 @@ services:
   # are file secrets run.sh writes under .work/.
   ferropix:
     <<: *hardened
-    image: ghcr.io/ferrohealth/ferropix:0.0.30@sha256:6f0a9cc3f5246182e0e2549dc3a551b38067e0001768bdd62108d86e6a685e87
+    image: ghcr.io/ferrohealth/ferropix:0.0.39@sha256:b91cff886b9ec1413706630c25e80c08c6bf09a223e1916704a2421f7071a674
     restart: unless-stopped
     network_mode: service:issuer
     depends_on:
@@ -305,7 +370,7 @@ services:
   # `ferropix` role ferropix/10-ferropix-role.sh creates on the first start;
   # the superuser's password is the ferropix-postgres-password secret.
   ferropix-postgres:
-    image: postgres:18.6@sha256:edb0c08dc33befd0262ab3b5cf1c4f3f8cfd8b09e88c05b45adee29d6761ddb6
+    image: postgres:19.0@sha256:bb6e70add742cd868fb62cb3b2f67d1dd2bdd2b65a521e778420748753687c60
     restart: unless-stopped
     environment:
       POSTGRES_DB: ferropix

@@ -208,7 +208,12 @@ step "writing the development secrets under .work/secrets"
 [[ -s "$WORK/secrets/ferrofed-signing-key.pem" ]] ||
   openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-384 -pkeyopt ec_param_enc:named_curve \
     -out "$WORK/secrets/ferrofed-signing-key.pem" 2>/dev/null
-printf 'demo-ferrofed-gateway' >"$WORK/secrets/ferrofed-gateway-secret"
+# Each member's database URL; 20-member-databases.sh and compose.yaml's
+# ferroehr-postgres create the roles with these demo passwords.
+for n in a b c d; do
+  printf 'postgres://ferroehr_%s:ferroehr_%s_demo@ferroehr-postgres:5432/ferroehr_%s' "$n" "$n" "$n" \
+    >"$WORK/secrets/ferroehr-$n-db-url"
+done
 printf 'demo-ferrofed-pix' >"$WORK/secrets/ferrofed-pix-secret"
 openssl rand -base64 32 >"$WORK/secrets/ferropix-data-key"
 openssl rand -hex 16 | tr -d '\n' >"$WORK/secrets/ferropix-postgres-password"

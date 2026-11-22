@@ -285,24 +285,24 @@ compose up -d --wait --wait-timeout 900 keycloak ferroterm ferropix \
 # Keycloak users at every member: each User carries its login, the Basic user
 # name or the Keycloak user id the import fixes, as its binding key.
 scim_token() {
-  local status
+  local client="$1" status
   status="$(call POST "$KC_SERVICES/protocol/openid-connect/token" -d grant_type=client_credentials \
-    -d "client_id=$1" -d "client_secret=demo-$1" -d scope=ferroehr/scim)"
-  [[ "$status" == 200 ]] || fail "Keycloak token for $1 answered $status"
+    -d "client_id=$client" -d "client_secret=demo-$client" -d scope=ferroehr/scim)"
+  [[ "$status" == 200 ]] || fail "Keycloak token for $client answered $status"
   jq -er .access_token "$WORK/answer"
 }
 
 # provision MEMBER TOKEN USERNAME LOGIN FORMATTED_NAME: one SCIM User; an
 # existing one (409) is kept.
 provision() {
-  local status
-  status="$(call POST "http://127.0.0.1:808$(index "$1")/scim/v2/Users" -H "Authorization: Bearer $2" \
-    -H 'Content-Type: application/scim+json' --data-binary "$(jq -n --arg u "$3" --arg l "$4" --arg n "$5" '{
+  local member="$1" bearer="$2" user_name="$3" login="$4" name="$5" status
+  status="$(call POST "http://127.0.0.1:808$(index "$member")/scim/v2/Users" -H "Authorization: Bearer $bearer" \
+    -H 'Content-Type: application/scim+json' --data-binary "$(jq -n --arg u "$user_name" --arg l "$login" --arg n "$name" '{
       schemas: ["urn:ietf:params:scim:schemas:core:2.0:User",
         "urn:ietf:params:scim:schemas:extension:ferrohealth:2.0:User"],
       userName: $u, name: {formatted: $n},
       "urn:ietf:params:scim:schemas:extension:ferrohealth:2.0:User": {loginIdentifier: $l}}')")"
-  [[ "$status" =~ ^(201|409)$ ]] || fail "member $1 SCIM POST /Users for $3 answered $status"
+  [[ "$status" =~ ^(201|409)$ ]] || fail "member $member SCIM POST /Users for $user_name answered $status"
 }
 
 step "provisioning the Basic user and the demo users as persons at every member (SCIM)"

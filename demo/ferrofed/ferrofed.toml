@@ -6,27 +6,30 @@
 # and resolves a patient to each member's ehr_id through FerroPIX (ITI-83).
 # Every key is on <https://ferrofed.eu/docs/operate/configuration.html>.
 #
-# DEMO CREDENTIALS, NOT FOR PRODUCTION: the Keycloak client secrets, which
-# up.sh writes as files because managed revisions hold no inline secret.
+# DEMO CREDENTIALS, NOT FOR PRODUCTION: the signing key and the Keycloak
+# client secret, which up.sh writes as files because managed revisions hold
+# no inline secret.
 
 # The development profile admits the members over plain http inside the
 # compose network.
 profile = "development"
 
 [server]
-drain_delay_ms = 0
+drain_delay = "0ms"
+# Template uploads of a few MiB, as the members take them.
+body_limit = "64MiB"
+
+[gateway]
 # The address clients reach, which every Location names.
 public_url = "http://localhost:8080"
-# Template uploads of a few MiB, as the members take them.
-body_limit_bytes = 67108864
 
 [registry]
 document = "/etc/ferrofed/registry.toml"
 
 [federation]
 id = "ferrohealth-demo"
-per_node_timeout_ms = 10000
-overall_timeout_ms = 25000
+per_node_timeout = "10s"
+overall_timeout = "25s"
 node_selection = "ask-all"
 # A query that names no namespace is about the demo's patient identifier.
 default_namespace = "urn:oid:2.999.1.1"
@@ -34,17 +37,38 @@ fan_out_stored_queries = true
 fan_out_template_upload = true
 demographic_endpoint = "member-a-query"
 
-# product_scope and ca_file belong to [auth], never to an [[auth.issuer]].
 [auth]
-issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
-audience = ["ferrofed"]
-token_profile = "jwt"
-ca_file = "/run/demo-tls/ca.crt"
 product_scope = "__ferrofed.operator"
 
+# The demo realm: people sign in through the console, and the seed's
+# demo-seed client acts for a synthetic clinician with the IHE IUA purpose of
+# use. The gateway's own service account reaches the members.
+[[auth.issuer]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+kind = "persons"
+profile = "keycloak"
+audience = ["ferrofed"]
+first_party_clients = ["ferrofed-console", "demo-seed"]
+app_only = [{ subjects = ["de000000-0000-4000-8000-000000000001"] }]
+# FerroFED 0.0.20 takes no TLS table in [auth]: compose.yaml points
+# SSL_CERT_FILE at the demo CA, which the issuer's metadata is read with.
+
+# What the realm's tokens state about their professional: the IHE IUA
+# extension, which the demo-audiences and ihe-iua-treat scopes write.
+[[auth.attributes]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+mapping = "iua"
+
+[[trust.issuer]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+demographic_clients = ["demo-seed"]
+
+# The gateway's signing key, which signs the caller's identity on every
+# request to a member and the client assertion of its grant at Keycloak. The
+# key set is published under gateway.public_url, and Keycloak reads it at
+# http://ferrofed:8080/.well-known/jwks.json inside the compose network.
 [signing]
 key_file = "/run/secrets/ferrofed-signing-key.pem"
-# The JWK Set is published under server.public_url, which FerroFED derives.
 
 # The stored-query registry and the configuration revisions, kept on the
 # ferrofed-state volume.
@@ -61,41 +85,67 @@ path = "/var/lib/ferrofed/config-revisions.redb"
 listen = "0.0.0.0:9464"
 allow_remote = true
 
-[credentials."member-a-query".oauth]
+# Each member is reached under the gateway's own client credentials token,
+# its grant authenticated by a client assertion signed with the gateway's
+# key. No onward lane is configured, so every member request is the
+# gateway's: reads and template uploads, never a person's commit.
+[credentials."member-a-query".credentials.oauth]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
 client_id = "ferrofed-gateway"
-client_auth = "client_secret_post"
-client_secret_file = "/run/secrets/ferrofed-gateway-secret"
+client_auth = "private_key_jwt"
+private_key_file = "/run/secrets/ferrofed-signing-key.pem"
 scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
-ca_file = "/run/demo-tls/ca.crt"
 
-[credentials."member-b-query".oauth]
-issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
-client_id = "ferrofed-gateway"
-client_auth = "client_secret_post"
-client_secret_file = "/run/secrets/ferrofed-gateway-secret"
-scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
-ca_file = "/run/demo-tls/ca.crt"
+[credentials."member-a-query".credentials.oauth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
-[credentials."member-c-query".oauth]
+[credentials."member-b-query".credentials.oauth]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
 client_id = "ferrofed-gateway"
-client_auth = "client_secret_post"
-client_secret_file = "/run/secrets/ferrofed-gateway-secret"
+client_auth = "private_key_jwt"
+private_key_file = "/run/secrets/ferrofed-signing-key.pem"
 scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
-ca_file = "/run/demo-tls/ca.crt"
 
-[credentials."member-d-query".oauth]
+[credentials."member-b-query".credentials.oauth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+[credentials."member-c-query".credentials.oauth]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
 client_id = "ferrofed-gateway"
-client_auth = "client_secret_post"
-client_secret_file = "/run/secrets/ferrofed-gateway-secret"
+client_auth = "private_key_jwt"
+private_key_file = "/run/secrets/ferrofed-signing-key.pem"
 scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
-ca_file = "/run/demo-tls/ca.crt"
+
+[credentials."member-c-query".credentials.oauth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+[credentials."member-d-query".credentials.oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrofed-gateway"
+client_auth = "private_key_jwt"
+private_key_file = "/run/secrets/ferrofed-signing-key.pem"
+scope = "system/aql-*.cruds system/template-*.cruds system/composition-*.cruds"
+
+[credentials."member-d-query".credentials.oauth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
 # FerroPIX, over HTTPS from the demo CA. Each member maps to its ehr_id domain.
 [[pixm.manager]]
+
+[pixm.manager.endpoint]
 url = "https://ferropix:8080/fhir/"
+
+[pixm.manager.endpoint.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+[pixm.manager.endpoint.credentials.oauth]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrofed-pix"
+client_auth = "client_secret_post"
+client_secret_file = "/run/secrets/ferrofed-pix-secret"
+scope = "system/Patient.rs"
+
+[pixm.manager.endpoint.credentials.oauth.tls]
 trust_roots_file = "/run/demo-tls/ca.crt"
 
 [pixm.manager.members]
@@ -105,35 +155,29 @@ trust_roots_file = "/run/demo-tls/ca.crt"
 "member-d" = "urn:oid:2.999.2.4"
 "member-e" = "urn:oid:2.999.2.5"
 
-[pixm.manager.credentials.oauth]
+# PDQm against FerroPIX: the Demographics service.
+[pdqm]
+transaction = "iti-78"
+master = "urn:oid:2.999.1.1"
+
+[pdqm.endpoint]
+url = "https://ferropix:8080/fhir/"
+
+[pdqm.endpoint.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+[pdqm.endpoint.credentials.oauth]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
 client_id = "ferrofed-pix"
 client_auth = "client_secret_post"
 client_secret_file = "/run/secrets/ferrofed-pix-secret"
 scope = "system/Patient.rs"
-ca_file = "/run/demo-tls/ca.crt"
 
-# PDQm against FerroPIX: the Demographics service.
-[pdqm]
-url = "https://ferropix:8080/fhir/"
-transaction = "iti-78"
-master = "urn:oid:2.999.1.1"
+[pdqm.endpoint.credentials.oauth.tls]
 trust_roots_file = "/run/demo-tls/ca.crt"
 
 [pdqm.namespaces]
 "urn:oid:2.16.840.1.113883.2.4.6.3" = "urn:oid:2.16.840.1.113883.2.4.6.3"
-
-[pdqm.credentials.oauth]
-issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
-client_id = "ferrofed-pix"
-client_auth = "client_secret_post"
-client_secret_file = "/run/secrets/ferrofed-pix-secret"
-scope = "system/Patient.rs"
-ca_file = "/run/demo-tls/ca.crt"
-
-[[trust.issuer]]
-issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
-demographic_clients = ["demo-seed"]
 
 [usage_report]
 enabled = false

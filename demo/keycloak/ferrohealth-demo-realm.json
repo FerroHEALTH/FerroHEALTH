@@ -712,8 +712,7 @@
       "enabled": true,
       "protocol": "openid-connect",
       "publicClient": false,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "demo-ferrofed-gateway",
+      "clientAuthenticatorType": "client-jwt",
       "standardFlowEnabled": false,
       "directAccessGrantsEnabled": false,
       "serviceAccountsEnabled": true,
@@ -742,7 +741,11 @@
           }
         }
       ],
-      "attributes": {}
+      "attributes": {
+        "use.jwks.url": "true",
+        "jwks.url": "http://ferrofed:8080/.well-known/jwks.json",
+        "token.endpoint.auth.signing.alg": "ES384"
+      }
     },
     {
       "clientId": "ferrofed-pix",
@@ -1222,6 +1225,7 @@
   ],
   "users": [
     {
+      "id": "de000000-0000-4000-8000-000000000101",
       "username": "demo",
       "enabled": true,
       "emailVerified": true,
@@ -1246,6 +1250,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000102",
       "username": "steward",
       "enabled": true,
       "emailVerified": true,
@@ -1265,6 +1270,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000103",
       "username": "auditor",
       "enabled": true,
       "emailVerified": true,
@@ -1284,6 +1290,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000001",
       "username": "service-account-ferrofed-gateway",
       "enabled": true,
       "serviceAccountClientId": "ferrofed-gateway",
@@ -1292,6 +1299,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000002",
       "username": "service-account-ferrofed-pix",
       "enabled": true,
       "serviceAccountClientId": "ferrofed-pix",
@@ -1300,6 +1308,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000003",
       "username": "service-account-ferrobridge-cdr",
       "enabled": true,
       "serviceAccountClientId": "ferrobridge-cdr",
@@ -1308,6 +1317,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000004",
       "username": "service-account-ferroehr-a",
       "enabled": true,
       "serviceAccountClientId": "ferroehr-a",
@@ -1316,6 +1326,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000005",
       "username": "service-account-ferroehr-b",
       "enabled": true,
       "serviceAccountClientId": "ferroehr-b",
@@ -1324,6 +1335,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000006",
       "username": "service-account-ferroehr-c",
       "enabled": true,
       "serviceAccountClientId": "ferroehr-c",
@@ -1332,6 +1344,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000007",
       "username": "service-account-ferroehr-d",
       "enabled": true,
       "serviceAccountClientId": "ferroehr-d",
@@ -1340,6 +1353,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000008",
       "username": "service-account-hospital-a",
       "enabled": true,
       "serviceAccountClientId": "hospital-a",
@@ -1348,6 +1362,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-000000000009",
       "username": "service-account-hospital-b",
       "enabled": true,
       "serviceAccountClientId": "hospital-b",
@@ -1356,6 +1371,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-00000000000a",
       "username": "service-account-hospital-c",
       "enabled": true,
       "serviceAccountClientId": "hospital-c",
@@ -1364,6 +1380,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-00000000000b",
       "username": "service-account-hospital-d",
       "enabled": true,
       "serviceAccountClientId": "hospital-d",
@@ -1372,6 +1389,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-00000000000c",
       "username": "service-account-demo-seed",
       "enabled": true,
       "serviceAccountClientId": "demo-seed",
@@ -1381,6 +1399,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-00000000000d",
       "username": "service-account-demo-seed-fhir",
       "enabled": true,
       "serviceAccountClientId": "demo-seed-fhir",
@@ -1389,6 +1408,7 @@
       ]
     },
     {
+      "id": "de000000-0000-4000-8000-00000000000e",
       "username": "service-account-demo-steward",
       "enabled": true,
       "serviceAccountClientId": "demo-steward",

@@ -3,16 +3,26 @@
 #
 # The FerroTERM console in the demo, mounted read-only and named by its _CONFIG variable in
 # compose.yaml. It signs in through the demo realm with PKCE and forwards the
-# signed-in user's access token. It reads no CA file of its own, so
-# compose.yaml points SSL_CERT_FILE at the demo CA.
+# signed-in user's access token. It trusts the demo CA for FerroTERM's
+# certificate; compose.yaml points SSL_CERT_FILE at it for Keycloak's.
 #
 # DEMO CREDENTIALS, NOT FOR PRODUCTION: the Keycloak client secret below.
 
 [ferroterm]
-base_url = "http://ferroterm:8080/"
 # The address a reader's browser reaches FerroTERM at.
-public_url = "http://localhost:8085/"
-admin_url = "http://ferroterm:8081/"
+public_url = "https://localhost:8085/"
+
+[ferroterm.server]
+url = "https://ferroterm:8080/"
+
+[ferroterm.server.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+[ferroterm.admin]
+url = "https://ferroterm:8081/"
+
+[ferroterm.admin.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
 [oidc]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"

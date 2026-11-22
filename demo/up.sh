@@ -28,6 +28,7 @@ cd "$here"
 readonly WORK="$here/.work"
 readonly TLS="$WORK/tls"
 readonly KC=https://keycloak.localhost:8443/realms/ferrohealth-demo
+readonly KC_SERVICES=https://keycloak.localhost:8443/realms/ferrohealth-demo-services
 readonly PIX=https://localhost:8070/fhir
 readonly FED=http://127.0.0.1:8080
 readonly BRIDGE=http://127.0.0.1:8090/fhir
@@ -47,6 +48,19 @@ readonly FHIR_PACKAGES=(
   "https://packages2.fhir.org/web/hl7.terminology.r4-7.5.0.tgz 1da3004587602c3f5120061abc2309fef1f96668a477a9964354fa9af6fa6e60"
   "https://packages2.fhir.org/web/hl7.fhir.uv.v2mappings-1.0.0.tgz 49004948e7589ccc663b3df89f831b3cbf4c2dd1ef67c859633dd50cc81581a0"
 )
+# FerroBRIDGE's HL7 v2 value maps, the package FerroPIX's HL7 v2 face
+# translates through beside the guide's, from FerroBRIDGE v0.0.27.
+readonly HL7V2_VALUES_BASE=https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/3b1354628f0c1fcba8a66404a31d48427b71100f/terminology/hl7v2-values
+readonly HL7V2_VALUES=(
+  "ConceptMap-table-address-type-to-hl70190.json d28b3ff53aa63821b301b5683d946480673b1ac1e0421615e7c979c2ad5bda68"
+  "ConceptMap-table-address-use-to-hl70190.json 46a80f233cccb42f4bf671c612f70049e234ab46414eb31d56d3e32b08cf7aff"
+  "ConceptMap-table-administrative-gender-to-hl70001.json ba0afd6497dffc23e2a2819654ccb6451efb480e970a2e713f23315f67c78d63"
+  "ConceptMap-table-contact-point-system-to-hl70202.json 97035f7e5ba61a15ee47e568b4b74b7650d111cf18d8b9d33f1563c77ba4912c"
+  "ConceptMap-table-hl70202-equipment-to-contact-point-system.json 66f97c511a5006e633a872b75c095ab783405b3990d107d6e1835c27e323abf2"
+  "ConceptMap-table-hl70202-to-contact-point-use.json 6a033e040b94475c8984109c3e79d030f46e4376e0ef34dd6e868fba9e34db67"
+  "ConceptMap-table-name-use-to-hl70200.json 85ce27a015366a0c42973c68c0cccf567f1822df54d030ac25fdbb5ab5e92177"
+  "fhir-package.json 7aa6a9cab30cb23903f1eacd43dc1da8b7df0a50d965c28c6c39cf20f132679a"
+)
 # FerroEHR v5.7.0, the release the members run: its sandbox seed and the
 # corpus files the seed reads.
 readonly FERROEHR_REPO=https://github.com/FerroHEALTH/FerroEHR.git
@@ -54,6 +68,12 @@ readonly FERROEHR_COMMIT=7d85f0a1d2b86ca5bf2d43025090e6a102d99f74
 readonly FERROEHR_PATHS=(
   /scripts/sandbox/ /corpus/archetypes/adl2/ /corpus/fixtures/adl2/ /corpus/fixtures/composition/
   /corpus/templates/ckm/ /corpus/templates/dt_coded_text_binding_sct.opt
+  /deploy/definitions/professional/
+)
+# The professional PERSON and ROLE every member's party mapping writes with.
+readonly FERROEHR_DEFINITIONS=(
+  openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0.adls
+  openEHR-DEMOGRAPHIC-ROLE.healthcare_professional.v1.0.0.adls
 )
 # The family lane's synthetic templates and composition, from FerroBRIDGE's
 # testkit, pinned as e2e/family/run.sh pins them.
@@ -164,19 +184,23 @@ if [[ -n "$(compose ps -q 2>/dev/null)" ]]; then
   exit 1
 fi
 
-mkdir -p "$TLS" "$WORK/secrets" "$WORK/ferroterm-releases" "$WORK/ferroterm-packages" "$WORK/fixtures/opt" "$WORK/fixtures/composition"
+mkdir -p "$TLS" "$WORK/secrets" "$WORK/ferroterm-releases" "$WORK/ferroterm-packages/ferrobridge-hl7v2-values" \
+  "$WORK/fixtures/opt" "$WORK/fixtures/composition" "$WORK/definitions"
 : >"$WORK/answer"
 
 if [[ ! -s "$TLS/ca.crt" ]]; then
-  step "making the development CA and the Keycloak and FerroPIX certificates under .work/tls"
+  step "making the development CA under .work/tls (demo only; its key never leaves .work)"
   openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:P-256 -pkeyopt ec_param_enc:named_curve -out "$TLS/ca.key" 2>/dev/null
   printf '[req]\ndistinguished_name=dn\n[dn]\n[ca]\nbasicConstraints=critical,CA:TRUE,pathlen:0\nkeyUsage=critical,keyCertSign,cRLSign\nsubjectKeyIdentifier=hash\n' \
     >"$TLS/ca.cnf"
   openssl req -x509 -new -key "$TLS/ca.key" -sha256 -days 825 -config "$TLS/ca.cnf" -extensions ca \
     -subj "/CN=FerroHEALTH demo CA (not for production)" -out "$TLS/ca.crt" 2>/dev/null
-  leaf keycloak "DNS:keycloak.localhost,DNS:localhost,IP:127.0.0.1"
-  leaf ferropix "DNS:ferropix,DNS:localhost,IP:127.0.0.1"
 fi
+# The servers that speak TLS inside the network: Keycloak (the issuer),
+# FerroPIX and FerroTERM.
+[[ -s "$TLS/keycloak.crt" ]] || leaf keycloak "DNS:keycloak.localhost,DNS:localhost,IP:127.0.0.1"
+[[ -s "$TLS/ferropix.crt" ]] || leaf ferropix "DNS:ferropix,DNS:localhost,IP:127.0.0.1"
+[[ -s "$TLS/ferroterm.crt" ]] || leaf ferroterm "DNS:ferroterm,DNS:localhost,IP:127.0.0.1"
 
 step "writing the development secrets under .work/secrets"
 # The containers run as users other than yours and must read these files, so
@@ -194,7 +218,7 @@ printf 'postgresql://ferropix:%s@ferropix-postgres:5432/ferropix' "$pix_password
   >"$WORK/secrets/ferropix-db-url"
 chmod 644 "$WORK"/secrets/* "$TLS"/*
 
-step "fetching ICD-10-CM, two FHIR packages, the FerroEHR sandbox dataset and the FerroBRIDGE fixtures"
+step "fetching ICD-10-CM, three FHIR packages, the FerroEHR sandbox dataset and the FerroBRIDGE fixtures"
 releases=()
 for entry in "${ICD10CM[@]}"; do
   url="${entry%% *}"
@@ -213,12 +237,17 @@ for entry in "${FHIR_PACKAGES[@]}"; do
     tar -xzf "$WORK/ferroterm-releases/${url##*/}" -C "$WORK/ferroterm-packages/$name" package
   fi
 done
+for entry in "${HL7V2_VALUES[@]}"; do
+  path="${entry%% *}"
+  fetch "$HL7V2_VALUES_BASE/$path" "$WORK/ferroterm-packages/ferrobridge-hl7v2-values/$path" "${entry##* }"
+done
 for entry in "${FIXTURES[@]}"; do
   path="${entry%% *}"
   fetch "$FIXTURE_BASE/$path" "$WORK/fixtures/$path" "${entry##* }"
 done
 ferroehr_src="$WORK/ferroehr-$FERROEHR_COMMIT"
-if [[ "$(git -C "$ferroehr_src" rev-parse HEAD 2>/dev/null)" != "$FERROEHR_COMMIT" ]]; then
+if [[ "$(git -C "$ferroehr_src" rev-parse HEAD 2>/dev/null)" != "$FERROEHR_COMMIT" ||
+  ! -d "$ferroehr_src/deploy/definitions/professional" ]]; then
   rm -rf "$ferroehr_src"
   git init -q "$ferroehr_src"
   git -C "$ferroehr_src" remote add origin "$FERROEHR_REPO"
@@ -227,6 +256,11 @@ if [[ "$(git -C "$ferroehr_src" rev-parse HEAD 2>/dev/null)" != "$FERROEHR_COMMI
     fail "could not fetch FerroEHR $FERROEHR_COMMIT"
   git -C "$ferroehr_src" checkout -q FETCH_HEAD
 fi
+# What each member's definitions one-shot stores before the member serves.
+for definition in "${FERROEHR_DEFINITIONS[@]}"; do
+  cp "$ferroehr_src/deploy/definitions/professional/$definition" "$WORK/definitions/"
+done
+cp "$WORK/fixtures/opt/diagnose.opt" "$WORK/fixtures/opt/minimal_evaluation.opt" "$WORK/definitions/"
 
 step "pulling the images"
 compose --profile build pull --quiet
@@ -239,6 +273,41 @@ step "starting Keycloak, FerroTERM, FerroPIX, the four FerroEHR members and Ferr
 compose up -d --wait --wait-timeout 900 keycloak ferroterm ferropix \
   ferroehr-a ferroehr-b ferroehr-c ferroehr-d ferrofed ||
   fail "a service did not turn healthy"
+
+# Every member binds each person to a demographic PERSON, so the services
+# realm's two SCIM clients provision the Basic user and the realm's three
+# users at every member: each User carries its login, the Basic user name or
+# the Keycloak user id the realm import fixes, as its binding key.
+scim_token() {
+  local status
+  status="$(call POST "$KC_SERVICES/protocol/openid-connect/token" -d grant_type=client_credentials \
+    -d "client_id=$1" -d "client_secret=demo-$1" -d scope=ferroehr/scim)"
+  [[ "$status" == 200 ]] || fail "Keycloak token for $1 answered $status"
+  jq -er .access_token "$WORK/answer"
+}
+
+# provision MEMBER TOKEN USERNAME LOGIN FORMATTED_NAME: one SCIM User; an
+# existing one (409) is kept.
+provision() {
+  local status
+  status="$(call POST "http://127.0.0.1:808$(index "$1")/scim/v2/Users" -H "Authorization: Bearer $2" \
+    -H 'Content-Type: application/scim+json' --data-binary "$(jq -n --arg u "$3" --arg l "$4" --arg n "$5" '{
+      schemas: ["urn:ietf:params:scim:schemas:core:2.0:User",
+        "urn:ietf:params:scim:schemas:extension:ferrohealth:2.0:User"],
+      userName: $u, name: {formatted: $n},
+      "urn:ietf:params:scim:schemas:extension:ferrohealth:2.0:User": {loginIdentifier: $l}}')")"
+  [[ "$status" =~ ^(201|409)$ ]] || fail "member $1 SCIM POST /Users for $3 answered $status"
+}
+
+step "provisioning the Basic user and the demo users as persons at every member (SCIM)"
+basic_scim="$(scim_token ferroehr-scim)"
+keycloak_scim="$(scim_token ferroehr-scim-keycloak)"
+for n in a b c d; do
+  provision "$n" "$basic_scim" ferroehr ferroehr "FerroEHR seed"
+  provision "$n" "$keycloak_scim" keycloak-demo de000000-0000-4000-8000-000000000101 "Dana Demo"
+  provision "$n" "$keycloak_scim" keycloak-steward de000000-0000-4000-8000-000000000102 "Sam Demo"
+  provision "$n" "$keycloak_scim" keycloak-auditor de000000-0000-4000-8000-000000000103 "Alex Demo"
+done
 
 # FerroPIX: each hospital feeds its patients (ITI-104), FerroPIX mints each
 # member's pseudonym on that member's first ask (ITI-83), the member stores the
@@ -403,10 +472,10 @@ The FerroHEALTH demo is running. Sign in to every console as demo / demo
   FerroFED gateway    http://localhost:8080/v1/query/aql
   FerroEHR members    http://localhost:8081 to 8084   Basic ferroehr / ferroehr
   FerroPIX            https://localhost:8070/fhir
-  FerroTERM           http://localhost:8085/r4
+  FerroTERM           https://localhost:8085/r4
   FerroBRIDGE facade  http://localhost:8090/fhir   Condition/$condition_id
 
-Keycloak and FerroPIX serve certificates of the demo CA in
+Keycloak, FerroPIX and FerroTERM serve certificates of the demo CA in
 demo/.work/tls/ca.crt; your browser asks once before it trusts
 keycloak.localhost. The federated query just returned $rows rows for Eva Visser
 from four members. README.md walks through the rest. Stop it with demo/down.sh.

@@ -23,18 +23,39 @@ key_file = "/run/demo-tls/ferropix.key"
 url_file = "/run/secrets/ferropix-db-url"
 data_key_file = "/run/secrets/ferropix-data-key"
 
-[auth]
+# The demo realm, a `persons` issuer: people sign in through the console,
+# and the service accounts of the hospitals, the members, FerroFED and the
+# seed's steward call as themselves. Keycloak names a service account by its
+# user id, which the realm import fixes.
+[auth.issuer.demo]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+kind = "persons"
+preset = "keycloak"
 audience = ["ferropix"]
-ca_file = "/run/demo-tls/ca.crt"
 
-[[auth.issuer]]
-issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
-token_profile = "jwt"
+[auth.issuer.demo.profile]
+first_party_clients = ["ferropix-console"]
+app_only = [{ subjects = [
+  "de000000-0000-4000-8000-000000000002",
+  "de000000-0000-4000-8000-000000000004",
+  "de000000-0000-4000-8000-000000000005",
+  "de000000-0000-4000-8000-000000000006",
+  "de000000-0000-4000-8000-000000000007",
+  "de000000-0000-4000-8000-000000000008",
+  "de000000-0000-4000-8000-000000000009",
+  "de000000-0000-4000-8000-00000000000a",
+  "de000000-0000-4000-8000-00000000000b",
+  "de000000-0000-4000-8000-00000000000e",
+] }]
 
-# The Patient Identity Sources: one per hospital, and the registry that
-# vouches for the two authoritative domains no hospital owns.
+[auth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+# The Patient Identity Sources the demo realm, named by its table, vouches
+# for: one per hospital, and the registry that vouches for the two
+# authoritative domains no hospital owns.
 [[trust.issuer]]
-issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+issuer = "demo"
 clients = ["hospital-a", "hospital-b", "hospital-c", "hospital-d", "hospital-e", "demo-registry"]
 
 [operator]
@@ -56,6 +77,14 @@ domain = "urn:oid:2.999.3.5"
 [hl7v2.namespaces]
 "urn:oid:2.999.3.5" = "HOSPE"
 "urn:oid:2.16.840.1.113883.2.4.6.3" = "NLMINBIZA"
+
+# The terminology server the HL7 v2 face translates every table value on:
+# FerroTERM, over HTTPS from the demo CA.
+[terminology.endpoint]
+url = "https://ferroterm:8080/r4"
+
+[terminology.endpoint.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
 # Every grade goes to the review queue, so the steward flow has a certain, a
 # probable and a possible pair to decide.

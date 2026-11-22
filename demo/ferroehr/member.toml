@@ -3,24 +3,29 @@
 #
 # The configuration the four FerroEHR members of the demo share, mounted
 # read-only at /etc/ferroehr/ferroehr.toml. compose.yaml gives each member its
-# database, its system_id, its clinical domain and its FerroPIX consumer in
-# the environment. Every key is on <https://ferroehr.eu/docs/>.
+# database, its system_id, its clinical domain, its FerroPIX consumer and its
+# public address in the environment. Every key is on
+# <https://ferroehr.eu/docs/installation/config-keys.html>.
 #
 # DEMO CREDENTIALS, NOT FOR PRODUCTION: the Basic user ferroehr / ferroehr
 # (the hash is Argon2id of "ferroehr") and the Keycloak client secrets.
 
-deployment_profile = "sandbox"
+[deployment]
+profile = "sandbox"
 
 [server]
 listen = "0.0.0.0:8080"
 # The sandbox dataset uploads templates of a few MiB.
-body_limit_bytes = 67108864
+body_limit = "64MiB"
 
-[rest]
-cors_permissive = true
+[api]
+# The viewer's admin panels.
+admin = true
+# The terminology API the viewer's coded-text pickers read.
+terminology = true
 
-[admin]
-enabled = true
+[api.cors]
+allow_origins = ["*"]
 
 # The viewer's Server pages: build information, health, metrics and logging,
 # for an administrator.
@@ -34,19 +39,51 @@ loggers = "admin_only"
 health = "admin_only"
 status = "admin_only"
 
-# The subscription API the viewer lists; no broker runs, so nothing is sent.
-[events]
-admin_api = true
-
-# Keycloak signs every bearer token; up.sh seeds over Basic beside it.
 [auth]
 enabled = true
+
+# The issuer the Basic user binds under, as FerroEHR's quickstart declares
+# it: it signs nothing, and its key set ships in the image as the public half
+# of a discarded key pair.
+[[auth.issuer]]
+issuer = "https://basic-users.ferroehr.invalid"
+kind = "persons"
+audience = ["ferroehr-basic-users"]
+jwks_file = "/opt/sandbox-posture/basic-users-jwks.json"
+
+[[auth.party]]
+issuer = "https://basic-users.ferroehr.invalid"
+identifier_issuer = "urn:ferroehr:basic-user"
+identifier_type = "login"
+
+# The demo realm: people sign in through the viewers, and the service
+# accounts of FerroFED's gateway and FerroBRIDGE call as themselves. Keycloak
+# names a service account by its user id, which the realm import fixes.
+[[auth.issuer]]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+kind = "persons"
+profile = "keycloak"
 audience = ["ferroehr"]
-# Keycloak types its access tokens JWT, not RFC 9068 at+jwt.
-token_profile = "jwt"
-role_claims = ["realm_access.roles"]
-ca_file = "/run/demo-tls/ca.crt"
+first_party_clients = ["ferroehr-viewer"]
+role_claims = ["roles", "groups", "entitlements", "realm_access.roles"]
+app_only = [{ subjects = ["de000000-0000-4000-8000-000000000001", "de000000-0000-4000-8000-000000000003"] }]
+
+[[auth.party]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+identifier_issuer = "urn:ferrohealth-demo:keycloak-login"
+identifier_type = "login"
+
+# The demo's services realm, whose two clients provision the people above
+# through SCIM; up.sh runs them once every member is healthy.
+[[auth.issuer]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo-services"
+kind = "machines"
+profile = "keycloak"
+audience = ["ferroehr-scim"]
+app_only = [{ subjects = ["de000000-0000-4000-8000-000000000201", "de000000-0000-4000-8000-000000000202"] }]
+
+[auth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
 [[auth.basic.users]]
 user = "ferroehr"
@@ -54,24 +91,83 @@ password_hash = "$argon2id$v=19$m=19456,t=2,p=1$ZmVycm9laHJEZXZTYWx0$be5nPwWjfUl
 scopes = ["user/composition-*.cruds", "user/template-*.cruds", "user/aql-*.cruds", "__ferroehr.platform"]
 roles = ["ADMIN", "USER"]
 
-# The roles the viewer's access control shows: READONLY refuses every write.
-[authz.rbac]
-enabled = true
-
 # The SMART discovery document, from Keycloak's endpoints; compose.yaml sets
 # each member's public_base_url. The service clients whose system/aql-*
 # grants count.
-[smart]
-enabled = true
+[auth.smart]
+discovery = true
 backend_clients = ["ferrofed-gateway", "ferrobridge-cdr"]
 
-[terminology]
-api_enabled = true
+[[auth.scim.client]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo-services"
+client_id = "ferroehr-scim"
+scope = "ferroehr/scim"
+binding_issuer = "urn:ferroehr:basic-user"
 
-[terminology.server]
+[[auth.scim.client]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo-services"
+client_id = "ferroehr-scim-keycloak"
+scope = "ferroehr/scim"
+binding_issuer = "urn:ferrohealth-demo:keycloak-login"
+
+# The roles the viewer's access control shows: READONLY refuses every write,
+# and the demo realm's roles may grant ADMIN.
+[authz.rbac]
 enabled = true
-url = "http://ferroterm:8080/r4b"
-fail_on_error = false
+role_issuers = ["https://keycloak.localhost:8443/realms/ferrohealth-demo"]
+
+# The healthcare provider each member acts for (compose.yaml names its id),
+# and the binding key of the Basic user.
+[authz.party_binding]
+provider = { issuer = "urn:oid:2.999.4", id = "ferrohealth-demo" }
+
+[[authz.party_binding.basic_user]]
+user = "ferroehr"
+key_issuer = "urn:ferroehr:basic-user"
+key = "ferroehr"
+
+# FerroEHR's quickstart party mapping, over the professional PERSON and ROLE
+# pair the ferroehr-*-definitions one-shots load.
+[[authz.party_binding.person.template]]
+template_id = "openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0"
+default = true
+key = { path = "/details[id2]/items[id3]", type = "login" }
+user_name = { path = "/details[id2]/items[id3]", type = "scim_user_name" }
+external_id = { path = "/details[id2]/items[id3]", type = "scim_external_id" }
+
+[[authz.party_binding.person.attribute]]
+scim = "name.formatted"
+name = true
+path = { "openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0" = "/identities[id4]/details[id5]/items[id6]" }
+
+[[authz.party_binding.person.attribute]]
+scim = "name.givenName"
+path = { "openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0" = "/identities[id4]/details[id5]/items[id7]" }
+
+[[authz.party_binding.person.attribute]]
+scim = "name.familyName"
+path = { "openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0" = "/identities[id4]/details[id5]/items[id8]" }
+
+[authz.party_binding.professional_role]
+template_id = "openEHR-DEMOGRAPHIC-ROLE.healthcare_professional.v1.0.0"
+
+# FerroBRIDGE commits the compositions of its two templates as a system
+# client, relaying the FHIR resource a person wrote.
+[[authz.system_client]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+client_id = "ferrobridge-cdr"
+provider = { issuer = "urn:oid:2.999.4", id = "ferrohealth-demo" }
+writes = ["ferrobridge.diagnose.v1", "ferrobridge.minimal_evaluation.v1"]
+origins = ["relay"]
+
+[terminology]
+on_error = "accept"
+
+[terminology.endpoint]
+url = "https://ferroterm:8080/r4b"
+
+[terminology.endpoint.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
 # Each member's EHR_STATUS names its patient by the pseudonym FerroPIX mints in
 # that member's clinical domain; the list holds all four so one file serves
@@ -79,21 +175,25 @@ fail_on_error = false
 [privacy]
 subject_namespaces = ["urn:oid:2.999.7.1", "urn:oid:2.999.7.2", "urn:oid:2.999.7.3", "urn:oid:2.999.7.4"]
 
-[ehr_index]
-provider = "ihe"
-pixm_url = "https://ferropix:8080/fhir"
+[privacy.cohort]
+subjects = true
 
-[ehr_index.tls]
+[record]
+subject_index = "pixm"
+
+[pixm.endpoint]
+url = "https://ferropix:8080/fhir"
+
+[pixm.endpoint.tls]
 trust_roots_file = "/run/demo-tls/ca.crt"
 
-[ehr_index.oauth]
+[pixm.endpoint.credentials.oauth]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
 client_auth = "client_secret_post"
 scope = "system/Patient.rs"
-ca_file = "/run/demo-tls/ca.crt"
 
-[cohort]
-subjects = true
+[pixm.endpoint.credentials.oauth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
 [usage_report]
 enabled = false

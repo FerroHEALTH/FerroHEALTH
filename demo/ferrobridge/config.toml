@@ -9,21 +9,31 @@
 #
 # DEMO CREDENTIALS, NOT FOR PRODUCTION: the Keycloak client secret below.
 
-[cdr]
-base_url = "http://ferroehr-a:8080/ferroehr/rest/openehr/v1"
+[cdr.endpoint]
+url = "http://ferroehr-a:8080/ferroehr/rest/openehr/v1"
 
-[cdr.credentials.oauth]
+# FerroBRIDGE commits as a system client of member A, whose
+# [[authz.system_client]] lists the two templates it writes.
+[cdr.endpoint.credentials.oauth]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
 client_id = "ferrobridge-cdr"
 client_auth = "client_secret_post"
 client_secret = "demo-ferrobridge-cdr"
 scope = "system/composition-*.cruds system/template-*.cruds system/aql-*.cruds"
-ca_file = "/run/demo-tls/ca.crt"
 
-# FerroTERM's R4 base. Its read surface takes no credential.
+[cdr.endpoint.credentials.oauth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
+
+# FerroTERM's R4 base, over HTTPS from the demo CA. Its read surface takes no
+# credential.
 [terminology]
-base_url = "http://ferroterm:8080/r4"
 wire_version = "r4"
+
+[terminology.endpoint]
+url = "https://ferroterm:8080/r4"
+
+[terminology.endpoint.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
 [mappings]
 directory = "/etc/ferrobridge/mappings"
@@ -47,11 +57,19 @@ composition_territory = "NL"
 [operator]
 enabled = true
 
-[auth]
+# The demo realm: people sign in through the console, and the seed's
+# demo-seed-fhir service account writes as itself. Keycloak names a service
+# account by its user id, which the realm import fixes.
+[[auth.issuer]]
 issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+kind = "persons"
+profile = "keycloak"
 audience = ["http://localhost:8090/fhir"]
-token_profile = "jwt"
-ca_file = "/run/demo-tls/ca.crt"
+first_party_clients = ["ferrobridge-console"]
+app_only = [{ subjects = ["de000000-0000-4000-8000-00000000000d"] }]
+
+[auth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"
 
 [usage_report]
 enabled = false

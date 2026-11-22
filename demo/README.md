@@ -14,11 +14,11 @@ its keys for real patient data.
 
 | Product | Console | What the demo holds |
 |---|---|---|
-| Keycloak | <https://keycloak.localhost:8443/admin> (`admin` / `admin`) | `ferrohealth-demo`: three users, one client per console and one per server that calls another |
+| Keycloak | <https://keycloak.localhost:8443/admin> (`admin` / `admin`) | `ferrohealth-demo`: three users, one client per console and one per server that calls another; `ferrohealth-demo-services`: the two clients that provision people into FerroEHR |
 | FerroEHR, four members | a viewer per member: A <http://localhost:3001>, B <http://localhost:3006>, C <http://localhost:3007>, D <http://localhost:3008> | A is an academic hospital with FerroEHR's sandbox dataset, B a GP practice, C a public health service with its laboratory, D an outpatient clinic; every patient has a year of vital signs and the member's own compositions |
 | FerroPIX | <http://localhost:3002> | about 150 records from five hospitals, hospital E's over HL7 v2; a review queue at every grade, decided candidates, a kept and a reverted merge, the members' pseudonyms and a research registry |
 | FerroFED | <http://localhost:3003> | the gateway over the four members and a suspended fifth, resolving patients through FerroPIX (PIXm and PDQm), with stored queries, an integrity incident and managed configuration revisions |
-| FerroTERM | <http://localhost:3004> | ICD-10-CM from the CMS release, the HL7 Terminology package (2,541 value sets) and the HL7 v2-to-FHIR ConceptMaps (264 concept maps) |
+| FerroTERM | <http://localhost:3004> | ICD-10-CM from the CMS release, the HL7 Terminology package (2,541 value sets), the HL7 v2-to-FHIR ConceptMaps (264 concept maps) and FerroBRIDGE's HL7 v2 value maps, which FerroPIX's HL7 v2 face translates through |
 | FerroBRIDGE | <http://localhost:3005> | the FHIR R4 facade over member A, with one Condition written through it |
 
 Every port binds loopback only. `compose.yaml` lists them all.
@@ -39,8 +39,10 @@ demo/down.sh   # stops everything and deletes its data
 socket first, for example
 `DOCKER_HOST=unix:///var/run/docker.sock FERROHEALTH_DEMO_COMPOSE=docker-compose demo/up.sh`.
 
-Keycloak serves HTTPS from a development CA that `up.sh` makes in
-`demo/.work/tls/ca.crt`. The first time a console sends you to
+Keycloak, FerroPIX and FerroTERM serve HTTPS from a development CA that
+`up.sh` makes in `demo/.work/tls/ca.crt`. Its private key is made on your
+machine by `up.sh` and stays under `demo/.work/`, which git ignores; it is a
+demo key and never committed. The first time a console sends you to
 `keycloak.localhost`, your browser warns about the certificate. Accept it for
 the session, or trust the CA for as long as you keep it:
 
@@ -145,11 +147,11 @@ as `auditor` to see a member read-only.
 Open <http://localhost:3004> as `demo`. Browse ICD-10-CM's hierarchy, expand
 any of the HL7 Terminology value sets, or translate an HL7 v2 table value
 through the v2-to-FHIR ConceptMaps. The same operations answer without
-signing in over the FHIR API:
+signing in over the FHIR API, which FerroTERM serves over HTTPS:
 
 ```sh
-curl -s 'http://localhost:8085/r4/CodeSystem/$lookup?system=http://hl7.org/fhir/sid/icd-10-cm&code=J30.2'
-curl -s 'http://localhost:8085/r4/ConceptMap/$translate?url=http://hl7.org/fhir/uv/v2mappings/ConceptMap/table-hl70001-to-administrative-gender&system=http://terminology.hl7.org/CodeSystem/v2-0001&code=F'
+curl -s --cacert demo/.work/tls/ca.crt 'https://localhost:8085/r4/CodeSystem/$lookup?system=http://hl7.org/fhir/sid/icd-10-cm&code=J30.2'
+curl -s --cacert demo/.work/tls/ca.crt 'https://localhost:8085/r4/ConceptMap/$translate?url=http://hl7.org/fhir/uv/v2mappings/ConceptMap/table-hl70001-to-administrative-gender&system=http://terminology.hl7.org/CodeSystem/v2-0001&code=F'
 ```
 
 ### 5. FHIR over openEHR (FerroBRIDGE)
@@ -171,11 +173,39 @@ curl -s -H "Authorization: Bearer $token" http://localhost:8090/fhir/Condition/<
 
 Each product checks Keycloak's tokens itself; none of them issues tokens. The
 servers read the issuer at `https://keycloak.localhost:8443/realms/ferrohealth-demo`
-and trust the development CA through their `ca_file` setting. The containers
-reach that name through a network alias, and your browser resolves every
-`*.localhost` name to loopback, so the issuer URL is the same on both sides.
+and trust the development CA through their `[auth.tls]` table (FerroFED,
+which takes none, through `SSL_CERT_FILE`). The containers reach that name
+through a network alias, and your browser resolves every `*.localhost` name
+to loopback, so the issuer URL is the same on both sides. Each server reads
+the issuer under its Keycloak preset, which names a service account by its
+user id, so the import in `keycloak/` fixes those ids and each server lists
+the service accounts that call it.
 
 The servers that call one another use client credentials: FerroFED to the
 members and to FerroPIX, each member to FerroPIX for its pseudonyms, and
-FerroBRIDGE to member A. Every client secret is `demo-` followed by the client
+FerroBRIDGE to member A. FerroFED authenticates to Keycloak for the members
+with a client assertion signed by its own key, whose key set Keycloak reads
+from the gateway; every other client secret is `demo-` followed by the client
 id, and is written in `keycloak/ferrohealth-demo-realm.json`.
+
+Three choices follow from what the products require today:
+
+- **Every person at a FerroEHR member is a demographic PERSON.** A member
+  refuses a person, Basic user or Keycloak login, whose login no PERSON
+  carries. Before each member starts, a one-shot (`ferroehr-<member>-definitions`)
+  stores FerroEHR's professional PERSON and ROLE definitions. Once the members
+  are up, `up.sh` provisions the Basic user `ferroehr` and the three Keycloak
+  users at every member through FerroEHR's SCIM endpoint, as two clients of
+  the second Keycloak issuer, `ferrohealth-demo-services`, whose tokens
+  FerroEHR reads as a machines issuer.
+- **FerroBRIDGE writes as a system client.** Member A admits its commits only
+  for the templates its `[[authz.system_client]]` lists, and checks at start
+  that it holds them, so the same one-shot stores FerroBRIDGE's Condition
+  template before the member serves. FerroFED's template fan-out then uploads
+  the other synthetic template to all four members in one request. FerroFED
+  reaches the members under its own token, for queries and template uploads;
+  it carries no person's commit.
+- **FerroTERM speaks HTTPS.** FerroPIX's HL7 v2 face translates hospital E's
+  table values on a terminology server it reaches only over HTTPS, so
+  FerroTERM serves a certificate of the demo CA, and FerroEHR, FerroPIX,
+  FerroBRIDGE and the FerroTERM console trust that CA.

@@ -1,0 +1,117 @@
+{
+  "realm": "ferrohealth-demo-services",
+  "enabled": true,
+  "displayName": "FerroHEALTH demo services",
+  "sslRequired": "none",
+  "accessTokenLifespan": 300,
+  "registrationAllowed": false,
+  "defaultDefaultClientScopes": [
+    "basic"
+  ],
+  "defaultOptionalClientScopes": [],
+  "clientScopes": [
+    {
+      "name": "basic",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "sub",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-sub-mapper",
+          "config": {
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ferroehr-scim-audience",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "false",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "audience ferroehr-scim",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.custom.audience": "ferroehr-scim",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ferroehr/scim",
+      "description": "FerroEHR SCIM provisioning",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      }
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "ferroehr-scim",
+      "name": "ferroehr-scim",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferroehr-scim",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": false,
+      "defaultClientScopes": [
+        "basic",
+        "ferroehr-scim-audience",
+        "ferroehr/scim"
+      ],
+      "optionalClientScopes": []
+    },
+    {
+      "clientId": "ferroehr-scim-keycloak",
+      "name": "ferroehr-scim-keycloak",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "demo-ferroehr-scim-keycloak",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": false,
+      "defaultClientScopes": [
+        "basic",
+        "ferroehr-scim-audience",
+        "ferroehr/scim"
+      ],
+      "optionalClientScopes": []
+    }
+  ],
+  "users": [
+    {
+      "id": "de000000-0000-4000-8000-000000000201",
+      "username": "service-account-ferroehr-scim",
+      "enabled": true,
+      "serviceAccountClientId": "ferroehr-scim"
+    },
+    {
+      "id": "de000000-0000-4000-8000-000000000202",
+      "username": "service-account-ferroehr-scim-keycloak",
+      "enabled": true,
+      "serviceAccountClientId": "ferroehr-scim-keycloak"
+    }
+  ]
+}

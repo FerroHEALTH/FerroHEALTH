@@ -1,0 +1,58 @@
+# SPDX-FileCopyrightText: Cadasto B.V.
+# SPDX-License-Identifier: Apache-2.0
+#
+# FerroTERM in the demo, mounted read-only at /etc/ferroterm/ferroterm.toml,
+# which FERROTERM_CONFIG names. It serves ICD-10-CM, the HL7 Terminology
+# package, the v2-to-FHIR ConceptMaps, FerroBRIDGE's v2 value maps and the
+# family lane's code systems, over HTTPS from a certificate of the demo CA,
+# because FerroPIX's HL7 v2 face reaches its terminology server only over
+# HTTPS or loopback. Every key is on <https://ferroterm.eu/docs/>.
+
+[server]
+listen = "0.0.0.0:8080"
+
+[server.tls]
+certificate_file = "/run/demo-tls/ferroterm.crt"
+key_file = "/run/demo-tls/ferroterm.key"
+
+# The admin listener the console's Reload posts to, inside the compose
+# network.
+[admin]
+listen = "0.0.0.0:8081"
+
+[terminology]
+index = ["/data/state/index"]
+# The family lane's synthetic code systems, which FerroBRIDGE's mapping
+# names, and the three FHIR packages up.sh unpacks.
+code_systems = [
+  "/data/codesystems",
+  "/data/packages/hl7.terminology.r4/package",
+  "/data/packages/hl7.fhir.uv.v2mappings/package",
+  "/data/packages/ferrobridge-hl7v2-values",
+]
+# Where the console's edits are kept.
+resources = "/data/state/resources.redb"
+
+[fhir]
+base_url = "https://localhost:8085"
+
+[telemetry]
+format = "json"
+
+[usage_report]
+enabled = false
+
+# The demo realm: people edit through the console, which sends the
+# signed-in user's token.
+[[auth.issuer]]
+issuer = "https://keycloak.localhost:8443/realms/ferrohealth-demo"
+kind = "persons"
+profile = "keycloak"
+audience = ["ferroterm"]
+first_party_clients = ["ferroterm-console"]
+# No service account of the realm writes here, and the preset needs an
+# app-only rule: a Keycloak token's sub is never its client, so none matches.
+app_only = [{ sub_is_client = true }]
+
+[auth.tls]
+trust_roots_file = "/run/demo-tls/ca.crt"

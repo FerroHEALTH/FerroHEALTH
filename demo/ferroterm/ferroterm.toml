@@ -50,6 +50,9 @@ kind = "persons"
 profile = "keycloak"
 audience = ["ferroterm"]
 first_party_clients = ["ferroterm-console"]
+# No service account of the realm writes here, and the preset needs an
+# app-only rule: a Keycloak token's sub is never its client, so none matches.
+app_only = [{ sub_is_client = true }]
 
 [auth.tls]
 trust_roots_file = "/run/demo-tls/ca.crt"

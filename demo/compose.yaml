@@ -75,9 +75,8 @@ x-ferroehr-member: &ferroehr-member
 
 # The definitions a member reads at boot, stored before it serves: the
 # professional PERSON and ROLE its party mapping writes people with, and the
-# two templates FerroBRIDGE commits as a system client, whose writes list
-# FerroEHR holds to the store at start. up.sh copies them into
-# .work/definitions.
+# template FerroBRIDGE commits as a system client, whose writes list FerroEHR
+# holds to the store at start. up.sh copies them into .work/definitions.
 x-ferroehr-definitions: &ferroehr-definitions
   <<: *hardened
   image: ghcr.io/ferrohealth/ferroehr:5.7.0@sha256:44c9268cb8a154df118a10ffe84329633f22923ea2cc54261ff0cea57a2ee7e7
@@ -91,7 +90,6 @@ x-ferroehr-definitions: &ferroehr-definitions
     - /etc/ferroehr/definitions/openEHR-DEMOGRAPHIC-PERSON.healthcare_professional.v1.0.0.adls
     - /etc/ferroehr/definitions/openEHR-DEMOGRAPHIC-ROLE.healthcare_professional.v1.0.0.adls
     - /etc/ferroehr/definitions/diagnose.opt
-    - /etc/ferroehr/definitions/minimal_evaluation.opt
   volumes:
     - type: bind
       source: ./ferroehr/member.toml
@@ -268,12 +266,6 @@ services:
       retries: 60
       start_period: 20s
 
-  ferroehr-a-definitions:
-    <<: *ferroehr-definitions
-    environment:
-      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
-      FERROEHR__DATABASE__URL: postgres://ferroehr_a:ferroehr_a_demo@ferroehr-postgres:5432/ferroehr_a
-
   ferroehr-a:
     <<: *ferroehr-member
     depends_on:
@@ -287,7 +279,7 @@ services:
         condition: service_healthy
     ports:
       - "127.0.0.1:8081:8080"
-    environment:
+    environment: &ferroehr-a-env
       FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
       FERROEHR__DATABASE__URL: postgres://ferroehr_a:ferroehr_a_demo@ferroehr-postgres:5432/ferroehr_a
       FERROEHR__API__SYSTEM_ID: member-a.ferrohealth-demo.local
@@ -298,11 +290,9 @@ services:
       FERROEHR__AUTH__SMART__PUBLIC_BASE_URL: http://localhost:8081
       FERROEHR__AUTH__SCIM__PUBLIC_BASE_URL: http://localhost:8081
 
-  ferroehr-b-definitions:
+  ferroehr-a-definitions:
     <<: *ferroehr-definitions
-    environment:
-      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
-      FERROEHR__DATABASE__URL: postgres://ferroehr_b:ferroehr_b_demo@ferroehr-postgres:5432/ferroehr_b
+    environment: *ferroehr-a-env
 
   ferroehr-b:
     <<: *ferroehr-member
@@ -317,7 +307,7 @@ services:
         condition: service_healthy
     ports:
       - "127.0.0.1:8082:8080"
-    environment:
+    environment: &ferroehr-b-env
       FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
       FERROEHR__DATABASE__URL: postgres://ferroehr_b:ferroehr_b_demo@ferroehr-postgres:5432/ferroehr_b
       FERROEHR__API__SYSTEM_ID: member-b.ferrohealth-demo.local
@@ -328,11 +318,9 @@ services:
       FERROEHR__AUTH__SMART__PUBLIC_BASE_URL: http://localhost:8082
       FERROEHR__AUTH__SCIM__PUBLIC_BASE_URL: http://localhost:8082
 
-  ferroehr-c-definitions:
+  ferroehr-b-definitions:
     <<: *ferroehr-definitions
-    environment:
-      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
-      FERROEHR__DATABASE__URL: postgres://ferroehr_c:ferroehr_c_demo@ferroehr-postgres:5432/ferroehr_c
+    environment: *ferroehr-b-env
 
   ferroehr-c:
     <<: *ferroehr-member
@@ -347,7 +335,7 @@ services:
         condition: service_healthy
     ports:
       - "127.0.0.1:8083:8080"
-    environment:
+    environment: &ferroehr-c-env
       FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
       FERROEHR__DATABASE__URL: postgres://ferroehr_c:ferroehr_c_demo@ferroehr-postgres:5432/ferroehr_c
       FERROEHR__API__SYSTEM_ID: member-c.ferrohealth-demo.local
@@ -358,11 +346,9 @@ services:
       FERROEHR__AUTH__SMART__PUBLIC_BASE_URL: http://localhost:8083
       FERROEHR__AUTH__SCIM__PUBLIC_BASE_URL: http://localhost:8083
 
-  ferroehr-d-definitions:
+  ferroehr-c-definitions:
     <<: *ferroehr-definitions
-    environment:
-      FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
-      FERROEHR__DATABASE__URL: postgres://ferroehr_d:ferroehr_d_demo@ferroehr-postgres:5432/ferroehr_d
+    environment: *ferroehr-c-env
 
   ferroehr-d:
     <<: *ferroehr-member
@@ -377,7 +363,7 @@ services:
         condition: service_healthy
     ports:
       - "127.0.0.1:8084:8080"
-    environment:
+    environment: &ferroehr-d-env
       FERROEHR_CONFIG: /etc/ferroehr/ferroehr.toml
       FERROEHR__DATABASE__URL: postgres://ferroehr_d:ferroehr_d_demo@ferroehr-postgres:5432/ferroehr_d
       FERROEHR__API__SYSTEM_ID: member-d.ferrohealth-demo.local
@@ -387,6 +373,10 @@ services:
       FERROEHR__PIXM__ENDPOINT__CREDENTIALS__OAUTH__CLIENT_SECRET: demo-ferroehr-d
       FERROEHR__AUTH__SMART__PUBLIC_BASE_URL: http://localhost:8084
       FERROEHR__AUTH__SCIM__PUBLIC_BASE_URL: http://localhost:8084
+
+  ferroehr-d-definitions:
+    <<: *ferroehr-definitions
+    environment: *ferroehr-d-env
 
   # One viewer per member. Each sends the signed-in user's own token to its
   # member, so the member's role gate decides what each demo user may do.

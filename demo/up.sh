@@ -260,7 +260,8 @@ fi
 for definition in "${FERROEHR_DEFINITIONS[@]}"; do
   cp "$ferroehr_src/deploy/definitions/professional/$definition" "$WORK/definitions/"
 done
-cp "$WORK/fixtures/opt/diagnose.opt" "$WORK/fixtures/opt/minimal_evaluation.opt" "$WORK/definitions/"
+cp "$WORK/fixtures/opt/diagnose.opt" "$WORK/definitions/"
+rm -f "$WORK/definitions/minimal_evaluation.opt"
 
 step "pulling the images"
 compose --profile build pull --quiet
@@ -274,10 +275,10 @@ compose up -d --wait --wait-timeout 900 keycloak ferroterm ferropix \
   ferroehr-a ferroehr-b ferroehr-c ferroehr-d ferrofed ||
   fail "a service did not turn healthy"
 
-# Every member binds each person to a demographic PERSON, so the services
-# realm's two SCIM clients provision the Basic user and the realm's three
-# users at every member: each User carries its login, the Basic user name or
-# the Keycloak user id the realm import fixes, as its binding key.
+# Every member binds each person to a demographic PERSON, so the two SCIM
+# clients of ferrohealth-demo-services provision the Basic user and the three
+# Keycloak users at every member: each User carries its login, the Basic user
+# name or the Keycloak user id the import fixes, as its binding key.
 scim_token() {
   local status
   status="$(call POST "$KC_SERVICES/protocol/openid-connect/token" -d grant_type=client_credentials \
@@ -360,16 +361,16 @@ member_url() {
   printf 'http://127.0.0.1:808%d/ferroehr/rest/openehr/v1' "$(index "$1")"
 }
 
-step "uploading the synthetic templates to every member through FerroFED's fan-out"
+# FerroBRIDGE's Condition template is already stored, by the definitions
+# one-shots, since member A checks its system client's writes at start.
+step "uploading the synthetic evaluation template to every member through FerroFED's fan-out"
 seed_token="$(token demo-seed)"
-for template in minimal_evaluation.opt diagnose.opt; do
-  status="$(call POST "$FED/v1/definition/template/adl1.4" -H "Authorization: Bearer $seed_token" \
-    -H 'openEHR-federation-endpoint: *' -H 'Content-Type: application/xml' \
-    --data-binary "@$WORK/fixtures/opt/$template")"
-  [[ "$status" =~ ^(200|201|204|207)$ ]] || fail "FerroFED template fan-out of $template answered $status"
-  [[ "$status" != 207 ]] || jq -e '[.meta.federation.endpoints[]? | select(.status != "active")] | length == 0' \
-    "$WORK/answer" >/dev/null || fail "FerroFED's fan-out of $template did not reach every member"
-done
+status="$(call POST "$FED/v1/definition/template/adl1.4" -H "Authorization: Bearer $seed_token" \
+  -H 'openEHR-federation-endpoint: *' -H 'Content-Type: application/xml' \
+  --data-binary "@$WORK/fixtures/opt/minimal_evaluation.opt")"
+[[ "$status" =~ ^(200|201|204|207)$ ]] || fail "FerroFED template fan-out answered $status"
+[[ "$status" != 207 ]] || jq -e '[.meta.federation.endpoints[]? | select(.status != "active")] | length == 0' \
+  "$WORK/answer" >/dev/null || fail "FerroFED's template fan-out did not reach every member"
 
 step "seeding the patients across the hospitals, FerroPIX and the members"
 eva_a=""

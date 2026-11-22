@@ -177,9 +177,9 @@ and trust the development CA through their `[auth.tls]` table (FerroFED,
 which takes none, through `SSL_CERT_FILE`). The containers reach that name
 through a network alias, and your browser resolves every `*.localhost` name
 to loopback, so the issuer URL is the same on both sides. Each server reads
-the realm under Keycloak's preset, which names a service account by its user
-id, so the realm import fixes those ids and each server lists the service
-accounts that call it.
+the issuer under its Keycloak preset, which names a service account by its
+user id, so the import in `keycloak/` fixes those ids and each server lists
+the service accounts that call it.
 
 The servers that call one another use client credentials: FerroFED to the
 members and to FerroPIX, each member to FerroPIX for its pseudonyms, and
@@ -194,15 +194,17 @@ Three choices follow from what the products require today:
   refuses a person, Basic user or Keycloak login, whose login no PERSON
   carries. Before each member starts, a one-shot (`ferroehr-<member>-definitions`)
   stores FerroEHR's professional PERSON and ROLE definitions. Once the members
-  are up, `up.sh` provisions the Basic user `ferroehr` and the three realm
+  are up, `up.sh` provisions the Basic user `ferroehr` and the three Keycloak
   users at every member through FerroEHR's SCIM endpoint, as two clients of
-  the second realm, `ferrohealth-demo-services`, whose tokens FerroEHR reads
-  as a machines issuer.
+  the second Keycloak issuer, `ferrohealth-demo-services`, whose tokens
+  FerroEHR reads as a machines issuer.
 - **FerroBRIDGE writes as a system client.** Member A admits its commits only
   for the templates its `[[authz.system_client]]` lists, and checks at start
-  that it holds them, so the same one-shot stores FerroBRIDGE's two templates
-  before the member serves. FerroFED reaches the members under its own token,
-  for queries and template uploads; it carries no person's commit.
+  that it holds them, so the same one-shot stores FerroBRIDGE's Condition
+  template before the member serves. FerroFED's template fan-out then uploads
+  the other synthetic template to all four members in one request. FerroFED
+  reaches the members under its own token, for queries and template uploads;
+  it carries no person's commit.
 - **FerroTERM speaks HTTPS.** FerroPIX's HL7 v2 face translates hospital E's
   table values on a terminology server it reaches only over HTTPS, so
   FerroTERM serves a certificate of the demo CA, and FerroEHR, FerroPIX,

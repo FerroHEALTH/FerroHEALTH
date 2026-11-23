@@ -23,6 +23,12 @@ copied asset came from. Everything else has a durable home:
 No change-narration. "Previously", "now correctly", "the old grid is retired" is
 PR text, and git history carries it. A comment describes the file as it is.
 
+Lean comments, never history (owner hard rule, 2026-11-23): write a
+comment only when the file cannot say it; most blocks need one line or none.
+Never describe the old way or how the file got here. When the file changes,
+rewrite its comment whole so it describes only the new content; never append
+a "then ... now ..." sentence.
+
 ## Budgets
 
 - An HTML or CSS comment run is at most 8 physical lines. The CSP note at the

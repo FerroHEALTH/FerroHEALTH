@@ -18,6 +18,13 @@
 #   data-repo="<product>"       whether the repository exists: "no repository
 #                               yet" while the API answers 404, and "code moved
 #                               <day>" once it does, from the last push
+#   data-badge="<url>"          the message of a product's CI-written
+#                               shields.io endpoint badge (13 / 13)
+#   data-badge-label="<url>"    the label of the same badge, which names what
+#                               was measured against which pin
+#
+# A badge URL is a product's own: a file on the main branch of a FerroHEALTH
+# repository, or a file its site serves. It is fetched without a token.
 #
 # A <time> element that carries a date marker also gets its datetime attribute
 # set, when that attribute follows the marker in the tag.
@@ -126,6 +133,29 @@ for product in "${PRODUCTS[@]}" "${LIBRARIES[@]}"; do
       ;;
   esac
 done
+
+# A badge's text reaches the page too, so it is held to the characters badges
+# use, which leaves no markup and no entity.
+is_badge_url()  { [[ "$1" =~ ^https://(raw\.githubusercontent\.com/FerroHEALTH/[A-Za-z]+/main|ferro[a-z]+\.eu)/[A-Za-z0-9._/-]+\.json$ ]]; }
+is_badge_text() { [[ "$1" =~ ^[[:alnum:][:space:].,:/()@+_·-]{1,160}$ ]]; }
+
+while IFS= read -r url; do
+  is_badge_url "$url" || { echo "render-releases: refusing badge URL '$url'" >&2; exit 1; }
+  asked=$((asked + 1))
+  if ! badge="$(curl -fsSL --max-time 20 "$url" 2>/dev/null | jq -r '[.label, .message] | @tsv' 2>/dev/null)" || [ -z "$badge" ]; then
+    echo "render-releases: badge $url is not reported; its fallback stands." >&2
+    continue
+  fi
+  IFS=$'\t' read -r label message <<< "$badge"
+  if ! is_badge_text "$label" || ! is_badge_text "$message"; then
+    echo "render-releases: refusing odd badge '$label' / '$message' from $url" >&2
+    exit 1
+  fi
+  answered=$((answered + 1))
+  fill data-badge "$url" "$message"
+  fill data-badge-label "$url" "$label"
+  echo "render-releases: badge $label: $message"
+done < <(grep -oE 'data-badge(-label)?="[^"]*"' "$FILE" | sed -E 's/^[^"]*"//; s/"$//' | sort -u)
 
 if [ "$answered" -eq "$asked" ]; then
   echo "render-releases: every figure rendered into $FILE."

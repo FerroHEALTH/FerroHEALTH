@@ -168,7 +168,10 @@ and narrow.
   release, the release date, the last push, whether it has a repository at all)
   carries a `data-rel`, `data-rel-plain`, `data-rel-date`, `data-pushed` or
   `data-repo` marker and is filled by `scripts/site/render-releases.sh` from
-  that product's repository. The committed value is real, and
+  that product's repository. Every figure in the EHDS section is a product's
+  own CI badge behind a `data-badge` and `data-badge-label` marker, and the
+  section never says certified, compliant, conformant or ready
+  (`.claude/rules/site.md`). The committed value is real, and
   `.github/workflows/refresh.yml` moves it through an auto-merged pull request
   when a product releases. `scripts/checks/no-typed-version.sh` fails the build
   on a version outside a marker, in the page and the diagram.

@@ -376,6 +376,59 @@ section { padding: clamp(3rem, 7vw, 4.5rem) 0; }
 }
 .product-head .status { margin-left: auto; font-family: var(--fh-mono); font-weight: 700; }
 
+/* The EHDS section. Each figure is a product's badge, so its value is set in
+   the mono face like the status table, and its label carries the pin. */
+.ehds-frame {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
+  margin-bottom: 1.75rem;
+}
+@media (min-width: 900px) { .ehds-frame { grid-template-columns: 1fr 1fr; } }
+.ehds-note, .ehds-dates, .ehds-pq {
+  min-width: 0;
+  background: var(--fh-bg);
+  border: 1px solid var(--fh-border);
+  border-radius: var(--fh-radius);
+  padding: 1.4rem 1.5rem;
+}
+.ehds-note { border-left: 4px solid var(--fh-accent); }
+.ehds-note h3, .ehds-dates h3, .ehds-pq h3 { margin: 0 0 0.6rem; font-size: 1.08rem; }
+.ehds-note p, .ehds-pq p { margin: 0; color: var(--fh-muted); font-size: 0.95rem; }
+.ehds-dates ol { list-style: none; margin: 0; padding: 0; }
+.ehds-dates li { color: var(--fh-muted); font-size: 0.93rem; margin: 0 0 0.7rem; }
+.ehds-dates li:last-child { margin-bottom: 0; }
+.ehds-dates time { display: block; color: var(--fh-text); font-weight: 700; font-family: var(--fh-mono); font-size: 0.85rem; }
+.ehds-products { margin-bottom: 1.75rem; }
+.product .measures-head {
+  margin: 0.4rem 0 0.35rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fh-muted);
+}
+.measures { list-style: none; margin: 0 0 1.1rem; padding: 0; font-size: 0.86rem; }
+.measures li { margin: 0; border-top: 1px solid var(--fh-border); }
+.measures li:first-child { border-top: 0; }
+.measures a { display: block; padding: 0.4rem 0; color: var(--fh-muted); overflow-wrap: anywhere; }
+.measures a:hover { color: var(--hue, var(--fh-accent)); text-decoration: none; }
+.measure-value {
+  display: inline-block;
+  margin-right: 0.35rem;
+  color: var(--hue, var(--fh-accent));
+  font-family: var(--fh-mono);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.measure-product { color: var(--fh-text); font-weight: 700; margin-right: 0.35rem; }
+.ehds-pq {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem 2rem;
+}
+@media (min-width: 900px) { .ehds-pq { grid-template-columns: 3fr 2fr; align-items: start; } }
+.ehds-pq .measures { margin: 0; }
+
 /* How the products fit together. The diagram is one file in assets/diagrams/,
    which carries its own palette and swaps it on prefers-color-scheme, so this
    page holds its size and nothing else. Below the min-width the labels stop

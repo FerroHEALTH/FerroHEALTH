@@ -11,10 +11,11 @@
 # database version and a set of FHIR release names were typed into it and the
 # products moved on. A fact that moves with a release is either rendered at
 # assembly time by scripts/site/render-releases.sh, inside an element that
-# carries a data-rel, data-rel-plain, data-rel-date, data-pushed or data-repo
-# marker, or it lives on the product's own site. This check fails on a version-like token
-# anywhere else in the page, the 404 page, the diagram and the family book's
-# pages, which carry no rendered marker at all. HTML comments are not checked,
+# carries a data-rel, data-rel-plain, data-rel-date, data-pushed, data-repo,
+# data-badge or data-badge-label marker, or it lives on the product's own
+# site. This check fails on a version-like token anywhere else in the page,
+# the 404 page, the diagram and the family book's pages, which carry no
+# rendered marker at all. HTML comments are not checked,
 # and neither is a licence's own version (BUSL-1.1, Apache 2.0).
 
 set -uo pipefail
@@ -49,12 +50,14 @@ for file in "${files[@]}"; do
   checked=$((checked + 1))
 
   # Blank out what is allowed to carry a version, keeping the line count so a
-  # finding points at the real line: comments, rendered markers, and the
-  # licences' own names. In an SVG only the text a reader sees is checked,
-  # because path data is full of `v11`-shaped commands.
+  # finding points at the real line: comments, rendered markers, the badge
+  # file a marker names, and the licences' own names. In an SVG only the text
+  # a reader sees is checked, because path data is full of `v11`-shaped
+  # commands.
   hits="$(SVG="$([[ "$file" == *.svg ]] && echo 1 || echo 0)" perl -0pe '
     s{<!--.*?-->}{ my $c = $&; $c =~ s/[^\n]//g; $c }gse;
-    s{(<[^<>]*\bdata-(rel|rel-plain|rel-date|pushed|repo)="[^"]*"[^<>]*>)[^<]*}{$1}g;
+    s{(<[^<>]*\bdata-(rel|rel-plain|rel-date|pushed|repo|badge|badge-label)="[^"]*"[^<>]*>)[^<]*}{$1}g;
+    s{\bdata-badge(-label)?="[^"]*"}{data-badge$1=""}g;
     s{<[^<>]*>}{<>}g if $ENV{SVG};
     s{Business Source License 1\.1|BUSL-1\.1|Apache(?: License|-)? 2\.0|version 1\.1}{}g;
   ' "$file" | grep -nE -- "$TAG|$FHIR_RELEASE|$STANDARD_PIN" || true)"

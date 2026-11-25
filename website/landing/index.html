@@ -17,7 +17,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>FerroHEALTH: health-data infrastructure in Rust, built on open standards</title>
-  <meta name="description" content="FerroHEALTH is the family behind five pure-Rust health-data servers that reach each other only over published protocols: FerroEHR, the openEHR Clinical Data Repository; FerroBRIDGE, openEHR to HL7 FHIR and to the OMOP Common Data Model, and clinical HL7 Version 2 messages mapped in; FerroFED, the federation gateway; FerroPIX, the Master Patient Index; and FerroTERM, the HL7 FHIR terminology server. FerroFORMS, an openEHR form builder, is paused. FerroSMART, the SMART App Launch authorization server, is being built, and FerroTASK for task planning and decision support is planned. The products share three libraries: FerroAUDIT, FerroUI and FerroSYS. One language, one licence, and every figure on this page rendered from the products' own repositories.">
+  <meta name="description" content="FerroHEALTH is the family behind five pure-Rust health-data servers that reach each other only over published protocols: FerroEHR, the openEHR Clinical Data Repository; FerroBRIDGE, openEHR to HL7 FHIR and to the OMOP Common Data Model, and clinical HL7 Version 2 messages mapped in; FerroFED, the federation gateway; FerroPIX, the Master Patient Index; and FerroTERM, the HL7 FHIR terminology server. FerroFORMS, an openEHR form builder, is paused. FerroSMART, the SMART App Launch authorization server, is being built, and FerroTASK for task planning and decision support is planned. The products share three libraries: FerroAUDIT, FerroUI and FerroSYS. The page shows what each product has built for the European Health Data Space, measured by its own CI. One language, one licence, and every figure on this page rendered from the products' own repositories.">
   <link rel="canonical" href="https://ferrohealth.eu/">
   <link rel="stylesheet" href="./style.css">
   <link rel="icon" href="./assets/brand/favicon.svg" type="image/svg+xml">
@@ -173,6 +173,7 @@
       </a>
       <nav class="nav-links" aria-label="Primary">
         <a href="#products">Products</a>
+        <a href="#ehds">EHDS</a>
         <a href="#libraries" class="hide-sm">Libraries</a>
         <a href="#how" class="hide-sm">How they fit</a>
         <a href="#principles" class="hide-sm">Principles</a>
@@ -204,12 +205,294 @@
         </p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#products">See the products</a>
+          <a class="btn btn-ghost" href="#ehds">What we built for the EHDS</a>
           <a class="btn btn-ghost" href="https://sandbox.ferroehr.eu" rel="noopener">Try the live sandbox</a>
         </div>
         <p class="note">
           Ferro is <em>ferrum</em>, iron. Rust is an oxide of it, which is the
           language every one of them is written in.
         </p>
+      </div>
+    </section>
+
+    <!-- The European Health Data Space. Every figure here is a product's own
+         CI-written badge, filled at assembly time by
+         scripts/site/render-releases.sh through its data-badge markers; never
+         hand-type one. Each figure links the pass list or self-assessment
+         behind it. -->
+    <section id="ehds" class="surface">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="eyebrow">European Health Data Space</span>
+          <h2>What the family has built for the EHDS</h2>
+          <p>
+            Regulation (EU) 2025/327 sets what an EHR system has to do with a
+            person's health data: exchange it in the European format, log
+            every access, and let the person see who looked and why. This is
+            what each product does about it on its main branch today, with the
+            article it answers and the test that measures it. Every figure is
+            read from the product's own CI badge when this page is assembled,
+            and links to the pass list or the self-assessment behind it.
+          </p>
+        </div>
+
+        <div class="ehds-frame">
+          <div class="ehds-note">
+            <h3>Self-tested and self-assessed</h3>
+            <p>
+              The figures are self-tested counts and self-assessed rows, and
+              none is a certification. No EHR system can claim EHDS
+              conformity yet: the European exchange format (Art 15) and the
+              common specifications of the two harmonised components (Art 25
+              and 36) are set by implementing acts that are still drafts, so
+              the products are built and tested against the published drafts.
+              The family has not been through the European digital testing
+              environment (Art 40), and no EU declaration of conformity
+              (Art 39) or CE marking (Art 41) exists for any product.
+            </p>
+          </div>
+          <div class="ehds-dates">
+            <h3>What applies when (Art 105)</h3>
+            <ol>
+              <li><time datetime="2027-03-26">26 March 2027</time> The Regulation applies.</li>
+              <li><time datetime="2029-03-26">26 March 2029</time> Articles 25, 26 and 27 apply to the first three priority categories of Art 14(1), patient summaries, electronic prescriptions and electronic dispensations, and to the EHR systems meant to process them.</li>
+              <li><time datetime="2031-03-26">26 March 2031</time> They apply to the other three, medical imaging studies and reports, medical test results and discharge reports, and to their EHR systems. Chapter III applies to EHR systems put into service under Art 26(2).</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="products ehds-products">
+
+          <article class="product product-bridge">
+            <div class="product-head">
+              <img src="./assets/products/ferrobridge-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferrobridge.eu/" rel="noopener">FerroBRIDGE</a></h3>
+                <span class="role">The European interoperability component, Art 25</span>
+              </div>
+            </div>
+            <p>
+              Its <code>eehrxf</code> crate is the interoperability software
+              component of Art 25(1): the Xt-EHR logical models read as data,
+              the crosswalk of each Art 14(1) category to the HL7 Europe
+              profiles, the European exchange format in HL7 FHIR, and the
+              mapping from openEHR to it through FHIRconnect. It is built
+              against the draft implementing act under Art 15(1), and CI
+              validates what it writes against the MyHealth@EU profiles.
+            </p>
+            <h4 class="measures-head">The draft exchange format</h4>
+            <ul class="measures">
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/eehrxf-annex-x/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-annex-x.json">33 / 33</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-annex-x.json">EEHRxF Annex X groups served</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/eehrxf-draft-patient-summary/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-patient-summary.json">284 / 284 annex elements held, 16 unmapped</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-patient-summary.json">EEHRxF draft 2026-11-23, Patient Summary</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/eehrxf-draft-eprescription/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-eprescription.json">25 / 25 annex elements held, 4 unmapped</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-eprescription.json">EEHRxF draft 2026-11-23, ePrescription</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/eehrxf-draft-edispensation/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-edispensation.json">15 / 15 annex elements held, 0 unmapped</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-edispensation.json">EEHRxF draft 2026-11-23, eDispensation</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/eehrxf-draft-medical-test-report/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-medical-test-report.json">137 / 137 annex elements held, 7 unmapped</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-medical-test-report.json">EEHRxF draft 2026-11-23, Medical test report</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/eehrxf-draft-imaging/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-imaging.json">90 / 91 annex elements held, 8 unmapped</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-imaging.json">EEHRxF draft 2026-11-23, Imaging report and study</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/eehrxf-draft-discharge/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-discharge.json">135 / 135 annex elements held, 5 unmapped</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/eehrxf-draft-discharge.json">EEHRxF draft 2026-11-23, Discharge report</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/xtehr-crosswalk/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/xtehr-crosswalk.json">712 / 852 elements aligned</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/xtehr-crosswalk.json">Xt-EHR models 1.0.0 crosswalk, EEHRxF draft 2026-11-23</span></a></li>
+            </ul>
+            <h4 class="measures-head">MyHealth@EU profiles</h4>
+            <ul class="measures">
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/myhealth-eu-core/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-core.json">65 / 70 valid</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-core.json">MyHealth@EU Core 1.0.1 (CI)</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/myhealth-eu-laboratory/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-laboratory.json">1 / 1 valid</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-laboratory.json">MyHealth@EU Laboratory 9.2.0 (CI)</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/myhealth-eu-hdr/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-hdr.json">0 / 3 valid</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-hdr.json">MyHealth@EU HDR 9.2.0 (CI)</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/myhealth-eu-mvc/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-mvc.json">79 / 92 codes in bound value sets</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-mvc.json">MyHealth@EU MVC 10.1.0 (CI)</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/conformance/myhealth-eu-euvac/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-euvac.json">1 / 1 valid</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/myhealth-eu-euvac.json">MyHealth@EU EuVAC 10.0.0-preview</span></a></li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-ghost" href="https://ferrobridge.eu/docs/evaluate/interoperability-component.html" rel="noopener">The component</a>
+            </div>
+          </article>
+
+          <article class="product product-ehr">
+            <div class="product-head">
+              <img src="./assets/products/ferroehr-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferroehr.eu/" rel="noopener">FerroEHR</a></h3>
+                <span class="role">The logging component, and the person's own log</span>
+              </div>
+            </div>
+            <p>
+              FerroEHR records every access to its API as the access record
+              of Annex II 3.2, through the shared FerroAUDIT library's
+              <code>ehds-logging</code> crate, and keeps it in a hash-chained
+              store. The person reads their own log, who accessed what, when
+              and why, through the subject-scoped ITI-81 retrieval.
+            </p>
+            <p>
+              A clinician outside a record's care relationships gets in only
+              when the deployment's access policy allows it, and only with a
+              reason, which the record keeps and the person sees (Art 11(5));
+              an emergency is one such case. No justification lifts the
+              person's own restriction under GDPR Art 18.
+            </p>
+            <h4 class="measures-head">FerroEHR</h4>
+            <ul class="measures">
+                <li><a href="https://ferroehr.eu/docs/dev/compliance/logging-checklist.html" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/main/docs/conformance/ehds/logging.json">11/11 evidenced</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/main/docs/conformance/ehds/logging.json">EHDS logging checklist · Xt-EHR D8.2 2026-05-19</span></a></li>
+                <li><a href="https://ferroehr.eu/docs/dev/compliance/eehrxf-annex-iii.html" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/main/docs/conformance/ehds/annex-iii.json">10/18 elements sourced</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/main/docs/conformance/ehds/annex-iii.json">EEHRxF draft 2026-11-23 · Annex III from the RM</span></a></li>
+                <li><a href="https://ferroehr.eu/docs/dev/compliance/eehrxf-pdf-originals.html" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/main/docs/conformance/ehds/pdf-originals.json">byte-identical 2/2</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/main/docs/conformance/ehds/pdf-originals.json">EEHRxF draft 2026-11-23 · PDF/A originals</span></a></li>
+            </ul>
+            <h4 class="measures-head">The FerroAUDIT crates it records with</h4>
+            <ul class="measures">
+                <li><a href="https://github.com/FerroHEALTH/FerroAUDIT/blob/main/docs/conformance.md#the-ehds-access-records-logging-fields" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroAUDIT/main/conformance/badges/ehds-annex-ii.json">5/5</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroAUDIT/main/conformance/badges/ehds-annex-ii.json">EHDS Annex II 3.2 logging fields mapped</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroAUDIT/blob/main/docs/conformance.md#xt-ehr-d82-logging-assertions" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroAUDIT/main/conformance/badges/xt-ehr-d8-2.json">4/4</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroAUDIT/main/conformance/badges/xt-ehr-d8-2.json">Xt-EHR D8.2 2026-05-19 logging assertions</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroAUDIT/blob/main/docs/conformance.md" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroAUDIT/main/conformance/badges/iti-81.json">11/11</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroAUDIT/main/conformance/badges/iti-81.json">IHE ITI-81 Retrieve (ARR) · RESTful ATNA Rev. 3.6 search parameters</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroAUDIT/blob/main/docs/conformance.md#balp-validation" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroAUDIT/main/conformance/badges/balp-1.1.4.json">144/144</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroAUDIT/main/conformance/badges/balp-1.1.4.json">IHE BALP 1.1.4 · AuditEvents valid</span></a></li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-ghost" href="https://ferroehr.eu/docs/dev/audit.html#justified-and-emergency-access" rel="noopener">Justified access</a>
+              <a class="btn btn-ghost" href="https://ferroehr.eu/docs/dev/audit.html#retrieving-audit-records-iti-81" rel="noopener">ITI-81</a>
+            </div>
+          </article>
+
+          <article class="product product-fed">
+            <div class="product-head">
+              <img src="./assets/products/ferrofed-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferrofed.eu/" rel="noopener">FerroFED</a></h3>
+                <span class="role">Behind a MyHealth@EU contact point, Art 23</span>
+              </div>
+            </div>
+            <p>
+              FerroFED is a national infrastructure that a contact point's
+              national connector calls on its FHIR face, for the records in
+              FerroEHR and other openEHR CDRs. It writes the documents it builds
+              from openEHR in the HL7 Europe formats.
+            </p>
+            <p>
+              Its self-assessment reads every requirement of the MyHealth@EU
+              Requirements Catalogue. The rows still open: a member's own
+              documents pass through unchecked, the hospital discharge report
+              does not yet validate against MyHealth@EU HDR, the catalogue
+              lacks the imaging codes, and the vaccination history document is
+              outside the categories FerroFED builds. The self-assessment
+              confers no Operation Ready status.
+            </p>
+            <ul class="measures">
+                <li><a href="https://github.com/FerroHEALTH/FerroFED/blob/main/conformance/myhealth-eu.tsv" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu-badge.json">catalogue v10.0.0 · 23/31 met</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu-badge.json">MyHealth@EU</span></a></li>
+                <li><a href="https://ferrofed.eu/docs/evaluate/myhealth-eu.html" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu/search.json">12/12 parameters answered</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu/search.json">MyHealth@EU NCP API 9.1.1-ci DocumentReference search</span></a></li>
+                <li><a href="https://ferrofed.eu/docs/evaluate/myhealth-eu.html" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu/core.json">11/11 valid</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu/core.json">MyHealth@EU Core 1.0.1 (CI)</span></a></li>
+                <li><a href="https://ferrofed.eu/docs/evaluate/myhealth-eu.html" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu/laboratory.json">1/1 valid</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu/laboratory.json">MyHealth@EU Laboratory 9.2.0 (CI)</span></a></li>
+                <li><a href="https://ferrofed.eu/docs/evaluate/myhealth-eu.html" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu/discharge.json">0/1 valid</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroFED/main/conformance/myhealth-eu/discharge.json">MyHealth@EU HDR 9.2.0 (CI)</span></a></li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-ghost" href="https://ferrofed.eu/docs/evaluate/myhealth-eu.html" rel="noopener">The self-assessment</a>
+            </div>
+          </article>
+
+          <article class="product product-pix">
+            <div class="product-head">
+              <img src="./assets/products/ferropix-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferropix.eu/" rel="noopener">FerroPIX</a></h3>
+                <span class="role">Who the patient is, across organisations</span>
+              </div>
+            </div>
+            <p>
+              FerroPIX holds the cross-reference of a person's identifiers:
+              PIXm (ITI-83, ITI-104), PDQm with <code>$match</code> (ITI-78,
+              ITI-119), the PMIR feed (ITI-93, ITI-94) and the XCPD responding
+              gateway (ITI-55). It serves an identifier of each type the draft
+              exchange format names, and the minimal Patient the MyHealth@EU
+              NCP API asks for.
+            </p>
+            <ul class="measures">
+                <li><a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/conformance/pixm/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/pixm.json">13 / 13</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/pixm.json">PIXm 3.1.0 examples</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/conformance/pdqm/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/pdqm.json">11 / 11</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/pdqm.json">PDQm 3.2.0 examples</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/conformance/pmir/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/pmir.json">7 / 7</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/pmir.json">PMIR 1.6.0 examples</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/conformance/ehds-identifier-types/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/ehds-identifier-types.json">12 / 12</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/ehds-identifier-types.json">EHDS identifier types (EEHRxF draft Annex X)</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/conformance/ncp-patient-minimal/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/ncp-patient-minimal.json">4 / 4</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/ncp-patient-minimal.json">MyHealth@EU NCP API 9.1.1-ci Patient-minimal valid</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/conformance/xtehr-patient-match/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/xtehr-patient-match.json">3 / 3</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/xtehr-patient-match.json">Xt-EHR D8.2 2026-05-19 Patient Match assertions</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/conformance/audit/pass-list.txt" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/audit.json">15 / 15</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/audit.json">Audit record examples</span></a></li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-ghost" href="https://ferropix.eu/docs/evaluate/conformance.html" rel="noopener">Test results</a>
+            </div>
+          </article>
+
+          <article class="product product-term">
+            <div class="product-head">
+              <img src="./assets/products/ferroterm-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferroterm.eu/" rel="noopener">FerroTERM</a></h3>
+                <span class="role">The code systems the format binds</span>
+              </div>
+            </div>
+            <p>
+              FerroTERM loads the code systems the draft exchange format binds
+              beyond SNOMED CT, LOINC and ICD-10, and imports the MyHealth@EU
+              Master Value Set Catalogue as FHIR value sets. It ships none of
+              those releases: you download each from its publisher and hold
+              any licence it needs, and its tests run on small synthetic
+              files.
+            </p>
+            <ul class="measures">
+                <li><a href="https://ferroterm.eu/docs/evaluate/conformance.html" rel="noopener"><span class="measure-value" data-badge="https://ferroterm.eu/conformance/ehds-mvc.json">2/2 value sets, synthetic fixture</span> <span class="measure-label" data-badge-label="https://ferroterm.eu/conformance/ehds-mvc.json">MyHealth@EU MVC 10.1.0 (CI) import</span></a></li>
+                <li><a href="https://ferroterm.eu/docs/evaluate/conformance.html" rel="noopener"><span class="measure-value" data-badge="https://ferroterm.eu/conformance/ehds-art6.json">16/16 loaders</span> <span class="measure-label" data-badge-label="https://ferroterm.eu/conformance/ehds-art6.json">EEHRxF draft 2026-11-23 Art 6 code systems</span></a></li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-ghost" href="https://ferroterm.eu/docs/operate/loading-eehrxf.html" rel="noopener">Loading the code systems</a>
+            </div>
+          </article>
+
+          <article class="product product-smart planned">
+            <div class="product-head">
+              <img src="./assets/products/ferrosmart-icon.svg" alt="" aria-hidden="true" width="40" height="40">
+              <div>
+                <h3><a href="https://ferrosmart.eu/" rel="noopener">FerroSMART</a></h3>
+                <span class="role">Sign-in with an EUDI Wallet, being built</span>
+              </div>
+            </div>
+            <p>
+              FerroSMART, being built toward its first release, lets a person
+              sign in with the PID from their EUDI Wallet, presented over
+              OpenID4VP as an SD-JWT VC or an mdoc, and issues SMART App
+              Launch tokens to the apps that act for them. It never asks for,
+              keeps or forwards the portrait.
+            </p>
+            <ul class="measures">
+                <li><a href="https://github.com/FerroHEALTH/FerroSMART/blob/main/conformance/pid-attributes.tsv" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroSMART/main/conformance/badges/pid-rulebook.json">7/7 attributes handled</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroSMART/main/conformance/badges/pid-rulebook.json">EUDI PID Rulebook 1.6</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroSMART/blob/main/app/ferrosmart/oidf/expected.tsv" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroSMART/main/conformance/badges/openid4vp.json">12/12 negative tests</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroSMART/main/conformance/badges/openid4vp.json">OpenID4VP 1.0</span></a></li>
+                <li><a href="https://github.com/FerroHEALTH/FerroSMART/blob/main/app/ferrosmart/inferno/smart_stu2_2_expected.json" rel="noopener"><span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroSMART/main/conformance/badges/smart-app-launch.json">79/79 Inferno tests</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroSMART/main/conformance/badges/smart-app-launch.json">SMART App Launch 2.2.0</span></a></li>
+            </ul>
+            <div class="product-cta">
+              <a class="btn btn-ghost" href="https://ferrosmart.eu/docs/evaluate/conformance.html" rel="noopener">Test results</a>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="ehds-pq">
+          <div>
+            <h3>The post-quantum move</h3>
+            <p>
+              A health record has to stay confidential for decades, so the EU
+              roadmap for the post-quantum transition counts it among the
+              high-risk uses that move by the end of 2030. Four products
+              offer the hybrid X25519MLKEM768 group (RFC 10024) first in the
+              TLS 1.3 connections they accept and open, and each publishes an
+              inventory of every cryptographic use, with a badge of the rows
+              it judges safe. FerroEHR signs record versions, access-log
+              checkpoints and seals with the RFC 9980 composite
+              ML-DSA-65+Ed25519, and FerroSMART signs the tokens of a client
+              registered for it with ML-DSA-65 (RFC 9964). FerroTERM and
+              FerroFED take the post-quantum TLS release next
+              (<a href="https://github.com/FerroHEALTH/FerroTERM/issues/1321" rel="noopener">FerroTERM#1321</a>,
+              <a href="https://github.com/FerroHEALTH/FerroFED/issues/1991" rel="noopener">FerroFED#1991</a>).
+            </p>
+          </div>
+          <ul class="measures">
+            <li><a href="https://github.com/FerroHEALTH/FerroEHR/blob/main/docs/post-quantum.md" rel="noopener"><span class="measure-product">FerroEHR</span> <span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/main/conformance/badges/post-quantum.json">12/27</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroEHR/main/conformance/badges/post-quantum.json">post-quantum safe uses</span></a></li>
+            <li><a href="https://github.com/FerroHEALTH/FerroBRIDGE/blob/main/docs/post-quantum.md" rel="noopener"><span class="measure-product">FerroBRIDGE</span> <span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/post-quantum.json">16/25</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroBRIDGE/main/conformance/badges/post-quantum.json">post-quantum</span></a></li>
+            <li><a href="https://github.com/FerroHEALTH/FerroPIX/blob/main/docs/post-quantum.md" rel="noopener"><span class="measure-product">FerroPIX</span> <span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/post-quantum.json">7 / 15</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroPIX/main/conformance/badges/post-quantum.json">post-quantum safe uses</span></a></li>
+            <li><a href="https://github.com/FerroHEALTH/FerroSMART/blob/main/docs/post-quantum.md" rel="noopener"><span class="measure-product">FerroSMART</span> <span class="measure-value" data-badge="https://raw.githubusercontent.com/FerroHEALTH/FerroSMART/main/conformance/badges/post-quantum.json">11/28</span> <span class="measure-label" data-badge-label="https://raw.githubusercontent.com/FerroHEALTH/FerroSMART/main/conformance/badges/post-quantum.json">post-quantum</span></a></li>
+          </ul>
+        </div>
+
+        <div class="section-cta">
+          <a class="btn btn-primary" href="./docs/ehds/readiness.html">The EHR system's readiness record</a>
+          <a class="btn btn-ghost" href="./docs/ehds/intended-purpose.html">Intended purpose</a>
+        </div>
       </div>
     </section>
 

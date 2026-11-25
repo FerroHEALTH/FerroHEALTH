@@ -81,6 +81,19 @@ beyond that script and the pinned mdbook, no runtime dependency.
   rendered and so is not typed: the page names the standard and links the
   product's site for the pin. `scripts/checks/no-typed-version.sh` fails the
   build on a version-like token outside a marker, in the page and the diagram.
+- **The EHDS section shows measurements, never claims** (owner, 2026-11-25).
+  `#ehds` says what each product has built for Regulation (EU) 2025/327,
+  against which article, and links what measures it. Every figure is a
+  product's own CI-written shields.io endpoint badge, filled by
+  `render-releases.sh` through `data-badge` (the message) and
+  `data-badge-label` (the label, which carries the pin) and linked to the
+  pass list or self-assessment behind it; prose carries no count. It uses
+  the badges' words (self-tested, self-assessed) and never says certified,
+  compliant, conformant, approved or ready, because no EHR system can claim
+  EHDS conformity before the implementing acts, the testing environment of
+  Art 40 and the conformity route of Art 30, 39 and 41 apply. A shared
+  library's badges appear under the product that records with it, never on
+  a card of their own.
 - **Relative URLs inside the site.** The page has to work from a checkout, from
   a preview, and from the apex domain without a rewrite. Product links are
   absolute, because they point at another domain.
@@ -186,4 +199,6 @@ the family book says what holds for all of them. Anything a
 product's own site should say belongs there. Adding a benchmark table, a
 conformance grid, or an API reference here duplicates a page that is already
 generated from evidence in the product's repository, and the copy here would go
-stale within a release.
+stale within a release. The EHDS section is the one exception, by the owner's decision: it renders
+the products' own EHDS badges at assembly time, so nothing in it is copied
+and nothing goes stale.

@@ -82,7 +82,7 @@ jobs:
           {
             echo "Rendered by scripts/site/render-releases.sh from each product's repository:"
             echo
-            grep -E '^render-releases: Ferro' render.log | sed 's/^render-releases: /- /' || true
+            grep -E '^render-releases: (Ferro|badge )' render.log | sed 's/^render-releases: /- /' || true
             grep -E '^pin-images: .* moves ' pins.log | sed 's/^pin-images: /- /' || true
           } > commit-body.md
           # The branch is owned by this workflow and rebuilt from the main
@@ -133,7 +133,7 @@ jobs:
           {
             echo "The committed release fallbacks in \`website/landing/index.html\`, or the family lane's image pins in \`e2e/family/\`, moved. Rendered by \`scripts/site/render-releases.sh\` and \`scripts/e2e/pin-images.sh\` from each product's repository:"
             echo
-            grep -E '^render-releases: Ferro' render.log | sed 's/^render-releases: /- /' || true
+            grep -E '^render-releases: (Ferro|badge )' render.log | sed 's/^render-releases: /- /' || true
             grep -E '^pin-images: .* moves ' pins.log | sed 's/^pin-images: /- /' || true
             echo
             echo "Opened by the Refresh workflow ($RUN_URL). The required checks are dispatched onto this branch and auto-merge is enabled, so it merges by itself when they pass."

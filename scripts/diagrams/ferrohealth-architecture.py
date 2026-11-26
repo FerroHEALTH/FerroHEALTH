@@ -198,9 +198,9 @@ BOXES = [
     Box("others", 1000, 456, 190, 56, "Other organisations",
         subs=["federation nodes"],
         why="Level with the gateway, because FerroFED is the only path to them."),
-    Box("smart", 664, 264, 166, 88, "FerroSMART", hue="smart", planned=True,
+    Box("smart", 664, 264, 166, 88, "FerroSMART", hue="smart",
         subs=["SMART App Launch 2.x", "authorization server"],
-        why="The SMART authorization server, being built: it issues the access tokens\n"
+        why="The SMART authorization server: it issues the access tokens\n"
             "with the launch context, behind the deployment's own sign-in. Every server\n"
             "checks the tokens it is handed through FerroSMART's ferrohealth-smart crate,\n"
             "against FerroSMART or any other authorization server the deployment names,\n"
@@ -211,8 +211,8 @@ BOXES = [
             "and the EHDS access record."),
     Box("ui", 376, 640, 150, 76, "FerroUI", subs=["ferrohealth-ui", "every console"],
         why="The component library each product's operator console is built with;\n"
-            "every console is reactive."),
-    Box("sys", 546, 640, 150, 76, "FerroSYS", subs=["system plumbing", "six shared crates"],
+            "every console is server-rendered."),
+    Box("sys", 546, 640, 150, 76, "FerroSYS", subs=["system plumbing", "ferrohealth-* crates"],
         why="Secrets and redaction, configuration, logging and OpenTelemetry, health,\n"
             "the HTTP stack and drain, and the usage report, as ferrohealth-* crates.\n"
             "Shared crates like the others, never a control plane or a central service."),
@@ -574,7 +574,7 @@ def dark_style():
 
 TITLE = "What calls what across the FerroHEALTH family"
 DESC = (
-    "Five products reach each other only over published protocols. FerroEHR, the openEHR CDR, is "
+    "Six products reach each other only over published protocols. FerroEHR, the openEHR CDR, is "
     "reached over the openEHR ITS-REST API and AQL, which any application can call directly, and it "
     "validates coded values against FerroTERM, the FHIR terminology server, as a client. FerroBRIDGE "
     "reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges "
@@ -588,7 +588,7 @@ DESC = (
     "FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' "
     "openEHR CDRs as federation nodes; and FerroTASK, the planned task planning and decision support "
     "server, drawn dashed, reads FerroEHR over ITS-REST and AQL and commits the state of each plan "
-    "back to it. FerroSMART, the SMART App Launch authorization server being built, drawn dashed, "
+    "back to it. FerroSMART, the SMART App Launch authorization server, "
     "issues access tokens with the launch context behind the deployment's own sign-in, and each "
     "server checks the tokens it is handed through FerroSMART's ferrohealth-smart crate, against "
     "FerroSMART or any other authorization server the deployment names. A frame "
@@ -597,7 +597,7 @@ DESC = (
     "holds the three shared libraries the products are built from, which never run on their own: "
     "FerroAUDIT "
     "writes the audit trail and the EHDS access record, FerroUI holds the components of the operator "
-    "consoles, every one of them reactive, and FerroSYS holds the system plumbing every product "
+    "consoles, every one of them server-rendered, and FerroSYS holds the system plumbing every product "
     "shares, from secrets and configuration to telemetry, health, the HTTP stack and the usage report."
 )
 

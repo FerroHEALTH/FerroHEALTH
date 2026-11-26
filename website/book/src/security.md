@@ -1,6 +1,6 @@
 # Security
 
-Revised 2026-11-17.
+Revised 2026-11-26.
 
 This page is the vulnerability-handling policy of Cadasto B.V., the
 manufacturer of every FerroHEALTH product: how to report a vulnerability,
@@ -281,10 +281,10 @@ per product:
 | FerroFED | Rust advisories | scanned before the tag, with a vulnerability record attached to the release |
 | FerroTERM | Rust advisories | scanned before the tag, with a vulnerability record attached to the release |
 | FerroBRIDGE | Rust advisories | scanned before the tag, with a vulnerability record attached to the release |
-| FerroPIX | Rust advisories | none published yet |
+| FerroPIX | Rust advisories | scanned before the tag, with a vulnerability record attached to the release |
 | FerroUI | Rust advisories | none; it ships a crate |
 | FerroAUDIT | none yet; the first accepted advisory brings one | none |
-| FerroSMART | none yet; the first accepted advisory brings one | the `ferrosmart` image, scanned before the tag from its first release |
+| FerroSMART | none yet; the release is refused while a finding has no statement | scanned before the tag, with a vulnerability record attached to the release |
 
 The email address security@cadasto.com reaches the manufacturer of every
 product, whichever routes a product's file names. The duties of CRA Art. 13

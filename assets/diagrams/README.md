@@ -60,7 +60,7 @@ Do not screenshot the page to get the diagram. The file is the diagram.
 
 The frame is one FerroHEALTH instance serving one tenant. The eight inside are
 the family; clinicians, applications, HL7 FHIR, HL7 Version 2 senders, the OMOP
-database and other organisations sit outside it. The family is five products
+database and other organisations sit outside it. The family is six products
 that reach each other only over published protocols, each in its own lane:
 FerroEHR implements no FHIR, OMOP, federation or IHE profile, FHIR, OMOP and
 clinical HL7 Version 2 are FerroBRIDGE's, federation is FerroFED's, and identity and
@@ -74,14 +74,12 @@ meaning, FerroBRIDGE carries it out. FerroFORMS is paused and still drawn,
 greyed out (a grey fill, outline and text, with "paused" in its box), because
 it is present and not in use, which is not a server waiting to run.
 FerroPIX, FerroFED and FerroTASK frame that path. A server not running yet is
-drawn dashed, as is every call into one: FerroTASK is planned, and
-FerroSMART is being built. FerroPIX and
+drawn dashed, as is every call into one: FerroTASK is planned. FerroPIX and
 FerroFED are released, running servers and are drawn solid, with every edge
-into them.
+into them, and so is FerroSMART, which has no edge.
 
 Under the frame, a second band holds the shared libraries: FerroAUDIT (`ihe-atna`,
-`ehds-logging`), FerroUI (`ferrohealth-ui`) and FerroSYS (`ferrohealth-secret`,
-`-config`, `-telemetry`, `-health`, `-server`, `-usage-report`: the system
+`ehds-logging`), FerroUI (`ferrohealth-ui`) and FerroSYS (the `ferrohealth-*` crates: the system
 plumbing every product shares, never a control plane or a central service). They sit outside the instance because they run inside the
 products that compile them in, never on their own, and no edge reaches them
 because nothing calls a library over the network. They carry no product hue.

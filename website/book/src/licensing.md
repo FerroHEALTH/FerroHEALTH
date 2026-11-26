@@ -1,6 +1,6 @@
 # Licensing and trademarks
 
-Revised 2026-11-17.
+Revised 2026-11-26.
 
 Every FerroHEALTH product, and every shared library the products are built
 from, is source-available under the Business Source License 1.1 (SPDX
@@ -27,7 +27,7 @@ which licence:
 | FerroFED | [`LICENSE`](https://github.com/FerroHEALTH/FerroFED/blob/main/LICENSE) | [ferrofed.eu](https://ferrofed.eu/docs/evaluate/licensing.html) |
 | FerroPIX | [`LICENSE`](https://github.com/FerroHEALTH/FerroPIX/blob/main/LICENSE) | [ferropix.eu](https://ferropix.eu/docs/evaluate/licensing.html) |
 | FerroTASK | [`LICENSE`](https://github.com/FerroHEALTH/FerroTASK/blob/main/LICENSE) | none yet |
-| FerroSMART | [`LICENSE`](https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE) | none yet |
+| FerroSMART | [`LICENSE`](https://github.com/FerroHEALTH/FerroSMART/blob/main/LICENSE) | [ferrosmart.eu](https://ferrosmart.eu/docs/evaluate/licensing.html) |
 
 The shared libraries carry their own `LICENSE` on the same terms:
 

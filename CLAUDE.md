@@ -2,7 +2,7 @@
 
 **FerroHEALTH** is the family name for a set of pure-Rust health-data servers, and
 this repository is the family site at <https://ferrohealth.eu> plus the shared
-brand. It ships no product code. The family is five products, each its own
+brand. It ships no product code. The family is six products, each its own
 server, image and repository, reaching the others only over a published
 protocol, and none a compile-time dependency of another
 (`.claude/memory/family-architecture.md` is the owner's statement of it):
@@ -14,9 +14,17 @@ clinical HL7 Version 2 messages mapped in through HL7's Version 2 to FHIR guide)
 [FerroFED](https://github.com/FerroHEALTH/FerroFED) (the federation gateway),
 [FerroPIX](https://github.com/FerroHEALTH/FerroPIX) (the Master Patient Index
 with the IHE identity profiles; it publishes its identity crates and runs as a
-released server, and `ferropix.eu` serves its site) and
+released server, and `ferropix.eu` serves its site),
 [FerroTERM](https://github.com/FerroHEALTH/FerroTERM) (the HL7 FHIR
-terminology server). A product stays in its own lane: FerroEHR implements no
+terminology server) and
+[FerroSMART](https://github.com/FerroHEALTH/FerroSMART) (the SMART App
+Launch 2.x authorization server, a product again by the owner's decision of
+2026-11-17 and a released server; its repository also publishes the
+`ferrohealth-smart`, `ferrohealth-authz` and `ferrohealth-session` crates
+every product checks its callers with, each on its own tags, so
+`render-releases.sh` reads FerroSMART's release from the server's
+`ferrosmart-v*` tags; its hue is its yellow, `#78350F` on a light ground and
+`#FBBF24` on a dark one). A product stays in its own lane: FerroEHR implements no
 FHIR, OMOP, federation or IHE profile, and when a product needs another's
 function it calls that server as a client.
 [FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS) (an openEHR form
@@ -25,13 +33,7 @@ and says so where it describes its status. One more is planned, with a
 domain and a repository that holds its licence and its brand and no release
 yet: [FerroTASK](https://github.com/FerroHEALTH/FerroTASK)
 (task planning and decision support over openEHR PROC and GDL2,
-`ferrotask.eu`). [FerroSMART](https://github.com/FerroHEALTH/FerroSMART), the
-SMART App Launch 2.x authorization server, is a product again by the owner's
-decision of 2026-11-17 and is being built toward its first release; the
-repository also publishes the `ferrohealth-smart`, `ferrohealth-authz` and
-`ferrohealth-session` crates every product checks its callers with. Its hue
-is its yellow (`#78350F` on a light ground, `#FBBF24` on a dark one). Ferro is *ferrum*, iron, which Rust is an oxide
-of.
+`ferrotask.eu`). Ferro is *ferrum*, iron, which Rust is an oxide of.
 
 The products are built from three **shared libraries**, which are not
 products and never appear in a product list, card, count or the status table:
@@ -40,10 +42,9 @@ products and never appear in a product list, card, count or the status table:
 [FerroUI](https://github.com/FerroHEALTH/FerroUI) (`ferrohealth-ui`, the
 components of every console, and every console is server-rendered since
 FerroUI 0.6, owner 2026-10-29, FerroUI #510) and
-[FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (`ferrohealth-secret`,
-`-config`, `-telemetry`, `-health`, `-server` and `-usage-report`: the system
-plumbing every product shares, being built toward its v0.1.0 milestone; never a
-control plane or a central service). The page gives
+[FerroSYS](https://github.com/FerroHEALTH/FerroSYS) (the `ferrohealth-*`
+crates, each released on its own tag: the system plumbing every product
+shares; never a control plane or a central service). The page gives
 them their own section, and the diagram a band outside the instance frame
 with no edges. The protocol clients and models a product publishes for the
 others (`fhir-types` and `ferrobridge-term` from FerroBRIDGE, `ihe-iti` and

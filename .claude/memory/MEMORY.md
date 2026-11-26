@@ -3,10 +3,10 @@
 
 # Memory index
 
-- [Family architecture](family-architecture.md): owner 2026-10-25, five
-  servers (FerroEHR, FerroBRIDGE, FerroFED, FerroPIX, FerroTERM) that reach
-  each other only over published protocols, and FerroSMART, the SMART
-  authorization server being built (owner 2026-11-17); shared crates
+- [Family architecture](family-architecture.md): owner 2026-10-25, six
+  servers (FerroEHR, FerroBRIDGE, FerroFED, FerroPIX, FerroTERM, and
+  FerroSMART, the SMART authorization server, owner 2026-11-17) that reach
+  each other only over published protocols; shared crates
   (FerroAUDIT, FerroUI, FerroSYS) for cross-cutting work, and FerroSYS is never
   a control plane; no product embeds another's
   domain; every console is server-rendered. A verbatim copy of the page every

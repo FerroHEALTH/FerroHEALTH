@@ -1,6 +1,6 @@
 # FerroHEALTH documentation
 
-Revised 2026-11-17.
+Revised 2026-11-26.
 
 This book holds what is true for every FerroHEALTH product: who makes them,
 how a vulnerability or a complaint reaches the manufacturer, what the
@@ -16,7 +16,7 @@ once.
 
 ## The products
 
-The family is five products, each its own server and repository, reaching
+The family is six products, each its own server and repository, reaching
 the others only over published protocols.
 [How the products fit together](architecture.md) says who owns what.
 
@@ -27,17 +27,17 @@ the others only over published protocols.
 | FerroFED | The federation gateway | <https://ferrofed.eu/docs/> | [FerroHEALTH/FerroFED](https://github.com/FerroHEALTH/FerroFED) |
 | FerroPIX | The Master Patient Index, with the IHE identity profiles; it also publishes its identity crates | <https://ferropix.eu/docs/> | [FerroHEALTH/FerroPIX](https://github.com/FerroHEALTH/FerroPIX) |
 | FerroTERM | The HL7 FHIR terminology server | <https://ferroterm.eu/docs/> | [FerroHEALTH/FerroTERM](https://github.com/FerroHEALTH/FerroTERM) |
+| FerroSMART | The SMART App Launch 2.x authorization server; it also publishes the crates every product checks its callers with | <https://ferrosmart.eu/docs/> | [FerroHEALTH/FerroSMART](https://github.com/FerroHEALTH/FerroSMART) |
 
 FerroFORMS, an openEHR form builder and renderer, is paused. Its
 documentation stays at <https://ferroforms.eu/docs/> and its repository at
 [FerroHEALTH/FerroFORMS](https://github.com/FerroHEALTH/FerroFORMS).
 
-Two more are on the way. Each has a repository that holds its licence and
-its brand, and no release of the product or book yet:
+One more is planned. It has a repository that holds its licence and its
+brand, and no release of the product or book yet:
 
-| On the way | What it is for | Repository |
+| Planned | What it is for | Repository |
 |---|---|---|
-| FerroSMART | The SMART App Launch 2.x authorization server, being built; it also publishes the crates every product checks its callers with; its book is at <https://ferrosmart.eu/docs/> | [FerroHEALTH/FerroSMART](https://github.com/FerroHEALTH/FerroSMART) |
 | FerroTASK | Task planning and decision support over openEHR | [FerroHEALTH/FerroTASK](https://github.com/FerroHEALTH/FerroTASK) |
 
 The family site, <https://ferrohealth.eu/>, shows what each product has
@@ -54,8 +54,8 @@ shares, never a product's domain.
 | Library | Crates | What it does | Repository |
 |---|---|---|---|
 | FerroAUDIT | `ihe-atna`, `ehds-logging` | The whole IHE ATNA and BALP audit trail, and the record of each access to electronic health data that the EHDS Regulation asks of an EHR system | [FerroHEALTH/FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) |
-| FerroUI | `ferrohealth-ui` | The one source for the user interface of every operator console, each of them reactive ([the console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md)) | [FerroHEALTH/FerroUI](https://github.com/FerroHEALTH/FerroUI) |
-| FerroSYS | `ferrohealth-secret`, `ferrohealth-config`, `ferrohealth-telemetry`, `ferrohealth-health`, `ferrohealth-server`, `ferrohealth-usage-report` | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report; shared crates, never a control plane or a central service, each published on crates.io ([the FerroSYS releases](https://github.com/FerroHEALTH/FerroSYS/releases)) | [FerroHEALTH/FerroSYS](https://github.com/FerroHEALTH/FerroSYS) |
+| FerroUI | `ferrohealth-ui` | The one source for the user interface of every operator console, each of them server-rendered ([the console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md)) | [FerroHEALTH/FerroUI](https://github.com/FerroHEALTH/FerroUI) |
+| FerroSYS | `ferrohealth-*` crates, listed in its README | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report; shared crates, never a control plane or a central service, each published on crates.io ([the FerroSYS releases](https://github.com/FerroHEALTH/FerroSYS/releases)) | [FerroHEALTH/FerroSYS](https://github.com/FerroHEALTH/FerroSYS) |
 
 [How the products fit together](architecture.md#the-shared-libraries) says
 which product uses which.

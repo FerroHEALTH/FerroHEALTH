@@ -48,6 +48,16 @@ readonly PRODUCTS=(FerroFORMS FerroEHR FerroTERM FerroBRIDGE FerroPIX FerroFED F
 # same way, so the same markers fill them.
 readonly LIBRARIES=(FerroAUDIT FerroUI FerroSYS)
 
+# A repository that also releases crates by their own tags names the prefix of
+# its server's tags, since its latest release may be a crate's. The server's
+# release is what the page shows, without the prefix.
+server_tag_prefix() {
+  case "$1" in
+    FerroSMART) echo ferrosmart- ;;
+    *) echo "" ;;
+  esac
+}
+
 [ -f "$FILE" ] || { echo "render-releases: no such file: $FILE" >&2; exit 1; }
 
 # One API call. Prints the value and returns 0. Returns 44 on a 404, which is
@@ -110,10 +120,17 @@ for product in "${PRODUCTS[@]}" "${LIBRARIES[@]}"; do
   esac
 
   asked=$((asked + 1))
-  release="$(api "$repo/releases/latest" '[.tag_name, .published_at[0:10]] | @tsv')" && rc=0 || rc=$?
+  prefix="$(server_tag_prefix "$product")"
+  if [ -n "$prefix" ]; then
+    release="$(api "$repo/releases?per_page=100" "first(.[] | select((.draft or .prerelease) | not) | select(.tag_name | startswith(\"${prefix}v\"))) | [.tag_name, .published_at[0:10]] | @tsv")" && rc=0 || rc=$?
+    [ "$rc" -ne 0 ] || [ -n "$release" ] || rc=44
+  else
+    release="$(api "$repo/releases/latest" '[.tag_name, .published_at[0:10]] | @tsv')" && rc=0 || rc=$?
+  fi
   case "$rc" in
     0)
       IFS=$'\t' read -r tag date <<< "$release"
+      tag="${tag#"$prefix"}"
       if ! is_tag "$tag" || ! is_date "$date"; then
         echo "render-releases: refusing odd release '$tag' / '$date' for $product" >&2
         exit 1

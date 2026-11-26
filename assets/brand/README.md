@@ -3,17 +3,16 @@
 
 # FerroHEALTH brand
 
-FerroHEALTH is the family name for five servers that are built and released
+FerroHEALTH is the family name for six servers that are built and released
 separately and reach each other only over published protocols:
 [FerroEHR](https://ferroehr.eu/), the openEHR® Clinical Data Repository;
 [FerroBRIDGE](https://ferrobridge.eu/), openEHR to HL7® FHIR® and to the OMOP
 Common Data Model; [FerroFED](https://ferrofed.eu/), the federation gateway;
-[FerroPIX](https://ferropix.eu/), the Master Patient Index; and [FerroTERM](https://ferroterm.eu/), the HL7 FHIR terminology
-server. [FerroFORMS](https://ferroforms.eu/), an openEHR form builder and
+[FerroPIX](https://ferropix.eu/), the Master Patient Index; [FerroTERM](https://ferroterm.eu/), the HL7 FHIR terminology
+server; and [FerroSMART](https://ferrosmart.eu/), the SMART App Launch
+authorization server. [FerroFORMS](https://ferroforms.eu/), an openEHR form builder and
 renderer, is paused and keeps its hue and its stroke. One more is planned
-around them: FerroTASK for task planning and decision support. FerroSMART, the
-SMART App Launch authorization server, is a product again since 2026-11-17
-and is being built. The shared libraries
+around them: FerroTASK for task planning and decision support. The shared libraries
 the products are built from (FerroAUDIT, FerroUI, FerroSYS) are no
 products: they own no hue and no stroke, and the page shows them in the
 parent's steel. FerroSYS's own steel lockup lives in its repository's

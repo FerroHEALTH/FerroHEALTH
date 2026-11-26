@@ -11,7 +11,7 @@
      called or written to. The band under the frame is the shared libraries. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1608" viewBox="0 0 1200 804" role="img" aria-labelledby="title desc">
   <title id="title">What calls what across the FerroHEALTH family</title>
-  <desc id="desc">Five products reach each other only over published protocols. FerroEHR, the openEHR CDR, is reached over the openEHR ITS-REST API and AQL, which any application can call directly, and it validates coded values against FerroTERM, the FHIR terminology server, as a client. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR face in both directions, receives clinical HL7 Version 2 messages over MLLP, and writes typed rows into an OMOP Common Data Model database over SQL. FerroFORMS, the form builder, is paused and drawn in grey: a clinician uses it in a browser, and it expands value sets against FerroTERM and commits compositions to FerroEHR over ITS-REST. Three services frame the data path: FerroPIX, the Master Patient Index, owns identity and the IHE profiles, and FerroEHR is to look the subject of each EHR up there as a client over PIXm and PDQm; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroTASK, the planned task planning and decision support server, drawn dashed, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. FerroSMART, the SMART App Launch authorization server being built, drawn dashed, issues access tokens with the launch context behind the deployment's own sign-in, and each server checks the tokens it is handed through FerroSMART's ferrohealth-smart crate, against FerroSMART or any other authorization server the deployment names. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, HL7 Version 2 senders, OMOP and other organisations sit outside it. Under the frame, a band holds the three shared libraries the products are built from, which never run on their own: FerroAUDIT writes the audit trail and the EHDS access record, FerroUI holds the components of the operator consoles, every one of them reactive, and FerroSYS holds the system plumbing every product shares, from secrets and configuration to telemetry, health, the HTTP stack and the usage report.</desc>
+  <desc id="desc">Six products reach each other only over published protocols. FerroEHR, the openEHR CDR, is reached over the openEHR ITS-REST API and AQL, which any application can call directly, and it validates coded values against FerroTERM, the FHIR terminology server, as a client. FerroBRIDGE reads FerroEHR over ITS-REST, calls FerroTERM to look up and translate codes, exchanges resources with HL7 FHIR over its FHIR face in both directions, receives clinical HL7 Version 2 messages over MLLP, and writes typed rows into an OMOP Common Data Model database over SQL. FerroFORMS, the form builder, is paused and drawn in grey: a clinician uses it in a browser, and it expands value sets against FerroTERM and commits compositions to FerroEHR over ITS-REST. Three services frame the data path: FerroPIX, the Master Patient Index, owns identity and the IHE profiles, and FerroEHR is to look the subject of each EHR up there as a client over PIXm and PDQm; applications send FerroFED, the federation gateway, an ordinary AQL query, and it asks FerroPIX where the record is, then dispatches the query to FerroEHR and to other organisations' openEHR CDRs as federation nodes; and FerroTASK, the planned task planning and decision support server, drawn dashed, reads FerroEHR over ITS-REST and AQL and commits the state of each plan back to it. FerroSMART, the SMART App Launch authorization server, issues access tokens with the launch context behind the deployment's own sign-in, and each server checks the tokens it is handed through FerroSMART's ferrohealth-smart crate, against FerroSMART or any other authorization server the deployment names. A frame around the eight marks one FerroHEALTH instance serving one tenant; clinicians, applications, FHIR, HL7 Version 2 senders, OMOP and other organisations sit outside it. Under the frame, a band holds the three shared libraries the products are built from, which never run on their own: FerroAUDIT writes the audit trail and the EHDS access record, FerroUI holds the components of the operator consoles, every one of them server-rendered, and FerroSYS holds the system plumbing every product shares, from secrets and configuration to telemetry, health, the HTTP stack and the usage report.</desc>
   <style>
     @media (prefers-color-scheme: dark) {
       .ground { fill: #131a26 }
@@ -143,13 +143,13 @@
     <text class="label" x="1095" y="517" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">Other organisations</text>
     <text class="sub" x="1095" y="539" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">federation nodes</text>
 
-    <!-- The SMART authorization server, being built: it issues the access tokens
+    <!-- The SMART authorization server: it issues the access tokens
          with the launch context, behind the deployment's own sign-in. Every server
          checks the tokens it is handed through FerroSMART's ferrohealth-smart crate,
          against FerroSMART or any other authorization server the deployment names,
          so no edge is drawn to it: every server would carry one. It sits between
          the CDR's two callers on the right, clear of every line. -->
-    <rect class="box box-smart" x="664" y="300" width="166" height="88" rx="10" fill="#ffffff" stroke="#78350f" stroke-width="1.5" stroke-dasharray="6 4"/>
+    <rect class="box box-smart" x="664" y="300" width="166" height="88" rx="10" fill="#ffffff" stroke="#78350f" stroke-width="1.5"/>
     <text class="label tag-smart" x="747" y="330" text-anchor="middle" font-size="15" font-weight="700" fill="#78350f">FerroSMART</text>
     <text class="sub" x="747" y="352" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">SMART App Launch 2.x</text>
     <text class="sub" x="747" y="370" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">authorization server</text>
@@ -162,7 +162,7 @@
     <text class="sub" x="281" y="746" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ehds-logging</text>
 
     <!-- The component library each product's operator console is built with;
-         every console is reactive. -->
+         every console is server-rendered. -->
     <rect class="box" x="376" y="676" width="150" height="76" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
     <text class="label" x="451" y="706" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroUI</text>
     <text class="sub" x="451" y="728" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ferrohealth-ui</text>
@@ -174,7 +174,7 @@
     <rect class="box" x="546" y="676" width="150" height="76" rx="10" fill="#ffffff" stroke="#dde3eb" stroke-width="1.5"/>
     <text class="label" x="621" y="706" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">FerroSYS</text>
     <text class="sub" x="621" y="728" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">system plumbing</text>
-    <text class="sub" x="621" y="746" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">six shared crates</text>
+    <text class="sub" x="621" y="746" text-anchor="middle" font-size="11.5" font-weight="600" fill="#58616e">ferrohealth-* crates</text>
 
     <path class="edge" d="M136 240 H194" fill="none" stroke="#58616e" stroke-width="1.6"/>
     <path class="edge-head" d="M206 240 l-9 -5.5 v11 z" fill="#58616e"/>

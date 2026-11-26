@@ -1,6 +1,6 @@
 # How the products fit together
 
-Revised 2026-11-17.
+Revised 2026-11-26.
 
 The FerroHEALTH family is six products, each its own server, image and
 repository, and each reaches the others only over a published protocol. No
@@ -16,7 +16,7 @@ its configuration and its pinned specification versions.
 | FerroFED | the federation gateway (the openEHR Federation Tier with AQL, EHDS cross-border exchange, MyHealth@EU) | it calls each CDR over ITS-REST; clients call its ITS-REST and FHIR faces |
 | FerroPIX | the Master Patient Index (IHE PIX, PIXm, PDQ, PDQm, PMIR) | IHE PIXm, PDQm and PMIR, and the HL7 Version 2 identity feed and queries (ITI-8, ITI-9, ITI-21) over MLLP |
 | FerroTERM | the HL7 FHIR terminology server | the FHIR terminology operations |
-| FerroSMART | the SMART App Launch 2.x authorization server, being built (owner, 2026-11-16 and 2026-11-17) | SMART App Launch 2.x, OAuth 2.0 and OpenID Connect; every product checks its tokens through FerroSMART's `ferrohealth-smart` |
+| FerroSMART | the SMART App Launch 2.x authorization server | SMART App Launch 2.x, OAuth 2.0 and OpenID Connect; every product checks its tokens through FerroSMART's `ferrohealth-smart` |
 
 ## Each product in its own lane
 
@@ -33,9 +33,9 @@ A product does one job and leaves the others' jobs to them:
   library, and the protocol clients and models live with the product that
   owns the protocol. When one lacks something, it is added in the repository
   that owns it and released, and no product keeps a local copy.
-- **Every console is reactive.** A link, a form or an action in an operator
-  console never reloads the whole page; WebAssembly is the normal path, and
-  the page without it is only the fallback.
+- **Every console is server-rendered.** Each page is one document the
+  console's server draws from FerroUI's components, and FerroUI's script
+  modules add behaviour on top; no console carries WebAssembly.
 
 FerroFORMS, an openEHR form builder and renderer at
 <https://ferroforms.eu/>, is paused. It is still drawn and listed, as a client
@@ -48,8 +48,8 @@ in the FerroHEALTH repository. Select it to open it at full size.
 
 ## Reading the diagram
 
-The frame is one FerroHEALTH instance serving one organisation. The seven
-inside are the products; clinicians, applications, HL7 FHIR, HL7 Version 2
+The frame is one FerroHEALTH instance serving one organisation. The eight
+inside are the products, the paused and the planned one included; clinicians, applications, HL7 FHIR, HL7 Version 2
 senders, the OMOP database and other organisations sit outside it. A dashed
 outline is a server not running yet (FerroTASK is planned), and a dashed line
 is a call into one. FerroFORMS is greyed out because it is paused. The band under the frame holds
@@ -92,8 +92,7 @@ Two more products sit beside the table:
   Dutch Generic Functions, for every product to use.
 - **FerroTASK** reads FerroEHR over the openEHR REST API and AQL for task
   plans and GDL2 guidelines, and commits the state of each plan back.
-- **FerroSMART** is the SMART App Launch 2.x authorization server, being
-  built. It issues access tokens with the launch context, behind the sign-in
+- **FerroSMART** is the SMART App Launch 2.x authorization server. It issues access tokens with the launch context, behind the sign-in
   system the deployment already runs, which serves login only. Every product
   checks the tokens it is handed through FerroSMART's `ferrohealth-smart`
   crate, against FerroSMART or any other authorization server the deployment
@@ -115,9 +114,9 @@ outside the instance with no edges.
 
 | Library | Crates | What it does | Who uses it |
 |---|---|---|---|
-| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The whole audit trail: the IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with sending, the store-and-forward spool ITI-20 asks of a sender, forwarding and retrieving; and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroEHR, FerroFED and FerroPIX, and FerroBRIDGE from the first release that carries [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377) |
-| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The one source for the user interface of every operator console: the components, the stylesheet with a theme per product, and the design. Every console built on it is reactive, so an action never reloads the whole page. Each console moves onto a new release in one rollout with the others, as [its console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md) describes | the consoles of FerroEHR, FerroTERM, FerroBRIDGE and FerroFED |
-| [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | `ferrohealth-secret`, `ferrohealth-config`, `ferrohealth-telemetry`, `ferrohealth-health`, `ferrohealth-server`, `ferrohealth-usage-report` | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report. It is a set of crates like FerroAUDIT, never a control plane or a central service. Every crate is published on crates.io on its own release line, and [the FerroSYS releases](https://github.com/FerroHEALTH/FerroSYS/releases) name the current version of each. | FerroEHR, FerroTERM, FerroBRIDGE and FerroPIX |
+| [FerroAUDIT](https://github.com/FerroHEALTH/FerroAUDIT) | `ihe-atna`, `ehds-logging` | The whole audit trail: the IHE ATNA Record Audit Event (ITI-20) and the Basic Audit Log Patterns (BALP), with sending, the store-and-forward spool ITI-20 asks of a sender, forwarding and retrieving; and the record of each access to electronic health data that Regulation (EU) 2025/327 asks of an EHR system | FerroEHR, FerroBRIDGE, FerroFED, FerroPIX and FerroSMART |
+| [FerroUI](https://github.com/FerroHEALTH/FerroUI) | `ferrohealth-ui` | The one source for the user interface of every operator console: the components, the stylesheet with a theme per product, and the design. Every console built on it is server-rendered, and every action keeps a plain link or form behind it, as [its console guide](https://github.com/FerroHEALTH/FerroUI/blob/main/docs/consoles.md) describes | FerroEHR, FerroTERM, FerroBRIDGE, FerroFED, FerroPIX and FerroSMART |
+| [FerroSYS](https://github.com/FerroHEALTH/FerroSYS) | `ferrohealth-*` crates, listed in its README | The system plumbing every product shares: secrets and redaction, configuration, logging and OpenTelemetry, health, the HTTP stack and its drain, and the usage report. It is a set of crates like FerroAUDIT, never a control plane or a central service. Every crate is published on crates.io on its own release line, and [the FerroSYS releases](https://github.com/FerroHEALTH/FerroSYS/releases) name the current version of each. | FerroEHR, FerroTERM, FerroBRIDGE, FerroFED, FerroPIX and FerroSMART |
 
 The protocol clients and models stay with the product that owns the
 protocol, and every other product uses them from there:
@@ -168,12 +167,9 @@ Five rules hold across the family:
   product, and no library, does.
 - **Audit is written once.** FerroAUDIT is the family's audit
   implementation, sending to an Audit Record Repository the deployment runs.
-  FerroEHR, FerroFED and FerroPIX write their audit trails through it, and
-  FerroEHR and FerroFED their EHDS access records. From the first release
-  that carries
-  [FerroBRIDGE#1377](https://github.com/FerroHEALTH/FerroBRIDGE/issues/1377),
-  FerroBRIDGE uses it for the EHDS access record of each access to its FHIR
-  facade, because the openEHR REST API carries no end-user identity and
+  FerroEHR, FerroBRIDGE, FerroFED, FerroPIX and FerroSMART write their audit
+  trails through it, and all of them but FerroPIX their EHDS access records.
+  FerroBRIDGE keeps one for each access to its FHIR facade, because the openEHR REST API carries no end-user identity and
   FerroEHR's record of that access names only the bridge.
 
 ## The family end-to-end lane
